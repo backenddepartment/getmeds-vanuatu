@@ -1,0 +1,1355 @@
+@charset "UTF-8";
+/* ==========================================================================
+   Getmeds Vanuatu — Pacific Chemotherapy Pharmacy
+   One stylesheet. No framework, no reset library, no third-party request.
+
+   The world: an official Vanuatu ministry notice. Ink rules and clause
+   structure carry every hierarchy. There are no cards, no shadows and no
+   rounded corners anywhere in this file, and that is deliberate.
+
+   Structure
+     1. Font
+     2. Tokens
+     3. Reset and base
+     4. Browser surfaces
+     5. Layout
+     6. Type
+     7. Rules, records and notices
+     8. Controls
+     9. Masthead and navigation
+    10. The two doors
+    11. Forms
+    12. Markers for outstanding content
+    13. Footer
+    14. Motion, print, forced colours
+   ========================================================================== */
+
+/* ---------- 1. Font ------------------------------------------------------ */
+/* Public Sans, variable weight 400-700, self-hosted, subset to Latin.
+   Two files: latin loads always, latin-ext only when accented characters
+   appear (French place names, Bislama). font-display:swap so slow Vanuatu
+   connections never blank the text. */
+
+@font-face {
+  font-family: 'Public Sans';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('../fonts/public-sans-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Public Sans';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('../fonts/public-sans-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF,
+    U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020,
+    U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* ---------- 2. Tokens --------------------------------------------------- */
+
+:root {
+  /* The palette. Five values, and no more.
+     Verified against #FBFBF9: ink 14.28:1, slate 5.57:1, alert 6.31:1.
+     --action measures 2.89:1 and therefore NEVER sets text on paper. It is a
+     fill, a rule or an underline only. Ink on an --action fill is 4.95:1,
+     which is how the primary button carries the group blue and still passes AA. */
+  --ink:    #0F2A3D;
+  --action: #1D9FDA;
+  --paper:  #FBFBF9;
+  --slate:  #54687A;
+  --alert:  #B3261E;
+
+  /* Transparencies of the five above. No sixth hue is introduced. */
+  --hair:         rgba(15, 42, 61, .18);
+  --hair-strong:  rgba(15, 42, 61, .38);
+  --wash:         rgba(15, 42, 61, .035);
+  --action-wash:  rgba(29, 159, 218, .10);
+  --alert-wash:   rgba(179, 38, 30, .055);
+
+  /* Rule weights are tokens, never ad-hoc borders.
+     A hairline divides peers. An ink rule opens a section. */
+  --rule-hair: 1px solid var(--slate);
+  --rule-ink:  2px solid var(--ink);
+
+  /* Eight real sizes from one face. Weight and size are the only hierarchy. */
+  --t-display: clamp(2.375rem, 1.55rem + 3.3vw, 3.5rem);   /* 38 - 56 */
+  --t-1:       clamp(1.875rem, 1.40rem + 1.9vw, 2.5rem);   /* 30 - 40 */
+  --t-2:       clamp(1.4375rem, 1.20rem + .95vw, 1.75rem); /* 23 - 28 */
+  --t-3:       1.25rem;    /* 20 */
+  --t-4:       1.125rem;   /* 18 - body */
+  --t-5:       1rem;       /* 16 */
+  --t-6:       .875rem;    /* 14 */
+  --t-7:       .8125rem;   /* 13 */
+
+  --s-1: .25rem;  --s-2: .5rem;   --s-3: .75rem;  --s-4: 1rem;
+  --s-5: 1.5rem;  --s-6: 2rem;    --s-7: 3rem;    --s-8: 4rem;   --s-9: 6rem;
+
+  /* Under 70 characters, as the brief requires. */
+  --measure: 65ch;
+  --measure-tight: 34ch;
+
+  /* 48px, not the 44px standard. Chemotherapy-induced neuropathy makes
+     precise tapping genuinely hard for this audience. */
+  --target: 3rem;
+
+  --ease: cubic-bezier(.2, .7, .3, 1);
+  --dur:  .18s;
+}
+
+/* ---------- 3. Reset and base ------------------------------------------- */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+/* Nothing in this design is rounded. */
+* { border-radius: 0; }
+
+html {
+  /* 100%, so 1rem is whatever the reader has set their browser to (16px by
+     default) and every rem on this page scales with it. The brief's 18px base is
+     applied ONCE, on body below. Setting a percentage here as well would
+     multiply the two and inflate the whole scale, which is what it used to do. */
+  font-size: 100%;
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Public Sans', ui-sans-serif, system-ui, 'Segoe UI', Roboto,
+               'Helvetica Neue', Arial, sans-serif;
+  font-size: var(--t-4);
+  font-weight: 400;
+  line-height: 1.6;
+  /* No tracking at body size. Negative tracking here inherits as a fixed pixel
+     value into every small label on the page and crushes it. Optical tightening
+     is applied per-role at display sizes only. */
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+img, svg, video { max-width: 100%; height: auto; }
+img { display: block; }
+
+/* Every numeral on this site is tabular. Prices, licence numbers, phone
+   numbers, references and dates all align in a column. */
+.num, table, dl, .record, input, output {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1;
+}
+
+.u-hidden {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap;
+}
+
+/* ---------- 4. Browser surfaces ----------------------------------------- */
+/* The parts of the page we did not draw still belong to the design. */
+
+::selection { background: var(--action); color: var(--ink); }
+
+:root {
+  caret-color: var(--action);
+  accent-color: var(--action);
+  scrollbar-color: var(--slate) var(--wash);
+  scrollbar-width: thin;
+}
+
+::-webkit-scrollbar { width: 12px; height: 12px; }
+::-webkit-scrollbar-track { background: var(--wash); }
+::-webkit-scrollbar-thumb { background: var(--slate); border: 3px solid var(--paper); }
+::-webkit-scrollbar-thumb:hover { background: var(--ink); }
+
+/* One focus ring for the whole site: 2px ink, offset so it clears the
+   component. Ink is 14.28:1 on paper and 4.95:1 on an action fill, so it is
+   visible against every surface here. Never removed. */
+:focus { outline: none; }
+:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+/* Keyboard users who land on a skipped-to region should see where they are. */
+:target { scroll-margin-top: var(--s-6); }
+
+.skip {
+  position: absolute;
+  left: var(--s-4); top: var(--s-4);
+  transform: translateY(-200%);
+  z-index: 50;
+  display: inline-flex; align-items: center;
+  min-height: var(--target);
+  padding: 0 var(--s-4);
+  background: var(--action);
+  color: var(--ink);
+  font-weight: 600;
+  text-decoration: none;
+  border: var(--rule-ink);
+}
+.skip:focus { transform: translateY(0); }
+
+/* ---------- 5. Layout --------------------------------------------------- */
+
+.shell {
+  width: 100%;
+  max-width: 76rem;
+  margin-inline: auto;
+  padding-inline: clamp(var(--s-4), 4vw, var(--s-7));
+}
+
+.main { flex: 1 0 auto; }
+
+/* Single column, left aligned, under 70 characters. */
+.prose { max-width: var(--measure); }
+
+/* A section opens with a 2px ink rule and deep space above its heading.
+   The page reads as stacked plates, not as a scroll of cards. */
+.section {
+  border-top: var(--rule-ink);
+  margin-top: var(--s-8);
+  padding-top: var(--s-6);
+}
+.section:last-child { padding-bottom: var(--s-8); }
+.section--quiet { border-top: var(--rule-hair); }
+
+.stack > * + * { margin-top: var(--s-4); }
+.stack--wide > * + * { margin-top: var(--s-6); }
+
+/* ---------- 6. Type ----------------------------------------------------- */
+/* More space above a heading than below it, everywhere. */
+
+h1, h2, h3, h4 {
+  margin: 0;
+  font-weight: 600;
+  line-height: 1.14;
+  text-wrap: balance;
+  max-width: var(--measure-tight);
+}
+h2, h3, h4 { max-width: var(--measure); }
+
+/* Tracking tightens as the size grows, and is zero at label sizes. */
+h1 { font-size: var(--t-1); letter-spacing: -.02em; }
+h2 { font-size: var(--t-2); margin-top: var(--s-7); letter-spacing: -.015em; }
+h3 { font-size: var(--t-3); margin-top: var(--s-6); letter-spacing: -.01em; }
+h4 { font-size: var(--t-5); margin-top: var(--s-5); font-weight: 700; letter-spacing: 0; }
+
+p, ul, ol, dl, figure, table { margin: 0 0 var(--s-4); max-width: var(--measure); }
+p:last-child, ul:last-child, ol:last-child { margin-bottom: 0; }
+
+/* Body copy sits closer to its heading than to whatever came before it, but it
+   must never touch it. This has to come AFTER the element margins above: `h2 + *`
+   scores the same specificity as `p`, so source order decides, and the `margin`
+   shorthand on `p` would otherwise reset the top margin to zero. */
+h1 + *, h2 + *, h3 + *, h4 + * { margin-top: var(--s-4); }
+.section > h2:first-child, .section > h1:first-child { margin-top: 0; }
+
+.lede {
+  font-size: var(--t-3);
+  line-height: 1.5;
+  color: var(--slate);
+  max-width: 48ch;
+}
+.small { font-size: var(--t-6); }
+.quiet { color: var(--slate); }
+
+strong, b { font-weight: 700; }
+
+/* Links: ink text with an action underline. Colour is never the only cue. */
+a { color: var(--ink); }
+.prose a, .body-link, .footer a, .record a {
+  text-decoration: underline;
+  text-decoration-color: var(--action);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+  transition: background-color var(--dur) var(--ease);
+}
+.prose a:hover, .body-link:hover, .footer a:hover, .record a:hover {
+  background: var(--action-wash);
+  text-decoration-thickness: 3px;
+}
+
+/* Clause lists, the gazette's own structure. */
+ul.clauses, ol.clauses { list-style: none; padding: 0; }
+ul.clauses > li, ol.clauses > li {
+  padding: var(--s-4) 0 var(--s-4) var(--s-6);
+  border-top: var(--rule-hair);
+  position: relative;
+}
+ul.clauses > li:last-child, ol.clauses > li:last-child { border-bottom: var(--rule-hair); }
+ol.clauses { counter-reset: clause; }
+ol.clauses > li::before {
+  counter-increment: clause;
+  content: counter(clause) '.';
+  position: absolute; left: 0; top: var(--s-4);
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  color: var(--slate);
+}
+ul.clauses > li::before {
+  content: '';
+  position: absolute; left: 0; top: calc(var(--s-4) + .62em);
+  width: 1rem; height: 2px;
+  background: var(--slate);
+}
+
+/* Ordinary lists. */
+.prose ul:not(.clauses), .prose ol:not(.clauses) { padding-left: 1.35em; }
+.prose li + li { margin-top: var(--s-2); }
+
+/* Numbered steps, used on How to Order. */
+.steps { list-style: none; padding: 0; margin: 0; counter-reset: step; }
+.steps > li {
+  counter-increment: step;
+  display: grid;
+  grid-template-columns: 3rem 1fr;
+  gap: var(--s-4);
+  padding: var(--s-5) 0;
+  border-top: var(--rule-hair);
+  max-width: var(--measure);
+}
+.steps > li:last-child { border-bottom: var(--rule-hair); }
+.steps > li::before {
+  content: counter(step);
+  font-size: var(--t-1);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  border-top: var(--rule-ink);
+  padding-top: var(--s-2);
+}
+.steps h2, .steps h3 { margin-top: 0; font-size: var(--t-3); letter-spacing: -.01em; }
+
+/* ---------- 7. Rules, records and notices ------------------------------- */
+/* Where this category would reach for a card, we use a hairline row. */
+
+.record { margin: 0; border-top: var(--rule-hair); max-width: none; }
+.record__row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--s-1);
+  padding: var(--s-4) 0;
+  border-bottom: var(--rule-hair);
+}
+@media (min-width: 40em) {
+  .record__row { grid-template-columns: minmax(9rem, 15rem) 1fr; gap: var(--s-5); }
+}
+.record dt { color: var(--slate); font-size: var(--t-6); }
+.record dd { margin: 0; }
+.record__sub { display: block; color: var(--slate); font-size: var(--t-6); }
+/* A record's primary value is a standalone target. Links inside .record__sub are
+   inline in a sentence and keep the WCAG 2.5.8 inline exemption. */
+.record dd > a { display: inline-flex; align-items: center; min-height: var(--target); }
+
+/* A notice: the site's one boxed element, reserved for content a reader must
+   not miss. Ink frame, no fill, no shadow. */
+.notice {
+  border: var(--rule-ink);
+  padding: var(--s-5);
+  margin: var(--s-6) 0;
+  max-width: var(--measure);
+}
+.notice > :first-child { margin-top: 0; }
+.notice__head {
+  font-weight: 700;
+  font-size: var(--t-5);
+  margin: 0 0 var(--s-2);
+}
+.notice--safety { border-color: var(--alert); background: var(--alert-wash); }
+.notice--safety .notice__head { color: var(--alert); }
+
+/* The standing product disclaimer at the foot of every /medicines page. */
+.disclaimer {
+  border-top: var(--rule-ink);
+  margin-top: var(--s-8);
+  padding-top: var(--s-5);
+  padding-bottom: var(--s-8);
+  color: var(--slate);
+  font-size: var(--t-6);
+  max-width: var(--measure);
+}
+.disclaimer h2 { font-size: var(--t-5); color: var(--ink); margin: 0 0 var(--s-3); }
+.disclaimer p + p { margin-top: var(--s-3); }
+
+/* Icons: one authored set, one stroke weight, square caps and mitre joins to
+   match the rules. No emoji, no glyph substitutes. */
+.icon {
+  width: 1em; height: 1em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.75;
+  stroke-linecap: square;
+  stroke-linejoin: miter;
+  flex: none;
+}
+.icon--lg { width: 1.35em; height: 1.35em; }
+
+/* ---------- 8. Controls ------------------------------------------------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s-2);
+  min-height: var(--target);
+  padding: var(--s-3) var(--s-5);
+  font: inherit;
+  font-weight: 600;
+  line-height: 1.2;
+  text-align: center;
+  text-decoration: none;
+  border: var(--rule-ink);
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+/* Ink on the group blue: 4.95:1. This is the one place --action fills an area
+   that carries text, and it is the site's single primary action. */
+.btn--primary { background: var(--action); }
+.btn--primary:hover, .btn--primary:active { background: var(--ink); color: var(--paper); }
+.btn--secondary:hover, .btn--secondary:active { background: var(--ink); color: var(--paper); }
+.btn--ghost { border-color: var(--hair-strong); font-weight: 400; }
+.btn--ghost:hover, .btn--ghost:active { border-color: var(--ink); background: var(--wash); }
+.btn[disabled], .btn[aria-disabled='true'] {
+  border-color: var(--hair-strong); color: var(--slate);
+  background: var(--wash); cursor: not-allowed;
+}
+.btn--block { width: 100%; }
+
+.actions {
+  display: flex; flex-wrap: wrap;
+  gap: var(--s-3);            /* 12px, above the 8px minimum between targets */
+  align-items: center;
+  margin-top: var(--s-6);
+}
+.actions--tight { margin-top: var(--s-4); }
+
+/* One primary action per page. Everything else is a text link. */
+.next-link {
+  display: inline-flex; align-items: center;
+  min-height: var(--target);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: var(--action);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+.next-link:hover { background: var(--action-wash); }
+
+/* ---------- 9. Masthead and navigation ---------------------------------- */
+
+/* Full bleed: this is the contract's 2px ink rule under the nav, and the
+   masthead is the only element here that spans the viewport. */
+.masthead { border-bottom: var(--rule-ink); }
+
+.masthead__inner {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas: 'brand toggle' 'reach reach';
+  gap: var(--s-4);
+  align-items: center;
+  padding-top: var(--s-4);
+  padding-bottom: var(--s-4);
+}
+@media (min-width: 60em) {
+  .masthead__inner {
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas: 'brand reach cta';
+    gap: var(--s-6);
+  }
+}
+
+.wordmark {
+  grid-area: brand;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: var(--target);
+  text-decoration: none;
+  color: var(--ink);
+}
+.wordmark__name {
+  display: block;
+  font-size: var(--t-3);
+  font-weight: 700;
+  letter-spacing: -.015em;
+  line-height: 1.1;
+}
+.wordmark__descriptor {
+  display: block;
+  font-size: var(--t-7);
+  color: var(--slate);
+  letter-spacing: 0;
+}
+.wordmark:hover .wordmark__name { text-decoration: underline;
+  text-decoration-color: var(--action); text-decoration-thickness: 2px;
+  text-underline-offset: 3px; }
+
+.masthead__reach {
+  grid-area: reach;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--s-2) var(--s-4);
+}
+@media (min-width: 60em) { .masthead__reach { justify-content: center; } }
+
+.callnow {
+  display: inline-flex;
+  flex-direction: column;
+  min-height: var(--target);
+  justify-content: center;
+  text-decoration: none;
+  color: var(--ink);
+  border-bottom: 2px solid var(--action);
+}
+.callnow:hover { background: var(--action-wash); }
+.callnow__label { font-size: var(--t-7); color: var(--slate); }
+.callnow__number {
+  font-size: var(--t-3);
+  font-weight: 700;
+  letter-spacing: -.01em;
+  font-variant-numeric: tabular-nums;
+}
+.masthead__hours { margin: 0; font-size: var(--t-7); color: var(--slate); }
+
+.masthead__cta { grid-area: cta; display: none; }
+@media (min-width: 60em) { .masthead__cta { display: inline-flex; } }
+
+.menu-toggle {
+  grid-area: toggle;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  min-height: var(--target);
+  min-width: var(--target);
+  padding: 0 var(--s-3);
+  font: inherit;
+  font-weight: 600;
+  background: transparent;
+  color: var(--ink);
+  border: var(--rule-ink);
+  cursor: pointer;
+}
+.menu-toggle:hover { background: var(--wash); }
+.menu-toggle__bars { display: grid; gap: 3px; width: 1.1rem; }
+.menu-toggle__bars span { height: 2px; background: currentColor; }
+.menu-toggle[aria-expanded='true'] { background: var(--ink); color: var(--paper); }
+@media (min-width: 60em) { .menu-toggle { display: none; } }
+/* Without JavaScript the nav is always open, so the toggle would be a dead
+   control. Hide it and show the nav instead. */
+.no-js .menu-toggle { display: none; }
+
+/* -- the nav itself -- */
+
+.nav { border-top: var(--rule-hair); }
+
+/* Collapsed on small screens once JS is running; always open without it. */
+.js .nav { display: none; }
+.js .nav.is-open { display: block; }
+@media (min-width: 60em) { .js .nav { display: block; } }
+
+.nav__list {
+  list-style: none;
+  /* margin-block only: .shell's margin-inline:auto must survive, or the nav row
+     sits flush left while every other element on the page is centred. */
+  margin-block: 0;
+  padding-block: 0;
+  display: flex;
+  flex-direction: column;
+}
+@media (min-width: 60em) {
+  .nav__list { flex-direction: row; flex-wrap: wrap; align-items: stretch; gap: 0; }
+}
+
+.nav__item { position: relative; border-bottom: var(--rule-hair); }
+@media (min-width: 60em) {
+  .nav__item { border-bottom: 0; display: flex; align-items: stretch; }
+  .nav__item + .nav__item { border-left: var(--rule-hair); }
+}
+
+.nav__link {
+  display: flex;
+  align-items: center;
+  min-height: var(--target);
+  padding: var(--s-3) var(--s-4);
+  font-size: var(--t-5);
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--ink);
+}
+.nav__link:hover { background: var(--action-wash); }
+/* An inset shadow, not a border: it marks the current section without occupying
+   layout space, so nothing shifts as you move between pages. */
+.nav__item.is-current > .nav__link,
+.nav__link[aria-current='page'] { box-shadow: inset 0 -4px 0 var(--action); }
+@media (min-width: 60em) {
+  .nav__link { padding: var(--s-3) var(--s-4); }
+  /* Pull the row left by the link's own padding so the first label's text sits
+     on the same vertical as the wordmark, not indented from it. */
+  .nav__item:first-child { margin-left: calc(var(--s-4) * -1); }
+}
+
+.nav__disc {
+  position: absolute;
+  right: var(--s-2); top: 0;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: var(--target); height: var(--target);
+  padding: 0;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--slate);
+  cursor: pointer;
+}
+.nav__disc:hover { color: var(--ink); border-color: var(--hair); }
+.nav__disc .icon--chev { transition: transform var(--dur) var(--ease); }
+.nav__disc[aria-expanded='true'] .icon--chev { transform: rotate(180deg); }
+.nav__disc[aria-expanded='true'] { color: var(--ink); }
+.no-js .nav__disc { display: none; }
+@media (min-width: 60em) {
+  .nav__disc { position: static; width: 2rem; height: auto; align-self: stretch; }
+}
+
+/* The panel. Without JS it opens on hover and on focus-within, so keyboard and
+   mouse both reach it. With JS it is click-operated only, which means a tremor
+   or a drifting pointer cannot close a menu somebody is reading. */
+.nav__panel { display: none; }
+.no-js .nav__item:hover > .nav__panel,
+.no-js .nav__item:focus-within > .nav__panel { display: block; }
+.js .nav__disc[aria-expanded='true'] + .nav__panel { display: block; }
+
+@media (min-width: 60em) {
+  .nav__panel {
+    position: absolute;
+    top: 100%; left: -1px;
+    min-width: 17rem;
+    background: var(--paper);
+    border: var(--rule-ink);
+    z-index: 30;
+  }
+}
+
+.nav__sub { list-style: none; margin: 0; padding: 0; }
+.nav__sub li + li { border-top: var(--rule-hair); }
+.nav__sub a {
+  display: flex; align-items: center;
+  min-height: var(--target);
+  padding: var(--s-3) var(--s-4) var(--s-3) var(--s-6);
+  font-size: var(--t-5);
+  text-decoration: none;
+  color: var(--ink);
+}
+@media (min-width: 60em) { .nav__sub a { padding-left: var(--s-4); } }
+.nav__sub a:hover { background: var(--action-wash); }
+.nav__sub a[aria-current='page'] { font-weight: 700; box-shadow: inset 4px 0 0 var(--action); }
+
+/* ---------- 10. The two doors ------------------------------------------- */
+/* The one place boldness is spent. Two notices posted side by side inside a
+   single ink frame, divided by a hairline. Not cards: there is one frame. */
+
+.doors {
+  border: var(--rule-ink);
+  display: grid;
+  grid-template-columns: 1fr;
+  margin-top: var(--s-6);
+  max-width: none;
+}
+@media (min-width: 52em) { .doors { grid-template-columns: 1fr 1fr; } }
+
+.door {
+  --door-pad: var(--s-5);
+  display: flex;
+  flex-direction: column;
+  min-height: 17rem;
+  padding: var(--s-6) var(--door-pad) 0;
+  text-decoration: none;
+  color: var(--ink);
+  background: var(--paper);
+  transition: background-color var(--dur) var(--ease);
+}
+.door + .door { border-top: var(--rule-hair); }
+@media (min-width: 52em) {
+  .door { --door-pad: var(--s-6); min-height: 20.25rem; padding: var(--s-7) var(--door-pad) 0; }
+  .door + .door { border-top: 0; border-left: var(--rule-hair); }
+}
+
+.door__label {
+  /* The next action is the largest thing on the page, above the question that
+     asks it. THESIS requires this order. */
+  font-size: var(--t-display);
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: -.028em;
+  margin: 0;
+  max-width: 16ch;
+  text-wrap: balance;
+}
+/* Three clause lines, hairline-divided: the gazette's own structure, and it
+   fills the panel rather than leaving flex slack behind. */
+.door__lines { display: block; margin-top: var(--s-5); }
+.door__line {
+  display: block;
+  padding: var(--s-3) 0;
+  border-top: var(--rule-hair);
+  color: var(--slate);
+  font-size: var(--t-5);
+  line-height: 1.35;
+}
+
+/* The slot is always 6px tall, so nothing shifts. The fill grows into it. */
+/* Bleeds to the panel's edges: it is the door's own rule, not a bar floating
+   inside it. The slot stays 6px tall so the fill growing into it shifts nothing. */
+.door__rule {
+  position: relative;
+  height: 6px;
+  margin-top: auto;
+  margin-inline: calc(var(--door-pad) * -1);
+  background: transparent;
+}
+.door__rule::before {
+  content: '';
+  position: absolute; inset: auto 0 0 0;
+  height: 2px;
+  background: var(--slate);
+}
+.door__rule::after {
+  content: '';
+  position: absolute; inset: auto 0 0 0;
+  height: 6px;
+  background: var(--action);
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform var(--dur) var(--ease);
+}
+.door:hover, .door:active { background: var(--action-wash); }
+.door:hover .door__rule::after,
+.door:active .door__rule::after,
+.door:focus-visible .door__rule::after { transform: scaleY(1); }
+.door:focus-visible { outline-offset: -6px; }
+
+.doors-aside {
+  margin-top: var(--s-5);
+  color: var(--slate);
+  font-size: var(--t-5);
+  max-width: var(--measure);
+}
+
+/* The home masthead block above the doors. */
+.entry { padding-top: var(--s-7); padding-bottom: var(--s-8); }
+.entry__question {
+  font-size: var(--t-1);
+  font-weight: 700;
+  line-height: 1.02;
+  letter-spacing: -.035em;
+  margin: 0;
+  max-width: 20ch;
+}
+.entry__sub {
+  margin: var(--s-4) 0 0;
+  font-size: var(--t-3);
+  color: var(--slate);
+  max-width: 42ch;
+}
+
+/* ---------- 11. Forms --------------------------------------------------- */
+/* At most five fields visible at once. Progressive disclosure is done on the
+   server first; JavaScript only removes the round trip. */
+
+.form { max-width: 34rem; }
+
+.fieldset {
+  border: 0; padding: 0; margin: 0 0 var(--s-6);
+}
+.fieldset > legend {
+  padding: 0;
+  font-size: var(--t-2);
+  font-weight: 600;
+  letter-spacing: -.02em;
+  margin-bottom: var(--s-2);
+}
+
+.field { margin-bottom: var(--s-5); }
+.field > label,
+.field > .field__label {
+  display: block;
+  font-weight: 600;
+  font-size: var(--t-5);
+  margin-bottom: var(--s-2);
+}
+.field__hint {
+  display: block;
+  font-size: var(--t-6);
+  color: var(--slate);
+  margin-bottom: var(--s-2);
+}
+.field__optional { font-weight: 400; color: var(--slate); }
+
+input[type='text'], input[type='email'], input[type='tel'], input[type='search'],
+input[type='date'], select, textarea {
+  width: 100%;
+  min-height: var(--target);
+  padding: var(--s-3);
+  font: inherit;
+  font-size: var(--t-4);
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--hair-strong);
+}
+textarea { min-height: 7rem; resize: vertical; line-height: 1.5; }
+input:hover, select:hover, textarea:hover { border-color: var(--slate); }
+input:focus-visible, select:focus-visible, textarea:focus-visible {
+  border-color: var(--ink);
+  border-width: 2px;
+  padding: calc(var(--s-3) - 1px);
+}
+::placeholder { color: var(--slate); opacity: 1; }
+
+/* Radios and checkboxes as full-width rows, so the whole row is the target. */
+.choices { display: grid; gap: var(--s-2); border: 0; padding: 0; margin: 0; }
+/* The legend of a radio group is a field label and must match one exactly. */
+.choices > .field__label {
+  display: block;
+  float: left;
+  width: 100%;
+  padding: 0;
+  font-weight: 600;
+  font-size: var(--t-5);
+  margin-bottom: var(--s-2);
+}
+.choices > .field__hint { float: left; width: 100%; }
+.choice {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  min-height: var(--target);
+  padding: var(--s-2) var(--s-3);
+  border: 1px solid var(--hair-strong);
+  cursor: pointer;
+  font-size: var(--t-5);
+}
+.choice:hover { border-color: var(--ink); background: var(--wash); }
+.choice input { width: 1.25rem; height: 1.25rem; margin: 0; flex: none; }
+.choice:has(input:checked) { border-color: var(--ink); border-width: 2px; padding: calc(var(--s-2) - 1px) calc(var(--s-3) - 1px); }
+
+/* Errors: in text, beside the field, describing the fix. Never colour alone. */
+.field.is-error input, .field.is-error select, .field.is-error textarea {
+  border-color: var(--alert);
+  border-width: 2px;
+  padding: calc(var(--s-3) - 1px);
+}
+.field__error {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--s-2);
+  margin-top: var(--s-2);
+  color: var(--alert);
+  font-size: var(--t-6);
+  font-weight: 600;
+}
+.field__error .icon { margin-top: .15em; }
+
+.errors {
+  border: 2px solid var(--alert);
+  background: var(--alert-wash);
+  padding: var(--s-5);
+  margin-bottom: var(--s-6);
+  max-width: 34rem;
+}
+.errors h2 { margin: 0 0 var(--s-3); font-size: var(--t-3); color: var(--alert); }
+.errors ul { margin: 0; padding-left: 1.2em; }
+.errors a { color: var(--ink); font-weight: 600; }
+
+/* Progress through a multi-step form, as a rule that fills. */
+.progress { margin-bottom: var(--s-6); max-width: 34rem; }
+.progress__label { font-size: var(--t-7); color: var(--slate); margin: 0 0 var(--s-2); }
+.progress__track { display: flex; gap: var(--s-1); }
+/* Weight, not colour: --action is reserved for interactive elements, and a
+   progress segment is not one. Pending is lightest, done is mid, current is
+   heaviest, so the eye lands on where you are. */
+.progress__seg { height: 6px; flex: 1; background: var(--hair); }
+.progress__seg.is-done { background: var(--slate); }
+.progress__seg.is-now  { background: var(--ink); }
+
+/* The confirmation, carrying a reference somebody can quote on the phone. */
+.receipt { border: var(--rule-ink); border-top-width: 6px; padding: var(--s-6); max-width: 34rem; }
+.receipt h1 { margin: 0 0 var(--s-4); }
+.receipt__ref {
+  display: block;
+  font-size: var(--t-1);
+  font-weight: 700;
+  letter-spacing: .02em;
+  font-variant-numeric: tabular-nums;
+  margin: var(--s-2) 0 var(--s-5);
+  padding-bottom: var(--s-4);
+  border-bottom: var(--rule-hair);
+}
+
+/* The medicine enquiry entry: a search field that opens a conversation rather
+   than pretending to query a catalogue we do not publish. */
+.lookup { border: var(--rule-ink); padding: var(--s-5); max-width: 38rem; margin: var(--s-6) 0; }
+.lookup__row { display: grid; gap: var(--s-3); }
+@media (min-width: 34em) { .lookup__row { grid-template-columns: 1fr auto; align-items: end; } }
+.lookup label { display: block; font-weight: 600; margin-bottom: var(--s-2); }
+.lookup__note { margin: var(--s-4) 0 0; font-size: var(--t-6); color: var(--slate); }
+
+/* Category chunks on the medicine pages. Rows, not a grid of cards. */
+.chunks { list-style: none; margin: var(--s-6) 0 0; padding: 0; border-top: var(--rule-ink); max-width: var(--measure); }
+.chunks > li { border-bottom: var(--rule-hair); }
+.chunks a, .chunks > li > div {
+  display: block;
+  padding: var(--s-5) 0;
+  text-decoration: none;
+  color: var(--ink);
+}
+.chunks a:hover { background: var(--action-wash); }
+.chunk__name { display: block; font-size: var(--t-3); font-weight: 600; letter-spacing: -.015em; }
+.chunk__blurb { display: block; margin-top: var(--s-2); color: var(--slate); font-size: var(--t-5); max-width: 52ch; }
+
+/* ---------- The parallel column ----------------------------------------- */
+/* Vanuatu is trilingual and the gazette is natively parallel-text. This opens a
+   second column beside the English. Without JS the column is simply shown. */
+
+.parallel { border-top: var(--rule-ink); margin-top: var(--s-8); padding-top: var(--s-5); }
+.parallel__bar { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-4); margin-bottom: var(--s-5); }
+.parallel__title { margin: 0; font-size: var(--t-5); font-weight: 700; }
+.parallel__toggle {
+  display: inline-flex; align-items: center; gap: var(--s-2);
+  min-height: var(--target); padding: 0 var(--s-4);
+  font: inherit; font-weight: 600; font-size: var(--t-6);
+  background: transparent; color: var(--ink);
+  border: 1px solid var(--hair-strong); cursor: pointer;
+}
+.parallel__toggle:hover { border-color: var(--ink); background: var(--wash); }
+.parallel__toggle[aria-expanded='true'] { border-color: var(--ink); border-width: 2px; padding: 0 calc(var(--s-4) - 1px); }
+.parallel__cols { display: grid; gap: var(--s-6); }
+.parallel__col > h3 { margin-top: 0; font-size: var(--t-5); color: var(--slate); font-weight: 600; }
+.parallel__col + .parallel__col { border-top: var(--rule-hair); padding-top: var(--s-5); }
+
+.js .parallel__col--alt { display: none; }
+.js .parallel.is-open .parallel__col--alt { display: block; }
+@media (min-width: 48em) {
+  .parallel.is-open .parallel__cols { grid-template-columns: 1fr 1fr; }
+  .parallel.is-open .parallel__col + .parallel__col {
+    border-top: 0; padding-top: 0; border-left: var(--rule-hair); padding-left: var(--s-6);
+  }
+}
+
+/* ---------- 12. Markers for outstanding content ------------------------- */
+/* Deliberately conspicuous. Nobody should be able to launch without seeing them. */
+
+.todo {
+  display: inline-flex; align-items: baseline; gap: var(--s-2);
+  padding: .25em .45em;
+  background: var(--alert-wash);
+  border-bottom: 2px solid var(--alert);
+  font-size: .95em;
+}
+.todo__label {
+  font-size: var(--t-7); font-weight: 700; color: var(--alert);
+  text-transform: none; letter-spacing: 0; white-space: nowrap;
+}
+.todo__key { font-weight: 600; color: var(--ink); word-break: break-word; }
+
+.todo-block {
+  border: 2px dashed var(--alert);
+  background: var(--alert-wash);
+  padding: var(--s-5);
+  margin: var(--s-5) 0 var(--s-6);
+  max-width: var(--measure);
+}
+.todo-block__head { margin: 0 0 var(--s-2); font-weight: 700; color: var(--alert); font-size: var(--t-5); }
+.todo-block__body { margin: 0; color: var(--ink); font-size: var(--t-6); }
+
+.photo-needed { margin: var(--s-6) 0; max-width: 34rem; }
+.photo-needed__frame {
+  border: 2px dashed var(--hair-strong);
+  padding: var(--s-7) var(--s-5);
+  text-align: left;
+  background: var(--wash);
+}
+.photo-needed__head { margin: 0 0 var(--s-2); font-size: var(--t-7); font-weight: 700; color: var(--slate); }
+.photo-needed__subject { margin: 0; font-size: var(--t-3); font-weight: 600; }
+.photo-needed__note { margin-top: var(--s-2); font-size: var(--t-6); color: var(--slate); }
+
+/* The healthcare-professional interstitial. */
+/* Constrain the content, not the shell: a max-width on .shell itself would
+   centre this page against every other route's left ink edge. */
+.gate { padding-top: var(--s-8); padding-bottom: var(--s-9); }
+.gate > * { max-width: 40rem; }
+.gate__head { border-top: var(--rule-ink); padding-top: var(--s-5); }
+
+/* ---------- 13. Footer -------------------------------------------------- */
+/* Small text, quiet, one column on mobile, no icons. Nine links is correct
+   here: footers are scanned, not decided from. */
+
+.footer {
+  border-top: var(--rule-ink);
+  margin-top: var(--s-9);
+  padding-top: var(--s-6);
+  padding-bottom: var(--s-7);
+  font-size: var(--t-6);
+  color: var(--slate);
+}
+.footer .shell { display: grid; gap: var(--s-6); }
+@media (min-width: 52em) {
+  .footer .shell { grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: var(--s-7); }
+  .footer__base { grid-column: 1 / -1; }
+}
+.footer__head {
+  font-size: var(--t-7);
+  font-weight: 700;
+  color: var(--ink);
+  margin: 0 0 var(--s-3);
+  padding-bottom: var(--s-2);
+  border-bottom: var(--rule-hair);
+  max-width: none;
+}
+.footer .record { font-size: var(--t-6); }
+.footer .record dt { font-size: var(--t-7); }
+.footer .record dd { color: var(--ink); }
+
+.footer__links { list-style: none; margin: 0; padding: 0; }
+.footer__links li + li { margin-top: 0; }
+.footer__links a {
+  display: flex;
+  align-items: center;
+  padding: var(--s-2) 0;
+  min-height: var(--target);
+  color: var(--slate);
+  text-decoration-color: var(--hair-strong);
+}
+.footer__links a:hover { color: var(--ink); text-decoration-color: var(--action); }
+
+.footer__base { border-top: var(--rule-hair); padding-top: var(--s-5); }
+.footer__group { margin: 0 0 var(--s-2); color: var(--ink); }
+.footer__sites { color: var(--slate); }
+.footer__claim { margin: 0; max-width: 62ch; }
+
+/* Marginalia: the notice reference and issue line, set apart from the footer's
+   body text the way a gazette sets them in the sheet's margin. */
+.footer__margin {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2) var(--s-6);
+  margin-top: var(--s-6);
+  padding-top: var(--s-3);
+  border-top: var(--rule-hair);
+  font-size: var(--t-7);
+  color: var(--slate);
+}
+@media (min-width: 52em) { .footer__margin { justify-content: flex-end; } }
+.footer__margin > span { display: inline-flex; gap: var(--s-2); }
+.footer__margin .footer__val { color: var(--ink); font-weight: 700; }
+
+/* ---------- 14. Plates: photography ------------------------------------- */
+/* A gazette does not print photographs in full colour beside its ink. It prints
+   plates: framed, captioned, and struck in the document's own ink. Every
+   photograph on this site is duotoned to --ink over --paper, which is why a
+   stock photograph cannot drift away from the five-value palette, and why the
+   page still reads as one printed object rather than a template with pictures
+   dropped into it.
+
+   The treatment is done in CSS, not baked into the files, so the same source
+   image can be re-toned if the palette ever moves. */
+
+.plate { margin: 0; max-width: none; }
+
+.plate__frame {
+  position: relative;
+  isolation: isolate;          /* keeps the blend off the page background */
+  background: var(--paper);
+  border: var(--rule-ink);
+  aspect-ratio: var(--plate-ar, 4 / 3);
+  overflow: hidden;
+}
+
+.plate__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--plate-pos, 50% 50%);
+  /* Desaturate, then push the remaining tone cold so the midtones sit with the
+     ink instead of going a neutral newsprint grey. */
+  filter: grayscale(1) sepia(.42) hue-rotate(168deg) saturate(1.45) contrast(1.06);
+  mix-blend-mode: multiply;    /* highlights fall to paper */
+}
+
+/* Shadows lift to ink. Together with the multiply above this is a two-point
+   duotone: pure black prints as --ink, pure white prints as --paper. */
+.plate__frame::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--ink);
+  mix-blend-mode: lighten;
+  pointer-events: none;
+}
+
+/* Caption. Hairline above, slate text, and an optional right-hand reference in
+   the same tabular figures as every other number on the site. */
+.plate__cap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2) var(--s-4);
+  justify-content: space-between;
+  align-items: baseline;
+  margin-top: var(--s-3);
+  padding-top: var(--s-3);
+  border-top: var(--rule-hair);
+  font-size: var(--t-7);
+  line-height: 1.45;
+  color: var(--slate);
+  max-width: none;
+}
+/* Sentence case, zero tracking: the same treatment the footer margin gives
+   "Notice GV-HOME". An all-caps label would be an eyebrow, and this system
+   does not have eyebrows. */
+.plate__ref {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+
+/* Ratios, named rather than written inline at every call site. */
+.plate--tall   { --plate-ar: 3 / 4; }
+.plate--square { --plate-ar: 1 / 1; }
+.plate--wide   { --plate-ar: 16 / 9; }
+.plate--strip  { --plate-ar: 21 / 9; }
+
+/* ---------- 15. Split layouts and bands --------------------------------- */
+/* Body copy is capped at 65 characters, which on a wide screen leaves the right
+   third of every section empty. A plate fills it. The measure stays honest and
+   the page stops looking unfinished. */
+
+.split {
+  display: grid;
+  gap: var(--s-6);
+  align-items: start;
+}
+@media (min-width: 60em) {
+  .split { grid-template-columns: minmax(0, 1fr) minmax(0, .68fr); gap: var(--s-8); }
+  .split--even { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  /* The plate leads on the left. Source order still puts the words first, and
+     the track widths swap with it — otherwise the flip hands the wide column to
+     the photograph and squeezes the reading column, which is backwards. */
+  .split--flip { grid-template-columns: minmax(0, .68fr) minmax(0, 1fr); }
+  .split--flip > .split__aside { order: -1; }
+}
+.split__body > :first-child, .split__aside > :first-child { margin-top: 0; }
+.split__aside .plate { width: 100%; }
+
+/* A band spans the viewport: an ink panel carrying one short statement, and a
+   plate beside it. Text sits on the ink, never on the photograph, so contrast
+   is 14.28:1 by construction instead of by luck. */
+.band {
+  border-top: var(--rule-ink);
+  border-bottom: var(--rule-ink);
+  margin-top: var(--s-8);
+  background: var(--ink);
+  color: var(--paper);
+}
+.band__inner { display: grid; }
+@media (min-width: 52em) { .band__inner { grid-template-columns: 1fr 1fr; align-items: stretch; } }
+
+.band__panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--s-4);
+  padding: var(--s-7) clamp(var(--s-4), 4vw, var(--s-7));
+}
+@media (min-width: 76rem) {
+  /* Hold the panel's text on the same left edge as the shell above it. */
+  .band__panel { padding-left: max(clamp(var(--s-4), 4vw, var(--s-7)), calc((100vw - 76rem) / 2 + var(--s-7))); }
+}
+/* A small label, not an overline. Sentence case and zero tracking, so this is
+   the same object as .record dt or .callnow__label — just set on ink. */
+.band__kicker {
+  margin: 0;
+  font-size: var(--t-6);
+  letter-spacing: 0;
+  color: var(--paper);
+  opacity: .78;
+}
+.band__head {
+  margin: 0;
+  max-width: 20ch;
+  font-size: var(--t-2);
+  font-weight: 600;
+  letter-spacing: -.015em;
+  color: var(--paper);
+}
+.band__body { margin: 0; max-width: 46ch; color: var(--paper); opacity: .86; }
+.band__body a, .band a { color: var(--paper); text-decoration-color: var(--action); }
+
+/* The band's own plate: no frame, because the band's rules already frame it,
+   and the ink ground is the plate's own shadow tone. */
+.band__figure {
+  position: relative;
+  isolation: isolate;
+  background: var(--paper);
+  min-height: 15rem;
+  overflow: hidden;
+}
+@media (min-width: 52em) { .band__figure { min-height: 22rem; } }
+.band__figure .plate__img { position: absolute; inset: 0; }
+.band__figure::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--ink);
+  mix-blend-mode: lighten;
+  pointer-events: none;
+}
+
+/* A plate used as a page's opening image, flush under the masthead. */
+.plate--opening { --plate-ar: 21 / 9; margin-top: var(--s-6); }
+@media (max-width: 40em) { .plate--opening { --plate-ar: 3 / 2; } }
+
+/* ---------- 16. Icons in context ---------------------------------------- */
+/* Icons mark a repeating kind of thing — a channel, a category, a state. They
+   are ink or slate, never --action: blue fills interactive targets only. */
+
+.record dt {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+}
+.record dt .icon { color: var(--slate); width: 1.05em; height: 1.05em; }
+
+/* A chunk row earns a mark on the right that leans in on hover, the same
+   gesture the door's rule makes. */
+.chunks a { position: relative; padding-right: var(--s-6); }
+.chunk__go {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  margin-top: -.5em;
+  color: var(--slate);
+  transition: transform var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+.chunks a:hover .chunk__go, .chunks a:focus-visible .chunk__go {
+  transform: translateX(.25rem);
+  color: var(--ink);
+}
+
+/* Contact channels: the same hairline record, with the channel's mark leading. */
+.channels { list-style: none; margin: var(--s-6) 0 0; padding: 0; border-top: var(--rule-ink); max-width: var(--measure); }
+.channels > li { border-bottom: var(--rule-hair); }
+.channels__row {
+  display: grid;
+  grid-template-columns: 1.5rem 1fr;
+  gap: var(--s-2) var(--s-4);
+  align-items: start;
+  padding: var(--s-4) 0;
+  min-height: var(--target);
+  text-decoration: none;
+  color: var(--ink);
+}
+a.channels__row:hover { background: var(--action-wash); }
+.channels__row > .icon { width: 1.35rem; height: 1.35rem; margin-top: .15em; color: var(--slate); }
+.channels__name { display: block; font-size: var(--t-6); color: var(--slate); }
+.channels__val  { display: block; font-size: var(--t-3); font-weight: 600; letter-spacing: -.01em; }
+.channels__sub  { display: block; margin-top: var(--s-1); font-size: var(--t-6); color: var(--slate); }
+
+/* The house mark, beside the wordmark and nowhere else. */
+.mark { width: 2.15rem; height: 2.15rem; flex: none; color: var(--ink); }
+.wordmark { flex-direction: row; align-items: center; gap: var(--s-3); }
+.wordmark__text { display: flex; flex-direction: column; }
+
+/* The phone mark in the masthead sits with the label, not the number. */
+.callnow__label { display: inline-flex; align-items: center; gap: var(--s-1); }
+.callnow__label .icon { width: .95em; height: .95em; }
+
+/* Marks used inline in a notice heading. */
+.notice__head { display: flex; align-items: center; gap: var(--s-2); }
+.notice__head .icon { width: 1.1em; height: 1.1em; flex: none; }
+.notice--safety .notice__head .icon { color: var(--alert); }
+
+/* ---------- 17. Motion, print, forced colours --------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    transition-duration: 0s !important;
+    animation-duration: 0s !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+/* This audience prints things to take to a doctor. Make that work. */
+@media print {
+  :root { --paper: #fff; --ink: #000; --slate: #333; }
+  body { font-size: 11pt; line-height: 1.45; }
+  .masthead__reach, .masthead__cta, .menu-toggle, .nav, .skip,
+  .parallel__toggle, .lookup, .actions { display: none !important; }
+  .doors, .notice, .receipt { border-color: #000; }
+  .section { break-inside: avoid; }
+  a { text-decoration: none; }
+  .prose a::after { content: ' (' attr(href) ')'; font-size: 9pt; color: #333; }
+  .footer { border-top: 1pt solid #000; }
+}
+
+@media (forced-colors: active) {
+  .door__rule::after, .progress__seg.is-now { background: Highlight; }
+  /* Keep the three-state ramp separable here too: Highlight alone would
+     make a completed step indistinguishable from the current one. */
+  .progress__seg.is-done { background: GrayText; }
+  .btn, .notice, .doors, .nav__panel { border-color: CanvasText; }
+  :focus-visible { outline-color: Highlight; }
+}
+
+/* Duotone is an enhancement. Where the blend modes are unavailable the plate
+   still prints as a toned photograph inside its ink frame. */
+@supports not (mix-blend-mode: lighten) {
+  .plate__img, .band__figure .plate__img {
+    mix-blend-mode: normal;
+    filter: grayscale(.9) contrast(1.04);
+  }
+  .plate__frame::after, .band__figure::after { display: none; }
+}
+
+@media (forced-colors: active) {
+  /* The overlay would paint a solid block over the photograph. */
+  .plate__frame::after, .band__figure::after { display: none; }
+  .plate__img { mix-blend-mode: normal; filter: none; }
+  .plate__frame, .channels, .chunks { border-color: CanvasText; }
+  .band { border-color: CanvasText; }
+}
+
+@media print {
+  /* A band is a screen device: the ink panel would print as a solid block. */
+  .band { background: none; color: #000; border-color: #000; }
+  .band__head, .band__body, .band__kicker { color: #000; opacity: 1; }
+  .band__figure, .plate { break-inside: avoid; }
+  .plate__img, .band__figure .plate__img { mix-blend-mode: normal; filter: grayscale(1); }
+  .plate__frame::after, .band__figure::after { display: none; }
+  .plate__frame { border-color: #000; }
+}
+
+/* The home entry: the question on the left, one plate on the right. The plate
+   fills the void that a 20ch heading leaves on a wide screen, and it stops
+   above the doors — the doors are still the boldest thing on this page, and a
+   photograph is not allowed to outrank them. */
+.entry__head { display: grid; gap: var(--s-5); align-items: start; }
+@media (min-width: 60em) {
+  .entry__head { grid-template-columns: minmax(0, 1fr) minmax(0, .58fr); gap: var(--s-8); }
+}
+.entry__words > :first-child { margin-top: 0; }
+.entry__plate { --plate-ar: 16 / 9; }
+
+/* The stock-photography disclosure sits under the trading claim, quieter than
+   it but still readable. */
+.footer__claim--quiet { color: var(--slate); }

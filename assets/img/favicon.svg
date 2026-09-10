@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Getmeds Vanuatu">
+  <title>Getmeds Vanuatu</title>
+  <!-- The house mark, identical to brand_mark() in includes/icons.php: a posted
+       notice with a pharmacy cross struck into it. The masthead and the browser
+       tab must carry the same mark, so this file and that function move together. -->
+  <rect width="32" height="32" fill="#FBFBF9"/>
+  <path d="M2 2h28v28H2z" fill="none" stroke="#0F2A3D" stroke-width="2.5"/>
+  <path d="M8 8h10" fill="none" stroke="#0F2A3D" stroke-width="2.5"/>
+  <path d="M8 13.5h6" fill="none" stroke="#0F2A3D" stroke-width="2.5"/>
+  <path d="M19 17v9M14.5 21.5h9" fill="none" stroke="#0F2A3D" stroke-width="3"/>
+</svg>

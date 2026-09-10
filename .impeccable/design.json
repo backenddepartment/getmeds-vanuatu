@@ -1,0 +1,381 @@
+{
+ "schemaVersion": 2,
+ "generatedAt": "2026-09-11T00:04:57",
+ "title": "Design System: Getmeds Vanuatu — Pacific Chemotherapy Pharmacy",
+ "extensions": {
+  "colorMeta": {
+   "ink": {
+    "role": "primary",
+    "displayName": "Ink",
+    "canonical": "oklch(27.4% 0.0482 242.1)",
+    "tonalRamp": [
+     "#000C1D",
+     "#0C283A",
+     "#2A455A",
+     "#49657B",
+     "#69869D",
+     "#8BA9C1",
+     "#AFCEE6",
+     "#D3F3FF"
+    ]
+   },
+   "action": {
+    "role": "accent",
+    "displayName": "Getmeds Blue",
+    "canonical": "oklch(66.4% 0.1349 235.3)",
+    "tonalRamp": [
+     "#00053A",
+     "#00285C",
+     "#00487E",
+     "#006AA2",
+     "#008DC7",
+     "#39B1ED",
+     "#64D6FF",
+     "#8CFDFF"
+    ]
+   },
+   "paper": {
+    "role": "neutral",
+    "displayName": "Paper",
+    "canonical": "oklch(98.8% 0.0026 106.4)",
+    "tonalRamp": [
+     "#0B0B0A",
+     "#252524",
+     "#424240",
+     "#616160",
+     "#828281",
+     "#A5A5A3",
+     "#C9C9C7",
+     "#EEEEEC"
+    ]
+   },
+   "slate": {
+    "role": "neutral",
+    "displayName": "Slate",
+    "canonical": "oklch(50.8% 0.0375 245.8)",
+    "tonalRamp": [
+     "#000C1A",
+     "#152736",
+     "#314455",
+     "#506476",
+     "#708598",
+     "#92A8BC",
+     "#B6CCE1",
+     "#DBF2FF"
+    ]
+   },
+   "alert": {
+    "role": "tertiary",
+    "displayName": "Alert",
+    "canonical": "oklch(50.1% 0.1783 28.7)",
+    "tonalRamp": [
+     "#3A0000",
+     "#610000",
+     "#880000",
+     "#B0221B",
+     "#D84C3F",
+     "#FF7161",
+     "#FF9784",
+     "#FFBDA8"
+    ]
+   }
+  },
+  "typographyMeta": {
+   "display": {
+    "displayName": "Display",
+    "purpose": "The two door labels only. The next action is the largest thing on the page."
+   },
+   "headline": {
+    "displayName": "Headline",
+    "purpose": "Page h1, and the home page's routing question, which sits one step BELOW the door labels."
+   },
+   "title": {
+    "displayName": "Title",
+    "purpose": "Section h2 opening a plate below a 2px ink rule."
+   },
+   "subtitle": {
+    "displayName": "Subtitle",
+    "purpose": "h3, chunk row names, lede, and the callnow number."
+   },
+   "body": {
+    "displayName": "Body",
+    "purpose": "18px, line-height 1.6, measure 65ch. Applied once on body; the root stays at 100%."
+   },
+   "label": {
+    "displayName": "Label",
+    "purpose": "Field labels, nav links, clause lines, buttons, secondary body."
+   },
+   "caption": {
+    "displayName": "Caption",
+    "purpose": "Footer body, record terms, hints, disclaimer."
+   },
+   "micro": {
+    "displayName": "Micro",
+    "purpose": "Wordmark descriptor, masthead hours, footer heads, the notice reference and issue line."
+   }
+  },
+  "shadows": [
+   {
+    "name": "none",
+    "value": "none",
+    "purpose": "There is no elevation system. The stylesheet contains zero box-shadow declarations and that is a deliberate constraint, not an omission. Depth is expressed by rule weight (1px slate hairline for peers, 2px ink rule for a section boundary) and by deep space above a heading. A shadow anywhere in this system is a defect."
+   }
+  ],
+  "motion": [
+   {
+    "name": "ease-standard",
+    "value": "cubic-bezier(.2, .7, .3, 1)",
+    "purpose": "The only easing curve. Exponential-ish ease-out from an already-visible default."
+   },
+   {
+    "name": "dur-standard",
+    "value": ".18s",
+    "purpose": "The only duration. Used for background-color, color and the door bar's transform."
+   },
+   {
+    "name": "reduced-motion",
+    "value": "0s",
+    "purpose": "prefers-reduced-motion: reduce sets every transition and animation duration to zero. There are no entrance animations to suppress; nothing on this site fades or slides in on scroll."
+   },
+   {
+    "name": "no-movement-rule",
+    "value": "transform: scaleY() on .door__rule::after only",
+    "purpose": "Nothing on this site moves on hover, focus or navigation. The single authored moment is the door's bottom bar filling its 6px slot; the slot is always 6px tall so the fill causes no layout shift."
+   }
+  ],
+  "breakpoints": [
+   {
+    "name": "xs",
+    "value": "34em",
+    "purpose": "The medicine lookup goes from stacked to field-plus-button."
+   },
+   {
+    "name": "sm",
+    "value": "40em",
+    "purpose": "Record rows go from stacked to a two-column term/value grid."
+   },
+   {
+    "name": "md",
+    "value": "48em",
+    "purpose": "The parallel language column can sit beside the English rather than beneath it."
+   },
+   {
+    "name": "lg",
+    "value": "52em",
+    "purpose": "The two doors go side by side inside one frame; the footer becomes two columns."
+   },
+   {
+    "name": "xl",
+    "value": "60em",
+    "purpose": "The nav becomes a horizontal row and the Menu button disappears; the masthead becomes three columns."
+   }
+  ]
+ },
+ "components": [
+  {
+   "name": "Primary Button",
+   "kind": "button",
+   "refersTo": "button-primary",
+   "description": "The site's one filled action rectangle per page. Ink text on the Getmeds blue fill, which is the only place --action carries text and measures 4.95:1.",
+   "html": "<a class=\"ds-btn ds-btn-primary\" href=\"#\">Ask About a Medicine</a>",
+   "css": ".ds-btn { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; min-height: 3rem; padding: .75rem 1.5rem; font: inherit; font-weight: 600; line-height: 1.2; text-align: center; text-decoration: none; border: 2px solid var(--ink, #0F2A3D); border-radius: 0; background: transparent; color: var(--ink, #0F2A3D); cursor: pointer; transition: background-color .18s cubic-bezier(.2,.7,.3,1), color .18s cubic-bezier(.2,.7,.3,1); } .ds-btn-primary { background: var(--action, #1D9FDA); } .ds-btn-primary:hover, .ds-btn-primary:active { background: var(--ink, #0F2A3D); color: var(--paper, #FBFBF9); } .ds-btn:focus-visible { outline: 2px solid var(--ink, #0F2A3D); outline-offset: 3px; }"
+  },
+  {
+   "name": "Secondary Button",
+   "kind": "button",
+   "refersTo": "button-secondary",
+   "description": "Outline variant. Every body-level button pointing at the header's action uses this, so only one filled rectangle exists per page.",
+   "html": "<a class=\"ds-btn ds-btn-secondary\" href=\"#\">Ask About a Medicine</a>",
+   "css": ".ds-btn-secondary { background: transparent; border: 2px solid var(--ink, #0F2A3D); border-radius: 0; color: var(--ink, #0F2A3D); display: inline-flex; align-items: center; justify-content: center; min-height: 3rem; padding: .75rem 1.5rem; font-weight: 600; line-height: 1.2; text-decoration: none; transition: background-color .18s cubic-bezier(.2,.7,.3,1), color .18s cubic-bezier(.2,.7,.3,1); } .ds-btn-secondary:hover, .ds-btn-secondary:active { background: var(--ink, #0F2A3D); color: var(--paper, #FBFBF9); } .ds-btn-secondary:focus-visible { outline: 2px solid var(--ink, #0F2A3D); outline-offset: 3px; }"
+  },
+  {
+   "name": "Text Field",
+   "kind": "input",
+   "refersTo": "input-text",
+   "description": "Persistent visible label above, optional hint, 48px minimum height, square corners. Placeholders are never used as labels.",
+   "html": "<div class=\"ds-field\"><label class=\"ds-field-label\" for=\"ds-m\">Medicine name</label><span class=\"ds-field-hint\">As written on the prescription.</span><input class=\"ds-input\" id=\"ds-m\" type=\"text\"></div>",
+   "css": ".ds-field { margin-bottom: 1.5rem; max-width: 34rem; } .ds-field-label { display: block; font-weight: 600; font-size: 1rem; margin-bottom: .5rem; color: var(--ink, #0F2A3D); } .ds-field-hint { display: block; font-size: .875rem; color: var(--slate, #54687A); margin-bottom: .5rem; } .ds-input { width: 100%; min-height: 3rem; padding: .75rem; font: inherit; font-size: 1.125rem; color: var(--ink, #0F2A3D); background: var(--paper, #FBFBF9); border: 1px solid rgba(15,42,61,.38); border-radius: 0; } .ds-input:hover { border-color: var(--slate, #54687A); } .ds-input:focus-visible { border-color: var(--ink, #0F2A3D); border-width: 2px; padding: calc(.75rem - 1px); outline: 2px solid var(--ink, #0F2A3D); outline-offset: 3px; }"
+  },
+  {
+   "name": "Field Error",
+   "kind": "custom",
+   "refersTo": "input-error",
+   "description": "Inline, beside the field, in text, naming the fix rather than the failure. Colour is never the only cue: a 2px alert border, an authored icon and a text message.",
+   "html": "<div class=\"ds-field ds-field-error\"><label class=\"ds-field-label\" for=\"ds-p\">Phone number</label><input class=\"ds-input ds-input-error\" id=\"ds-p\" type=\"tel\"><p class=\"ds-error\"><svg class=\"ds-icon\" viewBox=\"0 0 16 16\" aria-hidden=\"true\"><path d=\"M8 1.5L15 14H1L8 1.5z\"/><path d=\"M8 6v4\"/><path d=\"M8 11.75v.75\"/></svg><span>Add a phone number. This is how a pharmacist will reach you.</span></p></div>",
+   "css": ".ds-field-error .ds-input-error { border-color: var(--alert, #B3261E); border-width: 2px; padding: calc(.75rem - 1px); border-radius: 0; } .ds-error { display: flex; align-items: flex-start; gap: .5rem; margin-top: .5rem; color: var(--alert, #B3261E); font-size: .875rem; font-weight: 600; } .ds-error .ds-icon { width: 1em; height: 1em; flex: none; margin-top: .15em; fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linecap: square; stroke-linejoin: miter; }"
+  },
+  {
+   "name": "Navigation Row",
+   "kind": "nav",
+   "refersTo": "nav-primary",
+   "description": "Six labels, never more. Hairline dividers between items, the current section marked by an inset 4px accent shadow rather than a border so nothing shifts between pages.",
+   "html": "<nav class=\"ds-nav\" aria-label=\"Main\"><ul class=\"ds-nav-list\"><li class=\"ds-nav-item\"><a class=\"ds-nav-link\" href=\"#\" aria-current=\"page\">Home</a></li><li class=\"ds-nav-item\"><a class=\"ds-nav-link\" href=\"#\">Medicines</a></li><li class=\"ds-nav-item\"><a class=\"ds-nav-link\" href=\"#\">For Patients</a></li></ul></nav>",
+   "css": ".ds-nav { border-top: 1px solid var(--slate, #54687A); } .ds-nav-list { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; } .ds-nav-item { display: flex; align-items: stretch; } .ds-nav-item + .ds-nav-item { border-left: 1px solid var(--slate, #54687A); } .ds-nav-link { display: flex; align-items: center; min-height: 3rem; padding: .75rem 1rem; font-size: 1rem; font-weight: 600; text-decoration: none; color: var(--ink, #0F2A3D); } .ds-nav-link:hover { background: rgba(29,159,218,.10); } .ds-nav-link[aria-current=\"page\"] { box-shadow: inset 0 -4px 0 var(--action, #1D9FDA); } .ds-nav-link:focus-visible { outline: 2px solid var(--ink, #0F2A3D); outline-offset: 3px; }"
+  },
+  {
+   "name": "Hairline Row List",
+   "kind": "card",
+   "refersTo": "chunks",
+   "description": "What this system uses wherever the category would reach for a grid of identical cards: a 2px ink rule on top, then hairline-divided rows. There are no cards in this design.",
+   "html": "<ul class=\"ds-chunks\"><li><a href=\"#\"><span class=\"ds-chunk-name\">Cancer Medicines</span><span class=\"ds-chunk-blurb\">The groups of cancer medicine we supply against a prescription.</span></a></li><li><a href=\"#\"><span class=\"ds-chunk-name\">Medicines for Side Effects</span><span class=\"ds-chunk-blurb\">Anti-sickness, pain, mouth care and blood-count support.</span></a></li></ul>",
+   "css": ".ds-chunks { list-style: none; margin: 0; padding: 0; border-top: 2px solid var(--ink, #0F2A3D); max-width: 65ch; } .ds-chunks > li { border-bottom: 1px solid var(--slate, #54687A); } .ds-chunks a { display: block; padding: 1.5rem 0; text-decoration: none; color: var(--ink, #0F2A3D); } .ds-chunks a:hover { background: rgba(29,159,218,.10); } .ds-chunk-name { display: block; font-size: 1.25rem; font-weight: 600; letter-spacing: -.015em; } .ds-chunk-blurb { display: block; margin-top: .5rem; color: var(--slate, #54687A); font-size: 1rem; max-width: 52ch; } .ds-chunks a:focus-visible { outline: 2px solid var(--ink, #0F2A3D); outline-offset: 3px; }"
+  },
+  {
+   "name": "The Two Doors",
+   "kind": "custom",
+   "refersTo": "doors",
+   "description": "Signature. One 2px ink frame containing two equal panels divided by a single hairline. The label sits at the top of the type scale, above the page's own question, because the next action must be the largest thing on the page. Three hairline clause lines fill the panel structurally. The whole panel is the target.",
+   "html": "<div class=\"ds-doors\"><a class=\"ds-door\" href=\"#\"><span class=\"ds-door-label\">A patient or family member</span><span class=\"ds-door-lines\"><span class=\"ds-door-line\">How to order, and what to bring</span><span class=\"ds-door-line\">Prices, payment, and delivery</span><span class=\"ds-door-line\">How to reach a pharmacist</span></span><span class=\"ds-door-rule\" aria-hidden=\"true\"></span></a><a class=\"ds-door\" href=\"#\"><span class=\"ds-door-label\">A doctor, nurse or hospital</span><span class=\"ds-door-lines\"><span class=\"ds-door-line\">What we stock, and lead times</span><span class=\"ds-door-line\">Ordering for a ward or facility</span><span class=\"ds-door-line\">Storage, handling, and quotes</span></span><span class=\"ds-door-rule\" aria-hidden=\"true\"></span></a></div>",
+   "css": ".ds-doors { border: 2px solid var(--ink, #0F2A3D); display: grid; grid-template-columns: 1fr 1fr; } .ds-door { --pad: 2rem; display: flex; flex-direction: column; min-height: 20.25rem; padding: 3rem var(--pad) 0; text-decoration: none; color: var(--ink, #0F2A3D); background: var(--paper, #FBFBF9); transition: background-color .18s cubic-bezier(.2,.7,.3,1); } .ds-door + .ds-door { border-left: 1px solid var(--slate, #54687A); } .ds-door-label { font-size: clamp(2.375rem, 1.55rem + 3.3vw, 3.5rem); font-weight: 600; line-height: 1.08; letter-spacing: -.028em; max-width: 16ch; text-wrap: balance; } .ds-door-lines { display: block; margin-top: 1.5rem; } .ds-door-line { display: block; padding: .75rem 0; border-top: 1px solid var(--slate, #54687A); color: var(--slate, #54687A); font-size: 1rem; line-height: 1.35; } .ds-door-rule { position: relative; height: 6px; margin-top: auto; margin-inline: calc(var(--pad) * -1); background: transparent; } .ds-door-rule::before { content: ''; position: absolute; inset: auto 0 0 0; height: 2px; background: var(--slate, #54687A); } .ds-door-rule::after { content: ''; position: absolute; inset: auto 0 0 0; height: 6px; background: var(--action, #1D9FDA); transform: scaleY(0); transform-origin: bottom; transition: transform .18s cubic-bezier(.2,.7,.3,1); } .ds-door:hover, .ds-door:active { background: rgba(29,159,218,.10); } .ds-door:hover .ds-door-rule::after, .ds-door:active .ds-door-rule::after, .ds-door:focus-visible .ds-door-rule::after { transform: scaleY(1); } .ds-door:focus-visible { outline: 2px solid var(--ink, #0F2A3D); outline-offset: -6px; }"
+  },
+  {
+   "name": "Notice",
+   "kind": "custom",
+   "refersTo": "notice",
+   "description": "The system's one boxed element, reserved for content a reader must not miss. Ink frame, no fill, no shadow. The safety variant switches the frame and heading to alert with a faint alert wash.",
+   "html": "<div class=\"ds-notice\"><p class=\"ds-notice-head\">If it is urgent, do not wait for us</p><p>Call the pharmacy. Monday to Friday, 8am to 5pm.</p></div><div class=\"ds-notice ds-notice-safety\"><p class=\"ds-notice-head\">Cancer medicines are hazardous to handle</p><p>Do not crush, split or open a cancer tablet unless a pharmacist has told you to.</p></div>",
+   "css": ".ds-notice { border: 2px solid var(--ink, #0F2A3D); border-radius: 0; padding: 1.5rem; margin: 2rem 0; max-width: 65ch; } .ds-notice > :first-child { margin-top: 0; } .ds-notice p { margin: 0 0 1rem; } .ds-notice p:last-child { margin-bottom: 0; } .ds-notice-head { font-weight: 700; font-size: 1rem; margin: 0 0 .5rem !important; } .ds-notice-safety { border-color: var(--alert, #B3261E); background: rgba(179,38,30,.055); } .ds-notice-safety .ds-notice-head { color: var(--alert, #B3261E); }"
+  },
+  {
+   "name": "Record Rows",
+   "kind": "custom",
+   "refersTo": "record",
+   "description": "A definition list as hairline-divided term/value rows, used for every factual block: compliance values, lead times, delivery terms. Tabular figures throughout.",
+   "html": "<dl class=\"ds-record\"><div class=\"ds-record-row\"><dt>Cold chain</dt><dd>Held between 2 and 8 degrees, monitored and logged.</dd></div><div class=\"ds-record-row\"><dt>Prescription</dt><dd>Required for every medicine we supply.</dd></div></dl>",
+   "css": ".ds-record { margin: 0; border-top: 1px solid var(--slate, #54687A); font-variant-numeric: tabular-nums; } .ds-record-row { display: grid; grid-template-columns: minmax(9rem, 15rem) 1fr; gap: 1.5rem; padding: 1rem 0; border-bottom: 1px solid var(--slate, #54687A); } .ds-record-row dt { color: var(--slate, #54687A); font-size: .875rem; } .ds-record-row dd { margin: 0; color: var(--ink, #0F2A3D); }"
+  },
+  {
+   "name": "Outstanding-Content Marker",
+   "kind": "chip",
+   "refersTo": "todo",
+   "description": "A shipped component, not scaffolding. Renders wherever a real value has not been supplied, so the site cannot quietly launch with a gap. Deliberately conspicuous.",
+   "html": "<span class=\"ds-todo\" role=\"mark\"><span class=\"ds-todo-label\">Needed</span><span class=\"ds-todo-key\">PHARMACY_LICENCE_NO</span></span>",
+   "css": ".ds-todo { display: inline-flex; align-items: baseline; gap: .5rem; padding: .25em .45em; background: rgba(179,38,30,.055); border-bottom: 2px solid var(--alert, #B3261E); border-radius: 0; font-size: .95em; } .ds-todo-label { font-size: .8125rem; font-weight: 700; color: var(--alert, #B3261E); white-space: nowrap; } .ds-todo-key { font-weight: 600; color: var(--ink, #0F2A3D); word-break: break-word; font-variant-numeric: tabular-nums; }"
+  },
+  {
+   "name": "Progress Ramp",
+   "kind": "custom",
+   "refersTo": "progress",
+   "description": "Multi-step form progress as a monotone weight ramp, not a colour. Pending is lightest, completed is mid, current is heaviest, so the eye lands on where the reader actually is. Deliberately carries no accent: a progress segment is not an interactive element.",
+   "html": "<div class=\"ds-progress\"><p class=\"ds-progress-label\">Step 2 of 2</p><div class=\"ds-progress-track\"><span class=\"ds-progress-seg is-done\"></span><span class=\"ds-progress-seg is-now\"></span></div></div>",
+   "css": ".ds-progress { margin-bottom: 2rem; max-width: 34rem; } .ds-progress-label { font-size: .8125rem; color: var(--slate, #54687A); margin: 0 0 .5rem; font-variant-numeric: tabular-nums; } .ds-progress-track { display: flex; gap: .25rem; } .ds-progress-seg { height: 6px; flex: 1; background: rgba(15,42,61,.18); } .ds-progress-seg.is-done { background: var(--slate, #54687A); } .ds-progress-seg.is-now { background: var(--ink, #0F2A3D); }"
+  },
+  {
+   "name": "Plate",
+   "kind": "custom",
+   "refersTo": "plate",
+   "description": "A photograph printed the way a gazette prints one: 2px ink frame, fixed aspect box, hairline caption beneath, and a two-pass CSS duotone. multiply drops every highlight to --paper; a lighten overlay lifts every shadow to --ink. Pure black prints as #0F2A3D and pure white as #FBFBF9, so no photograph can introduce a sixth hue.",
+   "html": "<figure class=\"ds-plate\"><div class=\"ds-plate-frame\"><img class=\"ds-plate-img\" src=\"photo.jpg\" width=\"1600\" height=\"1067\" alt=\"Rows of capped glass vials on a stainless tray.\"></div><figcaption class=\"ds-plate-cap\"><span>Vials staged on a tray before checking.</span><span class=\"ds-plate-ref\">Plate 2</span></figcaption></figure>",
+   "css": ".ds-plate{margin:0}.ds-plate-frame{position:relative;isolation:isolate;background:var(--paper,#FBFBF9);border:2px solid var(--ink,#0F2A3D);border-radius:0;aspect-ratio:4/3;overflow:hidden}.ds-plate-img{display:block;width:100%;height:100%;object-fit:cover;filter:grayscale(1) sepia(.42) hue-rotate(168deg) saturate(1.45) contrast(1.06);mix-blend-mode:multiply}.ds-plate-frame::after{content:'';position:absolute;inset:0;background:var(--ink,#0F2A3D);mix-blend-mode:lighten;pointer-events:none}.ds-plate-cap{display:flex;flex-wrap:wrap;gap:.5rem 1rem;justify-content:space-between;align-items:baseline;margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--slate,#54687A);font-size:.8125rem;color:var(--slate,#54687A)}.ds-plate-ref{font-variant-numeric:tabular-nums;letter-spacing:0;white-space:nowrap}"
+  },
+  {
+   "name": "Band",
+   "kind": "custom",
+   "refersTo": "band",
+   "description": "The only element that inverts. Full-bleed between two 2px ink rules: an ink panel carrying one statement, a plate beside it. Text sits on ink and never on the photograph, so contrast is 14.28:1 by construction rather than by scrim. Used twice in the whole site.",
+   "html": "<section class=\"ds-band\"><div class=\"ds-band-inner\"><div class=\"ds-band-panel\"><p class=\"ds-band-kicker\">Where we deliver</p><h2 class=\"ds-band-head\">Eighty-three islands, and a cold chain that has to hold on every one.</h2><p class=\"ds-band-body\">Collection in Port Vila, delivery elsewhere in Vanuatu.</p></div><div class=\"ds-band-fig\"><img class=\"ds-plate-img\" src=\"island.jpg\" alt=\"Aerial view of a forested island ringed by reef.\"></div></div></section>",
+   "css": ".ds-band{border-top:2px solid var(--ink,#0F2A3D);border-bottom:2px solid var(--ink,#0F2A3D);background:var(--ink,#0F2A3D);color:var(--paper,#FBFBF9)}.ds-band-inner{display:grid}@media(min-width:52em){.ds-band-inner{grid-template-columns:1fr 1fr}}.ds-band-panel{display:flex;flex-direction:column;justify-content:center;gap:1rem;padding:3rem 2rem}.ds-band-kicker{margin:0;font-size:.875rem;letter-spacing:0;opacity:.78}.ds-band-head{margin:0;max-width:20ch;font-size:1.75rem;font-weight:600;letter-spacing:-.015em}.ds-band-body{margin:0;max-width:46ch;opacity:.86}.ds-band-fig{position:relative;isolation:isolate;background:var(--paper,#FBFBF9);min-height:15rem;overflow:hidden}.ds-band-fig .ds-plate-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}.ds-band-fig::after{content:'';position:absolute;inset:0;background:var(--ink,#0F2A3D);mix-blend-mode:lighten}"
+  },
+  {
+   "name": "Channel Row",
+   "kind": "custom",
+   "refersTo": "channels",
+   "description": "Contact details are acted on, not read. The whole hairline row is the target and clears 48px: icon column, name, value, sub-line. Replaced a definition list on /contact where the phone number had been a 20px-tall link.",
+   "html": "<ul class=\"ds-channels\"><li><a class=\"ds-channel\" href=\"tel:+6785282543\"><svg class=\"ds-icon\" viewBox=\"0 0 16 16\" aria-hidden=\"true\"><path d=\"M2.2 2.4h3.6l1.3 3.4-2 1.4a11 11 0 0 0 3.7 3.7l1.4-2 3.4 1.3v3.6h-1.1C6.3 13.8 2.2 9.7 2.2 3.5z\"/></svg><span><span class=\"ds-channel-name\">Phone</span><span class=\"ds-channel-val\">+678 528 2543</span><span class=\"ds-channel-sub\">Monday to Friday, 8am to 5pm.</span></span></a></li></ul>",
+   "css": ".ds-channels{list-style:none;margin:0;padding:0;border-top:2px solid var(--ink,#0F2A3D);max-width:65ch}.ds-channels>li{border-bottom:1px solid var(--slate,#54687A)}.ds-channel{display:grid;grid-template-columns:1.5rem 1fr;gap:.5rem 1rem;align-items:start;padding:1rem 0;min-height:3rem;text-decoration:none;color:var(--ink,#0F2A3D)}.ds-channel:hover{background:rgba(29,159,218,.10)}.ds-icon{width:1.35rem;height:1.35rem;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:square;stroke-linejoin:miter;color:var(--slate,#54687A);margin-top:.15em}.ds-channel-name{display:block;font-size:.875rem;color:var(--slate,#54687A)}.ds-channel-val{display:block;font-size:1.25rem;font-weight:600;letter-spacing:-.01em}.ds-channel-sub{display:block;margin-top:.25rem;font-size:.875rem;color:var(--slate,#54687A)}"
+  }
+ ],
+ "narrative": {
+  "northStar": "The Gazette Notice",
+  "overview": "This is an official notice board, not a marketing site. It borrows the graphic tradition of a Vanuatu ministry gazette, where ink rules and clause structure carry every hierarchy and the reader's next action is always the largest thing on the page. It refuses the arrangement this category always ships — a hero band over a three-up row of same-size rounded cards with icons, soft grey shadows and a blue gradient — and it equally refuses that arrangement's predictable opposite, the soft pastel cancer-charity look. Cards are not a container here; a rule is.\n\nThe audience decides everything. Patients and their families come first, ahead of prescribers and institutional buyers, and many of them arrive on a phone, on metered mobile data, days after a cancer diagnosis. Chemotherapy-induced peripheral neuropathy makes precise tapping genuinely hard, so every block-level target is 48px rather than the 44px standard. Cognitive load is treated as the enemy: six nav items and never more, one binary choice at the entry point, one filled action rectangle per page, at most five form fields visible at once, medicine categories chunked into five and never dumped.\n\nThe gazette was chosen over the dispensary metaphor the brief sketched for one reason: Vanuatu is officially trilingual, and the gazette is the one graphic form in this country that is natively parallel-text. That makes the Bislama requirement structural rather than an afterthought. It also signals licensure and legitimacy without touching a claim about outcomes, which is exactly this pharmacy's position — it supplies medicine against a valid prescription, and that is the only claim the site makes.",
+  "keyCharacteristics": [
+   "Rules, not boxes: 1px slate hairlines divide peers, 2px ink rules open sections, and hairline rows appear wherever the category would use cards.",
+   "Zero border-radius and zero box-shadow, enforced globally. Both are constraints, not omissions.",
+   "One humanist grotesque, Public Sans, self-hosted as a variable subset, at eight real sizes. Weight and size are the only hierarchy devices.",
+   "Five palette values and no sixth. Every tint is an alpha of one of the five.",
+   "The accent means one thing only: you can do something here.",
+   "Tabular figures on every numeral, so licence numbers, phone numbers and references align in a column.",
+   "Browser surfaces are themed from the palette rather than left at defaults: selection, caret, accent-color, both scrollbar syntaxes, underline offset, forced-colors.",
+   "Nothing moves. No entrance animations, no hover lift, no reflow between pages.",
+   "Every page carries a notice reference and an issue line in the footer margin.",
+   "JavaScript never gates content, layout or navigation."
+  ],
+  "rules": [
+   {
+    "name": "The Action Colour Never Touches Text On Paper",
+    "section": "colors",
+    "body": "--action #1D9FDA measures 2.89:1 against --paper #FBFBF9. That fails WCAG AA for body text (4.5:1) and also fails the 3:1 floor for large text and interface components. It therefore never sets a text colour on the page background. It appears only as a fill behind ink text, as a rule, or as an underline. Ink on an action fill measures 4.95:1 and passes, which is how the primary button carries the Getmeds group blue legally. This is the single most important constraint in the system and the one trap a future editor will walk into: set blue text on paper and AA breaks. Verified ratios: ink/paper 14.28:1, slate/paper 5.57:1, alert/paper 6.31:1, paper on ink-fill 14.28:1."
+   },
+   {
+    "name": "The Accent Is An Affordance, Never Decoration",
+    "section": "colors",
+    "body": "--action marks interactive elements and nothing else. Three violations were found and corrected during the build, and all three are worth naming because they are the shape the mistake takes: a 4px accent rule above the step numerals, an accent dash as the clause-list marker, and the completed segment of the form progress bar. None of those three is interactive. All now use ink or slate. Where state needs expressing on non-interactive content, use a monotone weight ramp — hair for pending, slate for done, ink for current — not colour."
+   },
+   {
+    "name": "One Filled Rectangle Per Page",
+    "section": "components",
+    "body": "Enforced centrally in includes/header.php, not page by page. The header's Ask About a Medicine button is the site's default primary action; any body-level button pointing at the same place is the outline variant. A page that owns a more specific primary action sets $page['own_primary'] = true and the header button steps down — that covers the medicine lookup, the quote form and the providers gate. On /enquire the header button renders outline with aria-current=\"page\" and is never removed, because .masthead__cta occupies a content-sized grid column and dropping the element collapses that column and shifts the phone number sideways. The phone number is the one thing on this site that must never move between pages."
+   },
+   {
+    "name": "Rule Weights Are Tokens",
+    "section": "elevation",
+    "body": "There are exactly two: --rule-hair is 1px solid slate and divides peers; --rule-ink is 2px solid ink and opens a section. Never write an ad-hoc border. The hairline is drawn in full-strength slate rather than a tint, because the whole thesis rests on rules being the container and a rule at 18% opacity reads as a pale default UI divider instead. The two weights must stay visibly distinct, which is what lets the page read as stacked plates."
+   },
+   {
+    "name": "The Base Size Is Applied Once",
+    "section": "typography",
+    "body": "html is font-size: 100%, so 1rem follows the reader's own browser setting, and the brief's 18px base is applied once on body as 1.125rem. Setting a percentage on the root as well multiplies the two: an earlier build had 112.5% on the root and 1.125rem on body, which compounded to a 20.25px body and silently inflated every spacing token 12.5% beyond its own documentation."
+   },
+   {
+    "name": "Heading Adjacency Must Come Last In Source Order",
+    "section": "typography",
+    "body": "The rule h1 + *, h2 + *, h3 + *, h4 + * { margin-top: var(--s-4) } scores identical CSS specificity to the bare p selector, because the universal selector contributes nothing. It must therefore appear AFTER the element margins in the stylesheet, or p's margin shorthand wins on source order and resets every heading-to-body gap on the site to zero. That is exactly what happened during the build, across every page, and it is invisible until measured."
+   },
+   {
+    "name": "JavaScript Only Enhances",
+    "section": "components",
+    "body": "Every page reads, navigates and submits with the script blocked. Navigation panels open on :hover and :focus-within without JavaScript; with it they become click-operated, which is deliberate for an audience with tremor, because a drifting pointer must not close a menu somebody is reading. The mobile nav is a stacked list without JavaScript and collapses behind the Menu button with it. The enquiry form's progressive disclosure is two ordinary server round trips, so there is no client-side step machine to desynchronise on a bad connection. The Bislama column is visible without JavaScript and gains a toggle with it."
+   },
+   {
+    "name": "Nothing Invented, Everything Marked",
+    "section": "components",
+    "body": "Where a real value does not exist, a conspicuous marker renders in its place rather than a plausible guess. This applies to the four compliance values and the content review date, to the six legal pages whose body copy must come from a lawyer qualified in Vanuatu, to the absent formulary, to every photograph, and to every Bislama translation. The marker is a shipped component with real padding and contrast, not scaffolding, because the site must not be able to launch quietly with a gap. Medical instructions in particular are never machine translated."
+   }
+  ],
+  "dos": [
+   "Do reach for a rule before a container. A 2px ink rule with deep space above its heading is how this system opens a section.",
+   "Do use hairline rows where you would otherwise build a grid of cards.",
+   "Do put the accent behind ink text when you need a filled control, and keep it to one per page.",
+   "Do give every block-level interactive target a 48px minimum height and at least 8px of separation.",
+   "Do set tabular figures on anything numeric so it aligns in a column.",
+   "Do write errors that name the fix rather than the failure, inline beside the field, with an icon and text as well as colour.",
+   "Do design the empty state as the primary view when there is no data to show; the medicine lookup is the designed answer to an absent formulary, not a fallback.",
+   "Do theme the browser surfaces you did not draw: selection, caret, accent-color, scrollbars, underline offset, forced-colors.",
+   "Do state what is missing in a visible marker rather than filling it with something plausible.",
+   "Do keep the reader's next action the largest thing on the page.",
+   "Do put every photograph through .plate, caption it with what is in it, and register it in data/images.php with width, height and source.",
+   "Do store photographic sources greyscale; the duotone discards colour anyway and the bytes are what keep the homepage at 157KB."
+  ],
+  "donts": [
+   "Don't set --action as a text colour on --paper; it measures 2.89:1 and fails AA for both body and large text.",
+   "Don't use --action on anything a finger or caret cannot land on. It means \"you can do something here\" and nothing else.",
+   "Don't add a sixth palette value. Every tint in this system is an alpha of one of the five.",
+   "Don't add a border-radius or a box-shadow anywhere. There are none, globally, on purpose.",
+   "Don't write an ad-hoc border; use --rule-hair or --rule-ink.",
+   "Don't put a second filled button on a page, or leave a page with none.",
+   "Don't set a percentage font-size on the root as well as a rem size on body; the two multiply.",
+   "Don't move the heading-adjacency rule above the element margins in the stylesheet.",
+   "Don't put an all-caps eyebrow above a heading, a middle-dot meta string, or an arrow appended to button text.",
+   "Don't use an emoji, a Unicode glyph or an icon font in place of an icon; the set is four authored SVGs at one stroke weight.",
+   "Don't add a second typeface, a display serif, or a weight outside 400 to 700.",
+   "Don't use a dashed border for anything except an outstanding-content marker, where dashed means \"not finished\".",
+   "Don't move anything on hover, focus or navigation, and never add an entrance animation.",
+   "Don't let JavaScript gate content, layout or navigation.",
+   "Don't ship a claim that the pharmacy treats, cures or improves outcomes in cancer, or imply that any named medicine is in stock.",
+   "Don't put a stock photograph where it reads as a claim about this business - beside the real address, or beside a named pharmacist.",
+   "Don't drop a photograph in untoned; a plate that skips the duotone introduces a sixth, seventh and eighth hue at once.",
+   "Don't give an icon --action. Icons are --ink or --slate; blue fills interactive targets only."
+  ],
+  "rasterProvenance": "Rasters now exist. On 2026-09-11 the site owner directed that the build move from low fidelity to high fidelity using stock photography, which reverses the constraint recorded in PRODUCT.md ('stock photography of models is prohibited'). That constraint is preserved in PRODUCT.md as a superseded decision rather than deleted.\n\nWhat shipped: 20 photographs under assets/img/photo/, each emitted at 480/800/1280 in WebP and JPEG, greyscale on disk because every plate is duotoned in CSS. Provenance for all 20 is in data/images.php, which carries the source id (Pexels), pixel dimensions, alt text and caption. The Pexels licence permits commercial use without attribution and forbids implying endorsement by a depicted person.\n\nThe anti-pattern the original brief named was 'stock photography of smiling models'. None shipped. The photographs are environmental and procedural: cabinets, ampoule trays, a sealing line, storage drawers, cartons in a van, a hospital corridor, an aerial of a Vanuatu island. Where a person appears they are working and turned away or cropped to hands; nobody is smiling at the camera, nobody is named, and no photograph is captioned or positioned as Getmeds staff or premises.\n\nThree guardrails: (1) the footer carries a standing line on every page saying the photographs are licensed stock and are not our premises or our staff; (2) /about/our-pharmacists takes no photograph, because a stock face beside 'our pharmacists' would be a fabricated credential; (3) /contact takes no photograph, because a stock pharmacy interior beside the real street address would read as a photograph of that address."
+ }
+}

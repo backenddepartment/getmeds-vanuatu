@@ -1,0 +1,110 @@
+# Getmeds Vanuatu — Apache configuration.
+#
+# Everything here is defensive or a performance measure. The site works without
+# this file; it is just slower and less tidy. Drop the folder into htdocs and it
+# runs with no other configuration.
+
+# ---------------------------------------------------------------------------
+# Directory index
+# ---------------------------------------------------------------------------
+DirectoryIndex index.php index.html
+
+# Never list a directory's contents.
+Options -Indexes
+
+# ---------------------------------------------------------------------------
+# Protect files that must never be served
+# ---------------------------------------------------------------------------
+<FilesMatch "\.(log|md)$">
+  Require all denied
+</FilesMatch>
+
+# The enquiry log lives under data/ and contains people's contact details.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteRule ^data/ - [F,L]
+  RewriteRule ^includes/ - [F,L]
+
+  # Strip a trailing index.php so the canonical URL is the directory.
+  RewriteCond %{THE_REQUEST} \s/+(.*/)?index\.php[\s?] [NC]
+  RewriteRule ^(.*/)?index\.php$ /%1 [R=301,L]
+</IfModule>
+
+# ---------------------------------------------------------------------------
+# Security headers
+#
+# The CSP is strict because this site loads nothing from anywhere else: no CDN,
+# no analytics, no fonts from Google, no embedded map. If you ever add a third
+# party, this is the line that has to change, and changing it should be a
+# deliberate decision rather than an accident.
+# ---------------------------------------------------------------------------
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Permissions-Policy "geolocation=(), camera=(), microphone=(), payment=()"
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; form-action 'self'; frame-ancestors 'self'; base-uri 'self'; object-src 'none'"
+
+  # Do not leak the PHP version.
+  Header unset X-Powered-By
+</IfModule>
+
+# ---------------------------------------------------------------------------
+# Compression. Connections in Vanuatu are slow and metered; this matters more
+# here than it does in most places.
+# ---------------------------------------------------------------------------
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/css text/javascript
+  AddOutputFilterByType DEFLATE application/javascript application/json
+  AddOutputFilterByType DEFLATE image/svg+xml
+  # Photographs and fonts arrive compressed already. Running deflate over them
+  # burns CPU and can make the response marginally larger.
+  SetEnvIfNoCase Request_URI \.(?:webp|jpe?g|png|woff2)$ no-gzip dont-vary
+</IfModule>
+
+<IfModule mod_brotli.c>
+  AddOutputFilterByType BROTLI_COMPRESS text/html text/css text/javascript
+  AddOutputFilterByType BROTLI_COMPRESS application/javascript image/svg+xml
+</IfModule>
+
+# ---------------------------------------------------------------------------
+# Caching. The font files are content-addressed by name and never change, so
+# they can be cached for a year. HTML must not be cached, because the
+# compliance values in the footer have to be updatable in one edit.
+# ---------------------------------------------------------------------------
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType font/woff2            "access plus 1 year"
+  ExpiresByType image/svg+xml         "access plus 1 month"
+  # Photographic plates. The filename carries its width, not a content hash, so
+  # a replaced photograph would keep its name: a month, not a year, and not
+  # immutable. Long enough that a patient on a slow island connection never
+  # re-downloads them, short enough that a correction lands.
+  ExpiresByType image/webp            "access plus 1 month"
+  ExpiresByType image/jpeg            "access plus 1 month"
+  ExpiresByType text/css              "access plus 1 week"
+  ExpiresByType application/javascript "access plus 1 week"
+  ExpiresDefault                      "access plus 1 hour"
+  ExpiresByType text/html             "access plus 0 seconds"
+</IfModule>
+
+<IfModule mod_headers.c>
+  <FilesMatch "\.woff2$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+</IfModule>
+
+# ---------------------------------------------------------------------------
+# Correct types, in case the server is missing them
+# ---------------------------------------------------------------------------
+<IfModule mod_mime.c>
+  AddType font/woff2 .woff2
+  AddType image/svg+xml .svg
+  AddCharset UTF-8 .css .js .html
+</IfModule>
+
+# ---------------------------------------------------------------------------
+# Error documents. Keep people on the site rather than on an Apache page.
+# ---------------------------------------------------------------------------
+ErrorDocument 404 /404.php
+ErrorDocument 403 /404.php
