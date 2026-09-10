@@ -131,7 +131,28 @@ jobs:
           echo "assets: $(find dist/assets -type f | wc -l)"
           echo "weight: $(du -sh dist | cut -f1)"
 
-      - uses: actions/configure-pages@v5
+      # enablement:true switches the repo's Pages source to "GitHub Actions" via
+      # the API. Without it this step fails on a repo whose source is still
+      # "Deploy from a branch", which is the default — and worse, the built-in
+      # Jekyll build keeps succeeding alongside it, so the site quietly serves a
+      # rendered README.md instead of the pharmacy.
+      - id: pages
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
+      # If the token is not allowed to change repository settings, say what to
+      # click rather than leaving the raw API error as the only clue.
+      - name: Explain a Pages configuration failure
+        if: failure() && steps.pages.outcome == 'failure'
+        run: |
+          echo "::error::Could not configure GitHub Pages for this repository."
+          echo "Set it by hand, once: Settings -> Pages -> Build and deployment ->"
+          echo "Source -> 'GitHub Actions', then re-run this workflow."
+          echo "While the source is 'Deploy from a branch', GitHub's own Jekyll build"
+          echo "keeps publishing README.md as the site, which is why the homepage"
+          echo "shows documentation instead of the pharmacy."
+
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
