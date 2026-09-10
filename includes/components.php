@@ -78,6 +78,13 @@ function chunk_facts(array $groups): void
  */
 function medicine_lookup(string $context = ''): void
 {
+    // On a static build the field would carry the medicine name to an /enquire
+    // page that has no form to receive it. Asking someone to type the name of
+    // their cancer medicine and then losing it is worse than not asking.
+    if (is_static_build()) {
+        form_unavailable('ask about a medicine', 'Medicine enquiry');
+        return;
+    }
     ?>
     <form class="lookup" method="get" action="<?= e(url('/enquire')) ?>">
       <div class="lookup__row">
@@ -97,6 +104,58 @@ function medicine_lookup(string $context = ''): void
         it will cost, and how long it takes. Nothing is ordered by sending this.
       </p>
     </form>
+    <?php
+}
+
+/**
+ * What stands in for a form on a host that cannot receive one.
+ *
+ * A static build has no POST handler. Left alone, the enquiry form would render
+ * perfectly, accept everything a frightened person typed about their cancer
+ * medicine, and throw it away on submit. That is the worst failure this site
+ * could have, so on a static build the form is not rendered at all and the two
+ * channels that do work are offered in its place.
+ *
+ * $what  what they were trying to do, e.g. "ask about a medicine"
+ */
+function form_unavailable(string $what, string $subject = ''): void
+{
+    $mailto = 'mailto:' . cfg('email');
+    if ($subject !== '') {
+        $mailto .= '?subject=' . rawurlencode($subject);
+    }
+    ?>
+    <div class="notice" style="max-width:34rem">
+      <p class="notice__head"><?= icon('alert') ?>This form is not available on this site</p>
+      <p>
+        You can still <?= e($what) ?>, and a pharmacist will answer you the same way. Use
+        whichever of these suits you.
+      </p>
+      <ul class="channels" style="margin-top:var(--s-5)">
+        <li>
+          <a class="channels__row" href="tel:<?= e(cfg('phone_href')) ?>">
+            <?= icon('phone') ?>
+            <span>
+              <span class="channels__name">Call the pharmacy</span>
+              <span class="channels__val num"><?= e(cfg('phone')) ?></span>
+              <span class="channels__sub"><?= e(cfg('hours_long')) ?> You will speak to a
+                person, not a menu.</span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a class="channels__row" href="<?= e($mailto) ?>">
+            <?= icon('mail') ?>
+            <span>
+              <span class="channels__name">Email the pharmacy</span>
+              <span class="channels__val"><?= e(cfg('email')) ?></span>
+              <span class="channels__sub">Say which medicine, and how to reach you. Answered
+                within one working day. Do not use email for anything urgent.</span>
+            </span>
+          </a>
+        </li>
+      </ul>
+    </div>
     <?php
 }
 

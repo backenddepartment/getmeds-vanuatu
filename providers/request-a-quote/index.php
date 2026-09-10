@@ -53,6 +53,12 @@ provider_gate();
 
   <div class="section shell" style="margin-top:var(--s-6);border-top:0;padding-top:0">
 
+    <?php if (is_static_build()): ?>
+
+      <?php form_unavailable('request a quote', 'Quote request'); ?>
+
+    <?php else: ?>
+
     <?php enquiry_errors($state); ?>
     <?php enquiry_progress($state['step']); ?>
 
@@ -85,6 +91,8 @@ provider_gate();
         </div>
       <?php endif; ?>
     </form>
+
+    <?php endif; /* is_static_build */ ?>
 
     <div class="notice" style="max-width:34rem">
       <p class="notice__head">What makes a quote faster</p>

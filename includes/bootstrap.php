@@ -24,6 +24,14 @@ function base_path(): string
         return $base;
     }
 
+    // A static build is rendered by a throwaway localhost server but served from
+    // somewhere else entirely — a GitHub Pages project site lives under
+    // /<repo>/. DOCUMENT_ROOT cannot know that, so the build tells us.
+    $override = getenv('GV_BASE_PATH');
+    if ($override !== false) {
+        return $base = rtrim($override, '/');
+    }
+
     $base = '';
     $docRoot = isset($_SERVER['DOCUMENT_ROOT']) ? realpath($_SERVER['DOCUMENT_ROOT']) : false;
     $appRoot = realpath(APP_ROOT);
@@ -59,10 +67,30 @@ function url(string $path = '/'): string
  */
 function abs_url(string $path = '/'): string
 {
+    // Same problem as base_path(): during a static build the request host is
+    // 127.0.0.1, and an og:image pointing there is worse than none at all.
+    $origin = getenv('GV_SITE_ORIGIN');
+    if ($origin !== false && $origin !== '') {
+        return rtrim($origin, '/') . url($path);
+    }
+
     $https  = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
            || (($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https');
     $host   = $_SERVER['HTTP_HOST'] ?? 'getmeds.vu';
     return ($https ? 'https' : 'http') . '://' . $host . url($path);
+}
+
+/**
+ * True when the page is being rendered into a static file rather than served.
+ *
+ * A static host runs no PHP, so anything that needs a POST — the enquiry form,
+ * the quote form, the healthcare-professional gate — cannot work once the page
+ * is published. Those places check this and offer the phone and the email
+ * instead of a form that would throw the visitor's message away.
+ */
+function is_static_build(): bool
+{
+    return getenv('GV_STATIC') === '1';
 }
 
 /** Escape for HTML text and attribute values. */

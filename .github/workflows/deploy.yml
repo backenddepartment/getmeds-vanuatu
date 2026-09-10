@@ -1,0 +1,147 @@
+# ---------------------------------------------------------------------------
+# Deploy to GitHub Pages.
+#
+# GitHub Pages runs no PHP. This site is PHP, so the workflow renders every
+# route to static HTML first and publishes that. Two things cannot survive the
+# trip, and are handled rather than left to fail silently:
+#
+#   - The enquiry form and the quote form need a POST handler. On the static
+#     build they are replaced with the pharmacy's phone number and email. A form
+#     that accepted what a frightened person typed about their cancer medicine
+#     and then dropped it would be the worst bug this site could ship.
+#   - The healthcare-professional gate needs a POST and a cookie. GATE below
+#     decides what happens to /providers; see the comment on it.
+#
+# .htaccess is also inert on Pages: the CSP and the other security headers, the
+# data/ and includes/ denials, and the cache policy are Apache directives. Pages
+# sets its own caching and compression, but it cannot set those headers. If they
+# matter, put a CDN in front or host somewhere that can run PHP.
+# ---------------------------------------------------------------------------
+
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Lets the deploy job publish to Pages using OIDC rather than a token.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One deploy at a time. In-progress runs finish rather than being cancelled,
+# so a half-published site is never left behind.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+env:
+  PHP_VERSION: '8.2'
+
+  # What to do with /providers, which is gated by a POST the static host cannot
+  # receive:
+  #   open   - publish the section ungated. An unreachable section is worse than
+  #            an ungated one, and the gate was never a security boundary.
+  #   closed - publish the contact-only variant of each page.
+  #   skip   - leave /providers out of the build entirely.
+  # Legal advice on advertising cancer treatment to the public is still
+  # outstanding (see PRODUCT.md). If that advice lands and says the section must
+  # not be public, change this to skip.
+  GATE: open
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          coverage: none
+          # gd renders nothing at request time, but config.php and the image
+          # manifest are read by every page, so keep the runtime honest.
+          extensions: mbstring, gd
+
+      - name: Lint every PHP file
+        run: |
+          set -euo pipefail
+          fail=0
+          while IFS= read -r f; do
+            php -l "$f" > /dev/null || { echo "::error file=$f::PHP parse error"; fail=1; }
+          done < <(find . -name '*.php' -not -path './dist/*')
+          [ "$fail" -eq 0 ] || exit 1
+          echo "all PHP files parse"
+
+      - name: Work out where the site will be served from
+        id: site
+        run: |
+          set -euo pipefail
+          if [ -f CNAME ]; then
+            # A custom domain serves from the root.
+            echo "base=" >> "$GITHUB_OUTPUT"
+            echo "origin=https://$(tr -d '[:space:]' < CNAME)" >> "$GITHUB_OUTPUT"
+          elif [ "${{ github.event.repository.name }}" = "${{ github.repository_owner }}.github.io" ]; then
+            # A user or organisation site also serves from the root.
+            echo "base=" >> "$GITHUB_OUTPUT"
+            echo "origin=https://${{ github.repository_owner }}.github.io" >> "$GITHUB_OUTPUT"
+          else
+            # A project site serves from /<repo>/, and every URL on the page has
+            # to carry that prefix or the whole site 404s.
+            echo "base=/${{ github.event.repository.name }}" >> "$GITHUB_OUTPUT"
+            echo "origin=https://${{ github.repository_owner }}.github.io" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Render the site to static HTML
+        run: |
+          php tools/build-static.php \
+            --base='${{ steps.site.outputs.base }}' \
+            --origin='${{ steps.site.outputs.origin }}' \
+            --gate='${{ env.GATE }}' \
+            --out=dist
+
+      - name: Check the build before publishing it
+        run: |
+          set -euo pipefail
+          test -f dist/index.html || { echo "::error::no homepage was rendered"; exit 1; }
+          test -f dist/.nojekyll || { echo "::error::.nojekyll missing; Jekyll would rewrite this"; exit 1; }
+          test -d dist/assets/img/photo || { echo "::error::photographs did not copy"; exit 1; }
+
+          # A PHP notice that reached the HTML would be published as page content.
+          if grep -rlE 'Fatal error|Parse error|<b>(Warning|Notice|Deprecated)</b>' dist --include='*.html'; then
+            echo "::error::PHP diagnostics found in rendered HTML"; exit 1
+          fi
+
+          # The base path has to be baked into every link, or a project site 404s
+          # on its own navigation.
+          base='${{ steps.site.outputs.base }}'
+          if [ -n "$base" ] && ! grep -q "href=\"$base/" dist/index.html; then
+            echo "::error::links are missing the $base prefix"; exit 1
+          fi
+
+          # A static host cannot answer these, so they must not have shipped.
+          if grep -rq 'method="post"' dist --include='*.html'; then
+            echo "::error::a POST form was published to a host that cannot receive one"; exit 1
+          fi
+
+          echo "pages:  $(find dist -name '*.html' | wc -l)"
+          echo "assets: $(find dist/assets -type f | wc -l)"
+          echo "weight: $(du -sh dist | cut -f1)"
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

@@ -1,0 +1,16 @@
+# Static build output. Produced by tools/build-static.php in CI and published
+# from there; it is never committed, because a stale dist/ in the repo is worse
+# than no dist/ at all.
+/dist/
+/dist-root/
+
+# Written by includes/enquiry-handler.php on every submission, whether or not
+# mail() is configured. It holds what patients typed about their own medicines,
+# so it must never reach the repository. .htaccess already refuses /data/ over
+# HTTP; this is the other half of that.
+/data/enquiries.log
+
+# OS and editor noise.
+Thumbs.db
+.DS_Store
+*.swp

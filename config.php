@@ -91,7 +91,10 @@ return [
     // Change this one value to tighten or remove the gate site-wide.
     // ---------------------------------------------------------------------
 
-    'provider_gate'       => 'interstitial',
+    // 'interstitial' | 'open' | 'closed'. A static build has no POST, so the
+    // interstitial's continue button cannot work; tools/build-static.php sets
+    // GV_PROVIDER_GATE and this reads it. See README for the consequence.
+    'provider_gate'       => getenv('GV_PROVIDER_GATE') ?: 'interstitial',
 
     // ---------------------------------------------------------------------
     // Analytics

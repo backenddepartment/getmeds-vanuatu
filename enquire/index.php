@@ -67,6 +67,12 @@ include INC . '/header.php';
 
   <div class="section shell" style="margin-top:var(--s-6);border-top:0;padding-top:0">
 
+    <?php if (is_static_build()): ?>
+
+      <?php form_unavailable('ask about a medicine', 'Medicine enquiry'); ?>
+
+    <?php else: ?>
+
     <?php enquiry_errors($state); ?>
     <?php enquiry_progress($state['step']); ?>
 
@@ -113,6 +119,11 @@ include INC . '/header.php';
       <?php endif; ?>
     </form>
 
+    <?php endif; /* is_static_build */ ?>
+
+    <?php /* On a static build form_unavailable() has already given them the
+             phone and the email; repeating it here just doubles the same box. */ ?>
+    <?php if (!is_static_build()): ?>
     <div class="notice" style="max-width:34rem">
       <p class="notice__head">Would you rather talk to someone?</p>
       <p>
@@ -120,6 +131,7 @@ include INC . '/header.php';
         than this form, and a pharmacist can answer while you are on the line.
       </p>
     </div>
+    <?php endif; ?>
 
     <div class="prose" style="margin-top:var(--s-6)">
       <h2>What we do with what you send</h2>
