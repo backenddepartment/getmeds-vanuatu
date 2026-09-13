@@ -11,7 +11,22 @@ $page = [
 include INC . '/head.php';
 include INC . '/header.php';
 
-page_open('Contact', 'The phone is the fastest way to reach a pharmacist.');
+page_hero([
+    'photo'   => 'notes',
+    'pos'     => '50% 50%',
+    'kicker'  => 'Contact',
+    'title'   => 'Talk to a pharmacist.',
+    'lede'    => 'The phone is the fastest way to reach us. You will speak to a person, not a menu.',
+    'actions' => [
+        ['label' => 'Call ' . cfg('phone'), 'href' => 'tel:' . cfg('phone_href'), 'icon' => 'phone', 'fill' => true],
+        ['label' => 'Email us', 'href' => 'mailto:' . cfg('email'), 'icon' => 'mail'],
+    ],
+    'points'  => [
+        ['mail',   cfg('email')],
+        ['pin',    'Golden Port, ' . cfg('address_city')],
+        ['script', 'Pharmacist replies'],
+    ],
+]);
 ?>
 
 <div class="section shell" style="margin-top:var(--s-6);border-top:0;padding-top:0">

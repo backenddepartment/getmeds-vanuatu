@@ -6,8 +6,9 @@
 require_once INC . '/icons.php';
 
 /**
- * A page's opening block: the 2px ink rule, the h1, and one lede line.
- * Every page except the homepage opens with this.
+ * A page's opening block: the h1 and one lede line, straight under the
+ * masthead with no rule above it (site.css drops the .section rule for the
+ * first block in <main>). Every page except the homepage opens with this.
  */
 function page_open(string $h1, string $lede = '', string $id = 'page-title'): void
 {
@@ -18,6 +19,85 @@ function page_open(string $h1, string $lede = '', string $id = 'page-title'): vo
       <p class="lede" style="margin-top:var(--s-4)"><?= $lede ?></p>
       <?php endif; ?>
     </div>
+    <?php
+}
+
+/**
+ * A full-screen hero: a photograph under an ink wash, the page's h1, a lede, up
+ * to two buttons, and a facts row pinned to the bottom edge (short points, then
+ * the phone and hours). The home page and the section landing pages open with
+ * this in place of page_open(). Its size and look live in site.css (.hero).
+ *
+ * $o  photo    string  key in data/images.php; shown as texture, so alt=""
+ *     pos      string  object-position for the photo, e.g. '50% 40%'
+ *     kicker   string  small label above the heading
+ *     title    string  the page's h1
+ *     lede     string  one or two sentences, plain text
+ *     actions  array   [['label', 'href', 'icon' => name, 'fill' => bool], ...]
+ *                      at most one should be 'fill' => true
+ *     points   array   [[icon name, text], ...], plain text
+ */
+function page_hero(array $o): void
+{
+    $name = (string) ($o['photo'] ?? '');
+    $im   = $name !== '' ? (img_manifest()[$name] ?? null) : null;
+    ?>
+    <section class="hero" aria-labelledby="hero-title">
+      <?php if ($im):
+          $base = url('/assets/img/photo/' . $name);
+          $webp = $jpg = [];
+          foreach ($im['widths'] as $w) {
+              $webp[] = e($base . '-' . $w . '.webp') . ' ' . $w . 'w';
+              $jpg[]  = e($base . '-' . $w . '.jpg') . ' ' . $w . 'w';
+          } ?>
+      <?php /* The only image above the fold, so the only one loaded eagerly. It
+               sits under a heavy wash as texture, so alt is empty. */ ?>
+      <div class="hero__media" style="--hero-pos:<?= e((string) ($o['pos'] ?? '50% 50%')) ?>">
+        <picture>
+          <source type="image/webp" srcset="<?= implode(', ', $webp) ?>" sizes="100vw">
+          <img src="<?= e($base . '-' . max($im['widths']) . '.jpg') ?>"
+               srcset="<?= implode(', ', $jpg) ?>" sizes="100vw"
+               width="<?= (int) $im['w'] ?>" height="<?= (int) $im['h'] ?>"
+               loading="eager" decoding="async" fetchpriority="high" alt="">
+        </picture>
+      </div>
+      <?php endif; ?>
+
+      <div class="hero__inner shell">
+        <?php if (!empty($o['kicker'])): ?>
+        <p class="hero__kicker"><?= e($o['kicker']) ?></p>
+        <?php endif; ?>
+        <h1 class="hero__title" id="hero-title"><?= e($o['title']) ?></h1>
+        <?php if (!empty($o['lede'])): ?>
+        <p class="hero__lede"><?= e($o['lede']) ?></p>
+        <?php endif; ?>
+
+        <?php if (!empty($o['actions'])): ?>
+        <div class="hero__actions">
+          <?php foreach ($o['actions'] as $a): ?>
+          <a class="btn <?= !empty($a['fill']) ? 'hero__btn--fill' : 'hero__btn--line' ?>" href="<?= e($a['href']) ?>"><?= !empty($a['icon']) ? icon($a['icon']) : '' ?><?= e($a['label']) ?></a>
+          <?php endforeach; ?>
+        </div>
+        <?php endif; ?>
+
+        <?php /* One row: the points, then the phone and hours. It wraps on narrow
+                 screens rather than overflowing. */ ?>
+        <div class="hero__facts">
+          <?php if (!empty($o['points'])): ?>
+          <ul class="hero__points" role="list">
+            <?php foreach ($o['points'] as $p): ?>
+            <li><?= icon($p[0]) ?><?= e($p[1]) ?></li>
+            <?php endforeach; ?>
+          </ul>
+          <?php endif; ?>
+          <p class="hero__contact">
+            <span class="hero__contact-item"><?= icon('phone') ?>Call the pharmacy
+              <a href="tel:<?= e(cfg('phone_href')) ?>"><?= e(cfg('phone')) ?></a></span>
+            <span class="hero__contact-item"><?= icon('clock') ?><?= e(cfg('hours_short')) ?></span>
+          </p>
+        </div>
+      </div>
+    </section>
     <?php
 }
 

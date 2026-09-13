@@ -12,15 +12,29 @@ $page = [
 include INC . '/head.php';
 include INC . '/header.php';
 
-page_open(
-    'For patients and families',
-    'Five things people ask us most. Start wherever you are.'
-);
+page_hero([
+    'photo'   => 'blister',
+    'pos'     => '50% 50%',
+    'kicker'  => 'For patients and families',
+    'title'   => 'Getting your cancer medicine in Port Vila.',
+    'lede'    => 'How to order, what to bring, what it costs, how to reach a pharmacist, and how '
+               . 'delivery works. Nothing on this website charges you or orders anything.',
+    'actions' => [
+        ['label' => 'Call ' . cfg('phone'), 'href' => 'tel:' . cfg('phone_href'), 'icon' => 'phone', 'fill' => true],
+        ['label' => 'How to order', 'href' => url('/patients/how-to-order')],
+    ],
+    'points'  => [
+        ['script', 'Bring your prescription'],
+        ['card',   'Price agreed first'],
+        ['ship',   'Collection or delivery'],
+    ],
+]);
 ?>
 
 <div class="section shell" style="margin-top:var(--s-6);border-top:0;padding-top:0">
   <div class="split">
     <div class="split__body">
+  <h2 style="margin-top:0">Five things people ask us most</h2>
   <?php chunk_links(nav_children('/patients')); ?>
     </div>
     <div class="split__aside">

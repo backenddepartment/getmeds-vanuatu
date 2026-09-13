@@ -12,16 +12,29 @@ $page = [
 include INC . '/head.php';
 include INC . '/header.php';
 
-page_open(
-    'About us',
-    'A licensed pharmacy in Port Vila, staffed by pharmacists, supplying cancer medicines '
-    . 'against a prescription.'
-);
+page_hero([
+    'photo'   => 'drawer',
+    'pos'     => '50% 50%',
+    'kicker'  => 'About us',
+    'title'   => 'A licensed pharmacy in Port Vila, run by pharmacists.',
+    'lede'    => 'We supply cancer medicines, and the medicines that manage their side effects, '
+               . 'against a prescription. Part of the Getmeds group.',
+    'actions' => [
+        ['label' => 'Who we are', 'href' => url('/about/who-we-are'), 'fill' => true],
+        ['label' => 'Our licences', 'href' => url('/about/licences')],
+    ],
+    'points'  => [
+        ['shield', 'Licensed in Vanuatu'],
+        ['person', 'Registered pharmacists'],
+        ['pin',    'Golden Port, ' . cfg('address_city')],
+    ],
+]);
 ?>
 
 <div class="section shell" style="margin-top:var(--s-6);border-top:0;padding-top:0">
   <div class="split">
     <div class="split__body">
+  <h2 style="margin-top:0">About Getmeds Vanuatu</h2>
   <?php chunk_links(nav_children('/about')); ?>
     </div>
     <div class="split__aside">

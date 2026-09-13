@@ -4,7 +4,7 @@ description: An official Vanuatu ministry notice, where ink rules and clause str
 colors:
   ink: "#0F2A3D"
   action: "#1D9FDA"
-  paper: "#FBFBF9"
+  paper: "#FFFFFF"
   slate: "#54687A"
   alert: "#B3261E"
   hair: "rgba(15, 42, 61, .18)"

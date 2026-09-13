@@ -25,27 +25,64 @@
    ========================================================================== */
 
 /* ---------- 1. Font ------------------------------------------------------ */
-/* Public Sans, variable weight 400-700, self-hosted, subset to Latin.
-   Two files: latin loads always, latin-ext only when accented characters
-   appear (French place names, Bislama). font-display:swap so slow Vanuatu
-   connections never blank the text. */
+/* Poppins, the site's only typeface. Self-hosted (the CSP allows no font CDN),
+   static weights 400, 500 (nav links), 600 and 700, the only four this file uses. Each weight
+   comes in two files: latin loads always, latin-ext only when accented
+   characters appear (French place names, Bislama). font-display:swap so slow
+   Vanuatu connections never blank the text. SIL Open Font License. */
 
 @font-face {
-  font-family: 'Public Sans';
-  font-style: normal;
-  font-weight: 400 700;
-  font-display: swap;
-  src: url('../fonts/public-sans-latin.woff2') format('woff2');
+  font-family: 'Poppins'; font-style: normal; font-weight: 400; font-display: swap;
+  src: url('../fonts/poppins-latin-400-normal.woff2') format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
     U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
     U+2212, U+2215, U+FEFF, U+FFFD;
 }
 @font-face {
-  font-family: 'Public Sans';
-  font-style: normal;
-  font-weight: 400 700;
-  font-display: swap;
-  src: url('../fonts/public-sans-latin-ext.woff2') format('woff2');
+  font-family: 'Poppins'; font-style: normal; font-weight: 500; font-display: swap;
+  src: url('../fonts/poppins-latin-500-normal.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Poppins'; font-style: normal; font-weight: 500; font-display: swap;
+  src: url('../fonts/poppins-latin-ext-500-normal.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF,
+    U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020,
+    U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Poppins'; font-style: normal; font-weight: 600; font-display: swap;
+  src: url('../fonts/poppins-latin-600-normal.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Poppins'; font-style: normal; font-weight: 700; font-display: swap;
+  src: url('../fonts/poppins-latin-700-normal.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Poppins'; font-style: normal; font-weight: 400; font-display: swap;
+  src: url('../fonts/poppins-latin-ext-400-normal.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF,
+    U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020,
+    U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Poppins'; font-style: normal; font-weight: 600; font-display: swap;
+  src: url('../fonts/poppins-latin-ext-600-normal.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF,
+    U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020,
+    U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Poppins'; font-style: normal; font-weight: 700; font-display: swap;
+  src: url('../fonts/poppins-latin-ext-700-normal.woff2') format('woff2');
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF,
     U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020,
     U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
@@ -55,13 +92,13 @@
 
 :root {
   /* The palette. Five values, and no more.
-     Verified against #FBFBF9: ink 14.28:1, slate 5.57:1, alert 6.31:1.
-     --action measures 2.89:1 and therefore NEVER sets text on paper. It is a
+     Verified against #FFFFFF: ink 14.80:1, slate 5.77:1, alert 6.54:1.
+     --action measures 2.99:1 and therefore NEVER sets text on paper. It is a
      fill, a rule or an underline only. Ink on an --action fill is 4.95:1,
      which is how the primary button carries the group blue and still passes AA. */
   --ink:    #0F2A3D;
   --action: #1D9FDA;
-  --paper:  #FBFBF9;
+  --paper:  #FFFFFF;
   --slate:  #54687A;
   --alert:  #B3261E;
 
@@ -123,8 +160,9 @@ body {
   margin: 0;
   background: var(--paper);
   color: var(--ink);
-  font-family: 'Public Sans', ui-sans-serif, system-ui, 'Segoe UI', Roboto,
-               'Helvetica Neue', Arial, sans-serif;
+  /* Poppins only. The generic keyword is there solely so text still renders
+     in the moment before the font file arrives. */
+  font-family: 'Poppins', sans-serif;
   font-size: var(--t-4);
   font-weight: 400;
   line-height: 1.6;
@@ -219,6 +257,9 @@ img { display: block; }
   padding-top: var(--s-6);
 }
 .section:last-child { padding-bottom: var(--s-8); }
+/* A page's opening block sits straight under the masthead with no rule, as
+   the home page does. Rules between later sections stay. */
+.main > .section:first-child { border-top: 0; margin-top: 0; }
 .section--quiet { border-top: var(--rule-hair); }
 
 .stack > * + * { margin-top: var(--s-4); }
@@ -448,29 +489,64 @@ ul.clauses > li::before {
 
 /* ---------- 9. Masthead and navigation ---------------------------------- */
 
-/* Full bleed: this is the contract's 2px ink rule under the nav, and the
-   masthead is the only element here that spans the viewport. */
-.masthead { border-bottom: var(--rule-ink); }
+/* No rule under the masthead: the header ends in white space, like most sites.
+   Sticky, so the nav, phone number and enquiry button stay in reach while a
+   long page scrolls. The paper background stops text showing through; z-index
+   sits below the skip link (50) so that still lands on top when focused. */
+.masthead {
+  border-bottom: 0;
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: var(--paper);
+}
 
+/* Anchor jumps and keyboard focus stop below the sticky header, not behind it
+   (WCAG 2.4.11). One value per header layout, each its height plus a margin. */
+html { scroll-padding-top: 6rem; }
+@media (min-width: 60em) { html { scroll-padding-top: 9rem; } }
+@media (min-width: 78em) { html { scroll-padding-top: 6rem; } }
+
+/* The masthead's height in each layout, so the home hero can fill exactly the
+   rest of the screen beneath it. */
+:root { --masthead-h: 5rem; }
+@media (min-width: 60em) { :root { --masthead-h: 8rem; } }
+@media (min-width: 78em) { :root { --masthead-h: 4.75rem; } }
+
+/* Three layouts, one source order (brand, Menu, nav):
+     under 60em   brand and Menu, then the nav when open
+     60em - 78em  brand on one row, the nav (with search and Contact) on a second
+     78em and up  everything on a single row
+   Row gaps are margins, not grid gaps: the nav row is empty while the menu is
+   collapsed, and a grid gap either side of an empty row doubles the space. */
 .masthead__inner {
   display: grid;
   grid-template-columns: 1fr auto;
-  grid-template-areas: 'brand toggle' 'reach reach';
-  gap: var(--s-4);
+  grid-template-areas: 'brand toggle' 'nav nav';
+  column-gap: var(--s-4);
+  row-gap: 0;
   align-items: center;
   padding-top: var(--s-4);
   padding-bottom: var(--s-4);
 }
 @media (min-width: 60em) {
   .masthead__inner {
-    grid-template-columns: auto 1fr auto;
-    grid-template-areas: 'brand reach cta';
-    gap: var(--s-6);
+    grid-template-columns: 1fr;
+    grid-template-areas: 'brand' 'nav';
+    column-gap: var(--s-6);
+    /* The nav row is the bottom of the header; its links carry their own padding. */
+    padding-bottom: 0;
   }
 }
 
+/* The logo image. Sized by height; the width/height attributes keep its ratio. */
+.wordmark__logo { display: block; height: 3rem; width: auto; }
+@media (min-width: 60em) { .wordmark__logo { height: 3.5rem; } }
+
 .wordmark {
   grid-area: brand;
+  /* Hug the left edge: stretched across a 1fr column, the flex row centres. */
+  justify-self: start;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -480,51 +556,20 @@ ul.clauses > li::before {
 }
 .wordmark__name {
   display: block;
-  font-size: var(--t-3);
+  font-size: 1.125rem;
   font-weight: 700;
   letter-spacing: -.015em;
   line-height: 1.1;
 }
 .wordmark__descriptor {
   display: block;
-  font-size: var(--t-7);
+  font-size: .75rem;
   color: var(--slate);
   letter-spacing: 0;
 }
 .wordmark:hover .wordmark__name { text-decoration: underline;
   text-decoration-color: var(--action); text-decoration-thickness: 2px;
   text-underline-offset: 3px; }
-
-.masthead__reach {
-  grid-area: reach;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: var(--s-2) var(--s-4);
-}
-@media (min-width: 60em) { .masthead__reach { justify-content: center; } }
-
-.callnow {
-  display: inline-flex;
-  flex-direction: column;
-  min-height: var(--target);
-  justify-content: center;
-  text-decoration: none;
-  color: var(--ink);
-  border-bottom: 2px solid var(--action);
-}
-.callnow:hover { background: var(--action-wash); }
-.callnow__label { font-size: var(--t-7); color: var(--slate); }
-.callnow__number {
-  font-size: var(--t-3);
-  font-weight: 700;
-  letter-spacing: -.01em;
-  font-variant-numeric: tabular-nums;
-}
-.masthead__hours { margin: 0; font-size: var(--t-7); color: var(--slate); }
-
-.masthead__cta { grid-area: cta; display: none; }
-@media (min-width: 60em) { .masthead__cta { display: inline-flex; } }
 
 .menu-toggle {
   grid-area: toggle;
@@ -552,19 +597,28 @@ ul.clauses > li::before {
 
 /* -- the nav itself -- */
 
-.nav { border-top: var(--rule-hair); }
+.nav { grid-area: nav; margin-top: var(--s-4); border-top: var(--rule-hair); }
+/* The hairline only separates the open menu on a phone; a desktop nav has none. */
+@media (min-width: 60em) { .nav { border-top: 0; margin-top: var(--s-2); } }
 
 /* Collapsed on small screens once JS is running; always open without it. */
 .js .nav { display: none; }
 .js .nav.is-open { display: block; }
+/* The header is sticky, so an open phone menu taller than the screen could
+   never be scrolled to its end. Cap it and let the menu scroll inside itself. */
+@media (max-width: 59.99em) {
+  .js .nav.is-open { max-height: calc(100vh - 7rem); max-height: calc(100dvh - 7rem); overflow-y: auto; }
+}
 @media (min-width: 60em) { .js .nav { display: block; } }
 
 .nav__list {
   list-style: none;
-  /* margin-block only: .shell's margin-inline:auto must survive, or the nav row
-     sits flush left while every other element on the page is centred. */
-  margin-block: 0;
-  padding-block: 0;
+  /* The masthead's .shell already centres and pads the nav, so the list adds none.
+     max-width: none lifts the 65ch reading measure every list gets, which would
+     otherwise wrap the nav long before the row runs out of room. */
+  margin: 0;
+  padding: 0;
+  max-width: none;
   display: flex;
   flex-direction: column;
 }
@@ -574,8 +628,8 @@ ul.clauses > li::before {
 
 .nav__item { position: relative; border-bottom: var(--rule-hair); }
 @media (min-width: 60em) {
+  /* Plain links on a wide screen: no dividers between items. */
   .nav__item { border-bottom: 0; display: flex; align-items: stretch; }
-  .nav__item + .nav__item { border-left: var(--rule-hair); }
 }
 
 .nav__link {
@@ -583,16 +637,14 @@ ul.clauses > li::before {
   align-items: center;
   min-height: var(--target);
   padding: var(--s-3) var(--s-4);
-  font-size: var(--t-5);
-  font-weight: 600;
+  font-size: .875rem;
+  font-weight: 500;
   text-decoration: none;
   color: var(--ink);
 }
 .nav__link:hover { background: var(--action-wash); }
-/* An inset shadow, not a border: it marks the current section without occupying
-   layout space, so nothing shifts as you move between pages. */
-.nav__item.is-current > .nav__link,
-.nav__link[aria-current='page'] { box-shadow: inset 0 -4px 0 var(--action); }
+/* No visual current-page marker. aria-current="page" still tells screen
+   readers which page this is. */
 @media (min-width: 60em) {
   .nav__link { padding: var(--s-3) var(--s-4); }
   /* Pull the row left by the link's own padding so the first label's text sits
@@ -645,13 +697,96 @@ ul.clauses > li::before {
   display: flex; align-items: center;
   min-height: var(--target);
   padding: var(--s-3) var(--s-4) var(--s-3) var(--s-6);
-  font-size: var(--t-5);
+  font-size: .9375rem;
   text-decoration: none;
   color: var(--ink);
 }
 @media (min-width: 60em) { .nav__sub a { padding-left: var(--s-4); } }
 .nav__sub a:hover { background: var(--action-wash); }
-.nav__sub a[aria-current='page'] { font-weight: 700; box-shadow: inset 4px 0 0 var(--action); }
+.nav__sub a[aria-current='page'] { font-weight: 700; }
+
+/* -- Site search, in the nav just before Contact -- */
+.nav__item--search { padding: var(--s-3) 0; }
+@media (min-width: 60em) {
+  /* margin-left:auto pushes the search, and Contact after it, to the right end. */
+  .nav__item--search { margin-left: auto; padding: 0; align-items: center; }
+}
+.navsearch { position: relative; display: flex; align-items: center; width: 100%; }
+/* Long and slim, 32px tall. Never under 13.5rem, so the whole placeholder
+   "How can we help you?" shows; ~225px at 1280px, up to 22rem on wide screens. */
+@media (min-width: 60em) { .navsearch { width: clamp(13.5rem, 30vw - 10rem, 22rem); } }
+/* Two classes, so this outranks the site-wide input[type='search'] rule. */
+.navsearch .navsearch__input {
+  width: 100%;
+  min-height: 2rem;
+  margin: 0;
+  padding: 0 2.25rem 0 .875rem;
+  font: inherit;
+  font-size: .75rem;
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--hair-strong);
+  border-radius: 999px;
+}
+/* The site-wide focus rule thickens the border to 2px and resets padding;
+   keep the thicker border but hold the room for the search button. */
+.navsearch .navsearch__input:focus-visible {
+  padding: 0 calc(2.25rem - 1px) 0 calc(.875rem - 1px);
+}
+/* Slate on paper is 5.77:1, so the placeholder is readable, not a ghost. */
+.navsearch__input::placeholder { color: var(--slate); opacity: 1; }
+/* The browser's own clear button would sit under the search button. */
+.navsearch__input::-webkit-search-cancel-button { -webkit-appearance: none; appearance: none; }
+.navsearch__btn {
+  position: absolute;
+  right: .125rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+}
+.navsearch__btn:hover { background: var(--action-wash); }
+.navsearch__btn .icon { width: .875rem; height: .875rem; }
+
+/* -- 78em and up: the whole masthead on one row --
+   Brand, the five section links, then the search and Contact at the right end. */
+
+@media (min-width: 78em) {
+  .masthead__inner {
+    /* Wider than .shell on big screens so the row never feels cramped. */
+    max-width: 100rem;
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-areas: 'brand nav';
+    column-gap: var(--s-6);
+    align-items: stretch;
+    min-height: 4.75rem;
+    padding-top: 0;
+  }
+  .wordmark { align-self: center; }
+
+  /* Full row height, so each link's hover fill spans the whole header. The
+     list fills the nav so the search's margin-left:auto has room to push. */
+  .nav, .js .nav { display: flex; margin-top: 0; }
+  .nav__list { flex: 1; }
+  .nav__item:first-child { margin-left: 0; }
+  /* Poppins sets wide; tight link padding keeps every item on the row. */
+  .nav__link { padding: 0 .625rem; }
+  /* Room between items, not inside them, so each chevron stays with its
+     label. Fluid: ~14px at 78em where the row is tightest (it now carries the
+     search too), ~15px at 1280px, 28px at most on wide screens. */
+  .nav__list { column-gap: clamp(.75rem, 4vw - 2.25rem, 1.75rem); }
+  .nav__item--parent > .nav__link { padding-right: var(--s-1); }
+  .nav__disc { width: 1.25rem; }
+}
 
 /* ---------- 10. The two doors ------------------------------------------- */
 /* The one place boldness is spent. Two notices posted side by side inside a
@@ -744,7 +879,154 @@ ul.clauses > li::before {
   max-width: var(--measure);
 }
 
-/* The home masthead block above the doors. */
+/* -- The home hero -- */
+/* Full bleed: a photograph under an ink wash, the text on the left. The wash
+   is heaviest where the text sits (.9 ink or more), so white text holds better
+   than 9:1 even over the brightest pixel of the photograph. It thins to the
+   right, where there is no text, so the picture still reads. */
+.hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: var(--ink);
+  color: #fff;
+}
+.hero__media { position: absolute; inset: 0; z-index: -1; }
+.hero__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--hero-pos, 50% 50%);
+  filter: grayscale(1) contrast(1.05);
+}
+.hero__media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 42, 61, .9);
+}
+@media (min-width: 52em) {
+  .hero__media::after {
+    background: linear-gradient(90deg,
+      rgba(15, 42, 61, .96) 0%, rgba(15, 42, 61, .92) 42%, rgba(15, 42, 61, .45) 100%);
+  }
+}
+/* The hero fills the screen below the sticky masthead. The words sit centred
+   in that space and the facts row is pinned to the bottom edge (both through
+   margin auto). svh, not vh, so a phone's sliding address bar never pushes the
+   facts row off screen; vh is the fallback for older browsers. */
+.hero__inner {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - var(--masthead-h));
+  min-height: calc(100svh - var(--masthead-h));
+  padding-block: var(--s-6);
+}
+@media (min-width: 60em) { .hero__inner { padding-block: var(--s-7) var(--s-6); } }
+.hero__inner > * { max-width: 38rem; }
+/* The headline and the facts row run the full width, each on one line where
+   the screen allows it. */
+.hero__inner > .hero__title,
+.hero__inner > .hero__facts { max-width: none; }
+.hero__inner > .hero__lede { max-width: 50rem; }
+
+.hero__kicker {
+  margin: auto 0 0;
+  font-size: var(--t-6);
+  font-weight: 500;
+  color: #fff;
+  opacity: .85;
+}
+.hero__title {
+  margin: var(--s-3) 0 0;
+  font-size: var(--t-1);
+  text-wrap: balance;
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: -.02em;
+  color: #fff;
+}
+.hero__lede {
+  margin: var(--s-4) 0 0;
+  font-size: var(--t-4);
+  line-height: 1.6;
+  color: #fff;
+  opacity: .9;
+}
+
+/* margin-bottom is the least space ever left above the facts row, which
+   otherwise floats to the bottom edge. */
+.hero__actions { display: flex; flex-wrap: wrap; gap: var(--s-3); margin-top: var(--s-6); margin-bottom: var(--s-7); }
+/* Compact pills: --fill is the hero's one filled action, --line the outline.
+   44px tall: smaller than the 48px site default, still a comfortable target. */
+.hero__btn--fill, .hero__btn--line {
+  border-radius: 999px;
+  min-height: 2.75rem;
+  padding: var(--s-2) var(--s-5);
+  font-size: .9375rem;
+}
+.hero__btn--fill { background: #1479AD; border-color: #1479AD; color: #fff; }
+.hero__btn--line  { border-color: #fff; color: #fff; }
+.hero__btn--fill:hover, .hero__btn--fill:active,
+.hero__btn--line:hover,  .hero__btn--line:active { background: #fff; border-color: #fff; color: var(--ink); }
+.hero a:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+
+/* The facts row: three points and the phone/hours, one line on a wide screen. */
+.hero__facts {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-3) var(--s-5);
+  margin-top: auto;
+  padding-top: var(--s-4);
+  border-top: 1px solid rgba(255, 255, 255, .25);
+}
+.hero__points {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-3) var(--s-5);
+  /* 13px: small enough that three points and the phone/hours share one row
+     at laptop widths on every page that uses the hero. */
+  font-size: .8125rem;
+  color: #fff;
+}
+.hero__points li { display: inline-flex; align-items: center; gap: var(--s-2); }
+/* The group blue on ink is 4.95:1, well past the 3:1 an icon needs. */
+.hero__points .icon { width: 1.15em; height: 1.15em; color: var(--action); }
+
+/* The pharmacy's phone and hours, sharing the points' row. */
+.hero__contact {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-2) var(--s-5);
+  margin: 0;
+  font-size: .8125rem;
+  color: #fff;
+}
+.hero__contact-item { display: inline-flex; align-items: center; gap: var(--s-2); }
+.hero__contact .icon { width: 1.15em; height: 1.15em; color: var(--action); }
+.hero__contact a {
+  color: #fff;
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: var(--action);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+/* On a wide screen the points and the phone/hours are one run of items in the
+   facts row. As nested flex boxes, the points list was sized without its own
+   gaps and broke onto a second line while the row still had room; flattened,
+   the row fits when it can and otherwise wraps one item at a time. The list
+   keeps role="list" in the markup, since display:contents can drop it. */
+@media (min-width: 60em) {
+  .hero__points, .hero__contact { display: contents; }
+}
+
+/* The home block under the hero: the question, then the doors. */
 .entry { padding-top: var(--s-7); padding-bottom: var(--s-8); }
 .entry__question {
   font-size: var(--t-1);
@@ -984,73 +1266,121 @@ input:focus-visible, select:focus-visible, textarea:focus-visible {
 /* The healthcare-professional interstitial. */
 /* Constrain the content, not the shell: a max-width on .shell itself would
    centre this page against every other route's left ink edge. */
-.gate { padding-top: var(--s-8); padding-bottom: var(--s-9); }
+.gate { padding-top: var(--s-6); padding-bottom: var(--s-9); }
 .gate > * { max-width: 40rem; }
-.gate__head { border-top: var(--rule-ink); padding-top: var(--s-5); }
+/* No rule above the notice's heading, to match every other page's opening. */
+.gate__head { padding-top: 0; }
 
 /* ---------- 13. Footer -------------------------------------------------- */
-/* Small text, quiet, one column on mobile, no icons. Nine links is correct
-   here: footers are scanned, not decided from. */
+/* A conventional site footer on the ink ground: brand and contact, a column of
+   links per section, the compliance record, then the policy links and small
+   print on a darker bar. White on --ink is 14.8:1; the quieter 75% white is
+   about 9:1 and the 60% white about 6:1, so every line clears AA. The darker
+   bar is black laid over ink, not a new colour. */
 
 .footer {
-  border-top: var(--rule-ink);
   margin-top: var(--s-9);
-  padding-top: var(--s-6);
-  padding-bottom: var(--s-7);
+  background: var(--ink);
+  color: rgba(255, 255, 255, .75);
   font-size: var(--t-6);
-  color: var(--slate);
 }
-.footer .shell { display: grid; gap: var(--s-6); }
-@media (min-width: 52em) {
-  .footer .shell { grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: var(--s-7); }
-  .footer__base { grid-column: 1 / -1; }
+.footer a:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
+
+/* Brand full width, then the section columns two, four, then all in a row. */
+.footer__main {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--s-6) var(--s-5);
+  padding-block: var(--s-8) var(--s-6);
 }
+.footer__brand { grid-column: 1 / -1; }
+@media (min-width: 48em) {
+  .footer__main { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+@media (min-width: 70em) {
+  .footer__main { grid-template-columns: minmax(0, 1.5fr) repeat(4, minmax(0, 1fr)); gap: var(--s-6); }
+  .footer__brand { grid-column: auto; padding-right: var(--s-5); }
+}
+
+.footer__logo { display: inline-block; }
+.footer__logo img { display: block; height: 3.5rem; width: auto; }
+.footer__about { margin: var(--s-4) 0 0; max-width: 36ch; line-height: 1.6; }
+
+.footer__contact { list-style: none; margin: var(--s-5) 0 0; padding: 0; display: grid; gap: var(--s-2); }
+.footer__contact li { display: flex; align-items: flex-start; gap: var(--s-2); }
+.footer__contact .icon { flex: none; width: 1.1em; height: 1.1em; margin-top: .2em; color: var(--action); }
+
 .footer__head {
-  font-size: var(--t-7);
-  font-weight: 700;
-  color: var(--ink);
   margin: 0 0 var(--s-3);
-  padding-bottom: var(--s-2);
-  border-bottom: var(--rule-hair);
+  font-size: var(--t-5);
+  font-weight: 600;
+  color: #fff;
   max-width: none;
 }
-.footer .record { font-size: var(--t-6); }
-.footer .record dt { font-size: var(--t-7); }
-.footer .record dd { color: var(--ink); }
 
+/* Links: no underline at rest, the group blue underline on hover. 44px tall. */
 .footer__links { list-style: none; margin: 0; padding: 0; }
-.footer__links li + li { margin-top: 0; }
-.footer__links a {
-  display: flex;
-  align-items: center;
-  padding: var(--s-2) 0;
-  min-height: var(--target);
-  color: var(--slate);
-  text-decoration-color: var(--hair-strong);
+.footer__head a, .footer__contact a, .footer__links a, .footer__policies a {
+  text-decoration: none;
 }
-.footer__links a:hover { color: var(--ink); text-decoration-color: var(--action); }
+.footer__head a, .footer__contact a { color: #fff; }
+.footer__links a, .footer__policies a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  color: rgba(255, 255, 255, .75);
+}
+.footer__head a:hover, .footer__contact a:hover, .footer__links a:hover, .footer__policies a:hover {
+  color: #fff;
+  background: none;
+  text-decoration: underline;
+  text-decoration-color: var(--action);
+  text-decoration-thickness: 2px;
+}
 
-.footer__base { border-top: var(--rule-hair); padding-top: var(--s-5); }
-.footer__group { margin: 0 0 var(--s-2); color: var(--ink); }
-.footer__sites { color: var(--slate); }
-.footer__claim { margin: 0; max-width: 62ch; }
+/* The compliance record: three facts in a row under a hairline. */
+.footer__record {
+  padding-block: var(--s-5);
+  border-top: 1px solid rgba(255, 255, 255, .15);
+}
+.footer__record dl { display: flex; flex-wrap: wrap; gap: var(--s-4) var(--s-7); margin: 0; }
+.footer__record dl > div { display: grid; gap: var(--s-1); }
+.footer__record dt { font-size: var(--t-7); color: rgba(255, 255, 255, .6); }
+.footer__record dd { margin: 0; color: #fff; }
+.footer__sub { display: block; margin-top: var(--s-1); font-size: var(--t-7); color: rgba(255, 255, 255, .6); }
+/* "Needed" markers are drawn for a light page; give them one here. */
+.footer .todo { background: #fff; }
 
-/* Marginalia: the notice reference and issue line, set apart from the footer's
-   body text the way a gazette sets them in the sheet's margin. */
+.footer__bottom {
+  background: rgba(0, 0, 0, .22);
+  padding-block: var(--s-4) var(--s-6);
+  font-size: var(--t-7);
+}
+.footer__bottom .shell { display: grid; gap: var(--s-4); }
+.footer__policies ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--s-5);
+}
+.footer__small p { margin: 0; max-width: 90ch; }
+.footer__small p + p { margin-top: var(--s-2); }
+.footer__claim--quiet { color: rgba(255, 255, 255, .6); }
+
+/* Marginalia: the notice reference and review date, set apart at the foot. */
 .footer__margin {
-  grid-column: 1 / -1;
   display: flex;
   flex-wrap: wrap;
   gap: var(--s-2) var(--s-6);
-  margin-top: var(--s-6);
   padding-top: var(--s-3);
-  border-top: var(--rule-hair);
-  font-size: var(--t-7);
-  color: var(--slate);
+  border-top: 1px solid rgba(255, 255, 255, .15);
+  color: rgba(255, 255, 255, .6);
 }
 @media (min-width: 52em) { .footer__margin { justify-content: flex-end; } }
 .footer__margin > span { display: inline-flex; gap: var(--s-2); }
-.footer__margin .footer__val { color: var(--ink); font-weight: 700; }
+.footer__margin .footer__val { color: #fff; font-weight: 700; }
 
 /* ---------- 14. Plates: photography ------------------------------------- */
 /* A gazette does not print photographs in full colour beside its ink. It prints
@@ -1175,7 +1505,7 @@ input:focus-visible, select:focus-visible, textarea:focus-visible {
   .band__panel { padding-left: max(clamp(var(--s-4), 4vw, var(--s-7)), calc((100vw - 76rem) / 2 + var(--s-7))); }
 }
 /* A small label, not an overline. Sentence case and zero tracking, so this is
-   the same object as .record dt or .callnow__label — just set on ink. */
+   the same object as .record dt — just set on ink. */
 .band__kicker {
   margin: 0;
   font-size: var(--t-6);
@@ -1269,9 +1599,6 @@ a.channels__row:hover { background: var(--action-wash); }
 .wordmark { flex-direction: row; align-items: center; gap: var(--s-3); }
 .wordmark__text { display: flex; flex-direction: column; }
 
-/* The phone mark in the masthead sits with the label, not the number. */
-.callnow__label { display: inline-flex; align-items: center; gap: var(--s-1); }
-.callnow__label .icon { width: .95em; height: .95em; }
 
 /* Marks used inline in a notice heading. */
 .notice__head { display: flex; align-items: center; gap: var(--s-2); }
@@ -1293,13 +1620,24 @@ a.channels__row:hover { background: var(--action-wash); }
 @media print {
   :root { --paper: #fff; --ink: #000; --slate: #333; }
   body { font-size: 11pt; line-height: 1.45; }
-  .masthead__reach, .masthead__cta, .menu-toggle, .nav, .skip,
+  .menu-toggle, .nav, .skip,
   .parallel__toggle, .lookup, .actions { display: none !important; }
   .doors, .notice, .receipt { border-color: #000; }
   .section { break-inside: avoid; }
   a { text-decoration: none; }
   .prose a::after { content: ' (' attr(href) ')'; font-size: 9pt; color: #333; }
   .footer { border-top: 1pt solid #000; }
+  /* The footer prints as plain black text: no ink ground, no white logo, and
+     no link columns, which mean nothing on paper. */
+  .footer, .footer__bottom { background: none; }
+  .footer * { color: #000 !important; }
+  .footer__logo, .footer__col, .footer__policies { display: none; }
+  /* The hero prints as plain text: no photograph, no ink ground, no buttons. */
+  .hero { background: none; color: #000; }
+  .hero__media, .hero__actions { display: none; }
+  .hero__title, .hero__kicker, .hero__lede, .hero__points,
+  .hero__contact, .hero__contact a { color: #000; opacity: 1; }
+  .hero__inner { min-height: 0; padding-block: 0 1rem; }
 }
 
 @media (forced-colors: active) {
@@ -1309,6 +1647,10 @@ a.channels__row:hover { background: var(--action-wash); }
   .progress__seg.is-done { background: GrayText; }
   .btn, .notice, .doors, .nav__panel { border-color: CanvasText; }
   :focus-visible { outline-color: Highlight; }
+  /* Forced colours drop the wash but keep the photograph; drop both, so the
+     hero text is never set over a bare picture. */
+  .hero__media { display: none; }
+  .hero__btn--fill, .hero__btn--line { border-color: ButtonText; }
 }
 
 /* Duotone is an enhancement. Where the blend modes are unavailable the plate
@@ -1339,17 +1681,16 @@ a.channels__row:hover { background: var(--action-wash); }
   .plate__frame { border-color: #000; }
 }
 
-/* The home entry: the question on the left, one plate on the right. The plate
-   fills the void that a 20ch heading leaves on a wide screen, and it stops
-   above the doors — the doors are still the boldest thing on this page, and a
-   photograph is not allowed to outrank them. */
-.entry__head { display: grid; gap: var(--s-5); align-items: start; }
-@media (min-width: 60em) {
-  .entry__head { grid-template-columns: minmax(0, 1fr) minmax(0, .58fr); gap: var(--s-8); }
-}
+/* The home entry: the question and its escape hatch, then the doors. The
+   photograph that used to sit beside the question now carries the hero. */
 .entry__words > :first-child { margin-top: 0; }
-.entry__plate { --plate-ar: 16 / 9; }
 
-/* The stock-photography disclosure sits under the trading claim, quieter than
-   it but still readable. */
-.footer__claim--quiet { color: var(--slate); }
+
+/* The search results page. */
+.search__form { max-width: 40rem; margin-top: var(--s-5); }
+.search__form label { display: block; font-weight: 600; margin-bottom: var(--s-2); }
+.search__row { display: flex; flex-wrap: wrap; gap: var(--s-3); }
+.search__row input { flex: 1 1 16rem; min-width: 0; }
+.search__status { margin-top: var(--s-6); }
+/* Matches in the excerpts: a tint of the group blue, not a highlighter yellow. */
+.search__results mark { background: rgba(29, 159, 218, .18); color: inherit; padding: 0 .1em; }

@@ -23,7 +23,9 @@
  *   - add an audit log line where noted below
  *
  * Every page under /providers must call provider_gate() immediately after
- * including header.php, and must set $page['noindex'] = true.
+ * including header.php, and must set $page['noindex'] = true. The one
+ * exception is /providers itself, which shows its hero first and then calls
+ * provider_gate('h2'), because the hero already carries the page's h1.
  */
 
 const PROVIDER_GATE_COOKIE = 'gv_hcp';
@@ -52,8 +54,10 @@ function provider_gate_accept(): void
 /**
  * Renders the interstitial and stops the page when the visitor has not
  * continued yet. Returns normally when the section may be shown.
+ *
+ * $heading  'h1' normally; 'h2' when a hero above already holds the page's h1.
  */
-function provider_gate(): void
+function provider_gate(string $heading = 'h1'): void
 {
     $mode = cfg('provider_gate', 'interstitial');
 
@@ -74,20 +78,20 @@ function provider_gate(): void
     }
 
     // Not passed. Render the notice in place of the page and stop.
-    provider_gate_render($mode);
+    provider_gate_render($mode, $heading === 'h2' ? 'h2' : 'h1');
 
     global $page;
     include INC . '/footer.php';
     exit;
 }
 
-function provider_gate_render(string $mode): void
+function provider_gate_render(string $mode, string $heading = 'h1'): void
 {
     require_once INC . '/icons.php';
     ?>
     <div class="shell gate">
       <div class="gate__head">
-        <h1>This section is written for healthcare professionals</h1>
+        <<?= $heading ?>>This section is written for healthcare professionals</<?= $heading ?>>
       </div>
 
       <div class="prose stack" style="margin-top:var(--s-5)">

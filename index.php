@@ -1,16 +1,18 @@
 <?php
 /**
- * Home. One decision, two routes.
+ * Home. A hero, then one decision with two routes.
  *
- * The hero is not a slogan, a photograph or a carousel. It is a single question
- * and two large doors, and everything downstream is filtered by which one the
- * visitor takes. This is where the design spends all of its boldness.
+ * The hero says what the pharmacy is and gives the two ways to reach it: call,
+ * or ask in writing. Directly under it sits the question and the two large
+ * doors, and everything downstream is filtered by which one the visitor takes.
  */
 require __DIR__ . '/includes/bootstrap.php';
 require_once INC . '/icons.php';
+require_once INC . '/components.php';
 
 $page = [
-    'title' => 'Cancer medicines in Port Vila',
+    // The browser tab reads just "Getmeds Vanuatu" on the home page.
+    'title' => 'Getmeds Vanuatu',
     'desc'  => 'Getmeds Vanuatu is a licensed specialty pharmacy in Port Vila supplying '
              . 'cancer medicines and the medicines that manage their side effects, against '
              . 'a valid prescription.',
@@ -21,28 +23,35 @@ include INC . '/head.php';
 include INC . '/header.php';
 ?>
 
+<?php page_hero([
+    'photo'   => 'shelves',
+    'pos'     => '50% 40%',
+    'kicker'  => 'Licensed pharmacy · ' . cfg('address_city') . ', ' . cfg('address_country'),
+    'title'   => 'Cancer medicines, supplied in Port Vila.',
+    'lede'    => "We supply cancer medicines, and the medicines that manage their side effects, "
+               . "against a valid prescription. Held between 2 and 8\u{00A0}degrees from the "
+               . "supplier to the patient.",
+    'actions' => [
+        ['label' => 'Call ' . cfg('phone'), 'href' => 'tel:' . cfg('phone_href'), 'icon' => 'phone', 'fill' => true],
+        ['label' => 'Ask About a Medicine', 'href' => url('/enquire')],
+    ],
+    'points'  => [
+        ['script', 'Prescription required'],
+        ['thermo', "Held at 2 to 8\u{00A0}°C"],
+        ['ship',   'Delivery across Vanuatu'],
+    ],
+]); ?>
+
 <section class="entry shell" aria-labelledby="entry-question">
-  <div class="entry__head">
-    <div class="entry__words">
-      <h1 class="entry__question" id="entry-question">Who is this for?</h1>
-      <p class="entry__sub">Choose one and we will take you straight to what you need.</p>
-      <?php /* The escape hatch sits with the question, not below the doors: it is
-               help for the choice, and it is what fills this column beside the
-               plate rather than leaving the page half empty. */ ?>
-      <p class="doors-aside">
-        Not sure which? Call the pharmacy on <?= phone_link('body-link') ?> and a
-        pharmacist will point you the right way. <?= e(cfg('hours_short')) ?>.
-      </p>
-    </div>
-    <?php /* The one plate above the fold, so it is the only one loaded eagerly. */
-          plate('dispensary', [
-            'class' => 'entry__plate',
-            'pos'   => '50% 34%',
-            'sizes' => '(min-width: 60em) 30vw, (min-width: 40em) 46vw, 92vw',
-            'cap'   => 'Cancer medicines are ordered per patient, not held on an open shelf.',
-            'ref'   => 'Plate 1',
-            'eager' => true,
-          ]); ?>
+  <div class="entry__words">
+    <h2 class="entry__question" id="entry-question">Who is this for?</h2>
+    <p class="entry__sub">Choose one and we will take you straight to what you need.</p>
+    <?php /* The escape hatch sits with the question, not below the doors: it is
+             help for the choice. */ ?>
+    <p class="doors-aside">
+      Not sure which? Call the pharmacy on <?= phone_link('body-link') ?> and a
+      pharmacist will point you the right way. <?= e(cfg('hours_short')) ?>.
+    </p>
   </div>
 
   <div class="doors">

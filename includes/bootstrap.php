@@ -60,6 +60,17 @@ function url(string $path = '/'): string
 }
 
 /**
+ * URL for a file under /assets, stamped with its modification time. .htaccess
+ * caches CSS and JS for a week, so without the stamp a returning visitor keeps
+ * the old file after an edit.
+ */
+function asset(string $path): string
+{
+    $file = APP_ROOT . $path;
+    return url($path) . (is_file($file) ? '?v=' . filemtime($file) : '');
+}
+
+/**
  * Absolute URL, for the places a relative one is not allowed: og:image and
  * canonical are both read by machines that have no page context to resolve
  * against. Derived from the request rather than hard-coded, so this works the

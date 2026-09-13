@@ -17,7 +17,9 @@ $noindex = !empty($page['noindex']);
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title><?= e($title) ?> — <?= e(cfg('site_name')) ?></title>
+<?php /* "Page — Getmeds Vanuatu", or the site name alone when that is the title
+         (the home page), rather than "Getmeds Vanuatu — Getmeds Vanuatu". */ ?>
+<title><?= $title === cfg('site_name') ? e($title) : e($title) . ' — ' . e(cfg('site_name')) ?></title>
 <?php if ($desc !== ''): ?>
 <meta name="description" content="<?= e($desc) ?>">
 <?php endif; ?>
@@ -39,9 +41,14 @@ $noindex = !empty($page['noindex']);
 <meta name="twitter:card" content="summary_large_image">
 
 <?php /* Self-hosted, no third-party request anywhere on this page. */ ?>
-<link rel="preload" href="<?= e(url('/assets/fonts/public-sans-latin.woff2')) ?>" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="<?= e(url('/assets/css/site.css')) ?>">
-<link rel="icon" href="<?= e(url('/assets/img/favicon.svg')) ?>" type="image/svg+xml">
+<link rel="preload" href="<?= e(url('/assets/fonts/poppins-latin-400-normal.woff2')) ?>" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="<?= e(asset('/assets/css/site.css')) ?>">
+<?php /* The navbar logo, centred on a square: the tab icon (32px, and 192px for
+         high-resolution screens), and the icon a phone uses when the site is
+         saved to its home screen. */ ?>
+<link rel="icon" href="<?= e(asset('/assets/img/favicon-32.png')) ?>" type="image/png" sizes="32x32">
+<link rel="icon" href="<?= e(asset('/assets/img/favicon-192.png')) ?>" type="image/png" sizes="192x192">
+<link rel="apple-touch-icon" href="<?= e(asset('/assets/img/apple-touch-icon.png')) ?>" sizes="180x180">
 
 <?php /* Sets the js flag before first paint so nav never flashes open. */ ?>
 <script>document.documentElement.className='js';</script>

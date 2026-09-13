@@ -195,7 +195,7 @@ The palette is five values and no more:
 |---|---|---|
 | `--ink` | `#0F2A3D` | Body text, headings, rules |
 | `--action` | `#1D9FDA` | Interactive elements only, never decoration |
-| `--paper` | `#FBFBF9` | Page background |
+| `--paper` | `#FFFFFF` | Page background |
 | `--slate` | `#54687A` | Secondary text, rules |
 | `--alert` | `#B3261E` | Errors and safety notices only |
 

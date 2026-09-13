@@ -18,18 +18,34 @@ $page = [
 include INC . '/head.php';
 include INC . '/header.php';
 
-provider_gate();
+// The hero shows to every visitor, before the gate. The gate's notice follows
+// it (with an h2, since the hero carries the page's h1) until the visitor
+// confirms; after that the section's content follows it instead.
+page_hero([
+    'photo'   => 'warehouse',
+    'pos'     => '50% 50%',
+    'kicker'  => 'For doctors and hospitals',
+    'title'   => 'Oncology supply for hospitals and prescribers.',
+    'lede'    => 'Formulary scope, ordering, handling and quotes. Written for prescribers, nurses, '
+               . 'pharmacists and institutional buyers across the Pacific.',
+    'actions' => [
+        ['label' => 'Request a Quote', 'href' => url('/providers/request-a-quote'), 'fill' => true],
+        ['label' => 'Call ' . cfg('phone'), 'href' => 'tel:' . cfg('phone_href'), 'icon' => 'phone'],
+    ],
+    'points'  => [
+        ['hosp', 'Named-patient supply'],
+        ['cold', 'Cold chain logged'],
+        ['box',  'Tender and ward quotes'],
+    ],
+]);
 
-page_open(
-    'For doctors and hospitals',
-    'Formulary scope, ordering, handling and quotes. Written for prescribers and buyers, not '
-    . 'for patients.'
-);
+provider_gate('h2');
 ?>
 
 <div class="section shell" style="margin-top:var(--s-6);border-top:0;padding-top:0">
   <div class="split">
     <div class="split__body">
+  <h2 style="margin-top:0">In this section</h2>
   <?php chunk_links(nav_children('/providers')); ?>
     </div>
     <div class="split__aside">
