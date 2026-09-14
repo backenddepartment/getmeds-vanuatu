@@ -33,6 +33,7 @@ function page_open(string $h1, string $lede = '', string $id = 'page-title'): vo
  *     kicker   string  small label above the heading
  *     title    string  the page's h1
  *     lede     string  one or two sentences, plain text
+ *     sub      string  optional second, quieter line under the lede
  *     actions  array   [['label', 'href', 'icon' => name, 'fill' => bool], ...]
  *                      at most one should be 'fill' => true
  *     points   array   [[icon name, text], ...], plain text
@@ -73,6 +74,9 @@ function page_hero(array $o): void
         <h1 class="hero__title" id="hero-title"><?= e($o['title']) ?></h1>
         <?php if (!empty($o['lede'])): ?>
         <p class="hero__lede"><?= e($o['lede']) ?></p>
+        <?php endif; ?>
+        <?php if (!empty($o['sub'])): ?>
+        <p class="hero__sub"><?= e($o['sub']) ?></p>
         <?php endif; ?>
 
         <?php if (!empty($o['actions'])): ?>
@@ -151,6 +155,109 @@ function chunk_facts(array $groups): void
       </li>
       <?php endforeach; ?>
     </ul>
+    <?php
+}
+
+/**
+ * Numbered step cards, for a process a reader follows in order. An <ol>, so the
+ * order is announced by a screen reader as well as shown.
+ *
+ * $steps: [['icon' => name, 'title' => 'Prescription', 'text' => 'plain text'], ...]
+ */
+function step_cards(array $steps): void
+{
+    if (!$steps) { return; }
+    ?>
+    <ol class="stepcards">
+      <?php foreach (array_values($steps) as $i => $s): ?>
+      <li class="stepcard">
+        <div class="stepcard__top">
+          <span class="stepcard__num" aria-hidden="true"><?= sprintf('%02d', $i + 1) ?></span>
+          <span class="cardicon" aria-hidden="true"><?= icon($s['icon']) ?></span>
+        </div>
+        <h3 class="stepcard__title"><?= e($s['title']) ?></h3>
+        <p class="stepcard__text"><?= e($s['text']) ?></p>
+      </li>
+      <?php endforeach; ?>
+    </ol>
+    <?php
+}
+
+/**
+ * A row of link cards: the few places a visitor most likely wants to go next.
+ *
+ * $items: [['icon' => name, 'label' => 'Find a Medicine', 'url' => '/enquire', 'blurb' => '...'], ...]
+ */
+function link_cards(array $items): void
+{
+    if (!$items) { return; }
+    ?>
+    <ul class="linkcards">
+      <?php foreach ($items as $it): ?>
+      <li>
+        <a class="linkcard" href="<?= e(url($it['url'])) ?>">
+          <span class="cardicon" aria-hidden="true"><?= icon($it['icon']) ?></span>
+          <span class="linkcard__title"><?= e($it['label']) ?></span>
+          <span class="linkcard__blurb"><?= e($it['blurb']) ?></span>
+          <span class="linkcard__go" aria-hidden="true">Open <?= icon('arrow') ?></span>
+        </a>
+      </li>
+      <?php endforeach; ?>
+    </ul>
+    <?php
+}
+
+/**
+ * A grid of short reasons or principles: an icon, a bold lead and one line.
+ *
+ * $items: [['icon' => name, 'title' => 'Affordable', 'text' => '...'], ...]
+ */
+function reason_grid(array $items): void
+{
+    if (!$items) { return; }
+    ?>
+    <ul class="reasons">
+      <?php foreach ($items as $it): ?>
+      <li class="reason">
+        <span class="cardicon" aria-hidden="true"><?= icon($it['icon']) ?></span>
+        <h3 class="reason__title"><?= e($it['title']) ?></h3>
+        <p class="reason__text"><?= e($it['text']) ?></p>
+      </li>
+      <?php endforeach; ?>
+    </ul>
+    <?php
+}
+
+/**
+ * The note every Medicines and Patients page ends with: the Patient Safety
+ * link, and on Patients pages the Named Patient Access cross-link. Called from
+ * footer.php, so no page has to remember to include it.
+ */
+function section_notes(): void
+{
+    $meds = in_section('/medicines');
+    $pats = in_section('/patients');
+    if (!$meds && !$pats) {
+        return;
+    }
+    $showNpa = current_path() !== '/patients/named-patient-access';
+    ?>
+    <aside class="shell section-notes" aria-label="Patient safety and access">
+      <div class="notice">
+        <p class="notice__head"><?= icon('shield') ?>Patient safety comes first</p>
+        <p>
+          We do not replace the advice of your doctor, oncologist or pharmacist. Please do not
+          change a medicine, dose or treatment schedule without talking to them first.
+          <a class="body-link" href="<?= e(url('/patient-safety')) ?>">Read about patient safety</a>.
+        </p>
+        <?php if ($showNpa): ?>
+        <p>
+          Need a cancer medicine that is not available locally?
+          <a class="body-link" href="<?= e(url('/patients/named-patient-access')) ?>">See Named Patient Access</a>.
+        </p>
+        <?php endif; ?>
+      </div>
+    </aside>
     <?php
 }
 

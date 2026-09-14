@@ -34,7 +34,7 @@ page_hero([
 <div class="section shell" style="margin-top:var(--s-6);border-top:0;padding-top:0">
   <div class="split">
     <div class="split__body">
-  <h2 style="margin-top:0">Five things people ask us most</h2>
+  <h2 style="margin-top:0">Start wherever you are</h2>
   <?php chunk_links(nav_children('/patients')); ?>
     </div>
     <div class="split__aside">

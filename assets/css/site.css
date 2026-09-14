@@ -1707,3 +1707,109 @@ a.channels__row:hover { background: var(--action-wash); }
 .search__status { margin-top: var(--s-6); }
 /* Matches in the excerpts: a tint of the group blue, not a highlighter yellow. */
 .search__results mark { background: rgba(29, 159, 218, .18); color: inherit; padding: 0 .1em; }
+
+/* ---------- 18. Cards, reasons and FAQ ---------------------------------- */
+/* Added with the 2026 content brief, which asks for card rows and numbered
+   step cards. They share one frame: a hairline border, a soft 12px corner
+   that matches the pill buttons, and an icon in a tinted circle. Numbers and
+   icons use the deeper blue #1479AD, which clears 4.5:1 on paper. */
+
+.hero__sub { margin: var(--s-3) 0 0; font-size: var(--t-5); color: #fff; opacity: .8; }
+
+.cardicon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 999px;
+  background: var(--action-wash);
+  color: #1479AD;
+}
+.cardicon .icon { width: 1.25rem; height: 1.25rem; }
+
+.stepcards, .linkcards, .reasons {
+  list-style: none;
+  margin: var(--s-6) 0 0;
+  padding: 0;
+  display: grid;
+  gap: var(--s-4);
+}
+/* Grids run the full width of the page: lift the 65ch reading measure every
+   list gets, which otherwise squeezes the cards into two-thirds of the row. */
+.stepcards, .linkcards, .reasons { max-width: none; }
+.stepcards { grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); }
+.linkcards { grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); }
+.reasons   { grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr)); }
+/* Step cards and reasons come in threes and sixes, so on a wide screen they
+   sit three to a row: even rows, never four and two. */
+@media (min-width: 60em) {
+  .stepcards, .reasons { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+.stepcard, .linkcard, .reason {
+  border: 1px solid var(--hair);
+  border-radius: .75rem;
+  padding: var(--s-5);
+  background: var(--paper);
+}
+.stepcard__top { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--s-4); }
+.stepcard__num {
+  font-size: var(--t-2);
+  font-weight: 700;
+  line-height: 1;
+  color: #1479AD;
+  font-variant-numeric: tabular-nums;
+}
+.stepcard__title, .reason__title { margin: 0; font-size: var(--t-4); font-weight: 600; letter-spacing: -.01em; }
+.reason__title { margin-top: var(--s-4); }
+.stepcard__text, .reason__text { margin: var(--s-2) 0 0; color: var(--slate); font-size: var(--t-5); line-height: 1.55; }
+
+.linkcards > li { display: flex; }
+.linkcard {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  color: var(--ink);
+  text-decoration: none;
+  transition: border-color var(--dur) var(--ease), background-color var(--dur) var(--ease);
+}
+.linkcard:hover { border-color: #1479AD; background: var(--action-wash); }
+.linkcard__title { margin-top: var(--s-4); font-size: var(--t-4); font-weight: 600; }
+.linkcard__blurb { flex: 1; margin-top: var(--s-2); color: var(--slate); font-size: var(--t-5); line-height: 1.55; }
+.linkcard__go {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  margin-top: var(--s-4);
+  color: #1479AD;
+  font-size: var(--t-6);
+  font-weight: 600;
+}
+.linkcard__go .icon { width: 1em; height: 1em; transition: transform var(--dur) var(--ease); }
+.linkcard:hover .linkcard__go .icon { transform: translateX(.25rem); }
+
+/* FAQ: native disclosure, so every answer opens without JavaScript. */
+.faq { margin: var(--s-6) 0 0; max-width: var(--measure); border-top: var(--rule-ink); }
+.faq details { border-bottom: var(--rule-hair); }
+.faq summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-4);
+  min-height: var(--target);
+  padding: var(--s-4) 0;
+  font-size: var(--t-4);
+  font-weight: 600;
+  cursor: pointer;
+  list-style: none;
+}
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: '+'; flex: none; font-size: 1.5rem; line-height: 1; color: #1479AD; }
+.faq details[open] > summary::after { content: '\2212'; }
+.faq summary:hover { color: #1479AD; }
+.faq__a { padding: 0 0 var(--s-5); }
+.faq__a > :first-child { margin-top: 0; }
+
+.section-notes .notice { margin-top: var(--s-8); }

@@ -42,7 +42,30 @@ page_hero([
 provider_gate('h2');
 ?>
 
-<div class="section shell" style="margin-top:var(--s-6);border-top:0;padding-top:0">
+<?php /* Added from the 2026 content brief, ahead of the section links. */ ?>
+<section class="section shell" aria-labelledby="hcp-support" style="margin-top:var(--s-6);border-top:0;padding-top:0">
+  <h2 id="hcp-support" style="margin-top:0">For healthcare providers</h2>
+  <div class="prose">
+    <p>
+      Getmeds Vanuatu-Pacific supports doctors, pharmacists, hospitals, clinics and other
+      healthcare organisations across Vanuatu and the wider Pacific with:
+    </p>
+  </div>
+  <ul class="clauses" style="max-width:var(--measure)">
+    <li>Cancer medicine sourcing, including Named Patient Access ordering for a specific patient.</li>
+    <li>Essential medicines.</li>
+    <li>Medical consumables and supplies.</li>
+    <li>Healthcare equipment.</li>
+    <li>Medicine quotations for tenders, ward stock, or a named patient.</li>
+    <li>Regional sourcing and distribution support.</li>
+  </ul>
+  <div class="actions">
+    <a class="btn btn--primary" href="<?= e(url('/providers/request-a-quote')) ?>">Submit a Medicine Request</a>
+    <a class="next-link" href="tel:<?= e(cfg('phone_href')) ?>">Or call <?= e(cfg('phone')) ?></a>
+  </div>
+</section>
+
+<div class="section shell">
   <div class="split">
     <div class="split__body">
   <h2 style="margin-top:0">In this section</h2>

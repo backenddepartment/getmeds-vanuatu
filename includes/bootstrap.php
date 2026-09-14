@@ -257,8 +257,10 @@ function csrf_valid(?string $token): bool
  * The site's navigation. The single source for both the header nav and the
  * landing pages that list their own children, so the two can never drift.
  *
- * Labels are fixed by the brief and are not to be reworded.
- * Hick's Law: at most 6 top-level items, at most 5 children each.
+ * Labels follow the 2026 content brief. At most 6 top-level items; a dropdown
+ * holds six at most. Pacific Network and FAQ sit under About Us rather than
+ * adding a seventh top-level item the header has no room for; Pacific Network
+ * still has its own top-level address, /pacific-network.
  */
 function nav_tree(): array
 {
@@ -283,8 +285,10 @@ function nav_tree(): array
             'label' => 'For Patients',
             'url'   => '/patients',
             'children' => [
-                ['label' => 'How to Order',          'url' => '/patients/how-to-order',
-                 'blurb' => 'The four steps, from prescription to collection.'],
+                ['label' => 'How It Works',          'url' => '/patients/how-to-order',
+                 'blurb' => 'The six steps, from prescription to dispensing.'],
+                ['label' => 'Named Patient Access',  'url' => '/patients/named-patient-access',
+                 'blurb' => 'For a cancer medicine that is not available locally.'],
                 ['label' => 'What You Need',         'url' => '/patients/what-you-need',
                  'blurb' => 'The papers to bring or send before we can dispense.'],
                 ['label' => 'Prices & Payment',      'url' => '/patients/prices-and-payment',
@@ -321,6 +325,10 @@ function nav_tree(): array
                  'blurb' => 'Our pharmacy licence and how to verify it.'],
                 ['label' => 'Part of Getmeds',   'url' => '/about/part-of-getmeds',
                  'blurb' => 'How the wider group supports supply into Vanuatu.'],
+                ['label' => 'Pacific Network',   'url' => '/pacific-network',
+                 'blurb' => 'Building medicine access and supply across the Pacific.'],
+                ['label' => 'FAQ',               'url' => '/faq',
+                 'blurb' => 'Straight answers to the questions people ask most.'],
             ],
         ],
         [
@@ -341,13 +349,14 @@ function nav_children(string $sectionUrl): array
     return [];
 }
 
-/** The nine footer links. Scanned, not decided from, so nine is correct here. */
+/** The footer's policy links. Scanned, not decided from, so ten is fine here. */
 function footer_links(): array
 {
     return [
         ['label' => 'Privacy Policy',               'url' => '/privacy'],
         ['label' => 'Terms of Use',                 'url' => '/terms'],
         ['label' => 'Medical Disclaimer',           'url' => '/disclaimer'],
+        ['label' => 'Patient Safety',               'url' => '/patient-safety'],
         ['label' => 'Prescription Policy',          'url' => '/prescription-policy'],
         ['label' => 'Shipping & Import Rules',      'url' => '/shipping-rules'],
         ['label' => 'Returns & Medicine Disposal',  'url' => '/returns'],

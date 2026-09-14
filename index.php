@@ -1,10 +1,12 @@
 <?php
 /**
- * Home. A hero, then one decision with two routes.
+ * Home. The hero, the five things a visitor should understand in seconds, the
+ * quick links, then one decision with two routes.
  *
- * The hero says what the pharmacy is and gives the two ways to reach it: call,
- * or ask in writing. Directly under it sits the question and the two large
- * doors, and everything downstream is filtered by which one the visitor takes.
+ * Copy from the 2026 content brief: affordability, access and the Pacific
+ * first, in the site's plain, careful voice. Under the quick links sits the
+ * question and the two large doors, and everything downstream is filtered by
+ * which one the visitor takes.
  */
 require __DIR__ . '/includes/bootstrap.php';
 require_once INC . '/icons.php';
@@ -27,13 +29,15 @@ include INC . '/header.php';
     'photo'   => 'shelves',
     'pos'     => '50% 40%',
     'kicker'  => 'Licensed pharmacy · ' . cfg('address_city') . ', ' . cfg('address_country'),
-    'title'   => 'Cancer medicines, supplied in Port Vila.',
-    'lede'    => "We supply cancer medicines, and the medicines that manage their side effects, "
-               . "against a valid prescription. Held between 2 and 8\u{00A0}degrees from the "
-               . "supplier to the patient.",
+    'title'   => 'Affordable Medicines. Better Access. Stronger Cancer Care.',
+    'lede'    => 'Getmeds Vanuatu-Pacific helps patients and healthcare providers access essential '
+               . 'and cancer medicines through reliable sourcing, more affordable pricing, and a '
+               . 'growing supply network across the Pacific.',
+    'sub'     => 'Making cancer medicines more accessible to patients in Vanuatu and across the Pacific.',
     'actions' => [
-        ['label' => 'Call ' . cfg('phone'), 'href' => 'tel:' . cfg('phone_href'), 'icon' => 'phone', 'fill' => true],
-        ['label' => 'Ask About a Medicine', 'href' => url('/enquire')],
+        ['label' => 'Find a Medicine', 'href' => url('/enquire'), 'icon' => 'search', 'fill' => true],
+        ['label' => 'How It Works', 'href' => url('/patients/how-to-order')],
+        ['label' => 'Contact Getmeds', 'href' => url('/contact')],
     ],
     'points'  => [
         ['script', 'Prescription required'],
@@ -41,6 +45,42 @@ include INC . '/header.php';
         ['ship',   'Delivery across Vanuatu'],
     ],
 ]); ?>
+
+<?php /* The five things to understand in the first few seconds, as plain prose. */ ?>
+<section class="section shell" aria-labelledby="intro-head" style="margin-top:var(--s-8);border-top:0;padding-top:0">
+  <h2 id="intro-head" class="u-hidden">What Getmeds Vanuatu-Pacific does</h2>
+  <div class="prose" style="max-width:62rem">
+    <p class="lede" style="max-width:none">
+      Getmeds Vanuatu-Pacific exists to make medicines — cancer medicines especially — more
+      affordable and easier to reach.
+    </p>
+    <p>
+      Cancer medicines are our primary specialisation, and we are working with Vanuatu’s
+      Ministry of Health toward the country’s first dedicated chemotherapy pharmacy and
+      treatment pathway, based at Vila Central Hospital. Where a medicine your doctor has
+      prescribed isn’t already on our shelf, we can usually still source it for you
+      individually — what’s called
+      <a href="<?= e(url('/patients/named-patient-access')) ?>">Named Patient Access</a> —
+      subject to your prescription and the normal import and regulatory requirements. And
+      Vanuatu is only the start: we’re building sourcing and referral partnerships across the
+      Pacific so patients aren’t left waiting on a single supply line.
+    </p>
+  </div>
+</section>
+
+<section class="section shell" aria-labelledby="quick-links" style="margin-top:var(--s-7);border-top:0;padding-top:0">
+  <h2 id="quick-links">Quick links</h2>
+  <?php link_cards([
+      ['icon' => 'search', 'label' => 'Find a Medicine', 'url' => '/enquire',
+       'blurb' => 'Ask a pharmacist whether we can supply what’s been prescribed.'],
+      ['icon' => 'script', 'label' => 'How It Works', 'url' => '/patients/how-to-order',
+       'blurb' => 'The six steps from prescription to dispensing.'],
+      ['icon' => 'box', 'label' => 'Named Patient Access', 'url' => '/patients/named-patient-access',
+       'blurb' => 'For a medicine that isn’t available locally.'],
+      ['icon' => 'hosp', 'label' => 'For Healthcare Providers', 'url' => '/providers',
+       'blurb' => 'Sourcing, quotes, and institutional ordering.'],
+  ]); ?>
+</section>
 
 <section class="entry shell" aria-labelledby="entry-question">
   <div class="entry__words">
@@ -76,6 +116,27 @@ include INC . '/header.php';
     </a>
   </div>
 
+</section>
+
+<section class="section shell" aria-labelledby="affordability">
+  <h2 id="affordability">Why affordability comes first</h2>
+  <div class="prose">
+    <p>
+      Cancer treatment is expensive almost everywhere, and Vanuatu has no local system set up
+      to absorb that cost. A patient referred overseas for treatment — most often to India —
+      can face costs estimated from around USD 8,000 into the tens of thousands of dollars,
+      before counting a caretaker’s travel or the medicines themselves. Importing a single
+      course of medicine individually is expensive for the same reason: there’s no volume, and
+      freight into a Pacific archipelago isn’t cheap. The result is stockouts, long delays, and
+      treatment that stops partway through — not because the medicine doesn’t exist, but
+      because getting it to Vanuatu one patient at a time is hard.
+    </p>
+    <p>
+      Getmeds Vanuatu-Pacific was set up to soften that specific problem: sourcing cancer and
+      essential medicines at more competitive, reduced-cost terms, and building the local
+      pathway so patients don’t have to solve it alone each time.
+    </p>
+  </div>
 </section>
 
 <?php band('island', [

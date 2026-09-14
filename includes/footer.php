@@ -15,7 +15,11 @@ $ref  = $page['ref'] ?? null;
 $cols = array_values(array_filter(nav_tree(), static function (array $item): bool {
     return !empty($item['children']);
 }));
+require_once INC . '/components.php';
 ?>
+<?php /* The Patient Safety note (and Named Patient Access link) that every
+         Medicines and Patients page ends with. It renders nothing elsewhere. */
+section_notes(); ?>
 </main>
 
 <footer class="footer">
