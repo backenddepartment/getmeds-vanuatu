@@ -36,13 +36,16 @@ function page_open(string $h1, string $lede = '', string $id = 'page-title'): vo
  *     actions  array   [['label', 'href', 'icon' => name, 'fill' => bool], ...]
  *                      at most one should be 'fill' => true
  *     points   array   [[icon name, text], ...], plain text
+ *     short    bool    a compact band instead of a full screen, with no facts
+ *                      row; for pages that want an opening image, not a stage
  */
 function page_hero(array $o): void
 {
-    $name = (string) ($o['photo'] ?? '');
-    $im   = $name !== '' ? (img_manifest()[$name] ?? null) : null;
+    $name  = (string) ($o['photo'] ?? '');
+    $im    = $name !== '' ? (img_manifest()[$name] ?? null) : null;
+    $short = !empty($o['short']);
     ?>
-    <section class="hero" aria-labelledby="hero-title">
+    <section class="hero<?= $short ? ' hero--short' : '' ?>" aria-labelledby="hero-title">
       <?php if ($im):
           $base = url('/assets/img/photo/' . $name);
           $webp = $jpg = [];
@@ -80,6 +83,7 @@ function page_hero(array $o): void
         </div>
         <?php endif; ?>
 
+        <?php if (!$short): ?>
         <?php /* One row: the points, then the phone and hours. It wraps on narrow
                  screens rather than overflowing. */ ?>
         <div class="hero__facts">
@@ -96,6 +100,7 @@ function page_hero(array $o): void
             <span class="hero__contact-item"><?= icon('clock') ?><?= e(cfg('hours_short')) ?></span>
           </p>
         </div>
+        <?php endif; ?>
       </div>
     </section>
     <?php

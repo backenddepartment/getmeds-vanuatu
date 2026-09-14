@@ -14,11 +14,21 @@ $page = [
 include INC . '/head.php';
 include INC . '/header.php';
 
-page_open(
-    'Medicines',
-    'We do not publish a stock list or prices. These are the kinds of medicine we handle, '
-    . 'so you can tell whether to ask us.'
-);
+// A short hero: an opening image without taking the whole screen, so the
+// medicine lookup below stays close to the top of the page.
+page_hero([
+    'short'   => true,
+    'photo'   => 'vialtray',
+    'pos'     => '50% 50%',
+    'kicker'  => 'Medicines',
+    'title'   => 'The medicines we handle.',
+    'lede'    => 'We do not publish a stock list or prices. These are the kinds of medicine we '
+               . 'supply, all against a prescription, so you can tell whether to ask us.',
+    'actions' => [
+        ['label' => 'Ask About a Medicine', 'href' => url('/enquire'), 'fill' => true],
+        ['label' => 'Call ' . cfg('phone'), 'href' => 'tel:' . cfg('phone_href'), 'icon' => 'phone'],
+    ],
+]);
 ?>
 
 <div class="section shell" style="margin-top:var(--s-6);border-top:0;padding-top:0">

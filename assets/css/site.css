@@ -930,6 +930,19 @@ html { scroll-padding-top: 6rem; }
 .hero__inner > .hero__facts { max-width: none; }
 .hero__inner > .hero__lede { max-width: 50rem; }
 
+/* The short hero: the same wash and type as a compact band, for pages that
+   want an opening image rather than a full screen. No facts row. */
+.hero--short .hero__inner {
+  min-height: 0;
+  justify-content: center;
+  padding-block: var(--s-7);
+}
+@media (min-width: 60em) {
+  .hero--short .hero__inner { min-height: 22rem; padding-block: var(--s-8) var(--s-7); }
+}
+.hero--short .hero__kicker { margin-top: 0; }
+.hero--short .hero__actions { margin-bottom: 0; }
+
 .hero__kicker {
   margin: auto 0 0;
   font-size: var(--t-6);
