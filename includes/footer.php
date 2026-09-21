@@ -69,11 +69,6 @@ section_notes(); ?>
         <dt>Pharmacy licence</dt>
         <dd><span class="num"><?= val('pharmacy_licence_no') ?></span></dd>
       </div>
-      <div>
-        <dt>Responsible pharmacist</dt>
-        <dd><?= val('pharmacist_name') ?>
-            <span class="footer__sub">Registration <span class="num"><?= val('pharmacist_reg_no') ?></span></span></dd>
-      </div>
     </dl>
   </div>
 

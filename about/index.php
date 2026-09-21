@@ -75,18 +75,18 @@ page_hero([
 </div>
 
 <section class="section shell" aria-labelledby="value">
-  <h2 id="value">Our value proposition</h2>
+  <h2 id="value">What that means for you</h2>
   <?php reason_grid([
-      ['icon' => 'box', 'title' => 'Availability',
-       'text' => 'A wide sourcing network, working to keep the medicines patients and providers need '
-               . 'in reliable supply and to reduce the stockouts that interrupt treatment.'],
-      ['icon' => 'shield', 'title' => 'Assurance',
-       'text' => 'Consistent service, accurate orders, professional communication, and follow-up you '
-               . 'can rely on — from the first enquiry through to dispensing.'],
-      ['icon' => 'card', 'title' => 'Affordability and advantage',
-       'text' => 'Reduced-cost and competitive pricing wherever we can offer it, flexible sourcing '
-               . 'when a medicine isn’t already local, and a long-term rather than one-off '
-               . 'relationship with the patients and providers we work with.'],
+      ['icon' => 'box', 'title' => 'Fewer stockouts',
+       'text' => 'We keep a wide sourcing network working in the background, so a course of '
+               . 'treatment is less likely to stall halfway through because a delivery didn’t '
+               . 'arrive.'],
+      ['icon' => 'shield', 'title' => 'Someone accountable',
+       'text' => 'A named, registered pharmacist checks every order — from the first phone call '
+               . 'or enquiry through to the medicine actually in your hand.'],
+      ['icon' => 'card', 'title' => 'A fair price, agreed first',
+       'text' => 'We aim for the best price we can offer, and we always tell you the real figure '
+               . 'before you decide anything. Nothing is ordered until you say yes.'],
   ]); ?>
 
   <div class="prose" style="margin-top:var(--s-6)">
@@ -100,22 +100,23 @@ page_hero([
 </section>
 
 <section class="section shell" aria-labelledby="why-getmeds">
-  <h2 id="why-getmeds">Why Getmeds</h2>
+  <h2 id="why-getmeds">Why families and hospitals choose us</h2>
   <?php reason_grid([
-      ['icon' => 'card', 'title' => 'Affordable',
-       'text' => 'We focus on reduced-cost and competitive medicine options wherever we can offer them.'],
-      ['icon' => 'truck', 'title' => 'Accessible',
-       'text' => 'We help connect patients with medicines that would otherwise be difficult to obtain locally.'],
-      ['icon' => 'check', 'title' => 'Reliable',
-       'text' => 'Dependable sourcing, accurate order handling, and follow-up you can count on.'],
-      ['icon' => 'vial', 'title' => 'Cancer-focused',
-       'text' => 'Cancer medicines are our primary specialisation, not an afterthought.'],
-      ['icon' => 'person', 'title' => 'Patient-centred',
-       'text' => 'Our goal is helping you continue the treatment your own doctor has prescribed — not '
-               . 'replacing their judgement.'],
-      ['icon' => 'ship', 'title' => 'Pacific-focused',
-       'text' => 'We’re building access and distribution pathways across the wider region, not just '
-               . 'one country.'],
+      ['icon' => 'vial', 'title' => 'Cancer care is what we know',
+       'text' => 'It’s our main focus, not one line among many — so we understand what a delay or '
+               . 'a shortage actually costs a patient.'],
+      ['icon' => 'truck', 'title' => 'We chase down hard-to-find medicine',
+       'text' => 'If something isn’t already here, we’ll tell you honestly whether — and how — we '
+               . 'can still get it to you.'],
+      ['icon' => 'check', 'title' => 'We do what we say',
+       'text' => 'The price and the timeline we give you are the real ones, and we follow up '
+               . 'rather than leaving you to chase us.'],
+      ['icon' => 'person', 'title' => 'Your doctor stays in charge',
+       'text' => 'We support the treatment your own doctor has already planned. We never '
+               . 'second-guess it, and we never will.'],
+      ['icon' => 'ship', 'title' => 'Built for the Pacific, not just Vanuatu',
+       'text' => 'A supply line that only works for one country breaks the moment something on '
+               . 'that route goes wrong. We’re building more than one.'],
   ]); ?>
 </section>
 
@@ -139,11 +140,6 @@ page_hero([
       <dt>Pharmacy licence</dt>
       <dd><span class="num"><?= val('pharmacy_licence_no') ?></span>
           <span class="record__sub"><a href="<?= e(url('/about/licences')) ?>">How to verify this</a></span></dd>
-    </div>
-    <div class="record__row">
-      <dt>Responsible pharmacist</dt>
-      <dd><?= val('pharmacist_name') ?>
-          <span class="record__sub">Registration <span class="num"><?= val('pharmacist_reg_no') ?></span></span></dd>
     </div>
     <div class="record__row">
       <dt>Premises</dt>

@@ -52,8 +52,8 @@ page_open(
     </div>
     <div class="record__row">
       <dt>Goes to</dt>
-      <dd><?= val('pharmacist_name') ?>, the responsible pharmacist
-          <span class="record__sub">Registration <span class="num"><?= val('pharmacist_reg_no') ?></span></span></dd>
+      <dd>The responsible pharmacist
+          <span class="record__sub">Accountable for the pharmacy, and for answering you.</span></dd>
     </div>
   </dl>
 

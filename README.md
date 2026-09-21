@@ -58,8 +58,6 @@ quietly go live with a gap.
 |---|---|---|
 | `legal_entity_name` | Registered business name exactly as it appears on the pharmacy licence | Directors / company registration |
 | `pharmacy_licence_no` | Vanuatu pharmacy licence number | Responsible pharmacist |
-| `pharmacist_name` | Full name of the responsible pharmacist | Responsible pharmacist |
-| `pharmacist_reg_no` | Registration number of the responsible pharmacist | Responsible pharmacist |
 | `content_reviewed` | Date the site's content was last reviewed for clinical and legal accuracy, e.g. "March 2026". Shown in the footer margin beside each page's notice reference, the way a gazette carries an issue date. | Responsible pharmacist, at each content review |
 
 Already supplied and live in `config.php`: phone `+678 528 2543`, address
@@ -77,11 +75,11 @@ been drafted, because drafting it would have meant inventing it.
 | `/report-side-effect` | Regulatory reporting obligations and the authority to report to. The practical "how to tell us" route **is** written. | Lawyer + responsible pharmacist |
 | `/complaints` | Formal complaints policy, timeframes, and the external escalation body. The practical route **is** written. | Lawyer + responsible pharmacist |
 | `/about/licences` | Issuing authority, licence dates, and the public verification route | Responsible pharmacist |
-| `/about/our-pharmacists` | Pharmacist biography and confirmed languages spoken | Responsible pharmacist |
+| `/about/our-pharmacists` | Confirmed languages spoken, and on which days. No biography: the site names no individual. | Responsible pharmacist |
 | `/providers/what-we-stock` | Line-item formulary, if one is ever to be published | Responsible pharmacist |
 | `/contact` | Local directions, parking, nearest bus route | Someone who knows Port Vila |
 | Bislama columns, site-wide | Translations of the plain-language summaries | A Bislama speaker with medical knowledge |
-| `/about/our-pharmacists`, `/contact` | Photographs of the premises and staff | Photographer. Licensed stock plates ship elsewhere on the site (see PRODUCT.md, 2026-09-11), but these two routes stay unphotographed on purpose: a stock face beside "our pharmacists", or a stock interior beside the real address, would read as a claim about this business. |
+| `/contact` | Photograph of the premises | Photographer. Licensed stock plates ship elsewhere on the site (see PRODUCT.md, 2026-09-11), but this route stays unphotographed on purpose: a stock interior beside the real address would read as a photograph of that address. `/about/our-pharmacists` needs no photograph at all -- the site shows no staff. |
 
 **Nothing above has been guessed at.** No licence number, formulary entry,
 testimonial, price, or translation appears anywhere in this codebase.

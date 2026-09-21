@@ -36,8 +36,8 @@ page_open(
     </div>
     <div class="record__row">
       <dt>Responsible pharmacist</dt>
-      <dd><?= val('pharmacist_name') ?>,
-          registration <span class="num"><?= val('pharmacist_reg_no') ?></span></dd>
+      <dd>A pharmacist registered in Vanuatu is named on the licence and is accountable
+          for every medicine dispensed here.</dd>
     </div>
   </dl>
 

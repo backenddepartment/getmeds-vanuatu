@@ -124,7 +124,10 @@ so it is edited in a single place:
 
 - Registered business name: `[[LEGAL_ENTITY_NAME]]`
 - Pharmacy licence number: `[[PHARMACY_LICENCE_NO]]`
-- Responsible pharmacist and registration number: `[[PHARMACIST_NAME]]`, `[[PHARMACIST_REG_NO]]`
+- ~~Responsible pharmacist and registration number: `[[PHARMACIST_NAME]]`, `[[PHARMACIST_REG_NO]]`~~
+  **Superseded 2026-09-21.** The owner directed that no individual be named on the site,
+  which is for ordering. Both values were removed from `config.php` and every page now
+  refers to the role. See PRODUCT.md.
 - Physical address in Port Vila: `[[STREET_ADDRESS]]`
 - Phone: `[[PHONE]]` — rendered as a `tel:` link, and visible in the header on every page.
   Phone will be the first contact channel for most patients.

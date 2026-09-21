@@ -4,7 +4,7 @@ require_once INC . '/components.php';
 
 $page = [
     'title' => 'Our pharmacists',
-    'desc'  => 'Who dispenses your medicine at Getmeds Vanuatu, and their registration.',
+    'desc'  => 'Who dispenses your medicine at Getmeds Vanuatu, and what they are accountable for.',
     'ref'   => 'GV-ABT-2',
 ];
 
@@ -13,35 +13,23 @@ include INC . '/header.php';
 
 page_open(
     'Our pharmacists',
-    'Who dispenses your medicine, and how to check they are registered to do it.'
+    'Who dispenses your medicine, and what they are accountable for.'
 );
 ?>
 
 <div class="section shell" style="margin-top:var(--s-6);border-top:0;padding-top:0">
   <h2 style="margin-top:0">Responsible pharmacist</h2>
-  <dl class="record">
-    <div class="record__row">
-      <dt>Name</dt>
-      <dd><?= val('pharmacist_name') ?></dd>
-    </div>
-    <div class="record__row">
-      <dt>Registration number</dt>
-      <dd><span class="num"><?= val('pharmacist_reg_no') ?></span></dd>
-    </div>
-    <div class="record__row">
-      <dt>Accountable for</dt>
-      <dd>Every medicine dispensed from these premises, the cold chain, the controlled
-          medicines register, and the conduct of the pharmacy.</dd>
-    </div>
-  </dl>
-
-  <?= photo_needed('The responsible pharmacist at the dispensary counter') ?>
-
-  <div class="todo-block">
-    <p class="todo-block__head">Biography required</p>
-    <p class="todo-block__body">
-      Qualifications, years in practice, oncology experience and languages spoken. Supplied by
-      the responsible pharmacist. Nothing has been invented here.
+  <div class="prose">
+    <p>
+      Every medicine leaving this pharmacy is dispensed by a pharmacist registered in Vanuatu.
+      One of them is the responsible pharmacist, named on our pharmacy licence and accountable
+      under Vanuatu law for every medicine dispensed from these premises, the cold chain, the
+      controlled medicines register, and the conduct of the pharmacy.
+    </p>
+    <p>
+      We do not publish the names or photographs of our staff. The licence is the public
+      record, and <a href="<?= e(url('/about/licences')) ?>">you can check it</a>. To speak to
+      the responsible pharmacist, call us and ask.
     </p>
   </div>
 </div>

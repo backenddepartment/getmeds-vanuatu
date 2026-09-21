@@ -141,8 +141,12 @@ Confirmed real values, supplied by the user:
 
 Deliberately absent. Future work must not fabricate these:
 
-- Registered legal entity name, pharmacy licence number, responsible pharmacist name and
-  registration number. All four render as visible placeholders from one config file.
+- Registered legal entity name and pharmacy licence number. Both render as visible
+  placeholders from one config file.
+- **No individual is named anywhere on the site.** The responsible pharmacist's name and
+  registration number were removed on 2026-09-21 at the owner's direction: this is an
+  ordering site, not a staff directory. Pages refer to the role, never the person. Do not
+  reintroduce a name, a registration number, or a photograph of staff.
 - **No stock list or formulary.** The user confirmed that medicine pages carry category
   structure and search only, with no drug names. Nothing may imply that a specific molecule
   is held in stock until a pharmacist confirms it.
@@ -158,7 +162,7 @@ Deliberately absent. Future work must not fabricate these:
   1. The footer carries a standing line on every page: the photographs are licensed stock,
      and are not our premises or our staff.
   2. `/about/our-pharmacists` takes no photograph. A stock face beside "our pharmacists"
-     would be a fabricated credential.
+     would be a fabricated credential, and since 2026-09-21 no staff are shown at all.
   3. `/contact` takes no photograph. A stock pharmacy interior beside the real street
      address would read as a photograph of that address.
 

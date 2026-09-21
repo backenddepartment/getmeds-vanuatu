@@ -50,13 +50,10 @@ return [
     // Supplied by: responsible pharmacist.
     'pharmacy_licence_no' => '[[PHARMACY_LICENCE_NO]]',
 
-    // Full name of the responsible pharmacist.
-    // Supplied by: responsible pharmacist.
-    'pharmacist_name'     => '[[PHARMACIST_NAME]]',
-
-    // Registration number of the responsible pharmacist.
-    // Supplied by: responsible pharmacist.
-    'pharmacist_reg_no'   => '[[PHARMACIST_REG_NO]]',
+    // No individual is named on this site. The responsible pharmacist's name and
+    // registration number were removed deliberately: this is an ordering site, and
+    // pages refer to the role ("the responsible pharmacist") rather than a person.
+    // Do not reintroduce them as config values.
 
     // Date the site's content was last reviewed for clinical and legal accuracy.
     // Shown in the footer margin beside each page's notice reference, the way a
