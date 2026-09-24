@@ -32,9 +32,10 @@ include INC . '/header.php';
     'plain'   => true,
     'pos'     => '50% 50%',
     'kicker'  => 'Licensed pharmacy · ' . cfg('address_city') . ', ' . cfg('address_country'),
-    'title'   => 'Send us your prescription. We call you with the price.',
-    'lede'    => 'Cancer medicines, and the medicines that manage their side effects, supplied '
-               . 'across Vanuatu and the Pacific against a valid prescription.',
+    'title'   => 'Affordable Medicines. Better Access. Stronger Cancer Care.',
+    'lede'    => 'Getmeds Vanuatu-Pacific helps patients and healthcare providers access essential '
+               . 'and cancer medicines through reliable sourcing, more affordable pricing, and a '
+               . 'growing supply network across the Pacific.',
     'actions' => [
         ['label' => 'Order a Medicine', 'href' => url('/order'), 'icon' => 'script', 'fill' => true],
         ['label' => 'Call ' . cfg('phone'), 'href' => 'tel:' . cfg('phone_href'), 'icon' => 'phone'],

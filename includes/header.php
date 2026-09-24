@@ -28,13 +28,6 @@ $overlay = (current_path() === '/'); ?>
       <?php endif; ?>
     </a>
 
-    <?php /* The order button. On every page, at every width, in the brand row
-             rather than inside the menu, because "where do I put my order" was
-             the question the old masthead could not answer. */ ?>
-    <a class="btn btn--primary masthead__cta" href="<?= e(url('/order')) ?>">
-      <?= icon('script') ?><span>Order<span class="masthead__cta-long"> a Medicine</span></span>
-    </a>
-
     <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="sitenav">
       <span class="menu-toggle__bars" aria-hidden="true"><span></span><span></span><span></span></span>
       <span class="menu-toggle__text">Menu</span>

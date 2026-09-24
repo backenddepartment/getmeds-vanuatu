@@ -2547,66 +2547,7 @@ a.channels__row:hover { background: var(--action-wash); }
    like somewhere you put a prescription rather than a default browser control.
    ========================================================================== */
 
-/* ---- 13.1 Masthead order button ----------------------------------------
-   Three layouts, because the masthead already had three and an override that
-   forgets one breaks it. The 78em rule is the one that matters: that
-   breakpoint puts brand, nav, search and Contact on a SINGLE row (see §9). A
-   60em-only override wins over it at desktop widths, drops the nav onto a
-   second line and, because that row is align-items:stretch with no top
-   padding, pulls the button flush against the top edge. Keep all three.
-
-   The button itself is an ordinary .btn .btn--primary pill in the markup, so
-   it inherits the site's button system. Everything below only places it and
-   trims it to header scale. */
-
-/* Phones: brand, order, menu button. Nav drops below when opened. */
-.masthead__inner {
-  grid-template-columns: 1fr auto auto;
-  grid-template-areas: 'brand cta toggle' 'nav nav nav';
-}
-
-/* 60em: the menu button is gone (§9), the nav still has a row of its own. */
-@media (min-width: 60em) {
-  .masthead__inner {
-    grid-template-columns: 1fr auto;
-    grid-template-areas: 'brand cta' 'nav nav';
-  }
-}
-
-/* 78em and up: rejoin the single-row masthead, order button at the right end. */
-@media (min-width: 78em) {
-  .masthead__inner {
-    grid-template-columns: auto minmax(0, 1fr) auto;
-    grid-template-areas: 'brand nav cta';
-  }
-}
-
-.masthead__cta {
-  grid-area: cta;
-  justify-self: end;
-  /* The 78em row stretches its children to the full header height. Without
-     this the pill becomes a tall blue slab. */
-  align-self: center;
-  min-height: 2.75rem;
-  padding: 0 var(--s-5);
-  font-size: var(--t-6);
-  white-space: nowrap;
-}
-.masthead__cta .icon { flex: none; width: 1rem; height: 1rem; }
-
-/* "Order a Medicine" in full only where the row has room for it: not on a
-   narrow phone, and not in the band just above 78em where brand, five links,
-   the search field and Contact are already sharing one line. Elsewhere the
-   button reads "Order". */
-.masthead__cta-long { display: none; }
-@media (min-width: 30em) and (max-width: 77.99em) {
-  .masthead__cta-long { display: inline; }
-}
-@media (min-width: 104em) {
-  .masthead__cta-long { display: inline; }
-}
-
- . "/* ---- 13.2 The prescription upload" -------------------------------------- */
+/* ---- 13.2 The prescription upload -------------------------------------- */
 .field input[type='file'] {
   display: block;
   width: 100%;
