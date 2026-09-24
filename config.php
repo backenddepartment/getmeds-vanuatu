@@ -37,6 +37,15 @@ return [
     'group_name'       => 'the Getmeds group',
     'group_sites'      => ['getmeds.ph', 'getmedshealthcare.com'],
 
+    // The pharmacy's Facebook page. Used by the floating Facebook button.
+    'facebook_url'        => 'https://web.facebook.com/getmedsvanuatu',
+
+    // A direct-message link to the same page: opens a chat with the page on
+    // messenger.com (after login if needed). Used by the floating Messenger
+    // button. Not the shorter m.me/<page> link: some networks' DNS does not
+    // resolve m.me at all, and visitors there got "This site can't be reached".
+    'messenger_url'       => 'https://www.messenger.com/t/getmedsvanuatu',
+
     // ---------------------------------------------------------------------
     // Awaiting real values. Each renders as a visible marker until supplied.
     // Replace the whole string, brackets included.

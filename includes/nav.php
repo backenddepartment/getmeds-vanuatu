@@ -53,15 +53,31 @@ $navQ  = ($here === '/search' && isset($_GET['q']) && is_string($_GET['q'])) ? $
         </svg>
       </button>
 
+      <?php /* Full width on a wide screen: the section's title and summary on
+               the left, its pages with their one-line summaries on the right.
+               On a phone only the page names show, as a plain list. */ ?>
       <div class="nav__panel" id="<?= $panelId ?>">
-        <ul class="nav__sub">
-          <?php foreach ($item['children'] as $child):
-              $childHere = ($here === rtrim($child['url'], '/')); ?>
-          <li>
-            <a href="<?= e(url($child['url'])) ?>"<?= $childHere ? ' aria-current="page"' : '' ?>><?= e($child['label']) ?></a>
-          </li>
-          <?php endforeach; ?>
-        </ul>
+        <div class="nav__panel-inner">
+          <div class="nav__intro">
+            <p class="nav__intro-title"><?= e($item['label']) ?></p>
+            <?php if (!empty($item['blurb'])): ?>
+            <p class="nav__intro-text"><?= e($item['blurb']) ?></p>
+            <?php endif; ?>
+          </div>
+          <ul class="nav__sub">
+            <?php foreach ($item['children'] as $child):
+                $childHere = ($here === rtrim($child['url'], '/')); ?>
+            <li>
+              <a href="<?= e(url($child['url'])) ?>"<?= $childHere ? ' aria-current="page"' : '' ?>>
+                <span class="nav__sub-title"><?= e($child['label']) ?><?= icon('go') ?></span>
+                <?php if (!empty($child['blurb'])): ?>
+                <span class="nav__sub-blurb"><?= e($child['blurb']) ?></span>
+                <?php endif; ?>
+              </a>
+            </li>
+            <?php endforeach; ?>
+          </ul>
+        </div>
       </div>
       <?php endif; ?>
     </li>

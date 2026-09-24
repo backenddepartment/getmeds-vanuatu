@@ -39,27 +39,51 @@ function page_open(string $h1, string $lede = '', string $id = 'page-title'): vo
  *     points   array   [[icon name, text], ...], plain text
  *     short    bool    a compact band instead of a full screen, with no facts
  *                      row; for pages that want an opening image, not a stage
+ *     plain    bool    the photograph in its natural colour, with no ink wash
+ *                      or duotone over it (the home page asked for this)
+ *     facts    bool    false drops the facts row under a full-screen hero
+ *                      (default true)
+ *     image    array   a one-off image outside the photo library, instead of
+ *                      'photo': ['base' => '/assets/img/name', 'widths' =>
+ *                      [800, 1600], 'w' => px, 'h' => px], served as JPEG
+ *                      copies named name-WIDTH.jpg
  */
 function page_hero(array $o): void
 {
-    $name  = (string) ($o['photo'] ?? '');
-    $im    = $name !== '' ? (img_manifest()[$name] ?? null) : null;
+    $name   = (string) ($o['photo'] ?? '');
+    $im     = $name !== '' ? (img_manifest()[$name] ?? null) : null;
+    $base   = $im ? url('/assets/img/photo/' . $name) : '';
+    $webpOk = true;
+    if (!empty($o['image'])) {
+        $im     = $o['image'];
+        $base   = url((string) $o['image']['base']);
+        $webpOk = false;
+    }
     $short = !empty($o['short']);
+    $plain = !empty($o['plain']);
+    $facts = !$short && ($o['facts'] ?? true) !== false;
     ?>
-    <section class="hero<?= $short ? ' hero--short' : '' ?>" aria-labelledby="hero-title">
+    <section class="hero<?= $short ? ' hero--short' : '' ?><?= $plain ? ' hero--plain' : '' ?><?= (!$short && !$facts) ? ' hero--nofacts' : '' ?>" aria-labelledby="hero-title">
       <?php if ($im):
-          $base = url('/assets/img/photo/' . $name);
           $webp = $jpg = [];
+          // A version stamp from each file's own mtime, so a replaced photo
+          // shows at once instead of the browser's cached copy.
+          $ver = static function (string $url): string {
+              $file = APP_ROOT . substr($url, strlen(base_path()));
+              return $url . (is_file($file) ? '?v=' . filemtime($file) : '');
+          };
           foreach ($im['widths'] as $w) {
-              $webp[] = e($base . '-' . $w . '.webp') . ' ' . $w . 'w';
-              $jpg[]  = e($base . '-' . $w . '.jpg') . ' ' . $w . 'w';
+              $webp[] = e($ver($base . '-' . $w . '.webp')) . ' ' . $w . 'w';
+              $jpg[]  = e($ver($base . '-' . $w . '.jpg')) . ' ' . $w . 'w';
           } ?>
       <?php /* The only image above the fold, so the only one loaded eagerly. It
                sits under a heavy wash as texture, so alt is empty. */ ?>
       <div class="hero__media" style="--hero-pos:<?= e((string) ($o['pos'] ?? '50% 50%')) ?>">
         <picture>
+          <?php if ($webpOk): ?>
           <source type="image/webp" srcset="<?= implode(', ', $webp) ?>" sizes="100vw">
-          <img src="<?= e($base . '-' . max($im['widths']) . '.jpg') ?>"
+          <?php endif; ?>
+          <img src="<?= e($ver($base . '-' . max($im['widths']) . '.jpg')) ?>"
                srcset="<?= implode(', ', $jpg) ?>" sizes="100vw"
                width="<?= (int) $im['w'] ?>" height="<?= (int) $im['h'] ?>"
                loading="eager" decoding="async" fetchpriority="high" alt="">
@@ -87,21 +111,23 @@ function page_hero(array $o): void
         </div>
         <?php endif; ?>
 
-        <?php if (!$short): ?>
+        <?php if ($facts): ?>
         <?php /* One row: the points, then the phone and hours. It wraps on narrow
                  screens rather than overflowing. */ ?>
         <div class="hero__facts">
+          <?php /* Text only, no icons. Each point's icon name is still accepted in
+                   $o['points'] so the pages' settings need not change. */ ?>
           <?php if (!empty($o['points'])): ?>
           <ul class="hero__points" role="list">
             <?php foreach ($o['points'] as $p): ?>
-            <li><?= icon($p[0]) ?><?= e($p[1]) ?></li>
+            <li><?= e($p[1]) ?></li>
             <?php endforeach; ?>
           </ul>
           <?php endif; ?>
           <p class="hero__contact">
-            <span class="hero__contact-item"><?= icon('phone') ?>Call the pharmacy
+            <span class="hero__contact-item">Call the pharmacy
               <a href="tel:<?= e(cfg('phone_href')) ?>"><?= e(cfg('phone')) ?></a></span>
-            <span class="hero__contact-item"><?= icon('clock') ?><?= e(cfg('hours_short')) ?></span>
+            <span class="hero__contact-item"><?= e(cfg('hours_short')) ?></span>
           </p>
         </div>
         <?php endif; ?>
@@ -204,6 +230,81 @@ function link_cards(array $items): void
       </li>
       <?php endforeach; ?>
     </ul>
+    <?php
+}
+
+/**
+ * A sliding row of large cards, words on the left and a photograph on the
+ * right, with previous / next arrows under it. The home page's quick links.
+ *
+ * Works without JavaScript: the row simply scrolls sideways (and snaps to each
+ * card). site.js adds the arrow buttons' behaviour and greys out an arrow at
+ * either end. Each whole card is clickable; the title is the one real link and
+ * stretches over the card, so a screen reader hears one link per card, not two.
+ *
+ * $o  id       string  the section's id; the heading is id-head
+ *     title    string  the section heading
+ *     action   array   ['label' =>, 'href' =>] optional button beside the heading
+ *     items    array   [['label', 'url', 'blurb', 'tag', 'cta', 'photo' =>
+ *                      library key, 'icon' => house icon name, 'tone' =>
+ *                      'blue'|'sky'], ...]
+ *
+ * Photographs are licensed stock (see plates.php) and decorative: the card's
+ * words carry the meaning, so alt is empty. They are shown in colour through
+ * color_picture() in plates.php.
+ */
+function quick_cards(array $o): void
+{
+    $items = $o['items'] ?? [];
+    if (!$items) { return; }
+    $id = (string) ($o['id'] ?? 'quick');
+    ?>
+    <section class="qcards shell" aria-labelledby="<?= e($id) ?>-head">
+      <div class="qcards__head">
+        <h2 class="qcards__title" id="<?= e($id) ?>-head"><?= e($o['title']) ?></h2>
+        <?php if (!empty($o['action'])): ?>
+        <a class="qcards__action" href="<?= e($o['action']['href']) ?>"><?= e($o['action']['label']) ?> <?= icon('arrow') ?></a>
+        <?php endif; ?>
+      </div>
+
+      <ul class="qcards__track" id="<?= e($id) ?>-track" role="list">
+        <?php foreach ($items as $it):
+            $tone = ($it['tone'] ?? 'blue') === 'sky' ? 'sky' : 'blue';
+            $pic  = !empty($it['photo'])
+                  ? color_picture($it['photo'], ['class' => 'qcard__img', 'sizes' => '(min-width: 48em) 24rem, 88vw'])
+                  : ''; ?>
+        <li class="qcard qcard--<?= $tone ?>">
+          <div class="qcard__text">
+            <?php if (!empty($it['tag'])): ?>
+            <span class="qcard__tag"><?= e($it['tag']) ?></span>
+            <?php endif; ?>
+            <h3 class="qcard__title">
+              <a href="<?= e(url($it['url'])) ?>"><?= e($it['label']) ?></a>
+            </h3>
+            <p class="qcard__blurb"><?= e($it['blurb']) ?></p>
+            <span class="qcard__go" aria-hidden="true"><?= e($it['cta'] ?? 'Find out more') ?> <?= icon('arrow') ?></span>
+          </div>
+          <?php if ($pic !== ''): ?>
+          <div class="qcard__media">
+            <?= $pic ?>
+            <?php if (!empty($it['icon'])): ?>
+            <span class="qcard__badge" aria-hidden="true"><?= icon($it['icon']) ?></span>
+            <?php endif; ?>
+          </div>
+          <?php endif; ?>
+        </li>
+        <?php endforeach; ?>
+      </ul>
+
+      <div class="qcards__nav">
+        <button class="qcards__arrow" type="button" data-dir="-1" aria-controls="<?= e($id) ?>-track">
+          <?= icon('arrow') ?><span class="u-hidden">Previous</span>
+        </button>
+        <button class="qcards__arrow" type="button" data-dir="1" aria-controls="<?= e($id) ?>-track">
+          <?= icon('arrow') ?><span class="u-hidden">Next</span>
+        </button>
+      </div>
+    </section>
     <?php
 }
 

@@ -177,6 +177,15 @@ components:
 
 # Design System: Getmeds Vanuatu — Pacific Chemotherapy Pharmacy
 
+> **Update, September 2026 — modern surfaces.** The on-screen content no longer
+> uses ink frames, square corners or section rules. Section 19 of
+> `assets/css/site.css` ("Modern surfaces") replaces them: sections are separated
+> by space, notices, cards and the lookup sit on a pale rounded surface
+> (`--surface`, `--radius`), buttons are pills, the primary button is
+> `--deep-blue` with white text, and photographs are rounded and unframed. Where
+> this document says "no radius", "no shadow" or "no card", section 19 now takes
+> precedence on screen. Print keeps the plain gazette styling.
+
 ## Overview
 
 **Creative North Star: "The Gazette Notice"**

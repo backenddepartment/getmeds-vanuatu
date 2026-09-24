@@ -17,7 +17,7 @@
      7. Rules, records and notices
      8. Controls
      9. Masthead and navigation
-    10. The two doors
+    10. The home hero
     11. Forms
     12. Markers for outstanding content
     13. Footer
@@ -109,10 +109,19 @@
   --action-wash:  rgba(29, 159, 218, .10);
   --alert-wash:   rgba(179, 38, 30, .055);
 
-  /* Rule weights are tokens, never ad-hoc borders.
-     A hairline divides peers. An ink rule opens a section. */
-  --rule-hair: 1px solid var(--slate);
-  --rule-ink:  2px solid var(--ink);
+  /* Rule weights are tokens, never ad-hoc borders. Both are soft dividers now:
+     sections are separated by space, and grouped content sits on a tinted,
+     rounded surface rather than inside an ink frame (section 19). */
+  --rule-hair: 1px solid rgba(15, 42, 61, .1);
+  --rule-ink:  1px solid rgba(15, 42, 61, .12);
+
+  /* Surfaces: rounded corners, a pale blue tint and one soft shadow. */
+  --radius:     1.25rem;
+  --radius-sm:  .75rem;
+  --surface:    #F3F8FC;
+  --surface-2:  #E8F3FA;
+  --deep-blue:  #1479AD;   /* the group blue deepened to 4.6:1 with white */
+  --shadow-soft: 0 1px 2px rgba(15, 42, 61, .04), 0 8px 24px rgba(15, 42, 61, .06);
 
   /* Eight real sizes from one face. Weight and size are the only hierarchy. */
   --t-display: clamp(2.375rem, 1.55rem + 3.3vw, 3.5rem);   /* 38 - 56 */
@@ -142,9 +151,6 @@
 /* ---------- 3. Reset and base ------------------------------------------- */
 
 *, *::before, *::after { box-sizing: border-box; }
-
-/* Nothing in this design is rounded. */
-* { border-radius: 0; }
 
 html {
   /* 100%, so 1rem is whatever the reader has set their browser to (16px by
@@ -261,6 +267,8 @@ img { display: block; }
    the home page does. Rules between later sections stay. */
 .main > .section:first-child { border-top: 0; margin-top: 0; }
 .section--quiet { border-top: var(--rule-hair); }
+/* A section that opens without the rule, on space alone. */
+.section--open { border-top: 0; padding-top: 0; }
 
 .stack > * + * { margin-top: var(--s-4); }
 .stack--wide > * + * { margin-top: var(--s-6); }
@@ -298,6 +306,16 @@ h1 + *, h2 + *, h3 + *, h4 + * { margin-top: var(--s-4); }
   line-height: 1.5;
   color: var(--slate);
   max-width: 48ch;
+}
+/* A lede that leads a page rather than sitting quietly under a heading: the
+   home intro's first line. Heading size and weight, in ink. */
+.lede--strong {
+  max-width: none;
+  font-size: var(--t-2);
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: -.01em;
+  color: var(--ink);
 }
 .small { font-size: var(--t-6); }
 .quiet { color: var(--slate); }
@@ -642,7 +660,12 @@ html { scroll-padding-top: 6rem; }
   text-decoration: none;
   color: var(--ink);
 }
-.nav__link:hover { background: var(--action-wash); }
+/* Hover is a colour change only: the link turns the deeper group blue, which
+   holds 4.81:1 on paper where the logo blue (2.99:1) would not. */
+.nav__link, .nav__disc, .nav__sub a { transition: color var(--dur) var(--ease); }
+.nav__link:hover,
+.nav__item--parent:hover > .nav__link,
+.nav__item--parent:hover > .nav__disc { color: #1479AD; }
 /* No visual current-page marker. aria-current="page" still tells screen
    readers which page this is. */
 @media (min-width: 60em) {
@@ -663,46 +686,186 @@ html { scroll-padding-top: 6rem; }
   color: var(--slate);
   cursor: pointer;
 }
-.nav__disc:hover { color: var(--ink); border-color: var(--hair); }
+.nav__disc:hover { color: #1479AD; }
 .nav__disc .icon--chev { transition: transform var(--dur) var(--ease); }
 .nav__disc[aria-expanded='true'] .icon--chev { transform: rotate(180deg); }
-.nav__disc[aria-expanded='true'] { color: var(--ink); }
+.nav__disc[aria-expanded='true'] { color: #1479AD; }
 .no-js .nav__disc { display: none; }
 @media (min-width: 60em) {
   .nav__disc { position: static; width: 2rem; height: auto; align-self: stretch; }
 }
 
 /* The panel. Without JS it opens on hover and on focus-within, so keyboard and
-   mouse both reach it. With JS it is click-operated only, which means a tremor
-   or a drifting pointer cannot close a menu somebody is reading. */
+   mouse both reach it. With JS, site.js opens and closes it (see below). */
 .nav__panel { display: none; }
 .no-js .nav__item:hover > .nav__panel,
 .no-js .nav__item:focus-within > .nav__panel { display: block; }
 .js .nav__disc[aria-expanded='true'] + .nav__panel { display: block; }
 
-@media (min-width: 60em) {
-  .nav__panel {
-    position: absolute;
-    top: 100%; left: -1px;
-    min-width: 17rem;
-    background: var(--paper);
-    border: var(--rule-ink);
-    z-index: 30;
-  }
-}
-
+/* Phone menu: the panel is a plain list of page names inside the open nav.
+   The section intro and the one-line summaries are for the wide layout only. */
+.nav__intro, .nav__sub-blurb, .nav__sub .icon--go { display: none; }
 .nav__sub { list-style: none; margin: 0; padding: 0; }
-.nav__sub li + li { border-top: var(--rule-hair); }
 .nav__sub a {
   display: flex; align-items: center;
-  min-height: var(--target);
-  padding: var(--s-3) var(--s-4) var(--s-3) var(--s-6);
-  font-size: .9375rem;
+  min-height: 2.75rem;
+  padding: var(--s-2) var(--s-4) var(--s-2) var(--s-6);
+  font-size: .875rem;
+  font-weight: 500;
   text-decoration: none;
   color: var(--ink);
 }
-@media (min-width: 60em) { .nav__sub a { padding-left: var(--s-4); } }
-.nav__sub a:hover { background: var(--action-wash); }
+.nav__sub a:hover { color: #1479AD; }
+
+/* Wide screens: a full-width white panel hanging from the bottom of the
+   masthead. The items drop their positioning so the panel measures itself
+   against the (sticky, so positioned) masthead rather than its own item. */
+@media (min-width: 60em) {
+  .nav__item { position: static; }
+  .nav__panel {
+    position: absolute;
+    top: 100%; left: 0; right: 0;
+    background: var(--paper);
+    /* The transparent border draws nothing, but forced colours turn it into
+       CanvasText, so the panel keeps an edge there. */
+    border: 1px solid transparent;
+    border-top: 0;
+    border-radius: 0 0 1.5rem 1.5rem;
+    /* Just enough to lift the panel off a white page below it. */
+    box-shadow: 0 1.5rem 2.5rem -1.5rem rgba(15, 42, 61, .28);
+    z-index: 30;
+  }
+  .nav__panel-inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 3fr);
+    column-gap: var(--s-7);
+    max-width: 76rem;
+    margin-inline: auto;
+    padding: var(--s-6) clamp(var(--s-4), 4vw, var(--s-7)) var(--s-7);
+  }
+
+  .nav__intro { display: block; }
+  .nav__intro-title {
+    margin: 0 0 var(--s-2);
+    font-size: var(--t-3);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -.015em;
+    /* The group blue, by request (3:1 on paper: fine at this heading size). */
+    color: #1D9FDA;
+  }
+  .nav__intro-text {
+    margin: 0;
+    max-width: 34ch;
+    font-size: .875rem;
+    line-height: 1.6;
+    color: var(--slate);
+  }
+
+  .nav__sub {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: var(--s-6);
+    row-gap: var(--s-4);
+    align-content: start;
+    /* Lists are held to the reading measure site-wide; this one is a grid. */
+    max-width: none;
+    padding-top: var(--s-1);
+  }
+  .nav__sub a {
+    display: block;
+    min-height: 0;
+    padding: 0;
+  }
+  .nav__sub-title {
+    display: block;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--ink);
+    transition: color var(--dur) var(--ease);
+  }
+  /* Inline, so the arrow follows the last word when a title wraps. */
+  .nav__sub .icon--go {
+    display: inline-block;
+    width: .75rem; height: .75rem;
+    margin-left: var(--s-2);
+    vertical-align: -.05em;
+    color: #1479AD;
+  }
+  .nav__sub-blurb {
+    display: block;
+    margin-top: var(--s-1);
+    font-size: .875rem;
+    font-weight: 400;
+    line-height: 1.55;
+    color: var(--slate);
+  }
+  .nav__sub a:hover .nav__sub-title { color: #1479AD; }
+
+  /* The open item is marked the way the panel is: group blue, with a bar
+     along the bottom of the header row. */
+  .nav__item--parent:has(> .nav__disc[aria-expanded='true']) > .nav__link,
+  .nav__item--parent:has(> .nav__disc[aria-expanded='true']) > .nav__disc { color: #1479AD; }
+  .nav__item--parent:has(> .nav__disc[aria-expanded='true']) { box-shadow: inset 0 -2px 0 #1479AD; }
+}
+@media (min-width: 78em) {
+  .nav__panel-inner { max-width: 100rem; }
+}
+
+/* Opening and closing. With JS, site.js is the only thing that opens a panel
+   (hover on a desktop with a mouse, a click or tap on the chevron, or the
+   keyboard), always by setting aria-expanded. It waits a moment before
+   closing, so a pointer crossing the gap between two items does not drop the
+   menu and bring it straight back.
+
+   A panel fades and drops in rather than snapping, then its intro and links
+   follow one after another. Hidden panels stay laid out but invisible and
+   unclickable, which is what lets them fade. Moving straight from one open
+   menu to another swaps the panels at once (site.js sets .nav-switch for a
+   frame) and only the new panel's links animate, so the white sheet never
+   flickers. */
+@media (min-width: 60em) {
+  .js .nav__panel {
+    display: block;
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(-.375rem);
+    pointer-events: none;
+    transition: opacity .22s var(--ease), transform .22s var(--ease), visibility 0s linear .22s;
+  }
+  .js .nav__disc[aria-expanded='true'] + .nav__panel {
+    visibility: visible;
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+    transition: opacity .3s var(--ease), transform .3s var(--ease), visibility 0s;
+  }
+  .js .nav-switch .nav__panel { transition: none; }
+
+  .js .nav__intro,
+  .js .nav__sub li {
+    opacity: 0;
+    transform: translateY(.625rem);
+    transition: opacity .15s ease, transform .15s ease;
+  }
+  .js .nav__disc[aria-expanded='true'] + .nav__panel .nav__intro,
+  .js .nav__disc[aria-expanded='true'] + .nav__panel .nav__sub li {
+    opacity: 1;
+    transform: none;
+    transition: opacity .45s var(--ease), transform .45s var(--ease);
+    transition-delay: calc(60ms + var(--i, 0) * 55ms);
+  }
+  .nav__sub li:nth-child(1) { --i: 1; }
+  .nav__sub li:nth-child(2) { --i: 2; }
+  .nav__sub li:nth-child(3) { --i: 3; }
+  .nav__sub li:nth-child(4) { --i: 4; }
+  .nav__sub li:nth-child(5) { --i: 5; }
+  .nav__sub li:nth-child(6) { --i: 6; }
+
+  /* The open item's colour and underline ease in with the panel. */
+  .nav__item--parent { transition: box-shadow .25s var(--ease); }
+}
 .nav__sub a[aria-current='page'] { font-weight: 700; }
 
 /* -- Site search, in the nav just before Contact -- */
@@ -788,98 +951,7 @@ html { scroll-padding-top: 6rem; }
   .nav__disc { width: 1.25rem; }
 }
 
-/* ---------- 10. The two doors ------------------------------------------- */
-/* The one place boldness is spent. Two notices posted side by side inside a
-   single ink frame, divided by a hairline. Not cards: there is one frame. */
-
-.doors {
-  border: var(--rule-ink);
-  display: grid;
-  grid-template-columns: 1fr;
-  margin-top: var(--s-6);
-  max-width: none;
-}
-@media (min-width: 52em) { .doors { grid-template-columns: 1fr 1fr; } }
-
-.door {
-  --door-pad: var(--s-5);
-  display: flex;
-  flex-direction: column;
-  min-height: 17rem;
-  padding: var(--s-6) var(--door-pad) 0;
-  text-decoration: none;
-  color: var(--ink);
-  background: var(--paper);
-  transition: background-color var(--dur) var(--ease);
-}
-.door + .door { border-top: var(--rule-hair); }
-@media (min-width: 52em) {
-  .door { --door-pad: var(--s-6); min-height: 20.25rem; padding: var(--s-7) var(--door-pad) 0; }
-  .door + .door { border-top: 0; border-left: var(--rule-hair); }
-}
-
-.door__label {
-  /* The next action is the largest thing on the page, above the question that
-     asks it. THESIS requires this order. */
-  font-size: var(--t-display);
-  font-weight: 600;
-  line-height: 1.08;
-  letter-spacing: -.028em;
-  margin: 0;
-  max-width: 16ch;
-  text-wrap: balance;
-}
-/* Three clause lines, hairline-divided: the gazette's own structure, and it
-   fills the panel rather than leaving flex slack behind. */
-.door__lines { display: block; margin-top: var(--s-5); }
-.door__line {
-  display: block;
-  padding: var(--s-3) 0;
-  border-top: var(--rule-hair);
-  color: var(--slate);
-  font-size: var(--t-5);
-  line-height: 1.35;
-}
-
-/* The slot is always 6px tall, so nothing shifts. The fill grows into it. */
-/* Bleeds to the panel's edges: it is the door's own rule, not a bar floating
-   inside it. The slot stays 6px tall so the fill growing into it shifts nothing. */
-.door__rule {
-  position: relative;
-  height: 6px;
-  margin-top: auto;
-  margin-inline: calc(var(--door-pad) * -1);
-  background: transparent;
-}
-.door__rule::before {
-  content: '';
-  position: absolute; inset: auto 0 0 0;
-  height: 2px;
-  background: var(--slate);
-}
-.door__rule::after {
-  content: '';
-  position: absolute; inset: auto 0 0 0;
-  height: 6px;
-  background: var(--action);
-  transform: scaleY(0);
-  transform-origin: bottom;
-  transition: transform var(--dur) var(--ease);
-}
-.door:hover, .door:active { background: var(--action-wash); }
-.door:hover .door__rule::after,
-.door:active .door__rule::after,
-.door:focus-visible .door__rule::after { transform: scaleY(1); }
-.door:focus-visible { outline-offset: -6px; }
-
-.doors-aside {
-  margin-top: var(--s-5);
-  color: var(--slate);
-  font-size: var(--t-5);
-  max-width: var(--measure);
-}
-
-/* -- The home hero -- */
+/* ---------- 10. The home hero ------------------------------------------ */
 /* Full bleed: a photograph under an ink wash, the text on the left. The wash
    is heaviest where the text sits (.9 ink or more), so white text holds better
    than 9:1 even over the brightest pixel of the photograph. It thins to the
@@ -943,6 +1015,82 @@ html { scroll-padding-top: 6rem; }
 .hero--short .hero__kicker { margin-top: 0; }
 .hero--short .hero__actions { margin-bottom: 0; }
 
+/* The plain hero: the photograph in natural colour, with no ink wash and no
+   duotone. Chosen for the home page knowing white text over a bright photo
+   does not reliably meet AA contrast. A faint, tight text shadow (not a shade
+   over the photograph) is the one concession to legibility. */
+.hero--plain .hero__media::after { display: none; }
+.hero--plain .hero__media img { filter: none; }
+.hero--plain .hero__inner { text-shadow: 0 1px 3px rgba(0, 0, 0, .55); }
+/* The home hero's photograph (homeherosection) is dark, with its subject just
+   right of centre. The headline is held to the left so it never crosses her
+   face; the description under it runs wider, so it takes fewer lines. On a
+   phone the image slides to its darker left side for the same reason. */
+.hero--plain .hero__inner > .hero__title { max-width: 30rem; }
+.hero--plain .hero__inner > .hero__lede  { max-width: 40rem; }
+@media (max-width: 47.99em) {
+  .hero--plain .hero__media img { object-position: 12% 50%; }
+}
+.hero--plain .hero__btn--fill,
+.hero--plain .hero__btn--line { text-shadow: none; }
+
+/* A full-screen hero with no facts row: kicker, headline, description and
+   buttons stack in one column, centred top to bottom in the screen. */
+.hero--nofacts .hero__actions { margin-bottom: auto; }
+
+/* -- The home page: the masthead over the hero photograph --
+   Only with JavaScript, which adds .is-solid once the hero has scrolled away
+   or the phone menu opens; the bar is then the ordinary white one again.
+   Without JavaScript it stays solid, since white text over the white page
+   below the hero would vanish. Dropdown panels keep their own white ground. */
+.masthead { transition: background-color .25s var(--ease); }
+.wordmark__logo--light { display: none; }
+.js .masthead--overlay:not(.is-solid) { background: transparent; }
+.js .masthead--overlay:not(.is-solid) .wordmark__logo { display: none; }
+.js .masthead--overlay:not(.is-solid) .wordmark__logo--light { display: block; }
+.js .masthead--overlay:not(.is-solid) .nav__link,
+.js .masthead--overlay:not(.is-solid) .nav__disc,
+.js .masthead--overlay:not(.is-solid) .menu-toggle { color: #fff; }
+.js .masthead--overlay:not(.is-solid) .menu-toggle { border-color: #fff; }
+/* Hover on the dark photograph: the brighter logo blue, which reads there. */
+.js .masthead--overlay:not(.is-solid) .nav__link:hover,
+.js .masthead--overlay:not(.is-solid) .nav__item--parent:hover > .nav__link,
+.js .masthead--overlay:not(.is-solid) .nav__item--parent:hover > .nav__disc,
+.js .masthead--overlay:not(.is-solid) .nav__disc[aria-expanded='true'] { color: var(--action); }
+.js .masthead--overlay:not(.is-solid) :focus-visible { outline-color: #fff; }
+
+/* While a dropdown is open the bar turns white too, so it and the white panel
+   read as one sheet. site.js marks every open panel's chevron expanded, so
+   the aria-expanded test covers mouse, click, tap and keyboard alike. */
+@media (min-width: 60em) {
+  .js .masthead--overlay:has(.nav__disc[aria-expanded='true']) { background: var(--paper); }
+  .js .masthead--overlay:has(.nav__disc[aria-expanded='true']) .wordmark__logo { display: block; }
+  .js .masthead--overlay:has(.nav__disc[aria-expanded='true']) .wordmark__logo--light { display: none; }
+  .js .masthead--overlay:has(.nav__disc[aria-expanded='true']) .nav__link,
+  .js .masthead--overlay:has(.nav__disc[aria-expanded='true']) .nav__disc { color: var(--ink); }
+  .js .masthead--overlay:has(.nav__disc[aria-expanded='true']) .nav__link:hover,
+  .js .masthead--overlay:has(.nav__disc[aria-expanded='true']) .nav__item--parent:hover > .nav__link,
+  .js .masthead--overlay:has(.nav__disc[aria-expanded='true']) .nav__item--parent:hover > .nav__disc,
+  .js .masthead--overlay .nav__item--parent:has(> .nav__disc[aria-expanded='true']) > .nav__link,
+  .js .masthead--overlay .nav__item--parent:has(> .nav__disc[aria-expanded='true']) > .nav__disc { color: #1479AD; }
+  .js .masthead--overlay:has(.nav__disc[aria-expanded='true']) :focus-visible { outline-color: var(--ink); }
+}
+
+/* The home hero slides up under the transparent bar, and grows by the bar's
+   height so it still fills exactly one screen. */
+.js .masthead--overlay ~ .main > .hero:first-child { margin-top: calc(-1 * var(--masthead-h)); }
+.js .masthead--overlay ~ .main > .hero:first-child .hero__inner {
+  min-height: 100vh;
+  min-height: 100svh;
+  padding-top: calc(var(--masthead-h) + var(--s-6));
+}
+
+/* Paper is white: print the colour logo, never the white one. */
+@media print {
+  .masthead--overlay .wordmark__logo { display: block !important; }
+  .masthead--overlay .wordmark__logo--light { display: none !important; }
+}
+
 .hero__kicker {
   margin: auto 0 0;
   font-size: var(--t-6);
@@ -971,14 +1119,15 @@ html { scroll-padding-top: 6rem; }
    otherwise floats to the bottom edge. */
 .hero__actions { display: flex; flex-wrap: wrap; gap: var(--s-3); margin-top: var(--s-6); margin-bottom: var(--s-7); }
 /* Compact pills: --fill is the hero's one filled action, --line the outline.
-   44px tall: smaller than the 48px site default, still a comfortable target. */
+   40px tall: smaller than the 48px site default, still well past the 24px
+   minimum target size. */
 .hero__btn--fill, .hero__btn--line {
   border-radius: 999px;
-  min-height: 2.75rem;
-  padding: var(--s-2) var(--s-5);
-  font-size: .9375rem;
+  min-height: 2.5rem;
+  padding: var(--s-2) 1.125rem;
+  font-size: .875rem;
 }
-.hero__btn--fill { background: #1479AD; border-color: #1479AD; color: #fff; }
+.hero__btn--fill { background: #1D9FDA; border-color: #1D9FDA; color: #fff; }
 .hero__btn--line  { border-color: #fff; color: #fff; }
 .hero__btn--fill:hover, .hero__btn--fill:active,
 .hero__btn--line:hover,  .hero__btn--line:active { background: #fff; border-color: #fff; color: var(--ink); }
@@ -1037,23 +1186,6 @@ html { scroll-padding-top: 6rem; }
    keeps role="list" in the markup, since display:contents can drop it. */
 @media (min-width: 60em) {
   .hero__points, .hero__contact { display: contents; }
-}
-
-/* The home block under the hero: the question, then the doors. */
-.entry { padding-top: var(--s-7); padding-bottom: var(--s-8); }
-.entry__question {
-  font-size: var(--t-1);
-  font-weight: 700;
-  line-height: 1.02;
-  letter-spacing: -.035em;
-  margin: 0;
-  max-width: 20ch;
-}
-.entry__sub {
-  margin: var(--s-4) 0 0;
-  font-size: var(--t-3);
-  color: var(--slate);
-  max-width: 42ch;
 }
 
 /* ---------- 11. Forms --------------------------------------------------- */
@@ -1285,16 +1417,17 @@ input:focus-visible, select:focus-visible, textarea:focus-visible {
 .gate__head { padding-top: 0; }
 
 /* ---------- 13. Footer -------------------------------------------------- */
-/* A conventional site footer on the ink ground: brand and contact, a column of
-   links per section, the compliance record, then the policy links and small
-   print on a darker bar. White on --ink is 14.8:1; the quieter 75% white is
-   about 9:1 and the 60% white about 6:1, so every line clears AA. The darker
-   bar is black laid over ink, not a new colour. */
+/* A conventional site footer on a diagonal wash from the group blue #1D9FDA
+   to the group green #61A644: brand and contact, a column of links per
+   section, the compliance record, then the policy links and small print.
+   Text is white over the wash and over the bottom bar, which is a black veil
+   the wash shows through rather than a colour of its own, so the gradient
+   runs unbroken to the foot. Icons are white to match. */
 
 .footer {
   margin-top: var(--s-9);
-  background: var(--ink);
-  color: rgba(255, 255, 255, .75);
+  background: linear-gradient(120deg, #1D9FDA 0%, #61A644 100%);
+  color: #fff;
   font-size: var(--t-6);
 }
 .footer a:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
@@ -1311,7 +1444,7 @@ input:focus-visible, select:focus-visible, textarea:focus-visible {
   .footer__main { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
 @media (min-width: 70em) {
-  .footer__main { grid-template-columns: minmax(0, 1.5fr) repeat(4, minmax(0, 1fr)); gap: var(--s-6); }
+  .footer__main { grid-template-columns: minmax(0, 1.4fr) repeat(4, minmax(0, 1fr)); gap: var(--s-6); align-items: start; }
   .footer__brand { grid-column: auto; padding-right: var(--s-5); }
 }
 
@@ -1321,18 +1454,20 @@ input:focus-visible, select:focus-visible, textarea:focus-visible {
 
 .footer__contact { list-style: none; margin: var(--s-5) 0 0; padding: 0; display: grid; gap: var(--s-2); }
 .footer__contact li { display: flex; align-items: flex-start; gap: var(--s-2); }
-.footer__contact .icon { flex: none; width: 1.1em; height: 1.1em; margin-top: .2em; color: var(--action); }
+.footer__contact .icon { flex: none; width: 1.1em; height: 1.1em; margin-top: .2em; color: #fff; }
 
 .footer__head {
-  margin: 0 0 var(--s-3);
-  font-size: var(--t-5);
-  font-weight: 600;
+  margin: 0 0 var(--s-4);
+  font-size: .9375rem;
+  font-weight: 500;
+  line-height: 1.3;
   color: #fff;
   max-width: none;
 }
 
-/* Links: no underline at rest, the group blue underline on hover. 44px tall. */
-.footer__links { list-style: none; margin: 0; padding: 0; }
+/* Links: no underline at rest, the group blue underline on hover. An even,
+   compact rhythm on a desktop; on a touch screen each link keeps a 44px row. */
+.footer__links { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--s-3); }
 .footer__head a, .footer__contact a, .footer__links a, .footer__policies a {
   text-decoration: none;
 }
@@ -1340,60 +1475,59 @@ input:focus-visible, select:focus-visible, textarea:focus-visible {
 .footer__links a, .footer__policies a {
   display: inline-flex;
   align-items: center;
-  min-height: 2.75rem;
-  color: rgba(255, 255, 255, .75);
+  line-height: 1.4;
+  color: #fff;
+}
+@media (pointer: coarse) {
+  .footer__links { gap: 0; }
+  .footer__links a, .footer__policies a { min-height: 2.75rem; }
 }
 .footer__head a:hover, .footer__contact a:hover, .footer__links a:hover, .footer__policies a:hover {
   color: #fff;
   background: none;
   text-decoration: underline;
-  text-decoration-color: var(--action);
+  text-decoration-color: currentColor;
   text-decoration-thickness: 2px;
 }
 
 /* The compliance record: three facts in a row under a hairline. */
 .footer__record {
   padding-block: var(--s-5);
-  border-top: 1px solid rgba(255, 255, 255, .15);
+  border-top: 1px solid rgba(0, 0, 0, .1);
 }
 .footer__record dl { display: flex; flex-wrap: wrap; gap: var(--s-4) var(--s-7); margin: 0; }
 .footer__record dl > div { display: grid; gap: var(--s-1); }
-.footer__record dt { font-size: var(--t-7); color: rgba(255, 255, 255, .6); }
+.footer__record dt { font-size: var(--t-7); color: rgba(255, 255, 255, .85); }
 .footer__record dd { margin: 0; color: #fff; }
-.footer__sub { display: block; margin-top: var(--s-1); font-size: var(--t-7); color: rgba(255, 255, 255, .6); }
-/* "Needed" markers are drawn for a light page; give them one here. */
-.footer .todo { background: #fff; }
+.footer__sub { display: block; margin-top: var(--s-1); font-size: var(--t-7); color: rgba(255, 255, 255, .85); }
+.footer .todo { background: #fff; color: #000; }
 
 .footer__bottom {
-  background: rgba(0, 0, 0, .22);
-  padding-block: var(--s-4) var(--s-6);
+  background: rgba(0, 0, 0, .15);
+  padding-block: var(--s-5) var(--s-6);
   font-size: var(--t-7);
 }
 .footer__bottom .shell { display: grid; gap: var(--s-4); }
+/* The policy links run in one line across the bar, wrapping only when the
+   screen is too narrow. */
 .footer__policies ul {
   list-style: none;
   margin: 0;
   padding: 0;
+  max-width: none;
   display: flex;
   flex-wrap: wrap;
-  gap: 0 var(--s-5);
+  gap: var(--s-2) var(--s-5);
 }
-.footer__small p { margin: 0; max-width: 90ch; }
-.footer__small p + p { margin-top: var(--s-2); }
-.footer__claim--quiet { color: rgba(255, 255, 255, .6); }
+.footer__small {
+  padding-top: var(--s-4);
+  border-top: 1px solid rgba(0, 0, 0, .18);
+  line-height: 1.6;
+}
+.footer__small p { margin: 0; max-width: none; }
+.footer__small p + p { margin-top: var(--s-1); }
+.footer__claim--quiet { color: rgba(255, 255, 255, .85); }
 
-/* Marginalia: the notice reference and review date, set apart at the foot. */
-.footer__margin {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--s-2) var(--s-6);
-  padding-top: var(--s-3);
-  border-top: 1px solid rgba(255, 255, 255, .15);
-  color: rgba(255, 255, 255, .6);
-}
-@media (min-width: 52em) { .footer__margin { justify-content: flex-end; } }
-.footer__margin > span { display: inline-flex; gap: var(--s-2); }
-.footer__margin .footer__val { color: #fff; font-weight: 700; }
 
 /* ---------- 14. Plates: photography ------------------------------------- */
 /* A gazette does not print photographs in full colour beside its ink. It prints
@@ -1471,6 +1605,12 @@ input:focus-visible, select:focus-visible, textarea:focus-visible {
 .plate--wide   { --plate-ar: 16 / 9; }
 .plate--strip  { --plate-ar: 21 / 9; }
 
+/* A softer plate: rounded corners, no ink frame, and no hairline over the
+   caption. The frame already clips its contents, so the corners clip the
+   photograph and its duotone overlay together. */
+.plate--soft .plate__frame { border: 0; border-radius: 1rem; }
+.plate--soft .plate__cap { border-top: 0; padding-top: 0; }
+
 /* ---------- 15. Split layouts and bands --------------------------------- */
 /* Body copy is capped at 65 characters, which on a wide screen leaves the right
    third of every section empty. A plate fills it. The measure stays honest and
@@ -1492,6 +1632,22 @@ input:focus-visible, select:focus-visible, textarea:focus-visible {
 }
 .split__body > :first-child, .split__aside > :first-child { margin-top: 0; }
 .split__aside .plate { width: 100%; }
+/* A heading in the group blue, #1D9FDA (3:1 on white: fine at heading size). */
+.heading--blue { color: #1D9FDA; }
+
+/* The two columns centred on each other rather than top-aligned. */
+.split--middle { align-items: center; }
+
+/* A colour photograph with rounded corners (color_picture() in plates.php),
+   in the same manner as the home page's quick-link cards. */
+.photo-round { overflow: hidden; border-radius: 1.25rem; }
+.photo-round img { display: block; width: 100%; height: auto; }
+/* Beside a long column of text, a taller crop so the two sides balance. */
+@media (min-width: 60em) {
+  .split--middle .photo-round { aspect-ratio: 5 / 6; }
+  .split--middle .photo-round picture { display: block; height: 100%; }
+  .split--middle .photo-round img { height: 100%; object-fit: cover; object-position: 70% 50%; }
+}
 
 /* A band spans the viewport: an ink panel carrying one short statement, and a
    plate beside it. Text sits on the ink, never on the photograph, so contrast
@@ -1618,10 +1774,77 @@ a.channels__row:hover { background: var(--action-wash); }
 .notice__head .icon { width: 1.1em; height: 1.1em; flex: none; }
 .notice--safety .notice__head .icon { color: var(--alert); }
 
+/* -- Floating contact buttons (includes/float-contact.php) --
+   Round buttons stacked at the bottom right, in each platform's own colour.
+   Below the masthead (40), so an open nav panel still covers them. The label
+   is the link's accessible name at all times and slides out beside the button
+   on hover or keyboard focus. */
+.floatcta {
+  position: fixed;
+  right: clamp(var(--s-4), 2vw, var(--s-6));
+  bottom: clamp(var(--s-4), 2vw, var(--s-6));
+  z-index: 35;
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  max-width: none;
+}
+.floatcta__btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  color: #fff;
+  text-decoration: none;
+  box-shadow: 0 .375rem 1rem rgba(15, 42, 61, .28);
+  transition: transform .2s var(--ease), box-shadow .2s var(--ease);
+}
+@media (min-width: 60em) { .floatcta__btn { width: 2.75rem; height: 2.75rem; } }
+.floatcta__btn svg { width: 46%; height: 46%; fill: currentColor; }
+.floatcta__btn:hover,
+.floatcta__btn:focus-visible {
+  transform: translateY(-2px) scale(1.06);
+  box-shadow: 0 .625rem 1.5rem rgba(15, 42, 61, .34);
+}
+.floatcta__btn:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+
+.floatcta__btn--fb   { background: #1877F2; }
+.floatcta__btn--fb svg { width: 52%; height: 52%; }
+/* Messenger's own gradient; the bolt is cut out of the white bubble. */
+.floatcta__btn--ms   { background: linear-gradient(45deg, #0099FF 0%, #A033FF 60%, #FF5280 90%, #FF7061 100%); }
+.floatcta__btn--call { background: #1FA855; }
+
+.floatcta__tip {
+  position: absolute;
+  right: calc(100% + var(--s-3));
+  top: 50%;
+  padding: .375rem .75rem;
+  border-radius: 999px;
+  background: var(--ink);
+  color: #fff;
+  font-size: .8125rem;
+  font-weight: 500;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(.375rem, -50%);
+  transition: opacity .2s var(--ease), transform .2s var(--ease);
+}
+.floatcta__btn:hover .floatcta__tip,
+.floatcta__btn:focus-visible .floatcta__tip { opacity: 1; transform: translate(0, -50%); }
+
 /* ---------- 17. Motion, print, forced colours --------------------------- */
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
+  /* Durations go to zero below; delays would still stagger the menu links. */
+  .nav__panel, .nav__panel * { transition-delay: 0s !important; }
   *, *::before, *::after {
     transition-duration: 0s !important;
     animation-duration: 0s !important;
@@ -1631,11 +1854,12 @@ a.channels__row:hover { background: var(--action-wash); }
 
 /* This audience prints things to take to a doctor. Make that work. */
 @media print {
+  .floatcta { display: none; }
   :root { --paper: #fff; --ink: #000; --slate: #333; }
   body { font-size: 11pt; line-height: 1.45; }
   .menu-toggle, .nav, .skip,
   .parallel__toggle, .lookup, .actions { display: none !important; }
-  .doors, .notice, .receipt { border-color: #000; }
+  .notice, .receipt { border-color: #000; }
   .section { break-inside: avoid; }
   a { text-decoration: none; }
   .prose a::after { content: ' (' attr(href) ')'; font-size: 9pt; color: #333; }
@@ -1654,11 +1878,12 @@ a.channels__row:hover { background: var(--action-wash); }
 }
 
 @media (forced-colors: active) {
-  .door__rule::after, .progress__seg.is-now { background: Highlight; }
+  .progress__seg.is-now { background: Highlight; }
   /* Keep the three-state ramp separable here too: Highlight alone would
      make a completed step indistinguishable from the current one. */
   .progress__seg.is-done { background: GrayText; }
-  .btn, .notice, .doors, .nav__panel { border-color: CanvasText; }
+  .btn, .notice, .nav__panel { border-color: CanvasText; }
+  .floatcta__btn { border: 2px solid CanvasText; }
   :focus-visible { outline-color: Highlight; }
   /* Forced colours drop the wash but keep the photograph; drop both, so the
      hero text is never set over a bare picture. */
@@ -1694,9 +1919,49 @@ a.channels__row:hover { background: var(--action-wash); }
   .plate__frame { border-color: #000; }
 }
 
-/* The home entry: the question and its escape hatch, then the doors. The
-   photograph that used to sit beside the question now carries the hero. */
-.entry__words > :first-child { margin-top: 0; }
+/* The home intro banner: assets/img/firstsectionbg, full bleed. The image is
+   a blue-green gradient with its subject on the right, so the words sit on the
+   left. The left side is white, fading to clear by 60% across, just before the
+   subject: ink text sits on near-white (about 14.8:1) and the photograph keeps
+   its colour. The solid colour underneath shows until the image arrives. */
+.intro-banner {
+  /* Follows the Quick links on the home page, so it keeps a section's space. */
+  margin-top: var(--s-8);
+  background-color: #2aa9cf;
+  background-image:
+    linear-gradient(90deg,
+      #fff 0%,
+      rgba(255, 255, 255, .95) 32%,
+      rgba(255, 255, 255, .55) 50%,
+      rgba(255, 255, 255, 0) 60%),
+    url('../img/firstsectionbg-1600.jpg');
+  background-size: cover;
+  /* Anchored to the top: when the banner is wider than the image's shape and
+     the image is trimmed, it loses the bottom, never the subject's face. */
+  background-position: right top;
+}
+/* On a phone there is no room beside the subject: show the gradient end of
+   the image behind the words, with the wash across the whole width. */
+@media (max-width: 47.99em) {
+  .intro-banner {
+    background-image:
+      linear-gradient(rgba(255, 255, 255, .85), rgba(255, 255, 255, .85)),
+      url('../img/firstsectionbg-800.jpg');
+    background-position: left center;
+  }
+}
+.intro-banner__inner { padding-block: var(--s-8); }
+@media (min-width: 60em) {
+  .intro-banner__inner { min-height: 32rem; display: flex; align-items: center; }
+}
+/* Kept to the left, clear of the subject, at every width. */
+.intro-banner__text { max-width: 34rem; }
+.intro-banner__text p { color: var(--ink); }
+/* The lead line in the group blue, #1D9FDA, as requested. On white it is
+   2.99:1, a hair under the 3:1 AA asks of large text. */
+.intro-banner__text .lede--strong { color: var(--action); }
+/* The group-blue underline would vanish on a blue ground; use ink. */
+.intro-banner__text a { color: var(--ink); text-decoration-color: var(--ink); }
 
 
 /* The search results page. */
@@ -1790,6 +2055,202 @@ a.channels__row:hover { background: var(--action-wash); }
 .linkcard__go .icon { width: 1em; height: 1em; transition: transform var(--dur) var(--ease); }
 .linkcard:hover .linkcard__go .icon { transform: translateX(.25rem); }
 
+/* -- Quick cards: a sliding row of large cards (components.php quick_cards) --
+   Words on the left, a rounded photograph on the right. Two grounds: the
+   group blue with white text (by request; white on it measures 3.0:1, under
+   AA's 4.5:1 for body text), and a pale tint of it with black text. The tag
+   is black on a white chip on either. The row scrolls sideways and snaps to each
+   card; the arrows under it step one card at a time. */
+.qcards { margin-top: var(--s-8); }
+.qcards__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--s-4) var(--s-6);
+  margin-bottom: var(--s-6);
+}
+.qcards__title {
+  margin: 0;
+  font-size: var(--t-1);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -.02em;
+}
+.qcards__action {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  min-height: var(--target);
+  padding: 0 var(--s-5);
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  color: var(--ink);
+  font-size: var(--t-6);
+  font-weight: 500;
+  text-decoration: none;
+  transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+.qcards__action .icon { width: 1em; height: 1em; }
+.qcards__action:hover { background: var(--ink); color: #fff; }
+
+.qcards__track {
+  display: flex;
+  gap: var(--s-5);
+  max-width: none;
+  margin: 0;
+  padding: 0 0 var(--s-2);
+  list-style: none;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  overscroll-behavior-x: contain;
+}
+/* With the arrows working, the scrollbar is noise. */
+.js .qcards__track { scrollbar-width: none; }
+.js .qcards__track::-webkit-scrollbar { display: none; }
+
+.qcard {
+  position: relative;
+  flex: 0 0 88%;
+  display: flex;
+  flex-direction: column-reverse;
+  gap: var(--s-3);
+  padding: var(--s-3);
+  border-radius: 1.25rem;
+  scroll-snap-align: start;
+  overflow: hidden;
+}
+@media (min-width: 48em) {
+  .qcard {
+    flex-basis: min(46rem, 80%);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    min-height: 22rem;
+  }
+}
+.qcard--blue  { background: #1D9FDA; color: #fff; }
+.qcard--sky   { background: #D4EDF9; color: #000; }
+
+.qcard__text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: var(--s-3) var(--s-3) var(--s-4);
+}
+@media (min-width: 48em) { .qcard__text { padding: var(--s-4) var(--s-3) var(--s-4) var(--s-4); } }
+.qcard__tag {
+  padding: .3125rem .625rem;
+  border-radius: .375rem;
+  background: #fff;
+  color: #000;
+  font-size: .75rem;
+  font-weight: 500;
+  line-height: 1.2;
+}
+.qcard__title {
+  margin: var(--s-6) 0 0;
+  max-width: none;
+  font-size: clamp(1.625rem, 1.2rem + 1.4vw, 2.375rem);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -.02em;
+}
+/* Pushes the words to the bottom of the card, as in the design. */
+@media (min-width: 48em) { .qcard__title { margin-top: auto; padding-top: var(--s-6); } }
+.qcard__title a { color: inherit; text-decoration: none; }
+/* The title's link covers the whole card. */
+.qcard__title a::after { content: ''; position: absolute; inset: 0; z-index: 1; border-radius: inherit; }
+.qcard__title a:focus-visible { outline: none; }
+.qcard:has(.qcard__title a:focus-visible) { outline: 3px solid #1479AD; outline-offset: 3px; }
+.qcard__blurb {
+  margin: var(--s-3) 0 0;
+  max-width: 26ch;
+  font-size: .9375rem;
+  line-height: 1.5;
+}
+.qcard__go {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  margin-top: var(--s-4);
+  padding-bottom: 2px;
+  border-bottom: 1px solid currentColor;
+  font-size: var(--t-6);
+  font-weight: 500;
+}
+.qcard__go .icon { width: 1em; height: 1em; transition: transform .25s var(--ease); }
+.qcard:hover .qcard__go .icon { transform: translateX(.25rem); }
+
+.qcard__media {
+  position: relative;
+  overflow: hidden;
+  border-radius: .875rem;
+  aspect-ratio: 4 / 3;
+}
+/* Wide screens: the photograph fills its half of the card whatever its own
+   shape, so a tall portrait never stretches the card. */
+@media (min-width: 48em) {
+  .qcard__media { aspect-ratio: auto; }
+  .qcard__media picture { position: absolute; inset: 0; }
+}
+.qcard__media picture { display: block; height: 100%; }
+.qcard__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .6s var(--ease);
+}
+.qcard:hover .qcard__img { transform: scale(1.04); }
+/* A frosted square in the photograph's corner, carrying the card's icon. */
+.qcard__badge {
+  position: absolute;
+  right: var(--s-3);
+  bottom: var(--s-3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: .625rem;
+  background: rgba(255, 255, 255, .28);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  color: #fff;
+}
+.qcard__badge .icon { width: 1.375rem; height: 1.375rem; }
+
+.qcards__nav {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--s-3);
+  margin-top: var(--s-5);
+}
+/* On a phone the arrows sit left, clear of the floating contact buttons. */
+@media (max-width: 47.99em) { .qcards__nav { justify-content: flex-start; } }
+/* Without JavaScript the row still scrolls; the arrows would do nothing. */
+.no-js .qcards__nav { display: none; }
+.qcards__nav[hidden] { display: none; }
+.qcards__arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--target);
+  height: var(--target);
+  padding: 0;
+  border: 1px solid var(--ink);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease), opacity var(--dur) var(--ease);
+}
+.qcards__arrow .icon { width: 1.25rem; height: 1.25rem; }
+.qcards__arrow[data-dir='-1'] .icon { transform: scaleX(-1); }
+.qcards__arrow:hover:not(:disabled) { background: var(--ink); color: #fff; }
+.qcards__arrow:disabled { opacity: .35; cursor: default; }
+
 /* FAQ: native disclosure, so every answer opens without JavaScript. */
 .faq { margin: var(--s-6) 0 0; max-width: var(--measure); border-top: var(--rule-ink); }
 .faq details { border-bottom: var(--rule-hair); }
@@ -1813,3 +2274,268 @@ a.channels__row:hover { background: var(--action-wash); }
 .faq__a > :first-child { margin-top: 0; }
 
 .section-notes .notice { margin-top: var(--s-8); }
+
+/* "On this page": a row of pill links to the sections of a one-page section
+   (About Us). It sticks under the masthead while the page scrolls; on a narrow
+   screen the row scrolls sideways rather than wrapping into a block. */
+.jumpnav {
+  position: sticky;
+  top: var(--masthead-h);
+  z-index: 30;
+  background: rgba(255, 255, 255, .92);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(15, 42, 61, .08);
+}
+.jumpnav__list {
+  display: flex;
+  gap: var(--s-2);
+  max-width: none;
+  margin: 0;
+  padding: var(--s-3) 0;
+  list-style: none;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.jumpnav__list::-webkit-scrollbar { display: none; }
+.jumpnav__list a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.5rem;
+  padding: 0 var(--s-4);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--ink);
+  font-size: var(--t-6);
+  font-weight: 500;
+  white-space: nowrap;
+  text-decoration: none;
+  transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+.jumpnav__list a:hover { background: var(--deep-blue); color: #fff; }
+/* A section jumped to lands below both the masthead and this bar. */
+.section[id] { scroll-margin-top: 4.5rem; }
+
+/* ---------- 19. Modern surfaces ----------------------------------------- */
+/* The content no longer sits in ink frames. Sections are separated by space,
+   not rules; things a reader must not miss sit on a pale, rounded surface;
+   buttons are pills like the hero's; photographs have rounded corners and no
+   border. Screen only, so a printed page stays plain black on white. */
+
+@media screen {
+
+  /* Sections: space, not a rule. */
+  .section, .section--quiet { border-top: 0; }
+  .section { margin-top: var(--s-7); }
+
+  /* Cards: a tinted surface with no outline; links lift onto white. */
+  .stepcard, .linkcard, .reason {
+    border: 0;
+    border-radius: var(--radius);
+    background: var(--surface);
+    padding: var(--s-6) var(--s-5);
+    transition: background-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+  }
+  .stepcard .cardicon, .linkcard .cardicon, .reason .cardicon { background: #fff; }
+  .linkcard:hover { background: #fff; box-shadow: var(--shadow-soft); }
+
+  /* Buttons: pills. Primary is the deeper group blue with white text. */
+  .btn {
+    border: 1.5px solid var(--ink);
+    border-radius: 999px;
+    padding: var(--s-3) var(--s-6);
+    font-weight: 500;
+    transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease),
+                border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+  }
+  .btn--primary { background: var(--deep-blue); border-color: var(--deep-blue); color: #fff; }
+  .btn--primary:hover, .btn--primary:active {
+    background: var(--ink); border-color: var(--ink); color: #fff;
+    box-shadow: 0 6px 18px rgba(20, 121, 173, .25);
+  }
+  .btn--secondary { border-color: rgba(15, 42, 61, .25); }
+  .btn--secondary:hover, .btn--secondary:active { border-color: var(--ink); }
+  .btn--ghost { border-color: transparent; background: var(--surface); }
+  .btn--ghost:hover, .btn--ghost:active { border-color: transparent; background: var(--surface-2); }
+  .btn[disabled], .btn[aria-disabled='true'] { border-color: transparent; }
+
+  .menu-toggle { border: 1px solid rgba(15, 42, 61, .2); border-radius: 999px; padding: 0 var(--s-4); }
+  .skip { border: 0; border-radius: 999px; color: #fff; background: var(--deep-blue); }
+
+  /* Fields: rounded, with a soft blue ring on focus instead of a heavier border. */
+  input[type='text'], input[type='email'], input[type='tel'], input[type='search'],
+  input[type='date'], select, textarea {
+    border: 1px solid rgba(15, 42, 61, .2);
+    border-radius: var(--radius-sm);
+    padding: var(--s-3) var(--s-4);
+    background: #fff;
+    transition: border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+  }
+  input:focus-visible, select:focus-visible, textarea:focus-visible,
+  .field.is-error input:focus-visible, .field.is-error select:focus-visible, .field.is-error textarea:focus-visible {
+    border-width: 1px;
+    padding: var(--s-3) var(--s-4);
+    border-color: var(--deep-blue);
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(29, 159, 218, .2);
+  }
+  .field.is-error input, .field.is-error select, .field.is-error textarea {
+    border-width: 1px;
+    padding: var(--s-3) var(--s-4);
+    box-shadow: 0 0 0 3px rgba(179, 38, 30, .12);
+  }
+  .choice { border: 1px solid rgba(15, 42, 61, .15); border-radius: var(--radius-sm); padding: var(--s-2) var(--s-4); }
+  .choice:hover { border-color: var(--deep-blue); background: var(--surface); }
+  .choice:has(input:checked) {
+    border: 1px solid var(--deep-blue);
+    background: var(--surface);
+    box-shadow: 0 0 0 3px rgba(29, 159, 218, .15);
+    padding: var(--s-2) var(--s-4);
+  }
+  .progress__seg { border-radius: 999px; }
+  .progress__seg.is-done { background: rgba(20, 121, 173, .45); }
+  .progress__seg.is-now  { background: var(--deep-blue); }
+
+  /* Notices: a tinted panel, no frame. */
+  .notice {
+    border: 0;
+    border-radius: var(--radius);
+    background: var(--surface);
+    padding: var(--s-6);
+  }
+  .notice--safety { background: #FDF3F2; }
+  .notice__head { font-size: var(--t-4); font-weight: 600; margin-bottom: var(--s-3); }
+
+  .errors { border: 0; border-radius: var(--radius); background: #FDF3F2; padding: var(--s-6); }
+
+  /* The confirmation: a white panel lifted by a soft shadow, with the brand
+     gradient along its top edge. */
+  .receipt {
+    position: relative;
+    overflow: hidden;
+    border: 0;
+    border-radius: var(--radius);
+    background: #fff;
+    box-shadow: var(--shadow-soft);
+    padding: var(--s-7) var(--s-6);
+  }
+  .receipt::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto;
+    height: 6px;
+    background: linear-gradient(90deg, #1D9FDA, #61A644);
+  }
+  .receipt__ref { color: var(--deep-blue); }
+
+  /* The medicine enquiry box: a soft panel with the field and button inside. */
+  .lookup {
+    border: 0;
+    border-radius: var(--radius);
+    background: var(--surface);
+    padding: var(--s-6);
+  }
+  .lookup input { border-color: transparent; box-shadow: var(--shadow-soft); }
+
+  /* The standing disclaimer: quiet small print, no rule. */
+  .disclaimer { border-top: 0; }
+
+  /* Lists of peers: light dividers and a blue tick or number in a circle,
+     instead of the gazette's dash. */
+  ul.clauses > li, ol.clauses > li { border-top: 0; border-bottom: var(--rule-hair); padding-left: var(--s-7); }
+  ul.clauses > li:last-child, ol.clauses > li:last-child { border-bottom: 0; }
+  ul.clauses > li::before {
+    top: calc(var(--s-4) + .15em);
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    background: var(--surface-2) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%231479AD' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3.5 8.5l3 3 6-7'/%3E%3C/svg%3E") center / .8rem no-repeat;
+  }
+  ol.clauses > li::before {
+    content: counter(clause);
+    top: calc(var(--s-4) + .05em);
+    display: grid;
+    place-items: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 50%;
+    background: var(--surface-2);
+    color: var(--deep-blue);
+    font-size: var(--t-6);
+  }
+
+  .steps > li { border-top: 0; border-bottom: var(--rule-hair); }
+  .steps > li:last-child { border-bottom: 0; }
+  .steps > li::before {
+    display: grid;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    padding-top: 0;
+    border-top: 0;
+    border-radius: 50%;
+    background: var(--surface-2);
+    color: var(--deep-blue);
+    font-size: var(--t-3);
+  }
+
+  .record { border-top: 0; }
+  .record__row:last-child { border-bottom: 0; }
+
+  /* Category rows become soft tiles that lift on hover. */
+  .chunks { border-top: 0; display: grid; gap: var(--s-3); }
+  .chunks > li { border-bottom: 0; }
+  .chunks a, .chunks > li > div {
+    padding: var(--s-5) var(--s-7) var(--s-5) var(--s-5);
+    border-radius: var(--radius);
+    background: var(--surface);
+    transition: background-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+  }
+  .chunks a:hover { background: #fff; box-shadow: var(--shadow-soft); }
+  .chunk__go { right: var(--s-5); color: var(--deep-blue); }
+
+  .channels { border-top: 0; display: grid; gap: var(--s-3); }
+  .channels > li { border-bottom: 0; }
+  .channels__row {
+    grid-template-columns: 2.75rem 1fr;
+    align-items: center;
+    padding: var(--s-4) var(--s-5);
+    border-radius: var(--radius);
+    background: var(--surface);
+    transition: background-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+  }
+  a.channels__row:hover { background: #fff; box-shadow: var(--shadow-soft); }
+  .channels__row > .icon {
+    box-sizing: content-box;
+    width: 1.25rem;
+    height: 1.25rem;
+    padding: .75rem;
+    margin: 0;
+    border-radius: 50%;
+    background: #fff;
+    color: var(--deep-blue);
+  }
+
+  .faq { border-top: 0; }
+  .faq details:last-child { border-bottom: 0; }
+
+  .parallel {
+    border-top: 0;
+    border-radius: var(--radius);
+    background: var(--surface);
+    padding: var(--s-6);
+  }
+  .parallel__toggle { border: 1px solid rgba(15, 42, 61, .2); border-radius: 999px; background: #fff; }
+  .parallel__toggle[aria-expanded='true'] { border: 1px solid var(--deep-blue); padding: 0 var(--s-4); }
+
+  /* Photographs: rounded, unframed, caption without a rule. */
+  .plate__frame { border: 0; border-radius: var(--radius); }
+  .plate__cap { border-top: 0; padding-top: 0; }
+
+  /* The band keeps its ink ground but loses the rules either side. */
+  .band { border-top: 0; border-bottom: 0; }
+
+  /* Outstanding-content markers stay conspicuous, just rounded. */
+  .todo { border-radius: .375rem; }
+  .todo-block, .photo-needed__frame { border-radius: var(--radius); }
+}

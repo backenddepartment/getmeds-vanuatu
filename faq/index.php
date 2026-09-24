@@ -87,7 +87,7 @@ page_open(
         <p>
           Vanuatu is where we started and where our pharmacy operates. Our longer-term direction
           is to extend medicine access and distribution across the Pacific region — see
-          <a href="<?= e(url('/pacific-network')) ?>">Pacific Network</a>.
+          <a href="<?= e(url('/about') . '#pacific-network') ?>">Pacific Network</a>.
         </p>
       </div>
     </details>

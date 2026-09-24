@@ -99,6 +99,42 @@ function plate(string $name, array $opt = []): void
 }
 
 /**
+ * A library photograph in its natural colour, as a bare <picture> (no frame,
+ * no duotone, no caption). Used where the design asks for colour: the home
+ * page's quick-link cards and its photo-beside-text sections.
+ *
+ * The colour copies live in assets/img/photo/color/ (the same Pexels originals
+ * as the black-and-white library copies, at the same widths). A photograph
+ * without a colour copy falls back to the library copy.
+ *
+ * $opt  sizes  string  the `sizes` attribute
+ *       class  string  class on the <img>
+ *       alt    string  alt text; default '' (decorative)
+ */
+function color_picture(string $name, array $opt = []): string
+{
+    $im = img_manifest()[$name] ?? null;
+    if (!$im) { return ''; }
+    $dir  = is_file(APP_ROOT . '/assets/img/photo/color/' . $name . '-800.jpg')
+          ? '/assets/img/photo/color/' : '/assets/img/photo/';
+    $base = url($dir . $name);
+    $webp = $jpg = [];
+    foreach ($im['widths'] as $w) {
+        $webp[] = e($base . '-' . $w . '.webp') . ' ' . $w . 'w';
+        $jpg[]  = e($base . '-' . $w . '.jpg') . ' ' . $w . 'w';
+    }
+    $sizes = e($opt['sizes'] ?? '(min-width: 48em) 50vw, 92vw');
+    $class = !empty($opt['class']) ? ' class="' . e($opt['class']) . '"' : '';
+    return '<picture>'
+         . '<source type="image/webp" srcset="' . implode(', ', $webp) . '" sizes="' . $sizes . '">'
+         . '<img' . $class . ' src="' . e($base . '-800.jpg') . '"'
+         . ' srcset="' . implode(', ', $jpg) . '" sizes="' . $sizes . '"'
+         . ' width="' . (int) $im['w'] . '" height="' . (int) $im['h'] . '"'
+         . ' loading="lazy" decoding="async" alt="' . e($opt['alt'] ?? '') . '">'
+         . '</picture>';
+}
+
+/**
  * A full-width band: an ink panel carrying one statement, and a plate beside it.
  *
  * Text sits on the ink and never on the photograph, so contrast is 14.28:1 by

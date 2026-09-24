@@ -40,6 +40,10 @@ function search_pages(): array
         $rel   = trim(substr($dir, strlen($root)), '/');
         $src   = (string) file_get_contents($file->getPathname());
         $entry = ['url' => $rel === '' ? '/' : '/' . $rel] + search_extract($src);
+        // A folder kept only to redirect an old address has no title of its own.
+        if ($entry['title'] === '') {
+            continue;
+        }
 
         // The medicine category pages keep their title and body in
         // data/medicines.php, looked up as $cats['key']: index those too.

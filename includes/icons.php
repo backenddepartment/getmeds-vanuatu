@@ -25,6 +25,8 @@ function icon(string $name, string $class = ''): string
         'cols'   => '<path d="M2 2.5h12v11H2z"/><path d="M8 2.5v11"/>',
         // Onward movement.
         'arrow'  => '<path d="M2.5 8h11"/><path d="M9 3.5L13.5 8 9 12.5"/>',
+        // A link into a section, in the nav's dropdown panels.
+        'go'     => '<path d="M4.5 11.5l7-7"/><path d="M5.5 4.5h6v6"/>',
         // Leaves the site.
         'ext'    => '<path d="M9 2.5h4.5V7"/><path d="M13.5 2.5L7.75 8.25"/>'
                   . '<path d="M12 9v4.5H2.5V4H7"/>',

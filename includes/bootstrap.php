@@ -257,10 +257,10 @@ function csrf_valid(?string $token): bool
  * The site's navigation. The single source for both the header nav and the
  * landing pages that list their own children, so the two can never drift.
  *
- * Labels follow the 2026 content brief. At most 6 top-level items; a dropdown
- * holds six at most. Pacific Network and FAQ sit under About Us rather than
- * adding a seventh top-level item the header has no room for; Pacific Network
- * still has its own top-level address, /pacific-network.
+ * Labels follow the 2026 content brief. A dropdown holds six at most. About Us
+ * is one page: its children are anchors to that page's sections, and the old
+ * sub-page addresses (and /pacific-network) redirect to them. The FAQ is its
+ * own page and its own top-level item.
  */
 function nav_tree(): array
 {
@@ -272,6 +272,7 @@ function nav_tree(): array
         [
             'label' => 'Medicines',
             'url'   => '/medicines',
+            'blurb' => 'Specialty and cancer medicines we source from licensed manufacturers and supply against a valid prescription.',
             'children' => [
                 ['label' => 'Cancer Medicines',            'url' => '/medicines/cancer-medicines',
                  'blurb' => 'The groups of cancer medicine we supply against a prescription.'],
@@ -284,6 +285,7 @@ function nav_tree(): array
         [
             'label' => 'For Patients',
             'url'   => '/patients',
+            'blurb' => 'For patients and caregivers: how ordering works, what to bring, what it costs, and how your medicine reaches you.',
             'children' => [
                 ['label' => 'How It Works',          'url' => '/patients/how-to-order',
                  'blurb' => 'The six steps, from prescription to dispensing.'],
@@ -302,6 +304,7 @@ function nav_tree(): array
         [
             'label' => 'For Doctors & Hospitals',
             'url'   => '/providers',
+            'blurb' => 'Ordering, storage and pricing for doctors, pharmacies and hospitals supplying patients in Vanuatu.',
             'children' => [
                 ['label' => 'What We Stock',           'url' => '/providers/what-we-stock',
                  'blurb' => 'Formulary scope, availability and lead times.'],
@@ -316,20 +319,23 @@ function nav_tree(): array
         [
             'label' => 'About Us',
             'url'   => '/about',
+            'blurb' => 'Who we are, who dispenses your medicine, the licences we hold, and the wider network behind us.',
             'children' => [
-                ['label' => 'Who We Are',        'url' => '/about/who-we-are',
+                ['label' => 'Who We Are',        'url' => '/about#who-we-are',
                  'blurb' => 'What this pharmacy is, and what it is not.'],
-                ['label' => 'Our Pharmacists',   'url' => '/about/our-pharmacists',
+                ['label' => 'Our Pharmacists',   'url' => '/about#our-pharmacists',
                  'blurb' => 'Who dispenses your medicine, and their registration.'],
-                ['label' => 'Our Licences',      'url' => '/about/licences',
+                ['label' => 'Our Licences',      'url' => '/about#licences',
                  'blurb' => 'Our pharmacy licence and how to verify it.'],
-                ['label' => 'Part of Getmeds',   'url' => '/about/part-of-getmeds',
+                ['label' => 'Part of Getmeds',   'url' => '/about#part-of-getmeds',
                  'blurb' => 'How the wider group supports supply into Vanuatu.'],
-                ['label' => 'Pacific Network',   'url' => '/pacific-network',
+                ['label' => 'Pacific Network',   'url' => '/about#pacific-network',
                  'blurb' => 'Building medicine access and supply across the Pacific.'],
-                ['label' => 'FAQ',               'url' => '/faq',
-                 'blurb' => 'Straight answers to the questions people ask most.'],
             ],
+        ],
+        [
+            'label' => 'FAQ',
+            'url'   => '/faq',
         ],
         [
             'label' => 'Contact',
@@ -361,7 +367,7 @@ function footer_links(): array
         ['label' => 'Shipping & Import Rules',      'url' => '/shipping-rules'],
         ['label' => 'Returns & Medicine Disposal',  'url' => '/returns'],
         ['label' => 'Report a Side Effect',         'url' => '/report-side-effect'],
-        ['label' => 'Our Licences',                 'url' => '/about/licences'],
+        ['label' => 'Our Licences',                 'url' => '/about#licences'],
         ['label' => 'Complaints',                   'url' => '/complaints'],
     ];
 }

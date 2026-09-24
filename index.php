@@ -26,31 +26,58 @@ include INC . '/header.php';
 ?>
 
 <?php page_hero([
-    'photo'   => 'shelves',
-    'pos'     => '50% 40%',
+    // The home hero's own photograph (assets/img/homeherosection), shown in its
+    // natural colour with no blue wash over it.
+    'image'   => ['base' => '/assets/img/homeherosection', 'widths' => [800, 1200], 'w' => 1200, 'h' => 628],
+    'plain'   => true,
+    'pos'     => '50% 50%',
     'kicker'  => 'Licensed pharmacy · ' . cfg('address_city') . ', ' . cfg('address_country'),
     'title'   => 'Affordable Medicines. Better Access. Stronger Cancer Care.',
     'lede'    => 'Getmeds Vanuatu-Pacific helps patients and healthcare providers access essential '
                . 'and cancer medicines through reliable sourcing, more affordable pricing, and a '
                . 'growing supply network across the Pacific.',
-    'sub'     => 'Making cancer medicines more accessible to patients in Vanuatu and across the Pacific.',
     'actions' => [
         ['label' => 'Find a Medicine', 'href' => url('/enquire'), 'icon' => 'search', 'fill' => true],
         ['label' => 'How It Works', 'href' => url('/patients/how-to-order')],
         ['label' => 'Contact Getmeds', 'href' => url('/contact')],
     ],
-    'points'  => [
-        ['script', 'Prescription required'],
-        ['thermo', "Held at 2 to 8\u{00A0}°C"],
-        ['ship',   'Delivery across Vanuatu'],
+    // No facts row: the phone and hours are in the footer on every page.
+    'facts'   => false,
+]); ?>
+
+<?php /* Quick links as a sliding row of large cards, each with a photograph. */ ?>
+<?php quick_cards([
+    'id'     => 'quick-links',
+    'title'  => 'Quick links',
+    'action' => ['label' => 'Contact us', 'href' => url('/contact')],
+    'items'  => [
+        ['label' => 'Find a Medicine', 'url' => '/enquire', 'tone' => 'blue',
+         'tag' => 'Start here', 'photo' => 'shelves', 'icon' => 'search',
+         'blurb' => 'Ask a pharmacist whether we can supply what’s been prescribed.',
+         'cta' => 'Ask a pharmacist'],
+        ['label' => 'How It Works', 'url' => '/patients/how-to-order', 'tone' => 'sky',
+         'tag' => 'For patients', 'photo' => 'script', 'icon' => 'script',
+         'blurb' => 'The six steps from prescription to dispensing.',
+         'cta' => 'See the six steps'],
+        ['label' => 'Named Patient Access', 'url' => '/patients/named-patient-access', 'tone' => 'sky',
+         'tag' => 'Not available locally', 'photo' => 'parcels', 'icon' => 'box',
+         'blurb' => 'For a medicine that isn’t available locally.',
+         'cta' => 'How it works'],
+        ['label' => 'For Healthcare Providers', 'url' => '/providers', 'tone' => 'blue',
+         'tag' => 'Doctors & hospitals', 'photo' => 'ward', 'icon' => 'hosp',
+         'blurb' => 'Sourcing, quotes, and institutional ordering.',
+         'cta' => 'Provider services'],
     ],
 ]); ?>
 
 <?php /* The five things to understand in the first few seconds, as plain prose. */ ?>
-<section class="section shell" aria-labelledby="intro-head" style="margin-top:var(--s-8);border-top:0;padding-top:0">
+<?php /* A full-bleed banner (assets/img/firstsectionbg): the words sit on the
+         gradient at the left, the photograph's subject is on the right. */ ?>
+<section class="intro-banner" aria-labelledby="intro-head">
+  <div class="intro-banner__inner shell">
   <h2 id="intro-head" class="u-hidden">What Getmeds Vanuatu-Pacific does</h2>
-  <div class="prose" style="max-width:62rem">
-    <p class="lede" style="max-width:none">
+  <div class="prose intro-banner__text">
+    <p class="lede lede--strong">
       Getmeds Vanuatu-Pacific exists to make medicines — cancer medicines especially — more
       affordable and easier to reach.
     </p>
@@ -66,76 +93,35 @@ include INC . '/header.php';
       Pacific so patients aren’t left waiting on a single supply line.
     </p>
   </div>
-</section>
-
-<section class="section shell" aria-labelledby="quick-links" style="margin-top:var(--s-7);border-top:0;padding-top:0">
-  <h2 id="quick-links">Quick links</h2>
-  <?php link_cards([
-      ['icon' => 'search', 'label' => 'Find a Medicine', 'url' => '/enquire',
-       'blurb' => 'Ask a pharmacist whether we can supply what’s been prescribed.'],
-      ['icon' => 'script', 'label' => 'How It Works', 'url' => '/patients/how-to-order',
-       'blurb' => 'The six steps from prescription to dispensing.'],
-      ['icon' => 'box', 'label' => 'Named Patient Access', 'url' => '/patients/named-patient-access',
-       'blurb' => 'For a medicine that isn’t available locally.'],
-      ['icon' => 'hosp', 'label' => 'For Healthcare Providers', 'url' => '/providers',
-       'blurb' => 'Sourcing, quotes, and institutional ordering.'],
-  ]); ?>
-</section>
-
-<section class="entry shell" aria-labelledby="entry-question">
-  <div class="entry__words">
-    <h2 class="entry__question" id="entry-question">Who is this for?</h2>
-    <p class="entry__sub">Choose one and we will take you straight to what you need.</p>
-    <?php /* The escape hatch sits with the question, not below the doors: it is
-             help for the choice. */ ?>
-    <p class="doors-aside">
-      Not sure which? Call the pharmacy on <?= phone_link('body-link') ?> and a
-      pharmacist will point you the right way. <?= e(cfg('hours_short')) ?>.
-    </p>
   </div>
-
-  <div class="doors">
-    <a class="door" href="<?= e(url('/patients')) ?>">
-      <span class="door__label">A patient or family member</span>
-      <span class="door__lines">
-        <span class="door__line">How to order, and what to bring</span>
-        <span class="door__line">Prices, payment, and delivery</span>
-        <span class="door__line">How to reach a pharmacist</span>
-      </span>
-      <span class="door__rule" aria-hidden="true"></span>
-    </a>
-
-    <a class="door" href="<?= e(url('/providers')) ?>">
-      <span class="door__label">A doctor, nurse or hospital</span>
-      <span class="door__lines">
-        <span class="door__line">What we stock, and lead times</span>
-        <span class="door__line">Ordering for a ward or facility</span>
-        <span class="door__line">Storage, handling, and quotes</span>
-      </span>
-      <span class="door__rule" aria-hidden="true"></span>
-    </a>
-  </div>
-
 </section>
 
-<section class="section shell" aria-labelledby="affordability">
-  <h2 id="affordability">Why affordability comes first</h2>
-  <div class="prose">
-    <p>
-      Cancer treatment is expensive almost everywhere, and Vanuatu has no local system set up
-      to absorb that cost. A patient referred overseas for treatment — most often to India —
-      can face costs estimated from around USD 8,000 into the tens of thousands of dollars,
-      before counting a caretaker’s travel or the medicines themselves. Importing a single
-      course of medicine individually is expensive for the same reason: there’s no volume, and
-      freight into a Pacific archipelago isn’t cheap. The result is stockouts, long delays, and
-      treatment that stops partway through — not because the medicine doesn’t exist, but
-      because getting it to Vanuatu one patient at a time is hard.
-    </p>
-    <p>
-      Getmeds Vanuatu-Pacific was set up to soften that specific problem: sourcing cancer and
-      essential medicines at more competitive, reduced-cost terms, and building the local
-      pathway so patients don’t have to solve it alone each time.
-    </p>
+<?php /* Photograph on the left, the words on the right; no rule above. */ ?>
+<section class="section section--open shell" aria-labelledby="affordability">
+  <div class="split split--flip split--middle">
+    <div class="split__body">
+      <h2 class="heading--blue" id="affordability">Why affordability comes first</h2>
+      <div class="prose">
+        <p>
+          Cancer treatment is expensive almost everywhere, and Vanuatu has no local system set up
+          to absorb that cost. A patient referred overseas for treatment — most often to India —
+          can face costs estimated from around USD 8,000 into the tens of thousands of dollars,
+          before counting a caretaker’s travel or the medicines themselves. Importing a single
+          course of medicine individually is expensive for the same reason: there’s no volume, and
+          freight into a Pacific archipelago isn’t cheap. The result is stockouts, long delays, and
+          treatment that stops partway through — not because the medicine doesn’t exist, but
+          because getting it to Vanuatu one patient at a time is hard.
+        </p>
+        <p>
+          Getmeds Vanuatu-Pacific was set up to soften that specific problem: sourcing cancer and
+          essential medicines at more competitive, reduced-cost terms, and building the local
+          pathway so patients don’t have to solve it alone each time.
+        </p>
+      </div>
+    </div>
+    <div class="split__aside">
+      <div class="photo-round"><?= color_picture('carton', ['sizes' => '(min-width: 60em) 30rem, 92vw']) ?></div>
+    </div>
   </div>
 </section>
 
@@ -179,7 +165,7 @@ include INC . '/header.php';
     <div class="record__row">
       <dt><?= icon('shield') ?>Pharmacy licence</dt>
       <dd><span class="num"><?= val('pharmacy_licence_no') ?></span>
-        <span class="record__sub"><a href="<?= e(url('/about/licences')) ?>">How to check our licence</a></span></dd>
+        <span class="record__sub"><a href="<?= e(url('/about') . '#licences') ?>">How to check our licence</a></span></dd>
     </div>
   </dl>
 </section>

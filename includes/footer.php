@@ -2,7 +2,7 @@
 /**
  * Closes <main>, then the footer.
  *
- * A conventional site footer on the ink ground: the white logo, a line about
+ * A conventional site footer on a blue-to-green wash: the white logo, a line about
  * the pharmacy and how to reach it, then a column of links for each section of
  * the site, then the compliance record and, on a darker bar, the policy links
  * and the small print.
@@ -11,7 +11,6 @@
  * nav, so a page added to the site appears here without anyone remembering to.
  * Every compliance value comes from config.php so it is edited in one place.
  */
-$ref  = $page['ref'] ?? null;
 $cols = array_values(array_filter(nav_tree(), static function (array $item): bool {
     return !empty($item['children']);
 }));
@@ -49,7 +48,8 @@ section_notes(); ?>
         <?php foreach ($col['children'] as $child): ?>
         <li><a href="<?= e(url($child['url'])) ?>"><?= e($child['label']) ?></a></li>
         <?php endforeach; ?>
-        <?php if ($col['url'] === '/about'): /* Contact has no column of its own. */ ?>
+        <?php if ($col['url'] === '/about'): /* FAQ and Contact have no column of their own. */ ?>
+        <li><a href="<?= e(url('/faq')) ?>">FAQ</a></li>
         <li><a href="<?= e(url('/contact')) ?>">Contact</a></li>
         <li><a href="<?= e(url('/enquire')) ?>">Ask About a Medicine</a></li>
         <?php endif; ?>
@@ -59,23 +59,38 @@ section_notes(); ?>
 
   </div>
 
+  <?php /* The compliance record. Each line shows only once its value has been
+           supplied in config.php; while every one is still a [[PLACEHOLDER]]
+           the whole block is left out rather than printing "Needed" markers. */
+  $has = static function (string $key): bool { return !is_placeholder(cfg($key)); };
+  $showRecord = $has('legal_entity_name') || $has('pharmacy_licence_no') || $has('pharmacist_name');
+  if ($showRecord): ?>
   <div class="footer__record shell">
     <dl>
+      <?php if ($has('legal_entity_name')): ?>
       <div>
         <dt>Registered name</dt>
         <dd><?= val('legal_entity_name') ?></dd>
       </div>
+      <?php endif; ?>
+      <?php if ($has('pharmacy_licence_no')): ?>
       <div>
         <dt>Pharmacy licence</dt>
         <dd><span class="num"><?= val('pharmacy_licence_no') ?></span></dd>
       </div>
+      <?php endif; ?>
+      <?php if ($has('pharmacist_name')): ?>
       <div>
         <dt>Responsible pharmacist</dt>
         <dd><?= val('pharmacist_name') ?>
-            <span class="footer__sub">Registration <span class="num"><?= val('pharmacist_reg_no') ?></span></span></dd>
+            <?php if ($has('pharmacist_reg_no')): ?>
+            <span class="footer__sub">Registration <span class="num"><?= val('pharmacist_reg_no') ?></span></span>
+            <?php endif; ?></dd>
       </div>
+      <?php endif; ?>
     </dl>
   </div>
+  <?php endif; ?>
 
   <div class="footer__bottom">
     <div class="shell">
@@ -100,16 +115,11 @@ section_notes(); ?>
                  get to be vague about whose dispensary is in the photograph. */ ?>
         <p class="footer__claim--quiet"><?= e(plate_note()) ?></p>
       </div>
-
-      <div class="footer__margin">
-        <?php if ($ref): ?>
-        <span>Notice <span class="num footer__val"><?= e($ref) ?></span></span>
-        <?php endif; ?>
-        <span>Content reviewed <span class="footer__val"><?= val('content_reviewed') ?></span></span>
-      </div>
     </div>
   </div>
 </footer>
+
+<?php include INC . '/float-contact.php'; ?>
 
 <script src="<?= e(asset('/assets/js/site.js')) ?>" defer></script>
 </body>
