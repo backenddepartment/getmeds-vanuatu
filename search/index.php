@@ -47,7 +47,7 @@ include INC . '/header.php';
     </p>
   </div>
   <div class="actions">
-    <a class="btn btn--secondary" href="<?= e(url('/enquire') . '?medicine=' . rawurlencode($q)) ?>">Ask about “<?= e($q) ?>”</a>
+    <a class="btn btn--secondary" href="<?= e(url('/order') . '?medicine=' . rawurlencode($q)) ?>">Ask about “<?= e($q) ?>”</a>
   </div>
 
   <?php else: $n = count($results); ?>

@@ -4,9 +4,9 @@
  *
  * EVERY value that appears on more than one page lives here and nowhere else.
  *
- * Values still marked [[LIKE_THIS]] have not been supplied yet. They render on the
- * page as a visible, styled marker so nobody can ship the site without noticing
- * them. See README.md for who supplies each one.
+ * Every value here is real. There are no unsupplied placeholders: a customer
+ * must never meet a "Needed" marker on a page they are trying to order from.
+ * If a value is not confirmed yet, leave it out and delete what displayed it.
  *
  * Do not add presentation logic to this file. It is data only.
  */
@@ -46,32 +46,18 @@ return [
     // resolve m.me at all, and visitors there got "This site can't be reached".
     'messenger_url'       => 'https://www.messenger.com/t/getmedsvanuatu',
 
-    // ---------------------------------------------------------------------
-    // Awaiting real values. Each renders as a visible marker until supplied.
-    // Replace the whole string, brackets included.
-    // ---------------------------------------------------------------------
+    // WhatsApp, as a wa.me link. This is the fallback ordering channel when the
+    // site is served as static HTML and no PHP is available to take the upload.
+    'whatsapp_href'       => '6785282543',
 
-    // Registered business name as it appears on the pharmacy licence.
-    // Supplied by: Getmeds Vanuatu directors / company registration.
-    'legal_entity_name'   => '[[LEGAL_ENTITY_NAME]]',
-
-    // Pharmacy licence number issued in Vanuatu.
-    // Supplied by: responsible pharmacist.
-    'pharmacy_licence_no' => '[[PHARMACY_LICENCE_NO]]',
-
-    // No individual is named on this site. The responsible pharmacist's name and
-    // registration number were removed deliberately: this is an ordering site, and
-    // pages refer to the role ("the responsible pharmacist") rather than a person.
-    // Do not reintroduce them as config values.
-
-    // Date the site's content was last reviewed for clinical and legal accuracy.
-    // Shown in the footer margin beside each page's notice reference, the way a
-    // gazette carries an issue date. Write it as a plain date, e.g. "March 2026".
-    // Supplied by: responsible pharmacist, at each content review.
-    'content_reviewed'    => '[[CONTENT_REVIEW_DATE]]',
+    // No individual is named on this site, and no unsupplied compliance values
+    // are displayed. The legal entity name, pharmacy licence number, content
+    // review date and responsible pharmacist were all removed: each rendered as
+    // a "Needed" marker on every page. Add one back only with a real value, and
+    // only somewhere a customer is not trying to order.
 
     // ---------------------------------------------------------------------
-    // Enquiry handling
+    // Orders and enquiries
     // ---------------------------------------------------------------------
 
     // Where enquiry notifications are sent. Until a real mailbox is configured
@@ -85,6 +71,12 @@ return [
     // While false, the form validates, shows the confirmation and reference,
     // and writes the enquiry to data/enquiries.log instead of emailing.
     'enquiry_mail_enabled' => false,
+
+    // Prescription uploads. Files land in data/uploads, which .htaccess refuses
+    // over HTTP. Keep the cap low: a phone photo of a script is well under 5 MB,
+    // and a larger ceiling only invites someone to fill the disk.
+    'upload_max_mb'       => 8,
+    'upload_max_files'    => 5,
 
     // ---------------------------------------------------------------------
     // Healthcare-professional gate on /providers

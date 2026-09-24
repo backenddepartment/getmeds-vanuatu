@@ -51,7 +51,7 @@ section_notes(); ?>
         <?php if ($col['url'] === '/about'): /* FAQ and Contact have no column of their own. */ ?>
         <li><a href="<?= e(url('/faq')) ?>">FAQ</a></li>
         <li><a href="<?= e(url('/contact')) ?>">Contact</a></li>
-        <li><a href="<?= e(url('/enquire')) ?>">Ask About a Medicine</a></li>
+        <li><a href="<?= e(url('/order')) ?>">Ask About a Medicine</a></li>
         <?php endif; ?>
       </ul>
     </nav>
@@ -59,38 +59,10 @@ section_notes(); ?>
 
   </div>
 
-  <?php /* The compliance record. Each line shows only once its value has been
-           supplied in config.php; while every one is still a [[PLACEHOLDER]]
-           the whole block is left out rather than printing "Needed" markers. */
-  $has = static function (string $key): bool { return !is_placeholder(cfg($key)); };
-  $showRecord = $has('legal_entity_name') || $has('pharmacy_licence_no') || $has('pharmacist_name');
-  if ($showRecord): ?>
-  <div class="footer__record shell">
-    <dl>
-      <?php if ($has('legal_entity_name')): ?>
-      <div>
-        <dt>Registered name</dt>
-        <dd><?= val('legal_entity_name') ?></dd>
-      </div>
-      <?php endif; ?>
-      <?php if ($has('pharmacy_licence_no')): ?>
-      <div>
-        <dt>Pharmacy licence</dt>
-        <dd><span class="num"><?= val('pharmacy_licence_no') ?></span></dd>
-      </div>
-      <?php endif; ?>
-      <?php if ($has('pharmacist_name')): ?>
-      <div>
-        <dt>Responsible pharmacist</dt>
-        <dd><?= val('pharmacist_name') ?>
-            <?php if ($has('pharmacist_reg_no')): ?>
-            <span class="footer__sub">Registration <span class="num"><?= val('pharmacist_reg_no') ?></span></span>
-            <?php endif; ?></dd>
-      </div>
-      <?php endif; ?>
-    </dl>
-  </div>
-  <?php endif; ?>
+  <?php /* The compliance record block stood here. It printed "Needed
+           LEGAL_ENTITY_NAME" and "Needed PHARMACY_LICENCE_NO" into the footer of
+           all 36 pages. Removed 2026-09-24 with the values themselves: a footer
+           is not the place to advertise what the business has not supplied. */ ?>
 
   <div class="footer__bottom">
     <div class="shell">

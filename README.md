@@ -48,51 +48,55 @@ php -S 127.0.0.1:8000 -t .
 
 ---
 
-## Placeholders that must be filled before launch
+## Ordering, and what still needs a lawyer
 
-Every one of these lives in **`config.php`** and nowhere else. Until a value is
-supplied it renders on the page as a conspicuous red marker, so the site cannot
-quietly go live with a gap.
+`/order` is the point of the site. It takes what the customer needs, the medicine
+name, an optional photograph or PDF of the prescription, and how to reach them,
+and it writes the lot to `data/orders.log` with a reference the customer can
+quote on the phone. Uploads land in `data/uploads/YYYY-MM/` under generated
+names. Three separate locks keep them off the web: the root `.htaccess` refuses
+`^data/`, `data/uploads/.htaccess` denies everything again, and `.gitignore`
+keeps them out of the repository. Files are checked by real content type, not by
+the name the browser sent.
 
-| Placeholder | What it needs | Who supplies it |
+On a **static build there is no PHP to receive an upload**, so `/order` does not
+render the form at all. It offers WhatsApp, phone and email instead, because a
+form that silently ate a prescription would be the worst thing this site could
+do. The same is true of the provider gate. If you want the upload to work, the
+site has to run on a PHP host — GitHub Pages cannot do it.
+
+### Still outstanding
+
+The visible `Needed` and `Copy required` markers were **removed on 2026-09-24**.
+They were builder's notes that customers were reading instead: "Needed
+LEGAL_ENTITY_NAME" appeared in the footer of all 36 pages, and `/privacy` was
+eleven grey boxes and no privacy policy. Nothing displays them now. That does
+not mean these are done — it means the site stopped shouting about them at
+patients. They are tracked here instead.
+
+| What | Why it matters | Who supplies it |
 |---|---|---|
-| `legal_entity_name` | Registered business name exactly as it appears on the pharmacy licence | Directors / company registration |
-| `pharmacy_licence_no` | Vanuatu pharmacy licence number | Responsible pharmacist |
-| `content_reviewed` | Date the site's content was last reviewed for clinical and legal accuracy, e.g. "March 2026". Shown in the footer margin beside each page's notice reference, the way a gazette carries an issue date. | Responsible pharmacist, at each content review |
+| **A privacy policy and terms of use drafted for Vanuatu law** | More urgent than before: `/order` now collects prescription images, which is health data. `/policies` describes truthfully what the site does with them, but that is a description of behaviour, not a legal instrument. | A lawyer qualified in Vanuatu |
+| Formal complaints policy: timeframes and the external escalation body | `/policies#complaints` gives the practical route only | Lawyer + responsible pharmacist |
+| Regulatory side-effect reporting obligations and the authority to report to | `/policies#side-effects` gives the practical route only | Lawyer + responsible pharmacist |
+| Registered entity name, pharmacy licence number, licence dates and the public verification route | Removed from display rather than shown as blanks. Put them back on `/about#licences` **only with real values** | Responsible pharmacist |
+| Confirmed languages spoken, and on which days | `/about` promises we will find someone; confirm that is true | Responsible pharmacist |
+| Local directions, parking, nearest bus route | `/contact` | Someone who knows Port Vila |
+| Bislama translations | `parallel_column()` now renders nothing until a translation exists, rather than printing "Needed" | A Bislama speaker with medical knowledge |
+| A photograph of the premises | `/contact`. Stock plates ship elsewhere; a stock interior beside the real street address would read as a photograph of that address | Photographer |
 
-Already supplied and live in `config.php`: phone `+678 528 2543`, address
-`Ground Floor, Rm 1006, Golden Port, Namba 2 Area, Port Vila`, email
-`getmeds.vu@gmail.com`.
-
-### Content marked as outstanding on the pages themselves
-
-These render as visible `Copy required` blocks. They are deliberate: none of it has
-been drafted, because drafting it would have meant inventing it.
-
-| Page | What is missing | Who supplies it |
-|---|---|---|
-| `/privacy`, `/terms`, `/disclaimer`, `/prescription-policy`, `/shipping-rules`, `/returns` | All body copy. Real heading structure is already in place for the copy to fill. | A lawyer qualified in Vanuatu |
-| `/report-side-effect` | Regulatory reporting obligations and the authority to report to. The practical "how to tell us" route **is** written. | Lawyer + responsible pharmacist |
-| `/complaints` | Formal complaints policy, timeframes, and the external escalation body. The practical route **is** written. | Lawyer + responsible pharmacist |
-| `/about/licences` | Issuing authority, licence dates, and the public verification route | Responsible pharmacist |
-| `/about/our-pharmacists` | Confirmed languages spoken, and on which days. No biography: the site names no individual. | Responsible pharmacist |
-| `/providers/what-we-stock` | Line-item formulary, if one is ever to be published | Responsible pharmacist |
-| `/contact` | Local directions, parking, nearest bus route | Someone who knows Port Vila |
-| Bislama columns, site-wide | Translations of the plain-language summaries | A Bislama speaker with medical knowledge |
-| `/contact` | Photograph of the premises | Photographer. Licensed stock plates ship elsewhere on the site (see PRODUCT.md, 2026-09-11), but this route stays unphotographed on purpose: a stock interior beside the real address would read as a photograph of that address. `/about/our-pharmacists` needs no photograph at all -- the site shows no staff. |
-
-**Nothing above has been guessed at.** No licence number, formulary entry,
-testimonial, price, or translation appears anywhere in this codebase.
+**Nothing has been guessed at.** No licence number, formulary entry, testimonial,
+price, medicine name or translation appears anywhere in this codebase.
 
 ---
 
 ## Before you go live
 
-1. Fill the five placeholders in `config.php`.
-2. Get the legal pages drafted and paste the copy in.
-3. Set `enquiry_mail_enabled => true` in `config.php` **once a real mail transport
+1. Get the legal text drafted and paste it into `/policies`.
+2. Set `enquiry_mail_enabled => true` in `config.php` **once a real mail transport
    is configured on the server.** Until then every submission is written to
-   `data/enquiries.log` and the sender still sees a confirmation and a reference,
+   `data/enquiries.log` and `data/orders.log` and the sender still sees a
+   confirmation and a reference,
    so nothing is silently lost. Check that log during the transition.
 4. Change `enquiry_recipient` to a monitored mailbox rather than the public address.
 5. Decide the `/providers` access question (see below).
@@ -175,7 +179,15 @@ must start before any output.
 
 The nav lives in one array, `nav_tree()` in `bootstrap.php`. The header menu and the
 landing pages that list their own children both read from it, so the two cannot
-drift. Labels are fixed by the brief and are not to be reworded.
+drift.
+
+Six items, **no dropdowns** since 2026-09-24. Every section that used to be a
+dropdown is one page with anchors, and the old addresses are 301 redirects into
+those anchors, so no bookmark or search result breaks. Ordering is deliberately
+not in the list: it is the masthead button, on every page.
+
+The ten real pages are `/`, `/order`, `/medicines`, `/how-it-works`,
+`/providers`, `/about`, `/contact`, `/faq`, `/policies` and `/search`.
 
 ---
 

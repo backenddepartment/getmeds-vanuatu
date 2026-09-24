@@ -1,23 +1,25 @@
 <?php
 /**
- * Home. The hero, the five things a visitor should understand in seconds, the
- * quick links, then one decision with two routes.
+ * Home.
  *
- * Copy from the 2026 content brief: affordability, access and the Pacific
- * first, in the site's plain, careful voice. Under the quick links sits the
- * question and the two large doors, and everything downstream is filtered by
- * which one the visitor takes.
+ * Rewritten 2026-09-24. It used to open with a hero, a quick-link row, a
+ * full-bleed essay on affordability, a second essay on why affordability comes
+ * first, a photo band, "what we do", and finally "asking about a medicine" —
+ * roughly nine hundred words before anyone found out where to send a
+ * prescription. The owner's words: "it's like a presentation full of words."
+ *
+ * The order now is: what this is, how to order in three steps, where to go,
+ * then the short factual record. Everything a patient must do sits above the
+ * essays, and the essays are gone rather than moved further down.
  */
 require __DIR__ . '/includes/bootstrap.php';
 require_once INC . '/icons.php';
 require_once INC . '/components.php';
 
 $page = [
-    // The browser tab reads just "Getmeds Vanuatu" on the home page.
     'title' => 'Getmeds Vanuatu',
-    'desc'  => 'Getmeds Vanuatu is a licensed specialty pharmacy in Port Vila supplying '
-             . 'cancer medicines and the medicines that manage their side effects, against '
-             . 'a valid prescription.',
+    'desc'  => 'Send your prescription to a licensed pharmacy in Port Vila. A pharmacist '
+             . 'calls you back with the price and how long it will take.',
     'ref'   => 'GV-HOME',
 ];
 
@@ -26,104 +28,62 @@ include INC . '/header.php';
 ?>
 
 <?php page_hero([
-    // The home hero's own photograph (assets/img/homeherosection), shown in its
-    // natural colour with no blue wash over it.
     'image'   => ['base' => '/assets/img/homeherosection', 'widths' => [800, 1200], 'w' => 1200, 'h' => 628],
     'plain'   => true,
     'pos'     => '50% 50%',
     'kicker'  => 'Licensed pharmacy · ' . cfg('address_city') . ', ' . cfg('address_country'),
-    'title'   => 'Affordable Medicines. Better Access. Stronger Cancer Care.',
-    'lede'    => 'Getmeds Vanuatu-Pacific helps patients and healthcare providers access essential '
-               . 'and cancer medicines through reliable sourcing, more affordable pricing, and a '
-               . 'growing supply network across the Pacific.',
+    'title'   => 'Send us your prescription. We call you with the price.',
+    'lede'    => 'Cancer medicines, and the medicines that manage their side effects, supplied '
+               . 'across Vanuatu and the Pacific against a valid prescription.',
     'actions' => [
-        ['label' => 'Find a Medicine', 'href' => url('/enquire'), 'icon' => 'search', 'fill' => true],
-        ['label' => 'How It Works', 'href' => url('/patients/how-to-order')],
-        ['label' => 'Contact Getmeds', 'href' => url('/contact')],
+        ['label' => 'Order a Medicine', 'href' => url('/order'), 'icon' => 'script', 'fill' => true],
+        ['label' => 'Call ' . cfg('phone'), 'href' => 'tel:' . cfg('phone_href'), 'icon' => 'phone'],
     ],
     // No facts row: the phone and hours are in the footer on every page.
     'facts'   => false,
 ]); ?>
 
-<?php /* Quick links as a sliding row of large cards, each with a photograph. */ ?>
+<?php /* Three steps, immediately. The old page put this seven hundred words down. */ ?>
+<section class="section section--open shell" aria-labelledby="how" style="padding-top:var(--s-7)">
+  <h2 id="how" class="heading--blue">Ordering takes three steps</h2>
+  <?php step_cards([
+      ['icon' => 'script', 'title' => 'Send the prescription',
+       'text' => 'Upload a photo from your phone, WhatsApp it, or bring the paper in.'],
+      ['icon' => 'check', 'title' => 'A pharmacist checks it',
+       'text' => 'They confirm what it is, whether we can supply it, and what it will cost.'],
+      ['icon' => 'box', 'title' => 'You decide, then collect',
+       'text' => 'Collect in Port Vila, or we send it to your island. Nothing is charged until you agree.'],
+  ]); ?>
+
+  <div class="actions">
+    <a class="btn btn--primary" href="<?= e(url('/order')) ?>">Order a Medicine</a>
+    <a class="next-link" href="<?= e(url('/how-it-works')) ?>">What to send, and what it costs</a>
+  </div>
+</section>
+
 <?php quick_cards([
     'id'     => 'quick-links',
-    'title'  => 'Quick links',
+    'title'  => 'Where to go',
     'action' => ['label' => 'Contact us', 'href' => url('/contact')],
     'items'  => [
-        ['label' => 'Find a Medicine', 'url' => '/enquire', 'tone' => 'blue',
-         'tag' => 'Start here', 'photo' => 'shelves', 'icon' => 'search',
-         'blurb' => 'Ask a pharmacist whether we can supply what’s been prescribed.',
-         'cta' => 'Ask a pharmacist'],
-        ['label' => 'How It Works', 'url' => '/patients/how-to-order', 'tone' => 'sky',
-         'tag' => 'For patients', 'photo' => 'script', 'icon' => 'script',
-         'blurb' => 'The six steps from prescription to dispensing.',
-         'cta' => 'See the six steps'],
-        ['label' => 'Named Patient Access', 'url' => '/patients/named-patient-access', 'tone' => 'sky',
-         'tag' => 'Not available locally', 'photo' => 'parcels', 'icon' => 'box',
-         'blurb' => 'For a medicine that isn’t available locally.',
-         'cta' => 'How it works'],
-        ['label' => 'For Healthcare Providers', 'url' => '/providers', 'tone' => 'blue',
-         'tag' => 'Doctors & hospitals', 'photo' => 'ward', 'icon' => 'hosp',
-         'blurb' => 'Sourcing, quotes, and institutional ordering.',
+        ['label' => 'Order a Medicine', 'url' => '/order', 'tone' => 'blue',
+         'tag' => 'Start here', 'photo' => 'script', 'icon' => 'script',
+         'blurb' => 'Send the prescription and get a real price back.',
+         'cta' => 'Upload a prescription'],
+        ['label' => 'Medicines We Supply', 'url' => '/medicines', 'tone' => 'sky',
+         'tag' => 'What we handle', 'photo' => 'shelves', 'icon' => 'pill',
+         'blurb' => 'Cancer medicines, side-effect medicines, and other specialty lines.',
+         'cta' => 'See the groups'],
+        ['label' => 'How It Works', 'url' => '/how-it-works', 'tone' => 'sky',
+         'tag' => 'For patients', 'photo' => 'parcels', 'icon' => 'info',
+         'blurb' => 'What to send, what it costs, and how it reaches your island.',
+         'cta' => 'Read the steps'],
+        ['label' => 'For Doctors & Hospitals', 'url' => '/providers', 'tone' => 'blue',
+         'tag' => 'Institutional', 'photo' => 'ward', 'icon' => 'hosp',
+         'blurb' => 'Scope, ordering on account, cold chain and quotes.',
          'cta' => 'Provider services'],
     ],
 ]); ?>
-
-<?php /* The five things to understand in the first few seconds, as plain prose. */ ?>
-<?php /* A full-bleed banner (assets/img/firstsectionbg): the words sit on the
-         gradient at the left, the photograph's subject is on the right. */ ?>
-<section class="intro-banner" aria-labelledby="intro-head">
-  <div class="intro-banner__inner shell">
-  <h2 id="intro-head" class="u-hidden">What Getmeds Vanuatu-Pacific does</h2>
-  <div class="prose intro-banner__text">
-    <p class="lede lede--strong">
-      Getmeds Vanuatu-Pacific exists to make medicines — cancer medicines especially — more
-      affordable and easier to reach.
-    </p>
-    <p>
-      Cancer medicines are our primary specialisation, and we are working with Vanuatu’s
-      Ministry of Health toward the country’s first dedicated chemotherapy pharmacy and
-      treatment pathway, based at Vila Central Hospital. Where a medicine your doctor has
-      prescribed isn’t already on our shelf, we can usually still source it for you
-      individually — what’s called
-      <a href="<?= e(url('/patients/named-patient-access')) ?>">Named Patient Access</a> —
-      subject to your prescription and the normal import and regulatory requirements. And
-      Vanuatu is only the start: we’re building sourcing and referral partnerships across the
-      Pacific so patients aren’t left waiting on a single supply line.
-    </p>
-  </div>
-  </div>
-</section>
-
-<?php /* Photograph on the left, the words on the right; no rule above. */ ?>
-<section class="section section--open shell" aria-labelledby="affordability">
-  <div class="split split--flip split--middle">
-    <div class="split__body">
-      <h2 class="heading--blue" id="affordability">Why affordability comes first</h2>
-      <div class="prose">
-        <p>
-          Cancer treatment is expensive almost everywhere, and Vanuatu has no local system set up
-          to absorb that cost. A patient referred overseas for treatment — most often to India —
-          can face costs estimated from around USD 8,000 into the tens of thousands of dollars,
-          before counting a caretaker’s travel or the medicines themselves. Importing a single
-          course of medicine individually is expensive for the same reason: there’s no volume, and
-          freight into a Pacific archipelago isn’t cheap. The result is stockouts, long delays, and
-          treatment that stops partway through — not because the medicine doesn’t exist, but
-          because getting it to Vanuatu one patient at a time is hard.
-        </p>
-        <p>
-          Getmeds Vanuatu-Pacific was set up to soften that specific problem: sourcing cancer and
-          essential medicines at more competitive, reduced-cost terms, and building the local
-          pathway so patients don’t have to solve it alone each time.
-        </p>
-      </div>
-    </div>
-    <div class="split__aside">
-      <div class="photo-round"><?= color_picture('carton', ['sizes' => '(min-width: 60em) 30rem, 92vw']) ?></div>
-    </div>
-  </div>
-</section>
 
 <?php band('island', [
   'id'     => 'reach',
@@ -131,63 +91,49 @@ include INC . '/header.php';
   'head'   => 'Eighty-three islands, and a cold chain that has to hold on every one.',
   'pos'    => '50% 42%',
   'body'   => 'Collection in Port Vila, delivery elsewhere in Vanuatu, and institutional '
-            . 'supply across the Pacific. The medicine is held between 2 and 8 degrees, '
-            . 'monitored and logged, from the supplier to the patient.',
+            . 'supply across the Pacific. Medicine that has to stay between 2 and 8 degrees '
+            . 'travels in a validated cold box, monitored and logged the whole way.',
 ]); ?>
 
 <section class="section shell" aria-labelledby="what-we-do">
-  <h2 id="what-we-do">What we do</h2>
+  <h2 id="what-we-do">What we are</h2>
   <div class="prose">
     <p class="lede">
-      We are a licensed pharmacy in Port Vila. We supply cancer medicines, and the medicines
-      that manage their side effects, against a valid prescription from a licensed doctor.
+      A licensed pharmacy in Port Vila, supplying cancer medicines against a prescription from
+      the doctor treating you.
     </p>
     <p>
-      We do not diagnose, treat or advise on the management of illness. That is the work of
-      the doctor treating you. What we do is make sure the medicine they prescribe is real,
-      has been stored properly the whole way, and is here when it is needed.
+      We do not diagnose, treat or advise on the management of illness — that is your doctor's
+      work. Ours is making sure the medicine they prescribed is real, was stored properly the
+      whole way, and is here when it is needed.
     </p>
   </div>
 
   <dl class="record" style="margin-top:var(--s-6)">
     <div class="record__row">
+      <dt><?= icon('script') ?>Prescription</dt>
+      <dd>Required for every medicine we supply. No exceptions, and nothing is sold or paid
+          for on this website.</dd>
+    </div>
+    <div class="record__row">
       <dt><?= icon('thermo') ?>Cold chain</dt>
       <dd>Held between 2 and 8&nbsp;degrees, monitored and logged from the supplier to the patient.</dd>
     </div>
     <div class="record__row">
-      <dt><?= icon('script') ?>Prescription</dt>
-      <dd>Required for every medicine we supply. No exceptions, and no medicine sold from this website.</dd>
+      <dt><?= icon('card') ?>Prices</dt>
+      <dd>Not published, because they depend on your medicine, dose and course. You get a real
+          figure before you commit to anything.</dd>
     </div>
     <div class="record__row">
-      <dt><?= icon('ship') ?>Where we deliver</dt>
-      <dd>Collection in Port Vila, delivery elsewhere in Vanuatu, and institutional supply across the Pacific.</dd>
-    </div>
-    <div class="record__row">
-      <dt><?= icon('shield') ?>Pharmacy licence</dt>
-      <dd><span class="num"><?= val('pharmacy_licence_no') ?></span>
+      <dt><?= icon('shield') ?>Licensed pharmacy</dt>
+      <dd>Licensed in Vanuatu to dispense prescription medicines.
         <span class="record__sub"><a href="<?= e(url('/about') . '#licences') ?>">How to check our licence</a></span></dd>
     </div>
   </dl>
-</section>
-
-<section class="section shell" aria-labelledby="ask-about">
-  <h2 id="ask-about">Asking about a medicine</h2>
-  <div class="prose">
-    <p>
-      We do not publish a stock list or prices. Cancer medicines are ordered per patient,
-      and the price depends on the medicine, the dose and the course your doctor has set.
-      So the way to find out about a specific medicine is to ask, and a pharmacist will
-      answer you.
-    </p>
-    <p>
-      You do not need a prescription in your hand to ask. You do need one before we can
-      dispense.
-    </p>
-  </div>
 
   <div class="actions">
-    <a class="btn btn--secondary" href="<?= e(url('/enquire')) ?>">Ask About a Medicine</a>
-    <a class="next-link" href="<?= e(url('/patients/how-to-order')) ?>">Read how ordering works</a>
+    <a class="btn btn--primary" href="<?= e(url('/order')) ?>">Order a Medicine</a>
+    <a class="next-link" href="<?= e(url('/about')) ?>">About the pharmacy</a>
   </div>
 </section>
 

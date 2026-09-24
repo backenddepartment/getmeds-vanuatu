@@ -349,12 +349,12 @@ function section_notes(): void
         <p>
           We do not replace the advice of your doctor, oncologist or pharmacist. Please do not
           change a medicine, dose or treatment schedule without talking to them first.
-          <a class="body-link" href="<?= e(url('/patient-safety')) ?>">Read about patient safety</a>.
+          <a class="body-link" href="<?= e(url('/policies') . '#safety') ?>">Read about patient safety</a>.
         </p>
         <?php if ($showNpa): ?>
         <p>
           Need a cancer medicine that is not available locally?
-          <a class="body-link" href="<?= e(url('/patients/named-patient-access')) ?>">See Named Patient Access</a>.
+          <a class="body-link" href="<?= e(url('/how-it-works') . '#not-local') ?>">See Named Patient Access</a>.
         </p>
         <?php endif; ?>
       </div>
@@ -379,7 +379,7 @@ function medicine_lookup(string $context = ''): void
         return;
     }
     ?>
-    <form class="lookup" method="get" action="<?= e(url('/enquire')) ?>">
+    <form class="lookup" method="get" action="<?= e(url('/order')) ?>">
       <div class="lookup__row">
         <div>
           <label for="lookup-medicine">Medicine name</label>
@@ -470,6 +470,11 @@ function form_unavailable(string $what, string $subject = ''): void
  */
 function parallel_column(string $heading, array $rows, string $blockId = 'parallel'): void
 {
+    // Nothing to show a Bislama speaker until somebody writes the Bislama.
+    $translated = array_filter($rows, static fn ($r) => !empty($r['bi']));
+    if (!$translated) {
+        return;
+    }
     ?>
     <section class="parallel shell" id="<?= e($blockId) ?>" aria-labelledby="<?= e($blockId) ?>-title">
       <div class="parallel__bar">
@@ -496,60 +501,18 @@ function parallel_column(string $heading, array $rows, string $blockId = 'parall
           <h3 lang="en">Bislama</h3>
           <ul class="clauses">
             <?php foreach ($rows as $r): ?>
-            <li>
-              <?php if (!empty($r['bi'])): ?>
-                <?= e($r['bi']) ?>
-              <?php else: ?>
-                <span class="todo" role="mark" lang="en">
-                  <span class="todo__label">Needed</span>
-                  <span class="todo__key">BISLAMA TRANSLATION</span>
-                </span>
-              <?php endif; ?>
-            </li>
+            <li><?= e($r['bi'] ?? '') ?></li>
             <?php endforeach; ?>
           </ul>
-          <p class="small quiet" lang="en" style="margin-top:var(--s-4)">
-            These points must be translated by a Bislama speaker with medical knowledge.
-            They have deliberately not been machine translated.
-          </p>
         </div>
       </div>
     </section>
     <?php
 }
 
-/**
- * A page whose body copy must be written by a lawyer. Renders the real heading
- * structure the copy should fill, plus the marker.
- *
- * $sections: ['Heading', ...]
+/*
+ * legal_page() was deleted on 2026-09-24. It rendered a heading list wrapped
+ * in "Legal copy required" and "Copy required" boxes, and it was what a
+ * customer actually saw when they clicked Privacy Policy or Terms of Use.
+ * Those six routes are now sections of /policies with real content.
  */
-function legal_page(string $h1, string $lede, array $sections, string $whoDrafts): void
-{
-    page_open($h1, e($lede));
-    ?>
-    <div class="section shell">
-      <?= legal_copy_required() ?>
-      <div class="prose">
-        <p class="small quiet">To be drafted by: <?= e($whoDrafts) ?>.</p>
-      </div>
-
-      <?php foreach ($sections as $s): ?>
-      <h2><?= e($s) ?></h2>
-      <div class="todo-block">
-        <p class="todo-block__head">Copy required</p>
-        <p class="todo-block__body"><?= e($s) ?> — content for this heading has not been written.</p>
-      </div>
-      <?php endforeach; ?>
-
-      <div class="notice" style="margin-top:var(--s-8)">
-        <p class="notice__head">If you need an answer now</p>
-        <p>
-          Do not wait for this page. Call the pharmacy on <?= phone_link() ?> or email
-          <a href="mailto:<?= e(cfg('email')) ?>"><?= e(cfg('email')) ?></a> and a pharmacist
-          will answer you directly.
-        </p>
-      </div>
-    </div>
-    <?php
-}

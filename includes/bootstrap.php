@@ -116,51 +116,23 @@ function cfg(string $key, $default = null)
     return $GLOBALS['CFG'][$key] ?? $default;
 }
 
-/** True when a config value is still an unsupplied [[PLACEHOLDER]]. */
-function is_placeholder($value): bool
-{
-    return is_string($value) && strlen($value) > 4
-        && substr($value, 0, 2) === '[['
-        && substr($value, -2) === ']]';
-}
+/*
+ * is_placeholder(), val(), legal_copy_required() and photo_needed() were deleted
+ * on 2026-09-24. They printed "Needed LEGAL_ENTITY_NAME", "Legal copy required"
+ * and "Photograph needed" boxes onto live pages — markers meant for the builder
+ * that customers were reading instead. Nothing unfinished is displayed now: if a
+ * value is not confirmed, the markup that showed it is removed too.
+ */
 
 /**
- * Render a config value, or a visible marker when it has not been supplied yet.
- * Markers are announced to screen readers as outstanding, not read as content.
+ * A wa.me link, optionally carrying a first message. WhatsApp is the ordering
+ * channel that works when the site is served as static HTML with no PHP behind
+ * it, and it is the one most patients here already have open.
  */
-function val(string $key): string
+function whatsapp_url(string $text = ''): string
 {
-    $v = cfg($key);
-
-    if (is_placeholder($v)) {
-        return '<span class="todo" role="mark">'
-             . '<span class="todo__label">Needed</span>'
-             . '<span class="todo__key">' . e(trim($v, '[]')) . '</span>'
-             . '</span>';
-    }
-
-    return e((string) $v);
-}
-
-/** A block-level marker for legal copy that must not be drafted by the builder. */
-function legal_copy_required(): string
-{
-    return '<div class="todo-block">'
-         . '<p class="todo-block__head">Legal copy required</p>'
-         . '<p class="todo-block__body">This section must be drafted and approved by a '
-         . 'lawyer qualified in Vanuatu. It has deliberately not been written here. The '
-         . 'headings below are the structure the copy should fill.</p>'
-         . '</div>';
-}
-
-/** A marker for a photograph that has to be taken before launch. */
-function photo_needed(string $subject): string
-{
-    return '<figure class="photo-needed"><div class="photo-needed__frame">'
-         . '<p class="photo-needed__head">Photograph needed</p>'
-         . '<p class="photo-needed__subject">' . e($subject) . '</p>'
-         . '</div><figcaption class="photo-needed__note">Real photograph of the Port Vila '
-         . 'premises or staff. Stock photography must not be used.</figcaption></figure>';
+    $u = 'https://wa.me/' . preg_replace('/\D+/', '', (string) cfg('whatsapp_href'));
+    return $text === '' ? $u : $u . '?text=' . rawurlencode($text);
 }
 
 /** The full address on one line. */
@@ -257,90 +229,26 @@ function csrf_valid(?string $token): bool
  * The site's navigation. The single source for both the header nav and the
  * landing pages that list their own children, so the two can never drift.
  *
- * Labels follow the 2026 content brief. A dropdown holds six at most. About Us
- * is one page: its children are anchors to that page's sections, and the old
- * sub-page addresses (and /pacific-network) redirect to them. The FAQ is its
- * own page and its own top-level item.
+ * Six items, no dropdowns. Every section that used to be a dropdown is now one
+ * page with anchors, because a patient hunting through a three-level menu for
+ * "where do I order" is a patient who phones a competitor instead.
+ *
+ * Ordering is deliberately NOT in this list. It is the masthead button, on
+ * every page, styled as the only filled control in the header.
  */
 function nav_tree(): array
 {
     return [
-        [
-            'label' => 'Home',
-            'url'   => '/',
-        ],
-        [
-            'label' => 'Medicines',
-            'url'   => '/medicines',
-            'blurb' => 'Specialty and cancer medicines we source from licensed manufacturers and supply against a valid prescription.',
-            'children' => [
-                ['label' => 'Cancer Medicines',            'url' => '/medicines/cancer-medicines',
-                 'blurb' => 'The groups of cancer medicine we supply against a prescription.'],
-                ['label' => 'Medicines for Side Effects',  'url' => '/medicines/side-effects',
-                 'blurb' => 'Anti-sickness, pain, mouth care and blood-count support.'],
-                ['label' => 'Other Specialty Medicines',   'url' => '/medicines/other-specialty',
-                 'blurb' => 'Cold-chain and hard-to-find medicines outside cancer care.'],
-            ],
-        ],
-        [
-            'label' => 'For Patients',
-            'url'   => '/patients',
-            'blurb' => 'For patients and caregivers: how ordering works, what to bring, what it costs, and how your medicine reaches you.',
-            'children' => [
-                ['label' => 'How It Works',          'url' => '/patients/how-to-order',
-                 'blurb' => 'The six steps, from prescription to dispensing.'],
-                ['label' => 'Named Patient Access',  'url' => '/patients/named-patient-access',
-                 'blurb' => 'For a cancer medicine that is not available locally.'],
-                ['label' => 'What You Need',         'url' => '/patients/what-you-need',
-                 'blurb' => 'The papers to bring or send before we can dispense.'],
-                ['label' => 'Prices & Payment',      'url' => '/patients/prices-and-payment',
-                 'blurb' => 'How pricing works, and how to get a figure for your medicine.'],
-                ['label' => 'Talk to a Pharmacist',  'url' => '/patients/talk-to-a-pharmacist',
-                 'blurb' => 'When to call, what a pharmacist can help with.'],
-                ['label' => 'Delivery',              'url' => '/patients/delivery',
-                 'blurb' => 'Collection in Port Vila, and sending to the other islands.'],
-            ],
-        ],
-        [
-            'label' => 'For Doctors & Hospitals',
-            'url'   => '/providers',
-            'blurb' => 'Ordering, storage and pricing for doctors, pharmacies and hospitals supplying patients in Vanuatu.',
-            'children' => [
-                ['label' => 'What We Stock',           'url' => '/providers/what-we-stock',
-                 'blurb' => 'Formulary scope, availability and lead times.'],
-                ['label' => 'Order for Your Hospital', 'url' => '/providers/order-for-your-hospital',
-                 'blurb' => 'Institutional ordering, documentation and accounts.'],
-                ['label' => 'Storage & Handling',      'url' => '/providers/storage-and-handling',
-                 'blurb' => 'Cold chain, cytotoxic handling and transport.'],
-                ['label' => 'Request a Quote',         'url' => '/providers/request-a-quote',
-                 'blurb' => 'Pricing for a tender, ward stock or a named patient.'],
-            ],
-        ],
-        [
-            'label' => 'About Us',
-            'url'   => '/about',
-            'blurb' => 'Who we are, who dispenses your medicine, the licences we hold, and the wider network behind us.',
-            'children' => [
-                ['label' => 'Who We Are',        'url' => '/about#who-we-are',
-                 'blurb' => 'What this pharmacy is, and what it is not.'],
-                ['label' => 'Our Pharmacists',   'url' => '/about#our-pharmacists',
-                 'blurb' => 'Who dispenses your medicine, their registration, and what they are accountable for.'],
-                ['label' => 'Our Licences',      'url' => '/about#licences',
-                 'blurb' => 'Our pharmacy licence and how to verify it.'],
-                ['label' => 'Part of Getmeds',   'url' => '/about#part-of-getmeds',
-                 'blurb' => 'How the wider group supports supply into Vanuatu.'],
-                ['label' => 'Pacific Network',   'url' => '/about#pacific-network',
-                 'blurb' => 'Building medicine access and supply across the Pacific.'],
-            ],
-        ],
-        [
-            'label' => 'FAQ',
-            'url'   => '/faq',
-        ],
-        [
-            'label' => 'Contact',
-            'url'   => '/contact',
-        ],
+        ['label' => 'Home',     'url' => '/'],
+        ['label' => 'Medicines', 'url' => '/medicines',
+         'blurb' => 'The groups of medicine we supply against a prescription.'],
+        ['label' => 'How It Works', 'url' => '/how-it-works',
+         'blurb' => 'Ordering, what to send, what it costs, and how it reaches you.'],
+        ['label' => 'For Doctors & Hospitals', 'url' => '/providers',
+         'blurb' => 'Institutional ordering, quotes, storage and handling.'],
+        ['label' => 'About Us', 'url' => '/about',
+         'blurb' => 'Who we are, the licences we hold, and the network behind us.'],
+        ['label' => 'Contact',  'url' => '/contact'],
     ];
 }
 
@@ -355,25 +263,27 @@ function nav_children(string $sectionUrl): array
     return [];
 }
 
-/** The footer's policy links. Scanned, not decided from, so ten is fine here. */
+/**
+ * The footer's secondary links. Everything a regulator or a careful customer
+ * may need, kept out of the main nav so the main nav can stay about ordering.
+ */
 function footer_links(): array
 {
     return [
-        ['label' => 'Privacy Policy',               'url' => '/privacy'],
-        ['label' => 'Terms of Use',                 'url' => '/terms'],
-        ['label' => 'Medical Disclaimer',           'url' => '/disclaimer'],
-        ['label' => 'Patient Safety',               'url' => '/patient-safety'],
-        ['label' => 'Prescription Policy',          'url' => '/prescription-policy'],
-        ['label' => 'Shipping & Import Rules',      'url' => '/shipping-rules'],
-        ['label' => 'Returns & Medicine Disposal',  'url' => '/returns'],
-        ['label' => 'Report a Side Effect',         'url' => '/report-side-effect'],
-        ['label' => 'Our Licences',                 'url' => '/about#licences'],
-        ['label' => 'Complaints',                   'url' => '/complaints'],
+        ['label' => 'Order a Medicine',  'url' => '/order'],
+        ['label' => 'FAQ',               'url' => '/faq'],
+        ['label' => 'Policies & Safety', 'url' => '/policies'],
+        ['label' => 'Report a Side Effect', 'url' => '/policies#side-effects'],
+        ['label' => 'Complaints',        'url' => '/policies#complaints'],
+        ['label' => 'Privacy',           'url' => '/policies#privacy'],
+        ['label' => 'Terms of Use',      'url' => '/policies#terms'],
+        ['label' => 'Search',            'url' => '/search'],
     ];
 }
 
 /**
- * Photography. Loaded here so every page has plate() and band() without
+ * Photography.
+ Loaded here so every page has plate() and band() without
  * remembering to ask for them.
  */
 require_once INC . '/plates.php';

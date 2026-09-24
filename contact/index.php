@@ -64,7 +64,7 @@ page_hero([
       </a>
     </li>
     <li>
-      <a class="channels__row" href="<?= e(url('/enquire')) ?>">
+      <a class="channels__row" href="<?= e(url('/order')) ?>">
         <?= icon('script') ?>
         <span>
           <span class="channels__name">Written enquiry</span>
@@ -104,14 +104,6 @@ page_hero([
       1006. Ground floor means no stairs, which matters if you are coming in tired.
     </p>
   </div>
-  <?= photo_needed('The street entrance to Golden Port, showing the pharmacy signage as a visitor arrives') ?>
-  <div class="todo-block">
-    <p class="todo-block__head">Directions required</p>
-    <p class="todo-block__body">
-      Local landmarks, where to park, and the nearest bus route. Written by someone who knows
-      Port Vila, not generated from a map.
-    </p>
-  </div>
 </section>
 
 <section class="section shell" aria-labelledby="emergency">
@@ -139,7 +131,7 @@ page_hero([
   ]); ?>
 
   <div class="actions">
-    <a class="btn btn--secondary" href="<?= e(url('/enquire')) ?>">Ask About a Medicine</a>
+    <a class="btn btn--secondary" href="<?= e(url('/order')) ?>">Ask About a Medicine</a>
   </div>
 </section>
 

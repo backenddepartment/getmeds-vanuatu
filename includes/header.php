@@ -12,6 +12,7 @@
  *
  * Opens <main>; includes/footer.php closes it.
  */
+require_once INC . '/icons.php';
 ?>
 <?php /* On the home page the masthead sits over the hero photograph: transparent,
          with the white logo and white nav. site.js turns it solid once the hero
@@ -25,6 +26,13 @@ $overlay = (current_path() === '/'); ?>
       <?php if ($overlay): /* Shown instead of the colour logo while over the hero. */ ?>
       <img class="wordmark__logo wordmark__logo--light" src="<?= e(asset('/assets/img/logo-getmeds-vanuatu-white.png')) ?>" width="200" height="125" alt="" aria-hidden="true">
       <?php endif; ?>
+    </a>
+
+    <?php /* The order button. On every page, at every width, in the brand row
+             rather than inside the menu, because "where do I put my order" was
+             the question the old masthead could not answer. */ ?>
+    <a class="btn btn--primary masthead__cta" href="<?= e(url('/order')) ?>">
+      <?= icon('script') ?><span>Order<span class="masthead__cta-long"> a Medicine</span></span>
     </a>
 
     <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="sitenav">

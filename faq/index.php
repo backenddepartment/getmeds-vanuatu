@@ -42,7 +42,7 @@ page_open(
           Yes — this is called Named Patient Access. Patients and healthcare providers can
           contact us to check sourcing and availability, subject to a valid prescription and the
           applicable regulatory and supply requirements. See the
-          <a href="<?= e(url('/patients/named-patient-access')) ?>">Named Patient Access</a>
+          <a href="<?= e(url('/how-it-works') . '#not-local') ?>">Named Patient Access</a>
           page for how the process works.
         </p>
       </div>

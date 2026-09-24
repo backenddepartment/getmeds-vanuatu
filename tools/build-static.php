@@ -139,12 +139,40 @@ foreach ($routes as $route) {
     $ctx  = stream_context_create(['http' => [
         'timeout'       => 30,
         'ignore_errors' => true,
+        // Do NOT follow. A merged page's 301 has to stay visible here so it can
+        // be written out as an HTML redirect; followed, every old address would
+        // get its own full copy of the target page instead.
+        'follow_location' => 0,
+        'max_redirects'   => 1,
         'header'        => "User-Agent: getmeds-static-build\r\n",
     ]]);
     $body = @file_get_contents($url, false, $ctx);
     $code = 0;
+    $to   = '';
     foreach ($http_response_header ?? [] as $h) {
         if (preg_match('~^HTTP/\S+\s+(\d{3})~', $h, $m)) { $code = (int) $m[1]; }
+        if (preg_match('~^Location:\s*(\S+)~i', $h, $m))  { $to   = $m[1]; }
+    }
+
+    /* Pages merged into another page answer 301. Static hosting has no 301, so
+       write the HTML equivalent: a canonical link for crawlers and a meta
+       refresh for people, with a real link in case both are ignored. Without
+       this every kept-alive old address would fail the build. */
+    if ($code >= 300 && $code < 400 && $to !== '') {
+        $dest = preg_replace('~^https?://[^/]+~', '', $to);
+        $html = "<!doctype html>\n<html lang=\"en\">\n<head>\n"
+              . "<meta charset=\"utf-8\">\n"
+              . "<title>Moved</title>\n"
+              . '<link rel="canonical" href="' . htmlspecialchars($dest, ENT_QUOTES) . "\">\n"
+              . '<meta http-equiv="refresh" content="0; url=' . htmlspecialchars($dest, ENT_QUOTES) . "\">\n"
+              . "<meta name=\"robots\" content=\"noindex\">\n</head>\n<body>\n"
+              . '<p>This page has moved to <a href="' . htmlspecialchars($dest, ENT_QUOTES) . '">'
+              . htmlspecialchars($dest, ENT_QUOTES) . "</a>.</p>\n</body>\n</html>\n";
+        put($out . ($route === '/' ? '' : $route) . '/index.html', $html);
+        $written++;
+        $bytes += strlen($html);
+        fwrite(STDERR, sprintf("  ->   %-42s %s\n", $route, $dest));
+        continue;
     }
 
     $bad = [];

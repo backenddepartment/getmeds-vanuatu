@@ -141,12 +141,21 @@ Confirmed real values, supplied by the user:
 
 Deliberately absent. Future work must not fabricate these:
 
-- Registered legal entity name and pharmacy licence number. Both render as visible
-  placeholders from one config file.
+- Registered legal entity name and pharmacy licence number. Both were REMOVED FROM
+  DISPLAY on 2026-09-24 rather than shown as "Needed" markers. See README.md; put them
+  back only with real values.
+- **Nothing unfinished is shown to a customer.** The owner's words on 2026-09-24: "it's
+  like a presentation full of words -- where can I upload my prescription?" Every builder's
+  marker (`val()`, `legal_copy_required()`, `photo_needed()`, the todo blocks) was deleted
+  along with the helpers that produced them. If a value is not confirmed, delete the markup
+  that displayed it; do not invent a placeholder for it.
 - **No individual is named anywhere on the site.** The responsible pharmacist's name and
   registration number were removed on 2026-09-21 at the owner's direction: this is an
   ordering site, not a staff directory. Pages refer to the role, never the person. Do not
   reintroduce a name, a registration number, or a photograph of staff.
+- **The site is for ordering.** `/order` is the primary route and the masthead button on
+  every page. 36 pages became 10 on 2026-09-24; the rest are 301 redirects into sections.
+  Anything added later must not push the order path further down a page.
 - **No stock list or formulary.** The user confirmed that medicine pages carry category
   structure and search only, with no drug names. Nothing may imply that a specific molecule
   is held in stock until a pharmacist confirms it.

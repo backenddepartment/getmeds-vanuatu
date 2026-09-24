@@ -132,7 +132,6 @@ page_hero([
   </div>
 
   <h3>The premises</h3>
-  <?= photo_needed('The dispensary counter and the cold-chain refrigeration, Golden Port, Port Vila') ?>
   <div class="prose">
     <p>
       You are welcome to come and look. A pharmacy that asks people to trust its cold chain
@@ -195,22 +194,14 @@ page_hero([
   <h3>Responsible pharmacist</h3>
   <dl class="record">
     <div class="record__row">
-      <dt>Name</dt>
-      <dd><?= val('pharmacist_name') ?></dd>
-    </div>
-    <div class="record__row">
-      <dt>Registration number</dt>
-      <dd><span class="num"><?= val('pharmacist_reg_no') ?></span></dd>
-    </div>
-    <div class="record__row">
       <dt>Accountable for</dt>
       <dd>Every medicine dispensed from these premises, the cold chain, the controlled
           medicines register, and the conduct of the pharmacy.</dd>
     </div>
     <div class="record__row">
       <dt>Pharmacy licence</dt>
-      <dd><span class="num"><?= val('pharmacy_licence_no') ?></span>
-          <span class="record__sub"><a href="<?= e(url('/about/licences')) ?>">How to verify this</a></span></dd>
+      <dd>Licensed in Vanuatu to dispense prescription medicines.
+          <span class="record__sub"><a href="#licences">How to verify this</a></span></dd>
     </div>
     <div class="record__row">
       <dt>Premises</dt>
@@ -219,7 +210,7 @@ page_hero([
     <div class="record__row">
       <dt>Part of</dt>
       <dd><?= e(cfg('group_name')) ?>
-          <span class="record__sub"><a href="<?= e(url('/about/part-of-getmeds')) ?>">What that means for supply</a></span></dd>
+          <span class="record__sub"><a href="<?= e(url('/about') . '#part-of-getmeds') ?>">What that means for supply</a></span></dd>
     </div>
   </dl>
 
@@ -232,18 +223,8 @@ page_hero([
     </p>
     <p>
       We do not publish the names or photographs of our staff. The licence is the public
-      record, and <a href="<?= e(url('/about/licences')) ?>">you can check it</a>. To speak to
+      record, and <a href="<?= e(url('/about') . '#licences') ?>">you can check it</a>. To speak to
       the responsible pharmacist, call us and ask.
-    </p>
-  </div>
-
-  <?= photo_needed('The responsible pharmacist at the dispensary counter') ?>
-
-  <div class="todo-block">
-    <p class="todo-block__head">Biography required</p>
-    <p class="todo-block__body">
-      Qualifications, years in practice, oncology experience and languages spoken. Supplied by
-      the responsible pharmacist. Nothing has been invented here.
     </p>
   </div>
 
@@ -253,14 +234,6 @@ page_hero([
       Vanuatu's official languages are Bislama, English and French, and a medicine schedule is
       hard enough to follow in your first language. Tell us when you call which you would
       rather use and we will find someone who can help.
-    </p>
-  </div>
-  <div class="todo-block">
-    <p class="todo-block__head">Confirmation required</p>
-    <p class="todo-block__body">
-      Which languages the pharmacy can actually offer, and on which days. This must be
-      confirmed rather than assumed, because a promise here that cannot be kept is worse than
-      no promise.
     </p>
   </div>
 
@@ -291,16 +264,8 @@ page_hero([
       <h3>The pharmacy, on the record</h3>
       <dl class="record">
         <div class="record__row">
-          <dt>Registered name</dt>
-          <dd><?= val('legal_entity_name') ?></dd>
-        </div>
-        <div class="record__row">
           <dt>Trading as</dt>
           <dd><?= e(cfg('site_name')) ?> — <?= e(cfg('site_descriptor')) ?></dd>
-        </div>
-        <div class="record__row">
-          <dt>Pharmacy licence</dt>
-          <dd><span class="num"><?= val('pharmacy_licence_no') ?></span></dd>
         </div>
         <div class="record__row">
           <dt>Premises licensed</dt>
@@ -308,10 +273,8 @@ page_hero([
         </div>
         <div class="record__row">
           <dt>Responsible pharmacist</dt>
-          <dd><?= val('pharmacist_name') ?>,
-              registration <span class="num"><?= val('pharmacist_reg_no') ?></span>
-              <span class="record__sub">A pharmacist registered in Vanuatu is named on the licence and is accountable
-              for every medicine dispensed here.</span></dd>
+          <dd>A pharmacist registered in Vanuatu is named on the licence and is
+              accountable for every medicine dispensed here.</dd>
         </div>
         <div class="record__row">
           <dt>Part of</dt>
@@ -319,14 +282,6 @@ page_hero([
         </div>
       </dl>
 
-      <div class="todo-block">
-        <p class="todo-block__head">Licence details required</p>
-        <p class="todo-block__body">
-          Issuing authority, licence category, issue date and expiry date, plus any import
-          authorisation held for controlled or cold-chain medicines. Supplied by the responsible
-          pharmacist. None of these have been guessed.
-        </p>
-      </div>
     </div>
     <div class="split__aside">
       <?php plate('script', [
@@ -351,14 +306,6 @@ page_hero([
         source of truth.</li>
     <li>Come to the premises. The licence is displayed there, as it is required to be.</li>
   </ol>
-  <div class="todo-block">
-    <p class="todo-block__head">Verification route required</p>
-    <p class="todo-block__body">
-      The name of the issuing authority in Vanuatu, and the public route for checking a
-      pharmacy licence and a pharmacist registration — a register, a phone number or an office.
-      This must be accurate, so it has not been drafted here.
-    </p>
-  </div>
 
   <div class="notice notice--safety">
     <p class="notice__head">Counterfeit cancer medicine exists, and it kills people</p>
@@ -518,7 +465,7 @@ page_hero([
   </div>
 
   <div class="actions">
-    <a class="btn btn--secondary" href="<?= e(url('/enquire')) ?>">Ask About a Medicine</a>
+    <a class="btn btn--secondary" href="<?= e(url('/order')) ?>">Ask About a Medicine</a>
     <a class="next-link" href="<?= e(url('/faq')) ?>">Read the FAQ</a>
     <a class="next-link" href="<?= e(url('/contact')) ?>">Contact the pharmacy</a>
   </div>

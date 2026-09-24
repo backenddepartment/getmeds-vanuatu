@@ -14,3 +14,9 @@
 Thumbs.db
 .DS_Store
 *.swp
+
+# Prescriptions uploaded through /order. Health information about real
+# patients: it must never reach the repository. .htaccess refuses /data/ over
+# HTTP, and data/uploads/.htaccess refuses it again; this is the third lock.
+/data/uploads/
+/data/orders.log

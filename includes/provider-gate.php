@@ -115,7 +115,7 @@ function provider_gate_render(string $mode, string $heading = 'h1'): void
             <p class="notice__head">If you are a patient or family member</p>
             <p>
               You will find what you need in
-              <a href="<?= e(url('/patients')) ?>">For Patients</a>. It covers how to order,
+              <a href="<?= e(url('/how-it-works')) ?>">For Patients</a>. It covers how to order,
               what to bring, prices and delivery in plain language. You are also welcome to
               call the pharmacy on <?= phone_link() ?>.
             </p>
