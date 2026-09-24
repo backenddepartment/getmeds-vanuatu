@@ -128,11 +128,6 @@ provider_gate('h2');
       <dt>Email</dt>
       <dd><a href="mailto:<?= e(cfg('email')) ?>"><?= e(cfg('email')) ?></a></dd>
     </div>
-    <div class="record__row">
-      <dt>Responsible pharmacist</dt>
-      <dd><?= val('pharmacist_name') ?>
-          <span class="record__sub">Registration <span class="num"><?= val('pharmacist_reg_no') ?></span></span></dd>
-    </div>
   </dl>
 
   <div class="actions">

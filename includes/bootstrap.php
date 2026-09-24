@@ -324,7 +324,7 @@ function nav_tree(): array
                 ['label' => 'Who We Are',        'url' => '/about#who-we-are',
                  'blurb' => 'What this pharmacy is, and what it is not.'],
                 ['label' => 'Our Pharmacists',   'url' => '/about#our-pharmacists',
-                 'blurb' => 'Who dispenses your medicine, and their registration.'],
+                 'blurb' => 'Who dispenses your medicine, their registration, and what they are accountable for.'],
                 ['label' => 'Our Licences',      'url' => '/about#licences',
                  'blurb' => 'Our pharmacy licence and how to verify it.'],
                 ['label' => 'Part of Getmeds',   'url' => '/about#part-of-getmeds',
