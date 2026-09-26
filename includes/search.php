@@ -39,8 +39,13 @@ function search_pages(): array
         $dir   = str_replace('\\', '/', dirname($file->getPathname()));
         $rel   = trim(substr($dir, strlen($root)), '/');
         $src   = (string) file_get_contents($file->getPathname());
+        // A folder kept only to redirect an old address (redirect_to(), no
+        // $page of its own) is not a page, and neither is a noindex page.
+        if (!preg_match('/\$page\s*=\s*\[/', $src)
+            || preg_match("/'noindex'\\s*=>\\s*true/", $src)) {
+            continue;
+        }
         $entry = ['url' => $rel === '' ? '/' : '/' . $rel] + search_extract($src);
-        // A folder kept only to redirect an old address has no title of its own.
         if ($entry['title'] === '') {
             continue;
         }

@@ -1,9 +1,8 @@
 <?php
 /**
- * Merged into /policies on 2026-09-24. The address is kept so old links,
- * bookmarks and search results still land in the right place.
+ * Old address, kept so links, bookmarks and search results still work.
+ * Replaced by /terms in the content-guide rebuild (owner decision 3).
  */
 require __DIR__ . '/../includes/bootstrap.php';
 
-header('Location: ' . url('/policies') . '#terms', true, 301);
-exit;
+redirect_to('/terms');

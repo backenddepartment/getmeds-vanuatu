@@ -1,0 +1,3905 @@
+GetMEDS
+
+VANUAT U-PACIFIC
+
+Website Content
+and Design Guide
+
+Complete, ready-to-use copy for every page of the Getmeds
+Vanuatu website, with a design instruction for every section.
+
+               Version 1.0 · September 2026                    1 / 90
+               Port Vila, Vanuatu
+
+Getmeds Vanuatu -- Website Content & Design Guide
+Contents                                           12. For Patients and Families
+                                                   13. Services
+00. Global Design System                           14. FAQ
+01. Home                                           15. Contact
+02. About Getmeds Vanuatu                          16. Report a Side Effect
+03. Oncology and Chemotherapy                      17. Complaints and Feedback
+04. Medicines                                      18. Policies and Safety
+05. Named Patient Supply                           19. Privacy Policy
+06. How It Works / Request a Medicine              20. Terms of Use
+07. Conditions (hub page)                          21. Page Not Found (404)
+08. Condition pages (template and all 53 pages)    22. Footer and Global Elements
+09. Pacific Islands Access                         23. Website Navigation
+10. Affordable Access to Medicines
+11. For Healthcare Professionals
+
+Getmeds Vanuatu -- Website Content & Design Guide                                  2 / 90
+     PAGE 00
+
+     Global Design System
+
+     URL: Applies to every page
+
+P AG E D ES IG N D IRECT IO N
+
+This section sets the rules every page follows. The site must feel calm, clear and trustworthy. It is a
+healthcare service, not a shop. Design for people reading on a phone, often on a slow connection,
+and often in their second or third language.
+
+Brand colours
+
+S P ECIFICAT IO N
+
+Token              Colour Hex   Use
+
+Navy               #0B2A5B Headings, top navigation, footer, dark sections
+
+Getmeds Blue       #1E9BD7 Links, icons, secondary buttons, highlights
+
+Getmeds            #6BB33F Primary buttons ("Request a Medicine"), success states
+Green
+
+Pacific Teal       #2FB5A6 Middle of the brand gradient, tags
+
+Care Pink          #E8508A Oncology and patient-support accents only (from the Patient Guide). Use
+                                     sparingly
+
+Soft Mint          #EEF7F2 Light section backgrounds
+
+Sky Tint           #F2F8FC Alternate light section backgrounds, cards
+
+Ink                #1B2B3A Body text
+
+Alert Red          #C62828 Emergency notices only
+
+Brand gradient: 135°, #1E9BD7  #2FB5A6  #8BD66B. This matches the Getmeds Vanuatu-Pacific
+presentation style. Use it for hero backgrounds, the final CTA band and page headers. Never put body text
+directly on the brightest green end; add a navy overlay at 20­30% if needed.
+
+Typography
+
+S P ECIFICAT IO N  Font         Desktop            Mobile Notes
+                   Poppins 700  44px / 1.2
+  Element                                          32px  One per page. Navy, or white on gradient
+  H1
+
+H2                 Poppins 600 32px / 1.25 26px          Section titles
+
+Getmeds Vanuatu -- Website Content & Design Guide                                                        3 / 90
+Element            Font         Desktop            Mobile Notes
+H3                 Poppins 600  22px / 1.3
+Body               Inter 400    18px / 1.6         20px  Card and sub-section titles
+Small / captions   Inter 400    15px
+Buttons            Inter 600    17px               17px  Never below 16px. Max line length 70 characters
+
+                                                   14px  Disclaimers, form help text
+
+                                                   17px  Sentence case, no all-caps
+
+Use short paragraphs (maximum 3 sentences). Bold only key words, never whole paragraphs.
+
+Layout and spacing
+
+ S P ECIFICAT IO N
+
+     12-column grid, max content width 1200px, 24px gutters on desktop, 16px side padding on mobile.
+     Section vertical spacing: 96px desktop, 64px mobile.
+     8px spacing scale (8, 16, 24, 32, 48, 64, 96).
+     Alternate section backgrounds: white  Soft Mint  white  Sky Tint. This helps readers see where
+     one topic ends.
+     Every page must work at 360px wide with no sideways scrolling.
+     Border radius: 16px for cards, 12px for buttons and inputs.
+
+Components
+
+S P ECIFICAT IO N
+
+Component          Instruction
+
+Primary button     Green #6BB33F fill, white text, 52px tall, 12px radius. Hover: 8% darker. Always the main action
+                   ("Request a Medicine")
+
+Secondary          Navy 2px outline, navy text, same size. For "Call Us", "Learn more"
+button
+
+Phone button       On mobile, every "Call Us" button uses a tel:+6785282543 link and a phone icon
+
+Cards              White, 1px border #DCE6EE, 16px radius, soft shadow (0 4px 16px rgba(11,42,91,.06)), 24­32px
+                   padding, line icon at top in Getmeds Blue
+
+Step list          Numbered circles (48px, green fill, white number) connected by a thin dotted line. Horizontal on
+                   desktop, vertical on mobile
+
+Info box           Sky Tint background, 4px blue left border. For helpful notes
+
+Safety box         Pale amber background #FFF6E5 with 4px amber #F2A900 left border and an info icon. For
+                   "speak to your doctor" notes
+
+Emergency box White background, 2px Alert Red border, red warning icon, bold heading. Only for emergency
+                           guidance
+
+Accordion          For FAQs and long lists. Plus/minus icon on the right, 56px minimum tap height
+
+Tables             Navy header row, light row dividers. On mobile, stack each row as a card
+
+Getmeds Vanuatu -- Website Content & Design Guide                                                                4 / 90
+Component    Instruction
+Trust strip  Row of 3­4 small icon + short text items, used under hero buttons
+
+Icons, photography and illustration
+
+ S P ECIFICAT IO N
+
+     Icons: one line-icon set only (for example Phosphor or Lucide), 2px stroke, Getmeds Blue. Suggested
+     icons: pill bottle, syringe, prescription clipboard, thermometer (cold chain), boat/plane (Pacific), map
+     pin, phone, shield-check (safety), calendar (cycle planning).
+     Photography: real Ni-Vanuatu and Pacific people, Port Vila streets, the Golden Port building, the
+     pharmacy team at work, medicine packs on clean shelves. Warm natural light. Show dignity and calm;
+     never show people looking ill or distressed.
+     Avoid: generic stock photos of Western hospitals, dramatic cancer imagery, needles close-up, pink-
+     ribbon overload.
+     Pacific motif: a subtle wave or island-line pattern at 5­8% opacity on gradient sections. Keep it quiet.
+     Every image needs alt text in plain English.
+
+Accessibility and performance
+
+ S P ECIFICAT IO N
+
+     Colour contrast of at least 4.5:1 for text (WCAG AA). Check white text on the green end of the gradient.
+     All interactive elements at least 48×48px on mobile.
+     Visible focus outline (3px Getmeds Blue) for keyboard users.
+     Images in WebP, lazy-loaded, under 200KB each. Page weight target under 1.5MB; many users are on
+     mobile data.
+     Language attribute lang="en" . Leave room in layouts for future Bislama and French versions (text can
+     grow 30%).
+
+Global header (all pages)
+
+ S P ECIFICAT IO N
+
+     Desktop: logo left (Getmeds Vanuatu-Pacific), menu centre, green "Request a Medicine" button right,
+     phone number in small text above the button.
+     Mobile: logo left, phone icon and hamburger right. A sticky bottom bar with two buttons: "Request a
+     Medicine" (green) and "Call" (navy outline).
+     Header becomes sticky and compact (64px) after scrolling 100px.
+     A thin top strip in Soft Mint: "Prescription required for all prescription medicines · Mon­Fri, 8am­5pm ·
+     +678 528 2543".
+
+Getmeds Vanuatu -- Website Content & Design Guide                               5 / 90
+PAGE 01
+
+Home
+
+URL: /
+
+SEO                    Getmeds Vanuatu -- Cancer Medicines and Chemotherapy Pharmacy, Port Vila
+SEO title
+Meta description       Getmeds Vanuatu helps patients and doctors get cancer medicines and other
+                       important medicines in Vanuatu and across the Pacific. Send a prescription to
+H1                     start.
+Suggested H2 sections
+                       Important medicines, closer to home
+Primary keyword
+Secondary keywords     Why Getmeds Vanuatu · Cancer and chemotherapy medicines · Named Patient
+URL slug               Supply · What we supply · Across the Pacific · More affordable access · How it
+                       works · Who we serve
+
+                       Getmeds Vanuatu
+
+                       chemotherapy Vanuatu, oncology medicines Vanuatu, chemotherapy pharmacy
+                       Pacific, medicines Pacific Islands
+
+                       /
+
+P AG E D ES IG N D IRECT IO N
+
+The home page must answer three questions in the first screen: What is this? Can they help me?
+What do I do now? Keep the page scannable: each section is one idea with one action. Order: hero 
+trust strip  intro  why  oncology  Named Patient Supply  categories  Pacific  affordability
+ how it works  who we serve  professionals/patients split  safety  final CTA  footer.
+
+Hero
+
+      D ES IG N INS T RUCT IO N
+
+          Full-width brand gradient background with a soft Pacific wave pattern.
+          Left column (7/12): H1, supporting text, two buttons, trust strip. Right column (5/12): photo of a Getmeds
+          pharmacist handing a medicine pack to a Pacific patient, rounded 24px corners.
+          Mobile: photo moves below the text and is cropped to 4:3. Buttons full width, stacked.
+          Height about 80% of the screen on desktop. No carousel or auto-sliding content.
+
+ WEBS IT E CO P Y
+
+Important medicines, closer to home
+
+Getmeds Vanuatu supplies cancer medicines and other important medicines in Port Vila. We work with
+patients, doctors and hospitals in Vanuatu and across the Pacific. Send us a prescription and a pharmacist
+will check it and give you a price.
+
+Getmeds Vanuatu -- Website Content & Design Guide  6 / 90
+Primary button: Request a Medicine Secondary button: Talk to a Pharmacist
+Trust strip: Prescription required · Pharmacist-checked · Based in Port Vila, Vanuatu · Serving the Pacific
+
+Introduction
+
+D ES IG N INS T RUCT IO N
+
+    White background. Centred text block, max width 760px.
+    Small label above the H2 in Getmeds Blue caps: "ABOUT GETMEDS VANUATU".
+    Add one small inline statistic chip beside the text: "83 islands. One pharmacy working to reach them."
+
+WEBS IT E CO P Y
+
+Label: About Getmeds Vanuatu
+
+A pharmacy built for cancer care in the Pacific
+
+For many people in Vanuatu, getting cancer medicine has meant travelling overseas or waiting for
+someone to bring it back. Getmeds Vanuatu was set up to change that.
+We are the first chemotherapy pharmacy in the Pacific. We keep cancer medicines in Port Vila, import
+them when needed, and source harder-to-find medicines for individual patients. We also supply medicines
+for diabetes, high blood pressure, heart disease and kidney care.
+Link: More about us 
+
+Why Getmeds
+
+D ES IG N INS T RUCT IO N
+
+    Soft Mint background. Four cards in a row (2×2 on tablet, 1 column on mobile).
+    Each card: blue line icon (pill bottle, shield-check, hand-coin, calendar), H3, one sentence.
+    These four cards visually repeat the brand story: Available  Checked  Affordable  Ongoing.
+
+WEBS IT E CO P Y
+
+Why Getmeds Vanuatu
+
+Card        Text
+
+Available   Many cancer medicines are kept in stock in Port Vila. Others can be imported or sourced for
+            you.
+
+Checked     A pharmacist checks every prescription before we supply anything.
+
+More        We work to make medicines more affordable to access, so fewer patients have to travel
+affordable  overseas for them.
+
+Ongoing     We plan your next treatment cycle with you, so your medicine is ready when you need it.
+
+Getmeds Vanuatu -- Website Content & Design Guide                                                           7 / 90
+Oncology feature
+
+      D ES IG N INS T RUCT IO N
+
+          The most important feature block on the page. White background, split layout: text left, image right.
+          Image: calm photo of a medicine pack being prepared on a clean pharmacy bench, or the Patient Guide
+          imagery (Pacific woman with head scarf, smiling).
+          Use a small Care Pink accent line above the label. The three supply routes appear as three small pill-shaped
+          tags (In stock / For import / Sourced on request).
+          Button: primary green.
+
+ WEBS IT E CO P Y
+
+Label: Oncology and chemotherapy
+
+Cancer and chemotherapy medicines
+
+Cancer treatment often needs medicine in cycles, over many months. If one cycle is missed or late,
+treatment can be interrupted.
+Getmeds Vanuatu supplies cancer medicines against a doctor's prescription or treatment protocol. We
+supply medicines in three ways:
+
+     In stock -- ready in Port Vila
+     For import -- ordered for you from our suppliers
+     Sourced on request -- found for you when a medicine is hard to get
+Injectable chemotherapy is given at a hospital. We work with your treating team so the medicine is ready
+for your session.
+Button: Learn about cancer medicines
+
+Named Patient Supply
+
+      D ES IG N INS T RUCT IO N
+
+          Sky Tint background. Two columns: left, a simple 3-icon diagram (Doctor's prescription  Getmeds sources
+          and imports  Medicine for one named patient). Right, the copy.
+          Mobile: diagram becomes a vertical 3-step strip above the text.
+
+ WEBS IT E CO P Y
+
+Named Patient Supply
+
+Sometimes a doctor prescribes a medicine that is not normally available in Vanuatu. Named Patient Supply
+is a way to get that medicine for one named patient, based on their prescription.
+Getmeds helps the doctor and patient with the request, the paperwork and the import. Not every medicine
+can be supplied this way, and we will tell you clearly what is possible.
+Link: How Named Patient Supply works 
+
+Getmeds Vanuatu -- Website Content & Design Guide  8 / 90
+Medicine categories
+
+D ES IG N INS T RUCT IO N
+
+    White background. Grid of 8 category tiles (4×2 desktop, 2 columns mobile).
+    Each tile: icon, category name, one line, arrow. The whole tile is clickable and links to the matching anchor on
+    the Medicines page.
+    Oncology tile is first and slightly highlighted (Care Pink top border).
+
+WEBS IT E CO P Y            Line
+                            Chemotherapy, hormone therapy and other cancer medicines
+What we supply              Medicines for blood cancers and blood conditions
+                            Medicines used alongside cancer treatment, such as anti-sickness medicine
+  Tile                      Medicines and supplies for people living with diabetes
+  Cancer medicines          Medicines for high blood pressure, cholesterol and heart disease
+  Blood disorders           Medicines used in kidney care and dialysis
+  Supportive care           Medicines used to treat bacterial infections
+  Diabetes                  Single-use consumables, devices and equipment
+  Heart and blood pressure
+  Kidney and dialysis
+  Antibiotics
+  Medical supplies
+
+Button: See all medicine groups
+
+Pacific access
+
+D ES IG N INS T RUCT IO N
+
+    Navy background section with white text.
+    Right side: simple stylised map of the South Pacific, Vanuatu marked with a green pin and soft dotted lines to
+    Solomon Islands, Fiji, Samoa, Tonga, Tuvalu and Nauru. Do not draw shipping routes or delivery claims; lines
+    are decorative.
+    Mobile: map goes above the text at reduced height.
+
+WEBS IT E CO P Y
+
+Across the Pacific
+
+Access to important medicines should not depend on where you live. From Port Vila, Getmeds is working
+to make medicines easier to reach across the Pacific Islands.
+If you are a patient, doctor or hospital outside Vanuatu, contact us and we will tell you what we can do.
+Link: Pacific access 
+
+Getmeds Vanuatu -- Website Content & Design Guide                                                                     9 / 90
+Affordability and access
+
+      D ES IG N INS T RUCT IO N
+
+          Soft Mint background. Left: large pull-quote style statement. Right: short text and button.
+          Do not show prices or percentages. No "cheapest" or "lowest price" wording anywhere.
+
+ WEBS IT E CO P Y
+
+More affordable access
+
+In Vanuatu, cancer and dialysis medicines are usually paid for by the patient. Travelling overseas for
+treatment can cost millions of vatu.
+Getmeds works to lower these barriers. We give you a clear price before you commit to anything.
+Button: How we keep access affordable
+
+How it works
+
+      D ES IG N INS T RUCT IO N
+
+          White background. Five-step component (numbered green circles joined by a dotted line), horizontal on
+          desktop, vertical on mobile.
+          Each step: bold title, one short sentence. Primary button centred below.
+
+ WEBS IT E CO P Y
+
+How it works
+
+ 1. Contact us. Call, message or use the online form.
+ 2. Send the prescription. Share your doctor's prescription or treatment protocol.
+ 3. A pharmacist checks it. We confirm the medicine, availability and price.
+ 4. Confirm and plan. You agree to the price. We give you a pick-up date and plan your next cycle.
+ 5. Collect your medicine. Pick up on the agreed date. Injectables go to your hospital for your session.
+Button: Request a Medicine
+
+Who we serve
+
+      D ES IG N INS T RUCT IO N
+
+          Sky Tint background. Five small icon cards in one row on desktop (scrollable row of cards on mobile, with
+          visible edge of the next card).
+
+ WEBS IT E CO P Y
+
+Who we serve
+
+     Patients and families -- help getting the medicine your doctor prescribed
+     Doctors and oncologists -- a local source for cancer and specialist medicines
+     Hospitals and clinics -- supply for wards, clinics and treatment units
+     Pharmacies -- access to medicines you do not normally stock
+     Overseas treatment agencies -- medicine continuity for patients who return home
+
+Getmeds Vanuatu -- Website Content & Design Guide  10 / 90
+For healthcare professionals / For patients (split block)
+
+      D ES IG N INS T RUCT IO N
+
+          Two equal cards side by side (stacked on mobile). Left card navy with white text (professionals). Right card
+          white with Care Pink accent (patients).
+          Each card has its own button. This routes visitors to the right page quickly.
+
+ WEBS IT E CO P Y
+
+Left card -- For doctors, hospitals and pharmacies
+Send us a prescription, a treatment protocol or a product list. We will reply with availability and a quotation.
+Let us quote for your requirement.
+Button: Healthcare Professional Enquiry
+Right card -- For patients and families
+You do not need to know medical words to ask us for help. Send us your prescription and tell us how to
+reach you. A pharmacist will explain the next steps.
+Button: Patient Enquiry
+
+Trust and safety
+
+      D ES IG N INS T RUCT IO N
+
+          White background. Four short statements in a 2×2 grid with shield, clipboard, thermometer and pharmacist
+          icons.
+          Keep this factual. No badges or logos of organisations.
+
+ WEBS IT E CO P Y
+
+How we keep medicines saf e
+
+     Prescription first. Every prescription medicine needs a valid prescription.
+     Pharmacist-checked. A pharmacist checks every order.
+     Only what was prescribed. We supply exactly what your doctor prescribed.
+     Stored correctly. Medicines that need cold storage are kept between 2 and 8 °C, monitored and
+     logged.
+
+Final CTA
+
+      D ES IG N INS T RUCT IO N
+
+          Full-width brand gradient band, centred text, two buttons (green primary, white outline secondary).
+          Keep to one heading and one sentence.
+
+ WEBS IT E CO P Y
+
+Need a medicine? Start with your prescription.
+
+Send it to us and a pharmacist will reply with what we can supply and the price.
+Buttons: Request a Medicine · Call +678 528 2543
+
+Getmeds Vanuatu -- Website Content & Design Guide  11 / 90
+Footer
+
+      D ES IG N INS T RUCT IO N
+
+     Uses the Global Footer (see the Footer and Global Elements page).
+
+ WEBS IT E CO P Y
+
+See the Global Footer page.
+
+Getmeds Vanuatu -- Website Content & Design Guide                       12 / 90
+PAGE 02
+
+About Getmeds Vanuatu
+
+URL: /about
+
+SEO                    About Getmeds Vanuatu -- Medicine Access for Vanuatu and the Pacific
+SEO title
+Meta description       Getmeds Vanuatu is a Port Vila pharmacy focused on cancer medicines. Learn
+                       why we started and how we help patients across the Pacific get the medicines
+H1                     they need.
+Suggested H2 sections
+                       About Getmeds Vanuatu
+Primary keyword
+Secondary keywords     Why we started · What we do · Our focus on cancer care · Medicines for one
+URL slug               named patient · Our place in the Pacific · Part of the Getmeds group · Our team ·
+                       What we want to achieve
+
+                       Getmeds Vanuatu
+
+                       specialist medicines Vanuatu, medicine access Pacific, chemotherapy
+                       pharmacy Pacific
+
+                       /about
+
+P AG E D ES IG N D IRECT IO N
+
+A story page. Use a narrow reading column (max 720px) with generous white space, broken up by
+full-width photo bands. The tone is human and calm. Readers should finish the page knowing why
+Getmeds exists and trusting the people behind it.
+
+Hero
+
+      D ES IG N INS T RUCT IO N
+
+          Short hero (50% screen height) with a wide photo of Port Vila harbour or the Golden Port building, navy
+          overlay at 40%, white H1 and intro.
+          Breadcrumb above H1: Home > About.
+
+ WEBS IT E CO P Y
+
+About Getmeds Vanuatu
+
+Getmeds Vanuatu is a pharmacy in Port Vila. Our main work is making cancer medicines available in
+Vanuatu and the Pacific. We also supply other important medicines and medical supplies.
+
+Getmeds Vanuatu -- Website Content & Design Guide                                                                  13 / 90
+Why we started
+
+      D ES IG N INS T RUCT IO N
+
+          White background, single column text.
+          Add a simple 3-part visual timeline beside the text on desktop: "Diagnosis"  "Treatment overseas"  "Home,
+          but no medicine". Grey for the problem stages.
+
+ WEBS IT E CO P Y
+
+Why we started
+
+Cancer is a major health problem in Vanuatu. But for a long time, many cancer medicines were not
+available here.
+Many patients were referred overseas for treatment. This can cost a family millions of vatu. When patients
+came home, some could not continue treatment because the medicine was not available locally. Others
+had to wait for someone to bring it from overseas.
+When a treatment cycle is missed, treatment can fail. Getmeds Vanuatu was started so that patients can
+get their medicine here, on time.
+
+What we do
+
+      D ES IG N INS T RUCT IO N
+
+          Soft Mint background. Two-column checklist with green check icons (one column on mobile).
+
+ WEBS IT E CO P Y
+
+What we do
+
+     We supply cancer medicines against a doctor's prescription or treatment protocol.
+     We keep medicines in stock in Port Vila.
+     We import medicines that are not in stock.
+     We source hard-to-find medicines for individual patients.
+     We supply essential medicines, including antibiotics and medicines for diabetes, blood pressure,
+     cholesterol, heart disease and kidney care.
+     We supply medical consumables, devices, equipment and laboratory supplies.
+     We offer simple blood pressure and blood sugar checks at our pharmacy.
+
+Our focus on cancer care
+
+      D ES IG N INS T RUCT IO N
+
+          White background. Split: text left, photo right (pharmacist reviewing a prescription).
+          Put the second paragraph in a Safety box style (pale amber) so the "we do not diagnose" message stands out.
+
+ WEBS IT E CO P Y
+
+Our focus on cancer care
+
+Getmeds Vanuatu is the first chemotherapy pharmacy in the Pacific. Cancer medicines are our main
+specialisation.
+
+Getmeds Vanuatu -- Website Content & Design Guide  14 / 90
+     We do not diagnose or treat cancer. That is the work of your doctor. Our job is to make sure the
+     medicine your doctor prescribed is available, checked by a pharmacist and ready when you need it.
+
+Named Patient Supply
+
+      D ES IG N INS T RUCT IO N
+
+          Sky Tint background, short text block with a text link. Keep to one paragraph.
+
+ WEBS IT E CO P Y
+
+Medicines for one named patient
+
+Some medicines are not normally available in Vanuatu. Through Named Patient Supply, we help arrange a
+medicine for one named patient, based on their doctor's prescription. We handle the sourcing and
+paperwork and keep the patient and doctor informed.
+Link: How Named Patient Supply works 
+
+Our place in the Pacific
+
+      D ES IG N INS T RUCT IO N
+
+          Navy background, white text, small map illustration (same style as Home).
+          Country names shown as small white outline tags.
+
+ WEBS IT E CO P Y
+
+Our place in the Pacific
+
+Many Pacific Islands face the same problems: medicines that run out, high import costs for one patient,
+and long delivery times. From our base in Port Vila, we are working to build better medicine access across
+the region.
+Tags: Solomon Islands · Fiji · Samoa · Tonga · Tuvalu · Nauru
+
+Part of the Getmeds group
+
+      D ES IG N INS T RUCT IO N
+
+          White background, short paragraph with small flag-free icons (globe). Keep brief.
+
+ WEBS IT E CO P Y
+
+Part of the wider Getmeds group
+
+Getmeds Vanuatu is part of the Getmeds group, which also operates in the Philippines and India. This
+connection helps us source a wide range of medicines for patients in the Pacific.
+
+Getmeds Vanuatu -- Website Content & Design Guide  15 / 90
+Our team
+
+      D ES IG N INS T RUCT IO N
+
+          Soft Mint background. Team photo (the Port Vila team in front of the pharmacy) full width with rounded
+          corners, caption below.
+          Individual profile cards can be added later: round photo, name, role.
+
+ WEBS IT E CO P Y
+
+Our team
+
+Our team is based in Port Vila and knows the local community. A pharmacist checks every prescription we
+receive, and our staff follow each patient's order from enquiry to pick-up.
+Photo caption: The Getmeds Vanuatu team at our pharmacy in Golden Port, Port Vila.
+
+What we want to achieve
+
+      D ES IG N INS T RUCT IO N
+
+          White background, large centred text (22px) as a mission statement. Three short lines, each on its own row
+          with a small green dot.
+
+ WEBS IT E CO P Y
+
+What we want to achieve
+
+     Specialist medicines that are easier to get, wherever someone lives in the Pacific.
+     Fewer patients missing a treatment cycle.
+     Patients and doctors who always know what is available and what it costs.
+
+CTA
+
+      D ES IG N INS T RUCT IO N
+
+          Brand gradient band, two buttons.
+
+ WEBS IT E CO P Y
+
+Talk to us
+
+Have a question about a medicine? Our team is here to help.
+Buttons: Request a Medicine · Contact Us
+
+Getmeds Vanuatu -- Website Content & Design Guide  16 / 90
+PAGE 03
+
+Oncology and Chemotherapy
+
+URL: /oncology
+
+SEO                    Chemotherapy and Cancer Medicines in Vanuatu -- Getmeds Vanuatu
+SEO title
+Meta description       Getmeds Vanuatu supplies chemotherapy and cancer medicines in Port Vila
+                       against a doctor's prescription. In stock, imported or sourced for each patient.
+H1
+Suggested H2 sections  Cancer and chemotherapy medicines in Vanuatu
+
+Primary keyword        Why local access matters · How we supply cancer medicines · Types of cancer
+Secondary keywords     medicine · Injectable chemotherapy · Planning each cycle · For doctors and
+URL slug               hospitals · For patients · Across the Pacific
+
+                       chemotherapy Vanuatu
+
+                       oncology medicines Vanuatu, chemotherapy pharmacy Pacific, cancer
+                       medicines Port Vila
+
+                       /oncology
+
+P AG E D ES IG N D IRECT IO N
+
+The flagship page. It speaks to two readers at once: worried patients and families, and busy doctors.
+Use a warm, calm look with Care Pink accents (small lines, icons, tags) on top of the normal
+navy/blue/green system. Include a sticky in-page menu on desktop (left side) with anchor links to
+each section. Never use images of needles, IV drips close-up or sick-looking people.
+
+Hero
+
+      D ES IG N INS T RUCT IO N
+
+          Brand gradient with a soft pink tint on the left edge. Left: text and buttons. Right: warm portrait photo of a
+          Pacific woman in a head scarf smiling (Patient Guide style).
+          Small pill tag above H1: "First chemotherapy pharmacy in the Pacific" (white outline).
+
+ WEBS IT E CO P Y
+
+Tag: First chemotherapy pharmacy in the Pacific
+
+Cancer and chemotherapy medicines in Vanuatu
+
+Getmeds Vanuatu is the first chemotherapy pharmacy in the Pacific. We supply cancer medicines in Port
+Vila, so patients can continue their treatment closer to home.
+Buttons: Request a Cancer Medicine · Healthcare Professional Enquiry
+
+Getmeds Vanuatu -- Website Content & Design Guide  17 / 90
+Why local access matters
+
+D ES IG N INS T RUCT IO N
+
+    White background. Text left; right side shows a simple circular "treatment cycle" diagram (Cycle 1  2  3 
+    4) with one step greyed out labelled "missed cycle" to show the risk visually.
+
+WEBS IT E CO P Y
+
+Why local access matters
+
+Cancer treatment is often given in cycles. Each cycle needs the right medicine at the right time.
+In the past, many patients in Vanuatu travelled overseas for treatment. When they came home, the
+medicine for their next cycle was often not available. Some waited for a traveller to bring it. Some missed
+cycles.
+Having cancer medicines in Vanuatu helps patients stay on the schedule their doctor planned.
+
+How we supply cancer medicines
+
+D ES IG N INS T RUCT IO N
+
+    Soft Mint background. Four cards in a row (2×2 on tablet, stacked on mobile), each with an icon: shelf (In
+    stock), plane (For import), search (Sourced on request), person-tag (Named Patient Supply).
+
+WEBS IT E CO P Y
+
+How we supply cancer medicines
+
+Route               What it means
+
+In stock            The medicine is kept at our pharmacy in Port Vila.
+
+For import          We order the medicine for you from our suppliers.
+
+Sourced on request  We search for a medicine that is hard to find or often out of stock.
+
+Named Patient       We help arrange a medicine that is not normally available in Vanuatu, for one named
+Supply              patient.
+
+Our pharmacist will tell you which route applies to your medicine and how long it may take.
+
+Types of cancer medicine
+
+D ES IG N INS T RUCT IO N
+
+    White background. List as 6 compact cards in a 3×2 grid, each with a small icon and one-line description. Add
+    a Info box below: "We do not list every medicine online."
+
+WEBS IT E CO P Y
+
+Types of cancer medicine we handle
+
+We supply cancer medicines from first-line treatments through to more advanced medicines. They
+include:
+
+    Chemotherapy -- given as an injection or drip in hospital, or as tablets at home
+
+Getmeds Vanuatu -- Website Content & Design Guide                                                               18 / 90
+     Hormone therapy -- medicines used for cancers that respond to hormones
+     Targeted and biological medicines -- newer medicines aimed at specific features of a cancer
+     Medicines for blood cancers -- used in cancers such as leukaemia, lymphoma and myeloma
+     Supportive care medicines -- medicines used alongside treatment, such as anti-sickness medicine
+     Single-use medical consumables used during cancer treatment
+Info box: We do not list every medicine on this website because stock changes. Please contact us to
+check a specific medicine.
+
+Injectable chemotherapy
+
+      D ES IG N INS T RUCT IO N
+
+          Sky Tint background. Text with two hospital name tags (building icon) for Vila Central Hospital and Vanuatu
+          Private Hospital.
+
+ WEBS IT E CO P Y
+
+Injectable chemotherapy
+
+Some chemotherapy is given by injection or drip. These medicines must be given by trained staff in a
+hospital.
+If your medicine is an injectable, we prepare the supply for your session. Your chemotherapy session
+takes place at Vila Central Hospital or Vanuatu Private Hospital, as arranged by your treating team.
+
+Planning each cycle
+
+      D ES IG N INS T RUCT IO N
+
+          White background. Horizontal calendar-style illustration showing pick-up dates across cycles, with a green
+          check on each. Four bullet points beside it with calendar, pharmacist, refresh and message icons.
+
+ WEBS IT E CO P Y
+
+Planning each treatment cycle
+
+We do not just supply one order. We help you plan ahead.
+     We give you a pick-up date for each cycle.
+     A pharmacist explains how to handle your medicine.
+     We plan your next cycle with you, so your medicine is ready on time.
+     If your doctor changes your treatment, tell us and we will update your supply.
+
+For doctors, oncologists and hospitals
+
+      D ES IG N INS T RUCT IO N
+
+          Navy card (full width, rounded) with white text and a green button. Visually separate from patient content.
+
+ WEBS IT E CO P Y
+
+For doctors, oncologists and hospitals
+
+Send us the prescription or treatment protocol. Our pharmacist will confirm availability, supply route and
+price. We support single patients and ongoing supply to wards and clinics.
+
+Getmeds Vanuatu -- Website Content & Design Guide  19 / 90
+Button: Healthcare Professional Enquiry
+
+For patients and families
+
+      D ES IG N INS T RUCT IO N
+
+          White card with Care Pink left border. Friendly, simple. Button in green.
+
+ WEBS IT E CO P Y
+
+For patients and families
+
+You need a prescription or treatment protocol from your doctor. We can only supply the medicine your
+doctor prescribed. This keeps you safe.
+If you are not sure what to send, call us. We will help you.
+Button: Patient Enquiry
+
+Across the Pacific
+
+      D ES IG N INS T RUCT IO N
+
+          Soft Mint background, short text with small map icon.
+
+ WEBS IT E CO P Y
+
+Cancer medicine access across the Pacific
+
+Many Pacific Islands have the same gaps in cancer medicine supply. Getmeds is working to extend access
+from Vanuatu to other Pacific countries. Contact us to ask what is possible for your country.
+
+Important note
+
+      D ES IG N INS T RUCT IO N
+
+          Safety box (pale amber) full width, directly above the final CTA.
+
+ WEBS IT E CO P Y
+
+     Important: Getmeds Vanuatu supplies medicines. We do not diagnose cancer or choose treatment.
+     Always follow the advice of your doctor or oncologist. Do not change a medicine, dose or schedule
+     without speaking to them first.
+
+Final CTA
+
+      D ES IG N INS T RUCT IO N
+
+          Brand gradient band, two buttons.
+
+ WEBS IT E CO P Y
+
+Ask about a cancer medicine
+
+Send the prescription and we will check what we can supply.
+
+Getmeds Vanuatu -- Website Content & Design Guide  20 / 90
+Buttons: Request a Cancer Medicine · Call Us
+
+Getmeds Vanuatu -- Website Content & Design Guide  21 / 90
+PAGE 04
+
+Medicines
+
+URL: /medicines
+
+SEO                    Medicines We Supply -- Getmeds Vanuatu
+SEO title
+Meta description       Cancer medicines, essential medicines and medical supplies from Getmeds
+                       Vanuatu in Port Vila. Prescription required. Contact us to check availability.
+H1
+Suggested H2 sections  Medicines we supply
+
+Primary keyword        How to check availability · Medicine groups · Medical supplies and devices ·
+Secondary keywords     Can't see your medicine?
+
+URL slug               medicines Vanuatu
+
+                       specialist medicines Vanuatu, oncology medicines Vanuatu, medicines Pacific
+                       Islands
+
+                       /medicines
+
+P AG E D ES IG N D IRECT IO N
+
+A reference page people will scan. Put a sticky filter bar under the hero with category chips (Cancer ·
+Blood · Supportive care · Diabetes · Heart · Kidney · Antibiotics · More). Clicking a chip scrolls to that
+group. Each category is an expandable card: closed state shows name + one-line summary; open
+state shows the four details and the CTA. On mobile, all cards start closed. Do not show product
+photos or prices.
+
+Hero and intro
+
+      D ES IG N INS T RUCT IO N
+
+          Short hero (40% height), Sky Tint background, H1 left and a small illustration of medicine boxes on a shelf on
+          the right.
+          Bold prescription line in a Safety box directly under the intro.
+
+ WEBS IT E CO P Y
+
+Medicines we supply
+
+Getmeds Vanuatu supplies medicines across several medical areas. Cancer medicines are our main focus.
+We also supply essential medicines and medical supplies.
+We list medicine groups, not every product. Stock changes, and we do not want to promise a medicine we
+cannot supply. Send us the prescription and a pharmacist will check it for you.
+
+     Prescription medicines need a valid prescription. Availability may vary.
+
+Getmeds Vanuatu -- Website Content & Design Guide  22 / 90
+How to check availability
+
+      D ES IG N INS T RUCT IO N
+
+          Three-step horizontal strip (small version of the step component) on white.
+
+ WEBS IT E CO P Y
+
+How to check if we can supply your medicine
+
+ 1. Send us the medicine name and the prescription.
+ 2. Our pharmacist checks availability, supply route and price.
+ 3. We reply with the next steps.
+Button: Request a Medicine
+
+Medicine groups
+
+      D ES IG N INS T RUCT IO N
+
+          Soft Mint background. One expandable card per group in the order below. Oncology first with a Care Pink top
+          border; others with a blue top border.
+          Each card has an icon, the anchor ID shown below, and its CTA button inside.
+
+ WEBS IT E CO P Y
+
+    Oncology (cancer medicines)
+
+     Anchor: /medicines#oncology
+
+    What it is: Medicines used to treat cancer, including chemotherapy.
+    What Getmeds provides: Cancer medicines in stock, for import, or sourced on request. This is our main
+    specialisation.
+    Who may need this: These medicines may be used as part of treatment for people with cancer, as prescribed
+    by their doctor or oncologist.
+    Access: Send us the medicine name and prescription. Our pharmacist will check availability and reply with the
+    next steps. Availability may vary.
+    CTA button: Enquire About Cancer Medicines
+
+    Haematology (blood disorders and blood cancers)
+
+     Anchor: /medicines#haematology
+
+    What it is: Medicines used for diseases of the blood and bone marrow, including some blood cancers.
+    What Getmeds provides: Supply and sourcing of haematology medicines, alongside our cancer medicines.
+    Who may need this: These medicines may be used as part of treatment for people with conditions such as
+    leukaemia, lymphoma, myeloma or other blood disorders.
+    Access: Send us the medicine name and prescription. Our pharmacist will check availability and reply with the
+    next steps. Availability may vary.
+    CTA button: Request Medicine Information
+
+Getmeds Vanuatu -- Website Content & Design Guide  23 / 90
+Anae mia
+
+Anchor: /medicines#anaemia
+
+What it is: Medicines used when the body does not have enough healthy red blood cells.
+What Getmeds provides: Supply and sourcing of anaemia medicines, including those used in kidney care and
+during cancer treatment.
+Who may need this: These medicines may be used as part of treatment for people with anaemia, including
+anaemia linked to kidney disease or chemotherapy.
+Access: Send us the medicine name and prescription. Our pharmacist will check availability and reply with the
+next steps. Availability may vary.
+CTA button: Request Medicine Information
+
+Supportive care in cancer treatment
+
+Anchor: /medicines#supportive-care
+
+What it is: Medicines that help with the side effects of cancer treatment, such as nausea, pain and mouth sores.
+What Getmeds provides: Supportive medicines, including anti-sickness medicine in tablet and injection form.
+Who may need this: People receiving chemotherapy or other cancer treatment, as prescribed by their treating
+team.
+Access: Send us the medicine name and prescription. Our pharmacist will check availability and reply with the
+next steps. Availability may vary.
+CTA button: Request Medicine Information
+
+Hormonal therapy
+
+Anchor: /medicines#hormonal-therapy
+
+What it is: Medicines that change the level or effect of hormones in the body. Some are used in cancer
+treatment.
+What Getmeds provides: Supply and sourcing of hormonal therapies, including long-course medicines that
+need steady supply.
+Who may need this: These medicines may be used as part of treatment for some breast and prostate cancers,
+and for thyroid and other hormone conditions.
+Access: Send us the medicine name and prescription. Our pharmacist will check availability and reply with the
+next steps. Availability may vary.
+CTA button: Request Medicine Information
+
+D iabe t e s
+
+Anchor: /medicines#diabetes
+
+What it is: Medicines and supplies used to manage blood sugar.
+What Getmeds provides: Diabetes medicines, and devices and supplies for diabetes care. Simple blood sugar
+checks at our pharmacy.
+Who may need this: These medicines may be used as part of treatment for people living with type 1 or type 2
+diabetes.
+Access: Send us the medicine name and prescription. Our pharmacist will check availability and reply with the
+next steps. Availability may vary.
+CTA button: Enquire About Medicines
+
+Getmeds Vanuatu -- Website Content & Design Guide  24 / 90
+Cardiology (heart, blood pressure and cholesterol)
+
+Anchor: /medicines#cardiology
+
+What it is: Medicines for the heart and blood vessels.
+What Getmeds provides: Medicines for high blood pressure, high cholesterol and heart disease. Blood
+pressure devices and supplies. Simple blood pressure checks at our pharmacy.
+Who may need this: These medicines may be used as part of treatment for people with high blood pressure,
+high cholesterol or heart disease.
+Access: Send us the medicine name and prescription. Our pharmacist will check availability and reply with the
+next steps. Availability may vary.
+CTA button: Enquire About Medicines
+
+Renal (kidney care and dialysis)
+
+Anchor: /medicines#renal
+
+What it is: Medicines used in kidney care, including for people on dialysis.
+What Getmeds provides: Dialysis medicines and other kidney-care medicines, sourced and supplied on
+prescription.
+Who may need this: These medicines may be used as part of treatment for people with kidney disease or on
+dialysis.
+Access: Send us the medicine name and prescription. Our pharmacist will check availability and reply with the
+next steps. Availability may vary.
+CTA button: Enquire About Medicines
+
+Bone health
+
+Anchor: /medicines#bone-health
+
+What it is: Medicines that help protect bone strength. Some are used for people with cancer that affects the
+bones.
+What Getmeds provides: Supply and sourcing of bone health medicines.
+Who may need this: These medicines may be used as part of treatment for people with weak bones or bone
+problems linked to cancer.
+Access: Send us the medicine name and prescription. Our pharmacist will check availability and reply with the
+next steps. Availability may vary.
+CTA button: Request Medicine Information
+
+Ant ibio t ics
+
+Anchor: /medicines#antibiotics
+
+What it is: Medicines that treat infections caused by bacteria.
+What Getmeds provides: Antibiotics, including broad-spectrum hospital antibiotics.
+Who may need this: These medicines may be used to treat bacterial infections when prescribed by a doctor.
+Antibiotics do not treat colds or flu.
+Access: Send us the medicine name and prescription. Our pharmacist will check availability and reply with the
+next steps. Availability may vary.
+CTA button: Enquire About Medicines
+
+Getmeds Vanuatu -- Website Content & Design Guide  25 / 90
+Pain management
+
+Anchor: /medicines#pain-management
+
+What it is: Medicines that help control pain, from everyday pain relief to stronger medicines.
+What Getmeds provides: Supply and sourcing of pain medicines. Some pain medicines have extra
+prescription rules, which we follow.
+Who may need this: People with pain, including pain linked to cancer or surgery, as prescribed by their doctor.
+Access: Send us the medicine name and prescription. Our pharmacist will check availability and reply with the
+next steps. Availability may vary.
+CTA button: Request Medicine Information
+
+Anti-inf lammatory
+
+Anchor: /medicines#anti-inflammatory
+
+What it is: Medicines that reduce swelling and inflammation.
+What Getmeds provides: Supply and sourcing of anti-inflammatory medicines.
+Who may need this: These medicines may be used as part of treatment for conditions such as arthritis and
+gout.
+Access: Send us the medicine name and prescription. Our pharmacist will check availability and reply with the
+next steps. Availability may vary.
+CTA button: Request Medicine Information
+
+Allergy and respiratory
+
+Anchor: /medicines#allergy-respiratory
+
+What it is: Medicines and devices used to manage allergies and breathing conditions such as asthma.
+What Getmeds provides: Allergy medicines, and devices and supplies for asthma care.
+Who may need this: People with allergies or asthma, as advised by their doctor or pharmacist.
+Access: Send us the medicine name and prescription. Our pharmacist will check availability and reply with the
+next steps. Availability may vary.
+CTA button: Request Medicine Information
+
+Radiology and contrast media
+
+Anchor: /medicines#radiology-contrast-media
+
+What it is: Products used by hospitals and clinics during some scans and X-rays to help pictures show more
+clearly.
+What Getmeds provides: Sourcing of contrast media for hospitals, clinics and imaging services.
+Who may need this: Hospitals, clinics and imaging services. These products are used by trained staff only.
+Access: Send us the medicine name and prescription. Our pharmacist will check availability and reply with the
+next steps. Availability may vary.
+CTA button: Healthcare Professional Enquiry
+
+Getmeds Vanuatu -- Website Content & Design Guide  26 / 90
+    Everyday and over-the-counter medicines
+
+     Anchor: /medicines#everyday-medicines
+
+    What it is: Common medicines for the home, including some that do not need a prescription.
+    What Getmeds provides: Essential and over-the-counter medicines, including medicines for infants and
+    children.
+    Who may need this: Families and individuals. Ask our pharmacist if you are not sure a medicine is right for you.
+    Access: Send us the medicine name and prescription. Our pharmacist will check availability and reply with the
+    next steps. Availability may vary.
+    CTA button: Talk to Our Team
+
+Medical supplies, devices and equipment
+
+      D ES IG N INS T RUCT IO N
+
+          White background. Split layout with a photo of neatly arranged single-use consumables (gloves, syringes in
+          packs, test strips). Button: secondary navy.
+
+ WEBS IT E CO P Y
+
+Medical supplies, devices and equipment
+
+We supply single-use medical consumables, medical devices, medical equipment and laboratory supplies.
+This includes supplies used in cancer treatment, and devices for asthma, diabetes and blood pressure
+care.
+Button: Request a Quotation
+
+Can't see your medicine?
+
+      D ES IG N INS T RUCT IO N
+
+          Brand gradient band with two buttons.
+
+ WEBS IT E CO P Y
+
+Can't see your medicine?
+
+We can source many products that are not listed here. Some items may take longer or cost more because
+of freight or import paperwork. We will tell you before you commit.
+Buttons: Request a Medicine · Talk to Our Team
+
+Getmeds Vanuatu -- Website Content & Design Guide  27 / 90
+PAGE 05
+
+Named Patient Supply
+
+URL: /named-patient-supply
+
+SEO                    Named Patient Supply in Vanuatu -- Getmeds Vanuatu
+SEO title
+Meta description       Named Patient Supply helps a patient get a prescribed medicine that is not
+                       normally available in Vanuatu. Learn how it works and how Getmeds can help.
+H1
+Suggested H2 sections  Named Patient Supply
+
+Primary keyword        What it means · Why it exists · When it may be used · The prescription comes
+Secondary keywords     first · What we need · How it works · How Getmeds helps · What to expect
+
+URL slug               Named Patient Supply
+
+                       specialist medicines Vanuatu, medicine access Pacific, special order medicines
+                       Vanuatu
+
+                       /named-patient-supply
+
+P AG E D ES IG N D IRECT IO N
+
+This page explains a new idea to people who have never heard of it. Make it feel simple: lots of white
+space, one idea per section, a clear diagram, and plain icons. Add a small "In simple words" summary
+box right under the hero so readers get the whole idea in 10 seconds.
+
+Hero
+
+      D ES IG N INS T RUCT IO N
+
+          Sky Tint background. H1, one-line intro, two buttons. Right side: simple illustration of a prescription with a
+          name tag attached to a medicine box.
+
+ WEBS IT E CO P Y
+
+Named Patient Supply
+
+Getting a medicine that is not normally available in Vanuatu, for one named patient.
+Buttons: Make a Named Patient Supply Enquiry · Call Us
+
+In simple words
+
+      D ES IG N INS T RUCT IO N
+
+          Green-bordered summary box, larger text (20px), centred, max width 680px.
+
+ WEBS IT E CO P Y
+
+Getmeds Vanuatu -- Website Content & Design Guide                                                                         28 / 90
+In simple words: If your doctor prescribes a medicine that Vanuatu does not normally have, Getmeds can
+try to bring it in just for you. We need your prescription. We tell you the price and time before you pay.
+
+What it means
+
+      D ES IG N INS T RUCT IO N
+
+          White background, single column.
+
+ WEBS IT E CO P Y
+
+What does Named Patient Supply mean?
+
+Some medicines are not usually sold or stocked in Vanuatu. A doctor may still decide a patient needs one
+of them.
+Named Patient Supply means the medicine is ordered for one patient, by name, based on their doctor's
+prescription. It is not ordered for general sale.
+
+Why it exists
+
+      D ES IG N INS T RUCT IO N
+
+          Soft Mint background, single column with a small island icon.
+
+ WEBS IT E CO P Y
+
+Why does it exist?
+
+Vanuatu is a small market. Many specialist medicines, including many cancer medicines, are not kept in
+stock. Named Patient Supply gives patients a way to get the medicine their doctor prescribed, even when
+it is not normally available here.
+
+When it may be used
+
+      D ES IG N INS T RUCT IO N
+
+          White background. Four bullet cards (2×2). Below them, an Info box with the "not every medicine" note.
+
+ WEBS IT E CO P Y
+
+When may it be used?
+
+     When a medicine is not available in Vanuatu.
+     When a medicine is often out of stock.
+     When a patient returns from treatment overseas and needs to continue a medicine at home.
+     When a doctor prescribes a specialist medicine for a serious condition.
+Info box: Not every medicine can be supplied this way. Some medicines cannot be exported by the maker,
+or need papers that are not available. We will tell you honestly what is possible.
+
+Getmeds Vanuatu -- Website Content & Design Guide  29 / 90
+The prescription comes first
+
+      D ES IG N INS T RUCT IO N
+
+          Safety box (pale amber) with clipboard icon.
+
+ WEBS IT E CO P Y
+
+The prescription comes first
+
+     Every Named Patient Supply request needs a valid prescription or treatment protocol from the
+     patient's doctor. For your safety, we only supply the medicine your doctor prescribed.
+
+What we need
+
+      D ES IG N INS T RUCT IO N
+
+          White background. Checklist with document icons. Put the reassurance line in bold below the list.
+
+ WEBS IT E CO P Y
+
+What information do we need?
+
+     The patient's full name and contact details
+     The doctor's prescription or treatment protocol
+     The medicine name, strength and amount
+     The doctor's or hospital's name and contact details
+     The date the medicine is needed (for example, the next treatment cycle)
+     Any medical papers needed for the import approval
+If you do not have everything, contact us anyway. We will tell you what is missing.
+
+How it works
+
+      D ES IG N INS T RUCT IO N
+
+          Soft Mint background. Six-step component, horizontal on desktop (two rows of three), vertical on mobile.
+
+ WEBS IT E CO P Y
+
+How it works
+
+ 1. Enquiry. The patient, doctor or hospital contacts Getmeds.
+ 2. Prescription check. Our pharmacist reviews the prescription or protocol.
+ 3. Sourcing. We find a supplier and check the paperwork needed.
+ 4. Quotation. We tell you the price and expected timing before you commit.
+ 5. Approval and import. We arrange the import approval and order the medicine.
+ 6. Supply. The medicine is dispensed to the patient, or prepared for the hospital for injectable treatment.
+
+Getmeds Vanuatu -- Website Content & Design Guide  30 / 90
+How Getmeds helps
+
+      D ES IG N INS T RUCT IO N
+
+          White background, four icon cards in a row.
+
+ WEBS IT E CO P Y
+
+How Getmeds helps
+
+     We work with the doctor to confirm what is needed.
+     We handle sourcing and import paperwork.
+     We keep the patient and doctor updated.
+     We plan ahead for the next treatment cycle.
+
+What to expect
+
+      D ES IG N INS T RUCT IO N
+
+          Sky Tint background, checklist with green ticks.
+
+ WEBS IT E CO P Y
+
+What patients can expect
+
+     A clear answer about whether we can source the medicine.
+     A price before you pay anything.
+     An estimated time. This can be longer than for medicines we keep in stock.
+     A pharmacist to explain how to take or handle your medicine.
+
+CTA
+
+      D ES IG N INS T RUCT IO N
+
+          Brand gradient band, two buttons.
+
+ WEBS IT E CO P Y
+
+Ask about Named Patient Supply
+
+Send us the prescription and we will check what is possible.
+Buttons: Make a Named Patient Supply Enquiry · Contact Us
+
+Getmeds Vanuatu -- Website Content & Design Guide                                31 / 90
+PAGE 06
+
+How It Works / Request a Medicine
+
+URL: /how-it-works
+
+SEO                    How to Request a Medicine -- Getmeds Vanuatu
+SEO title
+Meta description       Request a medicine from Getmeds Vanuatu in five simple steps. Send your
+                       prescription, a pharmacist checks it, and you get a clear price before you
+H1                     commit.
+Suggested H2 sections
+                       How to request a medicine
+Primary keyword
+Secondary keywords     Five steps · What to send · After your first order · For hospitals and clinics · Start
+URL slug               your request
+
+                       order medicines Vanuatu
+
+                       Getmeds Vanuatu, chemotherapy Vanuatu, medicine access Pacific
+
+                       /how-it-works
+
+P AG E D ES IG N D IRECT IO N
+
+A practical page. The five steps are the whole page: make each step a large numbered block with an
+icon, the title, short text and (where useful) a checklist. Use a vertical timeline layout on all screen
+sizes with a green line joining the numbers. Place a sticky "Request a Medicine" button on the right
+side on desktop.
+
+Hero
+
+      D ES IG N INS T RUCT IO N
+
+          White background, H1 and one-line intro, small trust strip (Pharmacist-checked · Price before you pay ·
+          Prescription required).
+
+ WEBS IT E CO P Y
+
+How to request a medicine
+
+Five simple steps. A pharmacist checks every request. You see the price before you pay anything.
+
+Step 1 -- Contact Getmeds
+
+      D ES IG N INS T RUCT IO N
+
+          Numbered block "1" with phone/chat icon. Show the three contact options as small chips: Phone · Email /
+          online form · Visit us.
+
+Getmeds Vanuatu -- Website Content & Design Guide                                                                  32 / 90
+ WEBS IT E CO P Y
+
+Start your enquiry by phone, email, the online form, or in person at our pharmacy in Port Vila. Tell us your
+name, how to reach you and which medicine you need.
+
+Step 2 -- Provide the required information
+
+      D ES IG N INS T RUCT IO N
+
+          Numbered block "2" with clipboard icon. Checklist beneath, and a tip box: "A clear phone photo of the
+          prescription is fine."
+
+ WEBS IT E CO P Y
+
+Send us the doctor's prescription or treatment protocol. A clear photo is fine. Depending on the medicine,
+we may also ask for:
+
+     patient details
+     the doctor's or hospital's details
+     the date you need the medicine
+     other medical papers, if needed for import
+
+Step 3 -- Availability is checked
+
+      D ES IG N INS T RUCT IO N
+
+          Numbered block "3" with pharmacist icon.
+
+ WEBS IT E CO P Y
+
+Our pharmacist checks the prescription, whether the medicine is in stock, and the price. If the medicine
+needs to be imported or specially ordered, we tell you and give you the earliest date we can.
+
+Step 4 -- Supply arrangements
+
+      D ES IG N INS T RUCT IO N
+
+          Numbered block "4" with calendar icon. Bullets with small calendar/pharmacist/refresh icons.
+
+ WEBS IT E CO P Y
+
+If you agree to the price, you confirm your order and pay. We then:
+     give you a date to collect your medicine
+     book time for a pharmacist to explain your medicine
+     plan your next treatment cycle with you, where this applies
+
+Timing depends on the medicine and where it comes from. We will not promise a date we cannot keep.
+
+Step 5 -- Medicine access
+
+      D ES IG N INS T RUCT IO N
+
+          Numbered block "5" with medicine-bag icon. Injectable note in an Info box with a hospital icon.
+
+ WEBS IT E CO P Y
+
+Getmeds Vanuatu -- Website Content & Design Guide  33 / 90
+Collect your medicine on the agreed date in Port Vila, or ask us about delivery to your island. Every
+medicine is supplied through the proper prescription and regulatory process.
+Info box: If your medicine is an injectable, it is given at the hospital. It is used at Vila Central Hospital or
+Vanuatu Private Hospital for your chemotherapy session, as arranged with your treating team.
+
+After your first order
+
+      D ES IG N INS T RUCT IO N
+
+          Soft Mint band with a looping arrow icon.
+
+ WEBS IT E CO P Y
+
+After your first order
+
+For ongoing treatment, we keep in touch before each cycle. If your doctor changes your medicine or
+dose, send us the new prescription and we will update your supply.
+
+For hospitals, clinics and pharmacies
+
+      D ES IG N INS T RUCT IO N
+
+          Navy card, white text, secondary button.
+
+ WEBS IT E CO P Y
+
+For hospitals, clinics and pharmacies
+
+Send your requirement or product list. We reply with a quotation. After you confirm, we source, receive
+and supply the order, and keep a full record.
+Button: Request a Quotation
+
+Start your request
+
+      D ES IG N INS T RUCT IO N
+
+          Brand gradient band, two buttons.
+
+ WEBS IT E CO P Y
+
+Start your request
+
+Buttons: Request a Medicine · Call Us
+
+Getmeds Vanuatu -- Website Content & Design Guide  34 / 90
+PAGE 07
+
+Conditions (hub page)
+
+URL: /conditions
+
+SEO                    Conditions -- Medicine Access by Condition -- Getmeds Vanuatu
+SEO title
+Meta description       Find information about medicine access for cancer, blood disorders, diabetes,
+                       heart, kidney and other conditions. Getmeds Vanuatu helps you check
+H1                     availability.
+Suggested H2 sections
+                       Medicine access by condition
+Primary keyword
+Secondary keywords     Cancers · Blood cancers and blood disorders · Anaemia · Side effects of cancer
+URL slug               treatment · Hormone conditions · Diabetes · Heart and blood vessels · Kidney ·
+                       Bone health · Infections · Joints and inflammation · Breathing and allergy
+
+                       medicines Vanuatu
+
+                       cancer medicines Vanuatu, diabetes medicines Vanuatu, oncology medicines
+                       Vanuatu
+
+                       /conditions
+
+P AG E D ES IG N D IRECT IO N
+
+A directory page. Top: H1, intro and a large search box ("Search a condition, for example breast
+cancer") that filters the list live. Below: condition groups as headed columns of links (3 columns
+desktop, 1 column mobile with accordions per group). Cancer groups come first. Each link goes to its
+condition page.
+
+Hero and search
+
+      D ES IG N INS T RUCT IO N
+
+          Sky Tint background. H1, intro, search box (56px tall, magnifier icon, rounded). A­Z quick links under the
+          search on desktop.
+
+ WEBS IT E CO P Y
+
+Medicine access by condition
+
+Choose a condition to learn how Getmeds can help you access medicines. These pages give general
+information only. Your doctor decides which medicine is right for you.
+Search placeholder: Search a condition, for example "breast cancer"
+
+Getmeds Vanuatu -- Website Content & Design Guide                                                                     35 / 90
+Condition list
+
+      D ES IG N INS T RUCT IO N
+
+          White background. Group headings in Poppins 600 with an icon each. Links in Getmeds Blue with a small
+          arrow. Show the number of conditions in each group in grey.
+
+ WEBS IT E CO P Y
+
+Cancers: Breast cancer, Cervical cancer, Ovarian cancer, Uterine (womb) cancer, Prostate cancer,
+Colorectal (bowel) cancer, Stomach cancer, Liver cancer, Pancreatic cancer, Lung cancer, Head and neck
+cancer, Thyroid cancer, Bladder cancer, Kidney cancer, Skin cancer and melanoma, Bone and soft tissue
+sarcoma, Brain tumours, Childhood cancers
+Blood cancers and blood disorders: Hodgkin lymphoma, Non-Hodgkin lymphoma, Acute leukaemia,
+Chronic myeloid leukaemia (CML), Chronic lymphocytic leukaemia (CLL), Multiple myeloma,
+Polycythaemia vera and essential thrombocythaemia, Low white blood cells after chemotherapy
+(neutropenia), Blood clots (thrombosis)
+Anaemia: Iron deficiency anaemia, Anaemia in kidney disease, Anaemia during cancer treatment
+Side effects of cancer treatment: Nausea and vomiting from chemotherapy, Cancer pain, Mouth sores
+from treatment (mucositis)
+Hormone conditions: Underactive thyroid (hypothyroidism), Overactive thyroid (hyperthyroidism)
+Diabetes: Type 1 diabetes, Type 2 diabetes
+Heart and blood vessels: High blood pressure (hypertension), High cholesterol, Coronary heart disease,
+Heart failure
+Kidney: Chronic kidney disease, Dialysis care
+Bone health: Osteoporosis (weak bones), Cancer that has spread to the bone
+Infections: Bacterial infections, Serious hospital infections, Urinary tract infection (UTI), Pneumonia
+Joints and inflammation: Arthritis, Gout
+Breathing and allergy: Asthma, Allergies and hay fever
+
+Help block
+
+      D ES IG N INS T RUCT IO N
+
+          Soft Mint card with two buttons.
+
+ WEBS IT E CO P Y
+
+Can't find your condition?
+
+We supply medicines for many more conditions. Send us your prescription and we will check what we can
+supply.
+Buttons: Request a Medicine · Talk to Our Team
+
+Getmeds Vanuatu -- Website Content & Design Guide  36 / 90
+PAGE 08
+
+Condition pages (template and all 53
+pages)
+
+URL: /conditions/[condition-name]
+
+SEO                       [Condition] Medicines in Vanuatu -- Getmeds Vanuatu
+SEO title pattern         Information about access to medicines for [condition] in Vanuatu and the
+Meta description pattern  Pacific. Send your prescription to Getmeds Vanuatu to check availability.
+
+H1                        [Condition name]
+Suggested H2 sections     What is [condition]? · How it is usually treated · How Getmeds can help ·
+                          Related medicines · Named Patient Supply · Need a medicine for [condition]?
+Primary keyword
+Secondary keywords        [condition] medicines Vanuatu
+URL slug                  [condition] treatment Pacific, Getmeds Vanuatu, the related category keyword
+                          /conditions/[slug] (listed on each page below)
+
+P AG E D ES IG N D IRECT IO N
+
+All 53 condition pages use one template so they feel like one system. Layout: breadcrumb (Home >
+Conditions > [Condition])  short hero with H1 and one-line summary  main column (8/12) with the
+sections below  right sidebar (4/12, sticky on desktop) containing a "Need this medicine?" card with
+the two buttons and phone number. On mobile the sidebar card moves to the end of the page and a
+sticky bottom bar shows the buttons. Cancer and blood condition pages use a small Care Pink
+accent; others use Getmeds Blue. No photos of illness; use one calm icon per page.
+
+Template section order
+
+      D ES IG N INS T RUCT IO N
+
+          Each block is a separate H2 with 24px spacing between. The safety note uses the Safety box style. The CTA
+          uses the brand gradient band.
+
+ WEBS IT E CO P Y
+
+ 1. Condition name (H1) and one-line summary
+ 2. What is [condition]? -- two or three plain sentences
+ 3. How it is usually treated -- general medicine context, no doses
+ 4. How Getmeds can help
+ 5. Related medicine group -- tag links to the Medicines page anchors
+ 6. Named Patient Supply -- short line, linking to the Named Patient Supply page
+
+Getmeds Vanuatu -- Website Content & Design Guide                                                                    37 / 90
+ 7. Important note (same on every page, Safety box):
+
+     This page gives general information only. It is not medical advice. Please speak to a doctor, nurse or
+     pharmacist about your own health. Do not start, stop or change a medicine without their advice.
+
+ 8. CTA (same on every page, gradient band):
+
+     Need a medicine for [condition]? Getmeds may be able to assist with access to appropriate
+     medicines for this condition. Contact the Getmeds team to check availability and supply
+     requirements. Buttons: Request a Medicine · Talk to Our Team
+
+All 53 condition pages -- copy
+
+ WEBS IT E CO P Y
+
+Cancers
+
+    Breast cancer
+
+     URL: /conditions/breast-cancer · SEO title: Breast cancer Medicines in Vanuatu -- Getmeds Vanuatu
+
+    What is it? Breast cancer is a cancer that starts in the cells of the breast. It is more common in women, but men
+    can also get it.
+    How it is usually treated: Treatment may include surgery, chemotherapy, hormone therapy, targeted medicines
+    or radiotherapy. The plan depends on the type and stage of the cancer.
+    How Getmeds can help: We supply cancer medicines against your doctor's prescription or treatment protocol,
+    and help plan each cycle so your medicine is ready on time.
+    Related medicine group: Oncology · Hormonal therapy
+    Named Patient Supply: May apply if a prescribed medicine is not normally available in Vanuatu.
+
+    Cervical cancer
+
+     URL: /conditions/cervical-cancer · SEO title: Cervical cancer Medicines in Vanuatu -- Getmeds Vanuatu
+
+    What is it? Cervical cancer starts in the cervix, the lower part of the womb. Regular screening can find changes
+    early.
+    How it is usually treated: Treatment may include surgery, radiotherapy and chemotherapy. Some patients are
+    referred overseas for part of their treatment.
+    How Getmeds can help: We supply cancer medicines against your doctor's prescription or treatment protocol,
+    and help plan each cycle so your medicine is ready on time. We also support patients who return home and
+    need to continue treatment locally.
+    Related medicine group: Oncology · Supportive care
+    Named Patient Supply: May apply if a prescribed medicine is not normally available in Vanuatu.
+
+Getmeds Vanuatu -- Website Content & Design Guide  38 / 90
+Ovarian cancer
+
+URL: /conditions/ovarian-cancer · SEO title: Ovarian cancer Medicines in Vanuatu -- Getmeds Vanuatu
+
+What is it? Ovarian cancer starts in the ovaries, which are part of the female reproductive system.
+How it is usually treated: Treatment usually includes surgery and chemotherapy. Some people also receive
+targeted medicines.
+How Getmeds can help: We supply cancer medicines against your doctor's prescription or treatment protocol,
+and help plan each cycle so your medicine is ready on time.
+Related medicine group: Oncology
+Named Patient Supply: May apply if a prescribed medicine is not normally available in Vanuatu.
+
+Uterine (womb) cancer
+
+URL: /conditions/uterine-cancer · SEO title: Uterine (womb) cancer Medicines in Vanuatu -- Getmeds Vanuatu
+
+What is it? Uterine cancer starts in the lining or muscle of the womb.
+How it is usually treated: Treatment may include surgery, radiotherapy, chemotherapy or hormone therapy.
+How Getmeds can help: We supply cancer medicines against your doctor's prescription or treatment protocol,
+and help plan each cycle so your medicine is ready on time.
+Related medicine group: Oncology · Hormonal therapy
+Named Patient Supply: May apply if a prescribed medicine is not normally available in Vanuatu.
+
+Prostate cancer
+
+URL: /conditions/prostate-cancer · SEO title: Prostate cancer Medicines in Vanuatu -- Getmeds Vanuatu
+
+What is it? Prostate cancer starts in the prostate, a small gland in men.
+How it is usually treated: Treatment may include surgery, radiotherapy and hormone treatment. Some men
+need chemotherapy or newer medicines.
+How Getmeds can help: We check and source prescribed medicines, including long-term hormone medicines
+that need regular supply.
+Related medicine group: Oncology · Hormonal therapy
+Named Patient Supply: May apply if a prescribed medicine is not normally available in Vanuatu.
+
+Colorectal (bowel) cancer
+
+URL: /conditions/colorectal-cancer · SEO title: Colorectal (bowel) cancer Medicines in Vanuatu -- Getmeds Vanuatu
+
+What is it? Colorectal cancer starts in the large bowel (colon) or the back passage (rectum).
+How it is usually treated: Treatment may include surgery and chemotherapy, given by drip or as tablets.
+How Getmeds can help: We supply cancer medicines against your doctor's prescription or treatment protocol,
+and help plan each cycle so your medicine is ready on time.
+Related medicine group: Oncology · Supportive care
+Named Patient Supply: May apply if a prescribed medicine is not normally available in Vanuatu.
+
+Getmeds Vanuatu -- Website Content & Design Guide  39 / 90
+Stomach cancer
+
+URL: /conditions/stomach-cancer · SEO title: Stomach cancer Medicines in Vanuatu -- Getmeds Vanuatu
+
+What is it? Stomach cancer starts in the lining of the stomach.
+How it is usually treated: Treatment may include surgery and chemotherapy, sometimes before and after
+surgery.
+How Getmeds can help: We supply cancer medicines against your doctor's prescription or treatment protocol,
+and help plan each cycle so your medicine is ready on time.
+Related medicine group: Oncology
+Named Patient Supply: May apply if a prescribed medicine is not normally available in Vanuatu.
+
+Liver cancer
+
+URL: /conditions/liver-cancer · SEO title: Liver cancer Medicines in Vanuatu -- Getmeds Vanuatu
+
+What is it? Liver cancer starts in the cells of the liver. It is more common in people with long-term liver disease,
+such as hepatitis B.
+How it is usually treated: Treatment depends on the stage and may include surgery, local treatments or
+medicines.
+How Getmeds can help: We supply cancer medicines against your doctor's prescription or treatment protocol,
+and help plan each cycle so your medicine is ready on time.
+Related medicine group: Oncology
+Named Patient Supply: May apply if a prescribed medicine is not normally available in Vanuatu.
+
+Pancreatic cancer
+
+URL: /conditions/pancreatic-cancer · SEO title: Pancreatic cancer Medicines in Vanuatu -- Getmeds Vanuatu
+
+What is it? Pancreatic cancer starts in the pancreas, an organ that helps with digestion and blood sugar.
+How it is usually treated: Treatment may include surgery and chemotherapy. Supportive care for pain and
+digestion is also important.
+How Getmeds can help: We supply cancer medicines against your doctor's prescription or treatment protocol,
+and help plan each cycle so your medicine is ready on time.
+Related medicine group: Oncology · Supportive care
+Named Patient Supply: May apply if a prescribed medicine is not normally available in Vanuatu.
+
+Lung cancer
+
+URL: /conditions/lung-cancer · SEO title: Lung cancer Medicines in Vanuatu -- Getmeds Vanuatu
+
+What is it? Lung cancer starts in the lungs. Smoking is the main cause, but people who have never smoked can
+also get it.
+How it is usually treated: Treatment may include surgery, radiotherapy, chemotherapy, targeted medicines or
+immunotherapy.
+How Getmeds can help: We supply cancer medicines against your doctor's prescription or treatment protocol,
+and help plan each cycle so your medicine is ready on time.
+Related medicine group: Oncology
+Named Patient Supply: May apply if a prescribed medicine is not normally available in Vanuatu.
+
+Getmeds Vanuatu -- Website Content & Design Guide  40 / 90
+Head and neck cancer
+
+URL: /conditions/head-and-neck-cancer · SEO title: Head and neck cancer Medicines in Vanuatu -- Getmeds Vanuatu
+
+What is it? Head and neck cancers start in the mouth, throat, voice box, nose or salivary glands. Tobacco and
+heavy alcohol use raise the risk.
+How it is usually treated: Treatment may include surgery, radiotherapy and chemotherapy.
+How Getmeds can help: We supply cancer medicines against your doctor's prescription or treatment protocol,
+and help plan each cycle so your medicine is ready on time.
+Related medicine group: Oncology · Supportive care
+Named Patient Supply: May apply if a prescribed medicine is not normally available in Vanuatu.
+
+T hyroid cancer
+
+URL: /conditions/thyroid-cancer · SEO title: Thyroid cancer Medicines in Vanuatu -- Getmeds Vanuatu
+
+What is it? Thyroid cancer starts in the thyroid, a gland in the front of the neck.
+How it is usually treated: Treatment usually includes surgery. Many people then take thyroid hormone tablets
+for life.
+How Getmeds can help: We supply prescribed medicines, including long-term thyroid hormone tablets.
+Related medicine group: Oncology · Hormonal therapy
+Named Patient Supply: May apply if a prescribed medicine is not normally available in Vanuatu.
+
+Bladder cancer
+
+URL: /conditions/bladder-cancer · SEO title: Bladder cancer Medicines in Vanuatu -- Getmeds Vanuatu
+
+What is it? Bladder cancer starts in the lining of the bladder.
+How it is usually treated: Treatment may include surgery, medicines placed into the bladder, chemotherapy or
+radiotherapy.
+How Getmeds can help: We supply cancer medicines against your doctor's prescription or treatment protocol,
+and help plan each cycle so your medicine is ready on time.
+Related medicine group: Oncology
+Named Patient Supply: May apply if a prescribed medicine is not normally available in Vanuatu.
+
+Kidney cancer
+
+URL: /conditions/kidney-cancer · SEO title: Kidney cancer Medicines in Vanuatu -- Getmeds Vanuatu
+
+What is it? Kidney cancer starts in the kidneys, the organs that clean the blood.
+How it is usually treated: Treatment is often surgery. Some people need targeted medicines or immunotherapy.
+How Getmeds can help: We supply cancer medicines against your doctor's prescription or treatment protocol,
+and help plan each cycle so your medicine is ready on time.
+Related medicine group: Oncology
+Named Patient Supply: May apply if a prescribed medicine is not normally available in Vanuatu.
+
+Getmeds Vanuatu -- Website Content & Design Guide  41 / 90
+Skin cancer and melanoma
+
+URL: /conditions/skin-cancer · SEO title: Skin cancer and melanoma Medicines in Vanuatu -- Getmeds Vanuatu
+
+What is it? Skin cancer starts in the cells of the skin. Melanoma is a more serious type.
+How it is usually treated: Many skin cancers are removed by surgery. Advanced melanoma may need targeted
+medicines or immunotherapy.
+How Getmeds can help: We supply cancer medicines against your doctor's prescription or treatment protocol,
+and help plan each cycle so your medicine is ready on time.
+Related medicine group: Oncology
+Named Patient Supply: May apply if a prescribed medicine is not normally available in Vanuatu.
+
+Bone and sof t tissue sarcoma
+
+URL: /conditions/sarcoma · SEO title: Bone and soft tissue sarcoma Medicines in Vanuatu -- Getmeds Vanuatu
+
+What is it? Sarcomas are rare cancers that start in bone, muscle, fat or other soft tissues.
+How it is usually treated: Treatment may include surgery, chemotherapy and radiotherapy, usually at a
+specialist centre.
+How Getmeds can help: We supply cancer medicines against your doctor's prescription or treatment protocol,
+and help plan each cycle so your medicine is ready on time.
+Related medicine group: Oncology
+Named Patient Supply: May apply if a prescribed medicine is not normally available in Vanuatu.
+
+Brain tumours
+
+URL: /conditions/brain-tumours · SEO title: Brain tumours Medicines in Vanuatu -- Getmeds Vanuatu
+
+What is it? A brain tumour is a growth of cells in the brain. Some are cancer and some are not.
+How it is usually treated: Treatment may include surgery, radiotherapy, chemotherapy and medicines to
+control swelling or seizures.
+How Getmeds can help: We supply cancer medicines against your doctor's prescription or treatment protocol,
+and help plan each cycle so your medicine is ready on time.
+Related medicine group: Oncology · Supportive care
+Named Patient Supply: May apply if a prescribed medicine is not normally available in Vanuatu.
+
+Childhood cancers
+
+URL: /conditions/childhood-cancers · SEO title: Childhood cancers Medicines in Vanuatu -- Getmeds Vanuatu
+
+What is it? Children can get cancers such as leukaemia, lymphoma and some solid tumours. These are rare.
+How it is usually treated: Treatment is planned by a children's cancer specialist and may include
+chemotherapy, surgery and radiotherapy.
+How Getmeds can help: We work closely with the child's treating team to supply the prescribed medicines on
+time for each cycle.
+Related medicine group: Oncology · Haematology
+Named Patient Supply: May apply if a prescribed medicine is not normally available in Vanuatu.
+
+Getmeds Vanuatu -- Website Content & Design Guide  42 / 90
+Blood cancers and blood disorders
+
+   Hodgkin lymphoma
+
+    URL: /conditions/hodgkin-lymphoma · SEO title: Hodgkin lymphoma Medicines in Vanuatu -- Getmeds Vanuatu
+
+   What is it? A cancer of the lymph system, which is part of the body's defence against infection.
+   How it is usually treated: Usually a combination of chemotherapy medicines given in cycles.
+   How Getmeds can help: We supply and source blood cancer and haematology medicines against a
+   prescription, and help arrange steady supply for long courses.
+   Related medicine group: Oncology · Haematology
+   Named Patient Supply: May apply if a prescribed medicine is not normally available in Vanuatu.
+
+   Non-Hodgkin lymphoma
+
+    URL: /conditions/non-hodgkin-lymphoma · SEO title: Non-Hodgkin lymphoma Medicines in Vanuatu -- Getmeds Vanuatu
+
+   What is it? A group of cancers of the lymph system. There are many different types.
+   How it is usually treated: Often combination chemotherapy. Some types also need targeted medicines.
+   How Getmeds can help: We supply and source blood cancer and haematology medicines against a
+   prescription, and help arrange steady supply for long courses.
+   Related medicine group: Oncology · Haematology
+   Named Patient Supply: May apply if a prescribed medicine is not normally available in Vanuatu.
+
+   Acute leukaemia
+
+    URL: /conditions/acute-leukaemia · SEO title: Acute leukaemia Medicines in Vanuatu -- Getmeds Vanuatu
+
+   What is it? A fast-growing cancer of the blood and bone marrow. It needs urgent specialist treatment.
+   How it is usually treated: Intensive chemotherapy, usually in a specialist hospital.
+   How Getmeds can help: We supply and source blood cancer and haematology medicines against a
+   prescription, and help arrange steady supply for long courses.
+   Related medicine group: Oncology · Haematology
+   Named Patient Supply: May apply if a prescribed medicine is not normally available in Vanuatu.
+
+   Chronic myeloid leukaemia (CML)
+
+    URL: /conditions/chronic-myeloid-leukaemia · SEO title: Chronic myeloid leukaemia (CML) Medicines in Vanuatu -- Getmeds
+    Vanuatu
+
+   What is it? A slow-growing cancer of the blood and bone marrow.
+   How it is usually treated: Often tablets taken every day for a long time.
+   How Getmeds can help: Long-term medicines need steady supply. We help you plan ahead so you do not run
+   out.
+   Related medicine group: Oncology · Haematology
+   Named Patient Supply: May apply if a prescribed medicine is not normally available in Vanuatu.
+
+Getmeds Vanuatu -- Website Content & Design Guide                                                                            43 / 90
+Chronic lymphocytic leukaemia (CLL)
+
+URL: /conditions/chronic-lymphocytic-leukaemia · SEO title: Chronic lymphocytic leukaemia (CLL) Medicines in Vanuatu --
+Getmeds Vanuatu
+
+What is it? A slow-growing cancer of a type of white blood cell.
+How it is usually treated: Some people need treatment straight away. Others are watched closely first.
+Treatment may include tablets or chemotherapy.
+How Getmeds can help: We supply and source blood cancer and haematology medicines against a
+prescription, and help arrange steady supply for long courses.
+Related medicine group: Oncology · Haematology
+Named Patient Supply: May apply if a prescribed medicine is not normally available in Vanuatu.
+
+Multiple myeloma
+
+URL: /conditions/multiple-myeloma · SEO title: Multiple myeloma Medicines in Vanuatu -- Getmeds Vanuatu
+
+What is it? A cancer of plasma cells, a type of cell in the bone marrow. It can affect the bones and kidneys.
+How it is usually treated: Usually a combination of medicines. Bone-protecting medicines may also be used.
+How Getmeds can help: We supply and source blood cancer and haematology medicines against a
+prescription, and help arrange steady supply for long courses.
+Related medicine group: Oncology · Haematology · Bone health
+Named Patient Supply: May apply if a prescribed medicine is not normally available in Vanuatu.
+
+Polycythaemia vera and essential thrombocythaemia
+
+URL: /conditions/myeloproliferative-disorders · SEO title: Polycythaemia vera and essential thrombocythaemia Medicines in
+Vanuatu -- Getmeds Vanuatu
+
+What is it? Rare blood disorders where the bone marrow makes too many blood cells.
+How it is usually treated: Treatment aims to control blood counts and may include long-term tablets.
+How Getmeds can help: We supply and source blood cancer and haematology medicines against a
+prescription, and help arrange steady supply for long courses.
+Related medicine group: Haematology
+Named Patient Supply: May apply if a prescribed medicine is not normally available in Vanuatu.
+
+Low white blood cells af ter chemotherapy (neutropenia)
+
+URL: /conditions/neutropenia · SEO title: Low white blood cells after chemotherapy (neutropenia) Medicines in Vanuatu --
+Getmeds Vanuatu
+
+What is it? Chemotherapy can lower the number of white blood cells that fight infection. This raises the risk of
+serious infection.
+How it is usually treated: Doctors may prescribe injections that help the body make white cells, and antibiotics
+if infection occurs.
+How Getmeds can help: We supply supportive injections and antibiotics against a prescription. If you have a
+fever during chemotherapy, go to hospital straight away.
+Related medicine group: Supportive care · Haematology · Antibiotics
+Named Patient Supply: May apply if a prescribed medicine is not normally available in Vanuatu.
+
+Getmeds Vanuatu -- Website Content & Design Guide  44 / 90
+   Blood clots (thrombosis)
+
+    URL: /conditions/blood-clots · SEO title: Blood clots (thrombosis) Medicines in Vanuatu -- Getmeds Vanuatu
+
+   What is it? A blood clot can block a vein or artery. People with cancer or after surgery are at higher risk.
+   How it is usually treated: Treatment usually includes blood-thinning medicines, as tablets or injections.
+   How Getmeds can help: We supply prescribed medicines and help you plan refills so you do not run out.
+   Related medicine group: Haematology
+   Named Patient Supply: Rarely needed, as many medicines for this condition are commonly available. Ask us
+   about any medicine that is hard to find.
+
+Anaemia
+
+   Iron def iciency anaemia
+
+    URL: /conditions/iron-deficiency-anaemia · SEO title: Iron deficiency anaemia Medicines in Vanuatu -- Getmeds Vanuatu
+
+   What is it? The body does not have enough iron to make healthy red blood cells. People may feel tired and
+   weak.
+   How it is usually treated: Treatment may include iron tablets or iron given by drip, and treating the cause.
+   How Getmeds can help: We supply prescribed medicines and help you plan refills so you do not run out.
+   Related medicine group: Anaemia
+   Named Patient Supply: Rarely needed, as many medicines for this condition are commonly available. Ask us
+   about any medicine that is hard to find.
+
+   Anaemia in kidney disease
+
+    URL: /conditions/anaemia-kidney-disease · SEO title: Anaemia in kidney disease Medicines in Vanuatu -- Getmeds Vanuatu
+
+   What is it? Damaged kidneys make less of a hormone the body needs to make red blood cells.
+   How it is usually treated: Treatment may include iron and injections that help the body make red blood cells.
+   How Getmeds can help: We supply prescribed anaemia medicines for people with kidney disease, including
+   those on dialysis.
+   Related medicine group: Anaemia · Renal
+   Named Patient Supply: May apply if a prescribed medicine is not normally available in Vanuatu.
+
+   Anaemia during cancer treatment
+
+    URL: /conditions/anaemia-cancer-treatment · SEO title: Anaemia during cancer treatment Medicines in Vanuatu -- Getmeds
+    Vanuatu
+
+   What is it? Cancer and its treatment can lower red blood cells, causing tiredness and breathlessness.
+   How it is usually treated: Treatment depends on the cause and may include iron, other medicines or a blood
+   transfusion.
+   How Getmeds can help: We supply prescribed medicines and help you plan refills so you do not run out.
+   Related medicine group: Anaemia · Supportive care
+   Named Patient Supply: May apply if a prescribed medicine is not normally available in Vanuatu.
+
+Getmeds Vanuatu -- Website Content & Design Guide                                                                           45 / 90
+Side effects of cancer treatment
+
+   Nausea and vomiting f rom chemotherapy
+
+    URL: /conditions/chemotherapy-nausea · SEO title: Nausea and vomiting from chemotherapy Medicines in Vanuatu -- Getmeds
+    Vanuatu
+
+   What is it? Feeling sick or being sick is a common side effect of some cancer treatments.
+   How it is usually treated: Doctors often prescribe anti-sickness medicine before and after a chemotherapy
+   session.
+   How Getmeds can help: We supply anti-sickness medicine in tablet and injection form, against a prescription.
+   Related medicine group: Supportive care
+   Named Patient Supply: Rarely needed, as many medicines for this condition are commonly available. Ask us
+   about any medicine that is hard to find.
+
+   Cancer pain
+
+    URL: /conditions/cancer-pain · SEO title: Cancer pain Medicines in Vanuatu -- Getmeds Vanuatu
+
+   What is it? Cancer and its treatment can cause pain. Good pain control improves daily life.
+   How it is usually treated: Doctors use a step-by-step approach, from everyday pain relief to stronger
+   medicines.
+   How Getmeds can help: We supply prescribed pain medicines and follow the extra rules that apply to stronger
+   pain medicines.
+   Related medicine group: Pain management · Supportive care
+   Named Patient Supply: May apply if a prescribed medicine is not normally available in Vanuatu.
+
+   Mouth sores f rom treatment (mucositis)
+
+    URL: /conditions/mouth-sores · SEO title: Mouth sores from treatment (mucositis) Medicines in Vanuatu -- Getmeds Vanuatu
+
+   What is it? Chemotherapy and radiotherapy can cause painful sores in the mouth and throat.
+   How it is usually treated: Care includes mouthwashes, gels, pain relief and good mouth hygiene.
+   How Getmeds can help: We supply mouth-care products and prescribed medicines. Our pharmacist can
+   explain how to use them.
+   Related medicine group: Supportive care
+   Named Patient Supply: Rarely needed, as many medicines for this condition are commonly available. Ask us
+   about any medicine that is hard to find.
+
+Hormone conditions
+
+   Underactive thyroid (hypothyroidism)
+
+    URL: /conditions/hypothyroidism · SEO title: Underactive thyroid (hypothyroidism) Medicines in Vanuatu -- Getmeds Vanuatu
+
+   What is it? The thyroid gland does not make enough hormone. People may feel tired, cold and gain weight.
+   How it is usually treated: Usually a daily thyroid hormone tablet, with regular blood tests.
+   How Getmeds can help: We supply prescribed medicines and help you plan refills so you do not run out.
+   Related medicine group: Hormonal therapy
+   Named Patient Supply: Rarely needed, as many medicines for this condition are commonly available. Ask us
+   about any medicine that is hard to find.
+
+Getmeds Vanuatu -- Website Content & Design Guide  46 / 90
+   Overactive thyroid (hyperthyroidism)
+
+    URL: /conditions/hyperthyroidism · SEO title: Overactive thyroid (hyperthyroidism) Medicines in Vanuatu -- Getmeds Vanuatu
+
+   What is it? The thyroid gland makes too much hormone. People may lose weight, feel anxious or have a fast
+   heartbeat.
+   How it is usually treated: Treatment may include tablets that slow the thyroid, and other treatments chosen by a
+   doctor.
+   How Getmeds can help: We supply prescribed medicines and help you plan refills so you do not run out.
+   Related medicine group: Hormonal therapy
+   Named Patient Supply: Rarely needed, as many medicines for this condition are commonly available. Ask us
+   about any medicine that is hard to find.
+
+Diabetes
+
+   T ype 1 diabe te s
+
+    URL: /conditions/type-1-diabetes · SEO title: Type 1 diabetes Medicines in Vanuatu -- Getmeds Vanuatu
+
+   What is it? The body cannot make insulin, a hormone that controls blood sugar. It often starts in children or
+   young adults.
+   How it is usually treated: People with type 1 diabetes need insulin every day, and regular blood sugar checks.
+   How Getmeds can help: We supply insulin and diabetes supplies on prescription, and offer simple blood sugar
+   checks at our pharmacy.
+   Related medicine group: Diabetes
+   Named Patient Supply: Rarely needed, as many medicines for this condition are commonly available. Ask us
+   about any medicine that is hard to find.
+
+   T ype 2 diabetes
+
+    URL: /conditions/type-2-diabetes · SEO title: Type 2 diabetes Medicines in Vanuatu -- Getmeds Vanuatu
+
+   What is it? The body does not use insulin well, so blood sugar stays too high. It is common in the Pacific.
+   How it is usually treated: Healthy eating, activity, and often tablets or injections. Regular checks help prevent
+   problems.
+   How Getmeds can help: We supply diabetes medicines, devices and supplies, and offer simple blood sugar
+   checks at our pharmacy.
+   Related medicine group: Diabetes
+   Named Patient Supply: Rarely needed, as many medicines for this condition are commonly available. Ask us
+   about any medicine that is hard to find.
+
+Getmeds Vanuatu -- Website Content & Design Guide  47 / 90
+Heart and blood vessels
+
+   High blood pressure (hypertension)
+
+    URL: /conditions/high-blood-pressure · SEO title: High blood pressure (hypertension) Medicines in Vanuatu -- Getmeds
+    Vanuatu
+
+   What is it? Blood pushes too hard against the walls of the blood vessels. It often has no signs, so checking is
+   important.
+   How it is usually treated: Lifestyle changes and, often, daily medicine.
+   How Getmeds can help: We supply blood pressure medicines and devices, and offer simple blood pressure
+   checks at our pharmacy.
+   Related medicine group: Cardiology
+   Named Patient Supply: Rarely needed, as many medicines for this condition are commonly available. Ask us
+   about any medicine that is hard to find.
+
+   High cholesterol
+
+    URL: /conditions/high-cholesterol · SEO title: High cholesterol Medicines in Vanuatu -- Getmeds Vanuatu
+
+   What is it? Cholesterol is a fat in the blood. Too much can raise the risk of heart disease and stroke.
+   How it is usually treated: Healthy eating, activity and, for some people, daily medicine.
+   How Getmeds can help: We supply prescribed medicines and help you plan refills so you do not run out.
+   Related medicine group: Cardiology
+   Named Patient Supply: Rarely needed, as many medicines for this condition are commonly available. Ask us
+   about any medicine that is hard to find.
+
+   Coronary heart disease
+
+    URL: /conditions/coronary-heart-disease · SEO title: Coronary heart disease Medicines in Vanuatu -- Getmeds Vanuatu
+
+   What is it? The blood vessels that feed the heart become narrow. This can cause chest pain or a heart attack.
+   How it is usually treated: Treatment usually includes several long-term medicines and, for some people, a
+   procedure.
+   How Getmeds can help: We supply prescribed medicines and help you plan refills so you do not run out.
+   Related medicine group: Cardiology
+   Named Patient Supply: May apply if a prescribed medicine is not normally available in Vanuatu.
+
+   Heart f ailure
+
+    URL: /conditions/heart-failure · SEO title: Heart failure Medicines in Vanuatu -- Getmeds Vanuatu
+
+   What is it? The heart does not pump as well as it should. People may feel breathless and have swollen legs.
+   How it is usually treated: Treatment usually includes several daily medicines and regular check-ups.
+   How Getmeds can help: We supply prescribed medicines and help you plan refills so you do not run out.
+   Related medicine group: Cardiology
+   Named Patient Supply: May apply if a prescribed medicine is not normally available in Vanuatu.
+
+Getmeds Vanuatu -- Website Content & Design Guide                                                                         48 / 90
+Kidney
+
+   Chronic kidney disease
+
+    URL: /conditions/chronic-kidney-disease · SEO title: Chronic kidney disease Medicines in Vanuatu -- Getmeds Vanuatu
+
+   What is it? The kidneys slowly lose their ability to clean the blood. Diabetes and high blood pressure are
+   common causes.
+   How it is usually treated: Treatment includes medicines to protect the kidneys, control blood pressure and
+   manage complications.
+   How Getmeds can help: We supply prescribed medicines and help you plan refills so you do not run out.
+   Related medicine group: Renal · Anaemia
+   Named Patient Supply: May apply if a prescribed medicine is not normally available in Vanuatu.
+
+   Dialysis care
+
+    URL: /conditions/dialysis · SEO title: Dialysis care Medicines in Vanuatu -- Getmeds Vanuatu
+
+   What is it? Dialysis cleans the blood when the kidneys stop working. People on dialysis often need several
+   regular medicines.
+   How it is usually treated: Medicines may include treatments for anaemia, bone health and blood pressure,
+   alongside dialysis.
+   How Getmeds can help: We supply dialysis medicines against a prescription and help plan regular supply.
+   Related medicine group: Renal · Anaemia
+   Named Patient Supply: May apply if a prescribed medicine is not normally available in Vanuatu.
+
+Bone health
+
+   Osteoporosis (weak bones)
+
+    URL: /conditions/osteoporosis · SEO title: Osteoporosis (weak bones) Medicines in Vanuatu -- Getmeds Vanuatu
+
+   What is it? Bones become thin and weak, and break more easily. It is more common in older women.
+   How it is usually treated: Treatment may include calcium, vitamin D and medicines that strengthen bone.
+   How Getmeds can help: We supply prescribed medicines and help you plan refills so you do not run out.
+   Related medicine group: Bone health
+   Named Patient Supply: May apply if a prescribed medicine is not normally available in Vanuatu.
+
+   Cancer that has spread to the bone
+
+    URL: /conditions/bone-metastases · SEO title: Cancer that has spread to the bone Medicines in Vanuatu -- Getmeds Vanuatu
+
+   What is it? Some cancers can spread to the bones, causing pain and weak bones.
+   How it is usually treated: Treatment may include bone-protecting medicines, pain relief, radiotherapy and
+   cancer treatment.
+   How Getmeds can help: We supply cancer medicines against your doctor's prescription or treatment protocol,
+   and help plan each cycle so your medicine is ready on time.
+   Related medicine group: Bone health · Oncology · Pain management
+   Named Patient Supply: May apply if a prescribed medicine is not normally available in Vanuatu.
+
+Getmeds Vanuatu -- Website Content & Design Guide  49 / 90
+Infections
+
+   Bacterial inf ections
+
+    URL: /conditions/bacterial-infections · SEO title: Bacterial infections Medicines in Vanuatu -- Getmeds Vanuatu
+
+   What is it? Infections caused by bacteria. They can affect many parts of the body.
+   How it is usually treated: Antibiotics chosen by a doctor. The full course should be taken as prescribed.
+   How Getmeds can help: We supply antibiotics against a prescription.
+   Related medicine group: Antibiotics
+   Named Patient Supply: Rarely needed, as many medicines for this condition are commonly available. Ask us
+   about any medicine that is hard to find.
+
+   Serious hospital inf ections
+
+    URL: /conditions/serious-infections · SEO title: Serious hospital infections Medicines in Vanuatu -- Getmeds Vanuatu
+
+   What is it? Some infections are severe or do not respond to common antibiotics. They are treated in hospital.
+   How it is usually treated: Hospital doctors may use broad-spectrum antibiotics given by drip.
+   How Getmeds can help: We supply broad-spectrum hospital antibiotics to hospitals and clinics against a
+   prescription.
+   Related medicine group: Antibiotics
+   Named Patient Supply: May apply if a prescribed medicine is not normally available in Vanuatu.
+
+   Urinary tract inf ection (UT I)
+
+    URL: /conditions/urinary-tract-infection · SEO title: Urinary tract infection (UTI) Medicines in Vanuatu -- Getmeds Vanuatu
+
+   What is it? An infection in the bladder or kidneys. It can cause pain when passing urine.
+   How it is usually treated: Usually a short course of antibiotics prescribed by a doctor.
+   How Getmeds can help: We supply prescribed antibiotics. See a doctor if you have fever or back pain.
+   Related medicine group: Antibiotics
+   Named Patient Supply: Rarely needed, as many medicines for this condition are commonly available. Ask us
+   about any medicine that is hard to find.
+
+   Pne umo nia
+
+    URL: /conditions/pneumonia · SEO title: Pneumonia Medicines in Vanuatu -- Getmeds Vanuatu
+
+   What is it? An infection of the lungs that causes cough, fever and difficulty breathing.
+   How it is usually treated: Antibiotics chosen by a doctor. Severe cases need hospital care.
+   How Getmeds can help: We supply prescribed antibiotics to patients and hospitals.
+   Related medicine group: Antibiotics
+   Named Patient Supply: Rarely needed, as many medicines for this condition are commonly available. Ask us
+   about any medicine that is hard to find.
+
+Getmeds Vanuatu -- Website Content & Design Guide                                                                                50 / 90
+Joints and inflammation
+
+   Ar t hr it is
+
+    URL: /conditions/arthritis · SEO title: Arthritis Medicines in Vanuatu -- Getmeds Vanuatu
+
+   What is it? Arthritis causes pain, swelling and stiffness in the joints. There are several types, including
+   osteoarthritis and rheumatoid arthritis.
+   How it is usually treated: Treatment may include pain relief, anti-inflammatory medicines, exercise and, for
+   some types, specialist medicines.
+   How Getmeds can help: We supply prescribed medicines and help you plan refills so you do not run out.
+   Related medicine group: Anti-inflammatory · Pain management
+   Named Patient Supply: May apply if a prescribed medicine is not normally available in Vanuatu.
+
+   Gout
+
+    URL: /conditions/gout · SEO title: Gout Medicines in Vanuatu -- Getmeds Vanuatu
+
+   What is it? Gout causes sudden, painful swelling in a joint, often the big toe. It is linked to high uric acid in the
+   blood.
+   How it is usually treated: Anti-inflammatory medicines for attacks, and long-term medicines to lower uric acid
+   for some people.
+   How Getmeds can help: We supply prescribed medicines and help you plan refills so you do not run out.
+   Related medicine group: Anti-inflammatory · Pain management
+   Named Patient Supply: Rarely needed, as many medicines for this condition are commonly available. Ask us
+   about any medicine that is hard to find.
+
+Breathing and allergy
+
+   Ast hma
+
+    URL: /conditions/asthma · SEO title: Asthma Medicines in Vanuatu -- Getmeds Vanuatu
+
+   What is it? Asthma is a long-term condition that makes the airways narrow. It can cause wheezing and
+   shortness of breath.
+   How it is usually treated: Usually inhalers, used as the doctor advises. An asthma plan helps manage attacks.
+   How Getmeds can help: We supply asthma medicines, devices and supplies. Our pharmacist can show you
+   how to use an inhaler.
+   Related medicine group: Allergy and respiratory
+   Named Patient Supply: Rarely needed, as many medicines for this condition are commonly available. Ask us
+   about any medicine that is hard to find.
+
+   Allergies and hay f ever
+
+    URL: /conditions/allergies · SEO title: Allergies and hay fever Medicines in Vanuatu -- Getmeds Vanuatu
+
+   What is it? Allergies happen when the body reacts to things such as dust, pollen or some foods. Signs include
+   sneezing, itching and rash.
+   How it is usually treated: Allergy medicines such as antihistamines. Severe allergic reactions need emergency
+   care.
+   How Getmeds can help: We supply allergy medicines. Our pharmacist can help you choose an over-the-
+   counter option or refer you to a doctor.
+   Related medicine group: Allergy and respiratory
+   Named Patient Supply: Rarely needed, as many medicines for this condition are commonly available. Ask us
+   about any medicine that is hard to find.
+
+Getmeds Vanuatu -- Website Content & Design Guide  51 / 90
+PAGE 09
+
+Pacific Islands Access
+
+URL: /pacific-access
+
+SEO                    Medicine Access Across the Pacific Islands -- Getmeds Vanuatu
+SEO title
+Meta description       From Port Vila, Getmeds Vanuatu is working to make cancer and specialist
+                       medicines easier to reach across the Pacific Islands. Enquiries from outside
+H1                     Vanuatu are welcome.
+Suggested H2 sections
+Primary keyword        Medicine access across the Pacific
+Secondary keywords
+URL slug               Why it matters · Our base in Vanuatu · Growing access across the region · If you
+                       are outside Vanuatu · Coming home after treatment overseas
+
+                       medicines Pacific Islands
+
+                       medicine access Pacific, chemotherapy pharmacy Pacific, affordable
+                       medicines Pacific
+
+                       /pacific-access
+
+P AG E D ES IG N D IRECT IO N
+
+This page carries the Pacific story. Use the ocean side of the palette: deeper blues and teal, with a
+large stylised map as the hero visual. Keep the map simple (islands as soft shapes, Vanuatu pin in
+green, other countries as small navy pins). Copy blocks stay short. Add a country selector on the
+enquiry form link so the form opens with the country pre-filled.
+
+Hero
+
+      D ES IG N INS T RUCT IO N
+
+          Full-width map illustration of the South-West Pacific on a deep blue-to-teal gradient. H1 and intro in white on
+          the left over a subtle dark overlay.
+          Mobile: map shrinks to a banner above the text.
+
+ WEBS IT E CO P Y
+
+Medicine access across the Pacific
+
+Access to important medicines should not depend solely on where a patient lives.
+Button: Pacific Enquiry
+
+Getmeds Vanuatu -- Website Content & Design Guide                                                      52 / 90
+Why it matters
+
+      D ES IG N INS T RUCT IO N
+
+          White background. Four problem cards with grey icons (empty shelf, money, clock, calendar-x). A short line
+          after the cards leads into the next section.
+
+ WEBS IT E CO P Y
+
+Why it matters
+
+Many Pacific Islands face the same problems with medicines:
+     Medicines run out.
+     Importing a medicine for one patient can cost too much.
+     Delivery takes a long time because of distance.
+     Patients miss treatment cycles as a result.
+
+These problems are hardest for people who need specialist medicines, such as cancer treatment.
+
+Our base in Vanuatu
+
+      D ES IG N INS T RUCT IO N
+
+          Soft Mint background. Split: photo of Port Vila harbour left, text right. Include a small fact chip: "Vanuatu: 83
+          islands".
+
+ WEBS IT E CO P Y
+
+Our base in Vanuatu
+
+Getmeds Vanuatu is based in Port Vila. From here, we supply cancer medicines and other important
+medicines to patients and healthcare providers across Vanuatu's 83 islands. Patients can collect in Port
+Vila, or ask us about delivery to their island. Medicines that need cold storage travel in monitored cold
+boxes.
+
+Growing access across the region
+
+      D ES IG N INS T RUCT IO N
+
+          Navy background. Six country tiles (country name + small island icon, no flags) in a 3×2 grid. A short line of
+          text above.
+
+ WEBS IT E CO P Y
+
+Growing access across the region
+
+Getmeds is focused on expanding access to medicines across the Pacific. We welcome enquiries from
+patients and healthcare providers in:
+Tiles: Solomon Islands · Fiji · Samoa · Tonga · Tuvalu · Nauru
+Enquiries from other Pacific countries are also welcome.
+
+Getmeds Vanuatu -- Website Content & Design Guide  53 / 90
+If you are outside Vanuatu
+
+      D ES IG N INS T RUCT IO N
+
+          White background. Left: checklist of what to tell us. Right: Info box about import rules. Button below.
+
+ WEBS IT E CO P Y
+
+If you are outside Vanuatu
+
+Patients, doctors, hospitals and pharmacies in other Pacific countries are welcome to contact us. Tell us:
+     your country
+     the medicine you need
+     whether you are a patient or a healthcare provider
+
+Info box: Import rules, paperwork and freight costs differ by country. We will explain these before you
+commit.
+Button: Pacific Enquiry
+
+Coming home after treatment overseas
+
+      D ES IG N INS T RUCT IO N
+
+          Sky Tint background. Illustration of a plane arriving at an island with a medicine bag. Warm tone.
+
+ WEBS IT E CO P Y
+
+Coming home after treatment overseas
+
+Many Pacific patients go overseas for cancer treatment. When they return, they often need to continue
+medicines at home. We help plan local supply so treatment is not interrupted.
+Please bring your prescription or treatment protocol from the overseas hospital.
+
+CTA
+
+      D ES IG N INS T RUCT IO N
+
+          Brand gradient band, two buttons.
+
+ WEBS IT E CO P Y
+
+Ask us what is possible for your country
+
+Buttons: Pacific Enquiry · Contact Us
+
+Getmeds Vanuatu -- Website Content & Design Guide  54 / 90
+PAGE 10
+
+Affordable Access to Medicines
+
+URL: /affordable-access
+
+SEO                    More Affordable Access to Medicines -- Getmeds Vanuatu
+SEO title              Getmeds Vanuatu works to reduce the barriers to important medicines in
+Meta description       Vanuatu and the Pacific, with clear prices before you commit.
+                       More affordable access to medicines
+H1                     The cost problem · How we help · How pricing works · Ask for a quotation
+Suggested H2 sections  affordable medicines Pacific
+Primary keyword        cancer medicine cost Vanuatu, medicine access Pacific
+Secondary keywords     /affordable-access
+URL slug
+
+P AG E D ES IG N D IRECT IO N
+
+Keep this page honest and reassuring. No price tags, discount badges, percentage-off graphics or
+sale colours. Use calm blues and greens. The key visual is a simple comparison illustration: "Travel
+overseas for medicine" (plane, many costs) vs "Medicine available at home" (pharmacy, one clear
+price). Do not attach numbers to the Getmeds side.
+
+Hero
+
+      D ES IG N INS T RUCT IO N
+
+          Soft Mint background, H1 and intro left, comparison illustration right.
+
+ WEBS IT E CO P Y
+
+More affordable access to medicines
+
+Important medicines should be within reach. We work to lower the barriers.
+
+The cost problem
+
+      D ES IG N INS T RUCT IO N
+
+          White background. Pull out "3 to 6 million vatu" as a large navy figure with a small caption, beside the
+          paragraphs.
+
+ WEBS IT E CO P Y
+
+The cost problem
+
+Getmeds Vanuatu -- Website Content & Design Guide                                                                   55 / 90
+In Vanuatu, cancer and dialysis medicines are usually paid for by the patient. There is no national health
+insurance.
+Many cancer patients are referred overseas. This can cost an estimated 3 to 6 million vatu per patient,
+before the cost of medicines and family support. The stress on families is also high.
+Large figure caption: Estimated cost of overseas cancer referral per patient
+
+How we help
+
+      D ES IG N INS T RUCT IO N
+
+          Sky Tint background. Five icon cards (home, search, calendar, receipt, speech bubble).
+
+ WEBS IT E CO P Y
+
+How we help
+
+     Local supply. Having medicines in Vanuatu can reduce the need to travel for them.
+     Wide sourcing. We compare sources to find more affordable options where possible.
+     Planning. Planning each cycle ahead helps avoid costly urgent orders.
+     Clear prices. We tell you the price before you commit.
+     Options. If a medicine is very costly, we can talk with your doctor about available options. Your doctor
+     decides the treatment.
+
+How pricing works
+
+      D ES IG N INS T RUCT IO N
+
+          White background, single column, with an Info box for the last line.
+
+ WEBS IT E CO P Y
+
+How pricing works
+
+We do not publish prices on this website. The price depends on the medicine, the strength, the amount
+and where it comes from. Import costs, freight and paperwork can also affect the price.
+Info box: Send us the prescription and we will give you a clear quotation. You pay nothing until you agree.
+
+CTA
+
+      D ES IG N INS T RUCT IO N
+
+          Brand gradient band.
+
+ WEBS IT E CO P Y
+
+Ask for a quotation
+
+Buttons: Request a Quotation · Talk to Our Team
+
+Getmeds Vanuatu -- Website Content & Design Guide  56 / 90
+PAGE 11
+
+For Healthcare Professionals
+
+URL: /healthcare-professionals
+
+SEO                    For Doctors, Hospitals and Pharmacies -- Getmeds Vanuatu
+SEO title
+Meta description       Getmeds Vanuatu supplies cancer, specialist and essential medicines to
+                       doctors, hospitals, clinics and pharmacies in Vanuatu and the Pacific. Request a
+H1                     quotation.
+Suggested H2 sections
+Primary keyword        For healthcare professionals
+Secondary keywords
+URL slug               Who we work with · What we supply · Oncology and chemotherapy supply ·
+                       Named Patient Supply · How to submit a request · What you can expect
+
+                       oncology medicines Vanuatu
+
+                       chemotherapy pharmacy Pacific, specialist medicines Vanuatu, Named Patient
+                       Supply
+
+                       /healthcare-professionals
+
+P AG E D ES IG N D IRECT IO N
+
+A more professional, denser look than the patient pages: navy-led palette, tables allowed, fewer
+illustrations. Professionals scan for scope, process and contact. Put a "Request a Quotation" form
+preview (fields for facility, contact, product list upload) directly on this page, not only on Contact.
+
+Hero
+
+      D ES IG N INS T RUCT IO N
+
+          Navy background, white text. Right side: photo of a pharmacist and a doctor reviewing a treatment protocol.
+          Two buttons (green primary, white outline).
+
+ WEBS IT E CO P Y
+
+For healthcare professionals
+
+A local source for cancer medicines, specialist medicines and medical supplies in Vanuatu and the Pacific.
+Let us quote for your requirement.
+Buttons: Request a Quotation · Talk to Our Pharmacist
+
+Getmeds Vanuatu -- Website Content & Design Guide                                                        57 / 90
+Who we work with
+
+D ES IG N INS T RUCT IO N
+
+    White background. Table on desktop; on mobile each row becomes a card with the role as a heading.
+
+WEBS IT E CO P Y                How we can help
+
+Who we work with
+
+  You are
+
+Doctors and GPs                 Check if a prescribed medicine is available and supply it to your patient
+
+Oncologists and haematologists  Supply of cancer medicines by treatment protocol, cycle by cycle
+
+Hospitals                       Supply to wards and treatment units, including injectable chemotherapy
+
+Clinics                         Medicines, consumables and devices for your patients
+
+Pharmacists and pharmacies      Access to medicines you do not normally stock
+
+Procurement and purchasing teams Quotations for medicines, supplies and equipment
+
+Overseas treatment agencies     Local medicine supply for patients who return home to continue treatment
+
+What we supply
+
+      D ES IG N INS T RUCT IO N
+
+          Soft Mint background, two-column bullet list with category icons.
+
+ WEBS IT E CO P Y
+
+What we supply
+
+     Cancer medicines -- our main specialisation
+     Haematology, hormonal and supportive-care medicines
+     Essential medicines, including antibiotics and cardiometabolic medicines
+     Medicines for dialysis and heart disease
+     Single-use medical consumables
+     Medical devices, equipment, laboratory supplies and contrast media
+We source a wide range of products through flexible procurement. Some items may be limited by freight
+costs or the availability of export documents. We will tell you early if this applies.
+
+Oncology and chemotherapy supply
+
+      D ES IG N INS T RUCT IO N
+
+          White background, text left, small process graphic right (Protocol  Quote  Supply per cycle).
+
+ WEBS IT E CO P Y
+
+Oncology and chemotherapy supply
+
+Getmeds Vanuatu -- Website Content & Design Guide                                                          58 / 90
+Send us the prescription or treatment protocol. We confirm which medicines are in stock, which must be
+imported and which must be sourced. We give you a quotation and a supply date for each cycle.
+
+We also plan supply ahead for patients on long treatment courses, and update supply when a protocol
+changes.
+
+Named Patient Supply
+
+D ES IG N INS T RUCT IO N
+
+    Sky Tint card with text link.
+
+WEBS IT E CO P Y
+
+Named Patient Supply
+
+If your patient needs a medicine that is not normally available in Vanuatu, we help arrange it for that named
+patient. We handle sourcing, the import approval and the paperwork.
+Link: How Named Patient Supply works 
+
+How to submit a request
+
+D ES IG N INS T RUCT IO N
+
+    White background. Five-step component plus the quotation form preview below it.
+    Form fields: Facility name · Contact person · Role · Email · Phone · Country · Product list or protocol (upload) ·
+    Date needed · Notes · Submit: "Request a Quotation".
+
+WEBS IT E CO P Y
+
+How to submit a request
+
+1. Send the prescription, treatment protocol or product list by email or the form below.
+2. Include the patient or facility name, quantities and the date needed.
+3. Our pharmacist reviews the request.
+4. We send a quotation with availability and timing.
+5. You confirm the order. We source, receive, supply and record it.
+
+What you can expect
+
+D ES IG N INS T RUCT IO N
+
+    Navy background, three columns titled Availability, Assurance and Advantage (the Getmeds "3A" promise) with
+    white icons; a fourth line for Partnership below.
+
+WEBS IT E CO P Y                      Assurance                             Advantage
+
+What you can expect                   Consistent service, accurate orders,  Affordable or competitive prices,
+                                      professional communication and        flexible solutions and long-term
+  Availability                        reliable follow-up                    partnership
+
+  A wide range of products, reliable
+  availability, fewer stock-outs and
+  fast order fulfilment
+
+Getmeds Vanuatu -- Website Content & Design Guide                                         59 / 90
+CTA
+
+      D ES IG N INS T RUCT IO N
+
+          Brand gradient band.
+
+ WEBS IT E CO P Y
+
+Let us quote for your requirement
+
+Buttons: Request a Quotation · Healthcare Professional Enquiry
+
+Getmeds Vanuatu -- Website Content & Design Guide               60 / 90
+PAGE 12
+
+For Patients and Families
+
+URL: /patients
+
+SEO                    For Patients and Families -- Getmeds Vanuatu
+SEO title
+Meta description       Need a cancer medicine or other prescribed medicine in Vanuatu? Learn how
+                       Getmeds Vanuatu can help, what to send, and what happens next.
+H1
+Suggested H2 sections  For patients and families
+
+Primary keyword        What we do · How to ask for help · Your doctor's role · How prescription
+Secondary keywords     medicines are handled · If you need a cancer medicine · If your medicine is not
+URL slug               available in Vanuatu · Not sure what to do next?
+
+                       cancer medicines Vanuatu
+
+                       chemotherapy Vanuatu, Getmeds Vanuatu, medicines Port Vila
+
+                       /patients
+
+P AG E D ES IG N D IRECT IO N
+
+The warmest page on the site. Base it on the existing Getmeds Patient Guide: Care Pink step
+numbers, the smiling patient portrait, and rounded white step cards on the brand gradient. Very
+simple language, larger body text (19px). Put the emergency box near the bottom but make it
+impossible to miss.
+
+Hero
+
+      D ES IG N INS T RUCT IO N
+
+          Brand gradient background. Left: "Patient Guide" script-style label in Care Pink, H1, intro, buttons. Right:
+          portrait of a smiling Pacific woman in a head scarf.
+
+ WEBS IT E CO P Y
+
+Label: Patient Guide
+
+For patients and families
+
+We help you get the medicine your doctor prescribed. You do not need to know medical words to ask us
+for help.
+Buttons: Patient Enquiry · Call Us
+
+Getmeds Vanuatu -- Website Content & Design Guide                                                61 / 90
+What we do
+
+      D ES IG N INS T RUCT IO N
+
+          White background, short paragraph centred.
+
+ WEBS IT E CO P Y
+
+What we do
+
+Getmeds Vanuatu is a pharmacy in Port Vila. We supply cancer medicines and other important medicines.
+If a medicine is not in stock, we can often import or source it for you.
+
+How to ask for help (Patient Guide steps)
+
+      D ES IG N INS T RUCT IO N
+
+          Brand gradient section. Five white rounded cards, each with a Care Pink numbered circle (01­05) and a pink
+          tab-style title, exactly like the printed Patient Guide. Vertical on all screen sizes.
+
+ WEBS IT E CO P Y
+
+How to ask for help
+
+ 1. Register. Share your basic details so we can understand your situation and give the right support for
+     your treatment journey.
+
+ 2. Share your prescription or treatment protocol. Cancer medicines must follow a doctor's prescription
+     or treatment protocol. For your safety, we only supply medicines that match what your doctor
+     prescribed.
+
+ 3. Pharmacy check. Our pharmacist checks your prescription, medicine availability and price, and tells
+     you if anything needs special ordering, with the earliest possible date.
+
+ 4. Pick-up schedule. Pay at an affordable price. We give you a schedule for pick-up, counselling and
+     planning of your next treatment cycle, so you never miss a cycle.
+
+ 5. Pick up your medicine. Collect your medicine on the scheduled date. If it is an injectable, go to Vila
+     Central Hospital or Vanuatu Private Hospital for your chemo session.
+
+Your doctor's role
+
+      D ES IG N INS T RUCT IO N
+
+          White background. Safety box style for the second paragraph.
+
+ WEBS IT E CO P Y
+
+Your doctor's role
+
+Your doctor decides your treatment. We supply the medicine. We cannot choose a medicine for you or
+change your treatment.
+
+     If you do not yet have a prescription, please see a doctor first.
+
+Getmeds Vanuatu -- Website Content & Design Guide  62 / 90
+How prescription medicines are handled
+
+      D ES IG N INS T RUCT IO N
+
+          Soft Mint background, four icon ticks.
+
+ WEBS IT E CO P Y
+
+How prescription medicines are handled
+
+     Prescription medicines need a valid prescription.
+     Our pharmacist checks every prescription.
+     We only supply what your doctor prescribed.
+     A pharmacist explains how to take or handle your medicine.
+
+If you need a cancer medicine
+
+      D ES IG N INS T RUCT IO N
+
+          White card with Care Pink left border.
+
+ WEBS IT E CO P Y
+
+If you need a cancer medicine
+
+Cancer medicines must follow your doctor's prescription or treatment protocol. For your safety, we can
+only supply medicines that match what your doctor prescribed.
+If your medicine is an injection or drip, it is given at the hospital: Vila Central Hospital or Vanuatu Private
+Hospital.
+If you had treatment overseas and need to continue at home, bring the prescription or protocol from the
+overseas hospital.
+
+If your medicine is not available in Vanuatu
+
+      D ES IG N INS T RUCT IO N
+
+          Sky Tint background, text link to Named Patient Supply.
+
+ WEBS IT E CO P Y
+
+If your medicine is not available in Vanuatu
+
+We may be able to order it just for you through Named Patient Supply. It can take longer. We will tell you
+the price and expected time first.
+Link: About Named Patient Supply 
+
+Not sure what to do next?
+
+      D ES IG N INS T RUCT IO N
+
+          White background. Friendly text, then the Emergency box (red border) directly below it, then buttons.
+
+ WEBS IT E CO P Y
+
+Getmeds Vanuatu -- Website Content & Design Guide  63 / 90
+Not sure what to do next?
+
+Call us or send a message. Tell us what your doctor has told you, and we will explain the next steps in
+simple words.
+
+    In an emergency: If you feel very unwell, have a fever over 38 °C during chemotherapy, trouble
+    breathing, or bleeding that will not stop, go to the hospital straight away. Do not wait for a reply from
+    the pharmacy.
+
+Buttons: Patient Enquiry · Call Us
+
+Getmeds Vanuatu -- Website Content & Design Guide  64 / 90
+PAGE 13
+
+Services
+
+URL: /services
+
+SEO                    Our Services -- Getmeds Vanuatu
+SEO title              Cancer medicine supply, Named Patient Supply, medicine sourcing, essential
+Meta description       medicines, medical supplies and health checks from Getmeds Vanuatu in Port
+                       Vila.
+H1
+Suggested H2 sections  Our services
+Primary keyword        One H2 per service (see below)
+Secondary keywords     Getmeds Vanuatu
+URL slug               chemotherapy pharmacy Pacific, specialist medicines Vanuatu
+                       /services
+
+P AG E D ES IG N D IRECT IO N
+
+An overview page. Top: H1 and intro. Then a grid of 8 service cards (2 columns desktop, 1 mobile);
+each card expands (or links) to show the full details. Card anatomy: icon, service name (H2), one-line
+explanation, "Who it is for" tag, arrow. Expanded view: detail paragraph, how-it-works mini steps, CTA
+button.
+
+Intro
+
+      D ES IG N INS T RUCT IO N
+
+          White background, centred.
+
+ WEBS IT E CO P Y
+
+Our services
+
+Everything we do is about one thing: helping people get the medicines they need.
+
+Service 1 -- Cancer medicine supply
+
+      D ES IG N INS T RUCT IO N
+
+          Card with Care Pink top border (flagship service).
+
+ WEBS IT E CO P Y
+
+One line: Cancer and chemotherapy medicines in Port Vila.
+
+Getmeds Vanuatu -- Website Content & Design Guide                                 65 / 90
+Details: Our main work. Medicines in stock, for import, or sourced on request, supplied against a
+prescription or treatment protocol.
+Who it is for: Patients, oncologists, hospitals
+How it works: Send the prescription  pharmacist check  quotation  supply
+CTA: Request a Cancer Medicine
+
+Service 2 -- Treatment cycle planning
+
+      D ES IG N INS T RUCT IO N
+
+          Standard card, calendar icon.
+
+ WEBS IT E CO P Y
+
+One line: Your medicine ready for every cycle.
+Details: We schedule pick-up, explain your medicine and plan the next cycle. We update supply if the
+protocol changes.
+Who it is for: Patients on ongoing treatment
+How it works: Set up with your first order, then we contact you before each cycle.
+CTA: Patient Enquiry
+
+Service 3 -- Named Patient Supply
+
+      D ES IG N INS T RUCT IO N
+
+          Standard card, person-tag icon.
+
+ WEBS IT E CO P Y
+
+One line: Medicines not normally available in Vanuatu, for one named patient.
+Details: We help arrange the medicine, the import approval and the paperwork.
+Who it is for: Patients and their doctors
+How it works: Prescription  sourcing  quotation  import  supply
+CTA: Named Patient Supply Enquiry
+
+Service 4 -- Medicine sourcing and import
+
+      D ES IG N INS T RUCT IO N
+
+          Standard card, globe icon.
+
+ WEBS IT E CO P Y
+
+One line: Hard-to-find medicines, found for you.
+Details: Flexible procurement through our suppliers and the wider Getmeds group. Freight costs and
+export papers may affect some items; we tell you first.
+Who it is for: Patients, pharmacies, hospitals
+How it works: Enquiry  quotation  order confirmation  sourcing  receiving  supply
+CTA: Request a Quotation
+
+Getmeds Vanuatu -- Website Content & Design Guide                                                     66 / 90
+Service 5 -- Essential medicines
+
+      D ES IG N INS T RUCT IO N
+
+          Standard card, pill icon.
+
+ WEBS IT E CO P Y
+
+One line: Everyday and long-term medicines.
+Details: Antibiotics, over-the-counter medicines, and medicines for diabetes, blood pressure, cholesterol,
+heart and kidney care.
+Who it is for: Patients, clinics, pharmacies
+How it works: Visit us or send a prescription.
+CTA: Enquire About Medicines
+
+Service 6 -- Medical supplies and devices
+
+      D ES IG N INS T RUCT IO N
+
+          Standard card, clipboard-gear icon.
+
+ WEBS IT E CO P Y
+
+One line: Consumables, devices and equipment.
+Details: Single-use consumables, devices for asthma, diabetes and blood pressure, medical equipment
+and laboratory supplies.
+Who it is for: Hospitals, clinics, patients
+How it works: Send your list  quotation  supply
+CTA: Request a Quotation
+
+Service 7 -- Institutional supply
+
+      D ES IG N INS T RUCT IO N
+
+          Navy card (stands out for professionals).
+
+ WEBS IT E CO P Y
+
+One line: Supply for hospitals, clinics and agencies.
+Details: Quotations and ongoing supply for facilities, and for overseas treatment agencies whose patients
+return home.
+Who it is for: Hospitals, clinics, pharmacies, agencies
+How it works: Product list  quotation  supply  follow-up
+CTA: Healthcare Professional Enquiry
+
+Getmeds Vanuatu -- Website Content & Design Guide  67 / 90
+Service 8 -- Basic health checks
+
+      D ES IG N INS T RUCT IO N
+
+          Standard card, heart-pulse icon.
+
+ WEBS IT E CO P Y
+
+One line: Blood pressure and blood sugar checks.
+Details: Simple checks at our pharmacy. If a result needs attention, we advise you to see a doctor.
+Who it is for: Members of the public
+How it works: Visit during opening hours. No appointment needed.
+CTA: Contact Us
+
+Getmeds Vanuatu -- Website Content & Design Guide                                                    68 / 90
+PAGE 14
+
+FAQ
+
+URL: /faq
+
+SEO                    Frequently Asked Questions -- Getmeds Vanuatu
+SEO title              Answers about Getmeds Vanuatu: medicines, prescriptions, Named Patient
+Meta description       Supply, chemotherapy, Pacific access, pricing and how to contact us.
+                       Frequently asked questions
+H1                     Grouped as: About Getmeds · Medicines and prescriptions · Cancer medicines ·
+Suggested H2 sections  Pacific access · Price and timing · Contact and safety
+                       Getmeds Vanuatu
+Primary keyword        Named Patient Supply, chemotherapy Vanuatu, medicines Pacific Islands
+Secondary keywords     /faq
+URL slug
+
+P AG E D ES IG N D IRECT IO N
+
+Accordion list grouped under six small headings, with a search box at the top. Only one answer open
+at a time. Add FAQPage structured data (schema.org) for search engines. End with a "Still have a
+question?" card.
+
+Questions and answers
+
+      D ES IG N INS T RUCT IO N
+
+          White background, accordions 56px tall, Getmeds Blue plus/minus icons. Group headings in Poppins 600.
+
+ WEBS IT E CO P Y
+
+What is Getmeds Vanuatu?
+Getmeds Vanuatu is a pharmacy in Port Vila. Our main focus is cancer medicines. We also supply essential
+medicines, medical supplies and devices.
+Where is Getmeds based?
+Ground Floor, Room 1006, Golden Port, Namba 2 Area, Port Vila, Vanuatu.
+What medicines are available?
+Cancer medicines, supportive medicines for cancer treatment, antibiotics, and medicines for diabetes,
+blood pressure, cholesterol, heart disease and kidney care. We also supply medical consumables and
+devices. Stock changes, so please contact the Getmeds team for current availability and requirements.
+What is Named Patient Supply?
+It is a way to get a prescribed medicine that is not normally available in Vanuatu, ordered for one named
+patient. Not every medicine can be supplied this way.
+
+Getmeds Vanuatu -- Website Content & Design Guide  69 / 90
+Can patients request medicines directly?
+Yes. Patients and families can contact us. For prescription medicines, we need your doctor's prescription.
+
+Do I need a prescription?
+Yes, for all prescription medicines. Cancer medicines must follow a doctor's prescription or treatment
+protocol. We only supply what your doctor prescribed.
+
+Can doctors and hospitals contact Getmeds?
+Yes. We work with doctors, hospitals, clinics, pharmacies and overseas treatment agencies. Send us your
+requirement and we will send a quotation.
+
+Does Getmeds provide chemotherapy medicines?
+Yes. Chemotherapy and other cancer medicines are our main specialisation. Injectable chemotherapy is
+given at a hospital, such as Vila Central Hospital or Vanuatu Private Hospital.
+
+What oncology medicines are available?
+We supply cancer medicines from stock, by import, or by sourcing on request. We do not list individual
+medicines online because stock changes. Please contact the Getmeds team for current availability and
+requirements.
+
+Can patients from other Pacific Islands access Getmeds?
+We are working to expand access across the Pacific and welcome enquiries from other Pacific countries.
+Contact us with your country and the medicine you need, and we will tell you what is possible.
+
+How can I check medicine availability?
+Send us the medicine name and prescription by phone, email or the online form. Our pharmacist will
+check and reply.
+
+How does pricing work?
+Prices depend on the medicine, amount and source. We give you a clear quotation before you commit.
+You pay nothing until you agree.
+
+How long does supply take?
+It depends on whether the medicine is in stock, needs to be imported, or must be specially sourced. We
+give you the earliest possible date when we quote. Please contact the Getmeds team for current
+availability and requirements.
+
+What information is required?
+Usually the patient's name and contact details, the prescription or treatment protocol, and the doctor's
+details. For imported medicines we may need more papers.
+
+Do you deliver outside Port Vila?
+You can collect in Port Vila, or ask us about delivery to your island. Medicines that need cold storage travel
+in monitored cold boxes.
+
+How can I contact Getmeds?
+Call +678 528 2543 (Monday to Friday, 8am to 5pm), email getmeds.vu@gmail.com, use the online form,
+or visit us at Golden Port, Port Vila.
+
+Can Getmeds tell me which medicine to take?
+No. Your doctor decides your treatment. Our pharmacist can explain how to take the medicine your doctor
+prescribed.
+
+What should I do in an emergency?
+Go to the nearest hospital emergency department or contact your treating hospital. Do not wait for a reply
+from the pharmacy.
+
+Getmeds Vanuatu -- Website Content & Design Guide  70 / 90
+Still have a question?
+
+      D ES IG N INS T RUCT IO N
+
+          Soft Mint card with two buttons.
+
+ WEBS IT E CO P Y
+
+Still have a question?
+
+Our team is happy to help.
+Buttons: Contact Us · Call +678 528 2543
+
+Getmeds Vanuatu -- Website Content & Design Guide  71 / 90
+PAGE 15
+
+Contact
+
+URL: /contact
+
+SEO                    Contact Getmeds Vanuatu -- Port Vila Pharmacy
+SEO title              Contact Getmeds Vanuatu in Port Vila about cancer medicines, Named Patient
+Meta description       Supply or other medicines. Patients and healthcare professionals welcome.
+                       Contact us
+H1                     How can we help? · Send an enquiry · Visit or call · What happens next · In an
+Suggested H2 sections  emergency
+                       Getmeds Vanuatu contact
+Primary keyword        pharmacy Port Vila, medicines Vanuatu
+Secondary keywords     /contact
+URL slug
+
+P AG E D ES IG N D IRECT IO N
+
+Make contacting easy in one screen. Desktop: left column (7/12) with enquiry-type cards and the
+form; right column (5/12) sticky contact card with phone, email, address, hours and an embedded
+map of Golden Port. Mobile: phone button first, then enquiry types, form, details, map. The
+emergency box sits at the bottom with a red border.
+
+Heading and intro
+
+      D ES IG N INS T RUCT IO N
+
+          Sky Tint short hero.
+
+ WEBS IT E CO P Y
+
+Contact us
+
+Tell us what you need. A member of our team will reply, and a pharmacist checks every medicine request.
+The phone is the fastest way to reach us.
+
+How can we help? (enquiry types)
+
+      D ES IG N INS T RUCT IO N
+
+          Four selectable cards. Clicking one scrolls to the form and pre-selects the enquiry type.
+
+ WEBS IT E CO P Y
+
+Getmeds Vanuatu -- Website Content & Design Guide                                                72 / 90
+Enquiry type                 Button                   Short text
+                                                      Need a medicine your doctor prescribed? Start here.
+Patient                      Patient Enquiry          Doctors, hospitals, clinics and pharmacies: request a
+                                                      quotation.
+Healthcare                   Healthcare Professional  Check if we can supply a medicine and what it costs.
+professional                 Enquiry                  Need a medicine not normally available in Vanuatu?
+
+Medicine                     Medicine Enquiry
+
+Named Patient Supply Named Patient Supply
+                                    Enquiry
+
+Contact form
+
+D ES IG N INS T RUCT IO N
+
+    Single-column form, labels above fields, 52px inputs, helper text in grey under each label. Required fields
+    marked *. Upload field accepts JPG, PNG, PDF up to 10MB and shows a thumbnail.
+    Show a progress-free, simple form; split into two steps only if analytics show drop-off.
+
+WEBS IT E CO P Y
+
+Send an enquiry
+
+Form instructions: Fill in what you can. If you are not sure, leave it blank and we will ask you. Fields
+marked * are required.
+
+Label                                Helper text
+I am a... *
+                                     Patient or family member / Doctor / Hospital or clinic / Pharmacy / Other
+                                     organisation
+
+Full name *                          The name of the person we should contact
+
+Patient name (if different)          Only if you are asking for someone else
+
+Phone or WhatsApp number *           Include your country code, for example +678
+
+Email                                Optional, but helpful for sending quotations
+
+Country *                            Vanuatu or another Pacific country
+
+Island or town                       Helps us plan collection or delivery
+
+Enquiry type *                       Medicine / Cancer medicine / Named Patient Supply / Quotation / Other
+
+Medicine name(s)                     Write it as it appears on the prescription
+
+Upload prescription or treatment     A clear photo or PDF. We need this before we can supply a prescription
+protocol                             medicine
+
+Date needed                          For example, the date of the next treatment cycle
+
+Message                              Anything else we should know
+
+Consent *                            I agree that Getmeds may use these details to respond to my enquiry. (Link:
+                                     Privacy Policy)
+
+Getmeds Vanuatu -- Website Content & Design Guide                                                                73 / 90
+Label                           Helper text
+Submit button                   Send Enquiry
+
+Message after submit: Thank you. We have received your enquiry. Our team will contact you within one
+working day. If your medicine is urgent, please call us.
+
+Visit or call (contact details)
+
+D ES IG N INS T RUCT IO N
+
+    Sticky white card with icons (map pin, phone, mail, clock). Phone and email are tap-to-call / tap-to-email links.
+    Map embed below the card, 280px tall.
+
+WEBS IT E CO P Y
+
+Visit or call
+
+Address: Ground Floor, Room 1006, Golden Port, Namba 2 Area, Port Vila, Shefa, Vanuatu
+Phone: +678 528 2543
+Email: getmeds.vu@gmail.com (answered within one working day; do not use email for anything urgent)
+Opening hours: Monday to Friday, 8am to 5pm. Closed on public holidays.
+Finding us: We are on the ground floor of Golden Port in the Namba 2 area, room 1006. No stairs.
+
+What happens next
+
+D ES IG N INS T RUCT IO N
+
+    Three-step mini component.
+
+WEBS IT E CO P Y
+
+What happens next
+
+1. We receive your enquiry.
+2. A pharmacist reviews any prescription.
+3. We contact you with availability, price and next steps.
+
+In an emergency
+
+D ES IG N INS T RUCT IO N
+
+    Emergency box (red border, warning icon).
+
+WEBS IT E CO P Y
+
+In an emergency
+
+Do not contact a pharmacy in a medical emergency. A fever over 38 °C during or after chemotherapy,
+vomiting you cannot stop, trouble breathing, or bleeding that will not stop: contact your treating hospital or
+go to the emergency department now.
+
+Getmeds Vanuatu -- Website Content & Design Guide           74 / 90
+Other reasons to get in touch
+
+      D ES IG N INS T RUCT IO N
+
+          Three small link cards in a row.
+
+ WEBS IT E CO P Y
+
+     Report a side effect -- something happened after taking a medicine we supplied.
+     Make a complaint -- if something went wrong, we want to hear it.
+     Return or dispose of medicine -- unused cancer medicine must not go in household rubbish.
+
+Getmeds Vanuatu -- Website Content & Design Guide                                               75 / 90
+PAGE 16
+
+Report a Side Effect
+
+URL: /report-a-side-effect
+
+SEO                    Report a Side Effect -- Getmeds Vanuatu
+SEO title              Tell Getmeds Vanuatu about a side effect or problem after taking a medicine we
+Meta description       supplied.
+                       Report a side effect
+H1                     When to report · How to report · What we do next
+Suggested H2 sections  report side effect Vanuatu
+Primary keyword        medicine safety Vanuatu
+Secondary keywords     /report-a-side-effect
+URL slug
+
+P AG E D ES IG N D IRECT IO N
+
+Simple, calm form page. Emergency box at the very top, then short text and a short form. No imagery.
+
+Emergency notice
+
+      D ES IG N INS T RUCT IO N
+
+          Emergency box, top of page.
+
+ WEBS IT E CO P Y
+
+     If the reaction is serious -- trouble breathing, swelling of the face or throat, a fever during
+     chemotherapy, or bleeding that will not stop -- go to hospital now.
+
+When to report
+
+      D ES IG N INS T RUCT IO N
+
+          White background.
+
+ WEBS IT E CO P Y
+
+Report a side effect
+
+If you or someone you care for had an unexpected reaction after taking a medicine from Getmeds, please
+tell us. Also tell your doctor. Your report helps keep other patients safe.
+
+Getmeds Vanuatu -- Website Content & Design Guide  76 / 90
+Form
+
+      D ES IG N INS T RUCT IO N
+
+          Same form styling as Contact.
+
+ WEBS IT E CO P Y
+
+Fields: Your name * · Phone * · Patient name · Medicine name * · Date started · What happened? * · Is the
+patient still taking the medicine? (Yes/No) · Doctor's name · Consent *
+Submit: Send Report
+After submit: Thank you. A pharmacist will review your report and contact you.
+
+What we do next
+
+ WEBS IT E CO P Y
+
+What we do next
+
+A pharmacist reviews every report, contacts you if we need more details, and passes safety information to
+the proper health authorities where required.
+
+Getmeds Vanuatu -- Website Content & Design Guide  77 / 90
+PAGE 17
+
+Complaints and Feedback
+
+URL: /complaints
+
+SEO                    Complaints and Feedback -- Getmeds Vanuatu
+SEO title              Tell us if something went wrong with your order, medicine or service. We listen
+Meta description       and respond.
+                       Complaints and feedback
+H1                     How to tell us · What happens next
+Suggested H2 sections  Getmeds Vanuatu feedback
+Primary keyword        pharmacy complaints Port Vila
+Secondary keywords     /complaints
+URL slug
+
+P AG E D ES IG N D IRECT IO N
+
+Short, respectful page. White background, three-step process component, short form (Name,
+Phone, Email, Order or reference, What happened, What would you like us to do, Consent).
+
+Intro
+
+ WEBS IT E CO P Y
+
+Complaints and feedback
+
+If something went wrong, we would rather hear it from you. Your feedback helps us improve.
+
+How to tell us
+
+      D ES IG N INS T RUCT IO N
+
+          Three icon options in a row.
+
+ WEBS IT E CO P Y
+
+     Call +678 528 2543
+     Email getmeds.vu@gmail.com
+     Use the form on this page
+
+Getmeds Vanuatu -- Website Content & Design Guide                                           78 / 90
+What happens next
+
+      D ES IG N INS T RUCT IO N
+
+          Three-step component.
+
+ WEBS IT E CO P Y
+
+ 1. We confirm we have received your complaint within two working days.
+ 2. A senior team member looks into it.
+ 3. We contact you with what we found and what we will do.
+
+Getmeds Vanuatu -- Website Content & Design Guide                        79 / 90
+PAGE 18
+
+Policies and Safety
+
+URL: /policies-and-safety
+
+SEO                    Policies and Patient Safety -- Getmeds Vanuatu
+SEO title              How Getmeds Vanuatu keeps medicines safe: prescriptions, pharmacist checks,
+Meta description       cold storage, returns and safe disposal.
+                       Policies and patient safety
+H1                     Prescriptions · Pharmacist checks · Storage and cold chain · Returns and
+Suggested H2 sections  disposal · Your information
+                       medicine safety Vanuatu
+Primary keyword        cold chain medicines Vanuatu
+Secondary keywords     /policies-and-safety
+URL slug
+
+P AG E D ES IG N D IRECT IO N
+
+A reference page with a left-side in-page menu on desktop and accordions on mobile. Each policy is
+a short block with an icon.
+
+Prescriptions
+
+ WEBS IT E CO P Y
+
+Prescriptions
+
+Every prescription medicine needs a valid prescription from a doctor. Cancer medicines must follow a
+prescription or treatment protocol. We do not sell prescription medicines without one.
+
+Pharmacist checks
+
+ WEBS IT E CO P Y
+
+Pharmacist checks
+
+A pharmacist checks every prescription for the right medicine, strength and amount before supply, and
+explains how to take or handle the medicine.
+
+Storage and cold chain
+
+      D ES IG N INS T RUCT IO N
+
+          Thermometer icon, Info box for 2­8 °C.
+
+Getmeds Vanuatu -- Website Content & Design Guide  80 / 90
+ WEBS IT E CO P Y
+
+Storage and cold chain
+
+Medicines are stored as the maker directs. Medicines that must stay between 2 and 8 °C are kept in
+monitored refrigerators and travel in monitored cold boxes, logged from supplier to patient.
+
+Returns and safe disposal
+
+      D ES IG N INS T RUCT IO N
+
+          Safety box for the cancer-medicine warning.
+
+ WEBS IT E CO P Y
+
+Returns and safe disposal
+
+For safety, we cannot resell medicines once they have left the pharmacy.
+
+     Unused cancer medicines must not go in household rubbish or down the toilet. Bring them back to
+     us in their original pack and we will dispose of them safely.
+
+Your information
+
+ WEBS IT E CO P Y
+
+Your information
+
+We keep your prescription and personal details private and use them only to supply your medicine. See
+our Privacy Policy.
+
+Getmeds Vanuatu -- Website Content & Design Guide  81 / 90
+PAGE 19
+
+Privacy Policy
+
+URL: /privacy
+
+SEO                    Privacy Policy -- Getmeds Vanuatu
+SEO title              How Getmeds Vanuatu collects, uses and protects your personal and health
+Meta description       information.
+                       Privacy Policy
+H1                     What we collect · Why we use it · Who we share it with · How we keep it safe ·
+Suggested H2 sections  Your choices · Contact
+                       Getmeds Vanuatu privacy
+Primary keyword        patient privacy Vanuatu
+Secondary keywords     /privacy
+URL slug
+
+P AG E D ES IG N D IRECT IO N
+
+Plain text page, narrow reading column (720px), clear H2s, last-updated date at the top. No imagery.
+
+Policy text
+
+ WEBS IT E CO P Y
+
+Last updated: September 2026
+
+What we collect
+
+Your name and contact details, the patient's details, prescriptions and treatment protocols, the medicines
+you order, and your messages to us.
+
+Why we use it
+
+To check prescriptions, supply medicines, plan treatment cycles, contact you about your order, and meet
+legal and safety duties.
+
+Who we share it with
+
+Only people who need it to supply your medicine: our pharmacist and team, your doctor or hospital,
+suppliers and authorities for import approval, and delivery partners. We never sell your information.
+
+How we keep it saf e
+
+We store records securely and limit who can see them. We keep records only as long as needed for your
+care and the law.
+
+Your choices
+
+Getmeds Vanuatu -- Website Content & Design Guide  82 / 90
+You can ask to see or correct your information at any time.
+
+Contact
+
+Email getmeds.vu@gmail.com or call +678 528 2543.
+
+Getmeds Vanuatu -- Website Content & Design Guide            83 / 90
+PAGE 20
+
+Terms of Use
+
+URL: /terms
+
+SEO                    Terms of Use -- Getmeds Vanuatu
+SEO title              The terms for using the Getmeds Vanuatu website.
+Meta description       Terms of Use
+H1                     Using this website · Medical information · Orders and prices · Links · Changes
+Suggested H2 sections  Getmeds Vanuatu terms
+Primary keyword        pharmacy website terms Vanuatu
+Secondary keywords     /terms
+URL slug
+
+P AG E D ES IG N D IRECT IO N
+
+Same plain text layout as the Privacy Policy.
+
+Terms text
+
+ WEBS IT E CO P Y
+
+Last updated: September 2026
+
+Using this website
+
+This website gives information about Getmeds Vanuatu and lets you send enquiries. No medicines are sold
+or paid for on this website.
+
+Medical information
+
+Information on this website is general and is not medical advice. Always follow the advice of your doctor,
+nurse or pharmacist.
+
+Orders and prices
+
+Every medicine request is checked by a pharmacist. Availability and prices are confirmed in a quotation
+before you commit. Prescription medicines need a valid prescription.
+
+Links
+
+We are not responsible for the content of other websites we link to.
+
+Changes
+
+We may update these terms. The date at the top shows the latest version.
+
+Getmeds Vanuatu -- Website Content & Design Guide  84 / 90
+PAGE 21
+
+Page Not Found (404)
+
+URL: /404
+
+SEO        Page not found -- Getmeds Vanuatu
+SEO title  noindex
+Meta
+
+P AG E D ES IG N D IRECT IO N
+
+Friendly, centred layout with a simple island illustration and four link cards. Include the phone number.
+
+Copy
+
+ WEBS IT E CO P Y
+
+That page is not here
+
+The address you used does not match a page on this site. Nothing has gone wrong with your medicine or
+your enquiry.
+Link cards: Request a Medicine · For Patients · Medicines · Contact
+Or call: +678 528 2543, Monday to Friday, 8am to 5pm.
+
+Getmeds Vanuatu -- Website Content & Design Guide  85 / 90
+PAGE 22
+
+Footer and Global Elements
+
+URL: All pages
+
+P AG E D ES IG N D IRECT IO N
+
+The footer is navy (#0B2A5B) with white and light-blue text, a thin brand-gradient line on top, and
+four link columns. On mobile, link columns become accordions. The medical disclaimer sits in a
+slightly darker strip at the very bottom.
+
+Footer -- brand block
+
+D ES IG N INS T RUCT IO N
+
+    Left column: logo (white version), short description, phone and email with icons.
+
+WEBS IT E CO P Y
+
+Getmeds Vanuatu-Pacific
+A pharmacy in Port Vila focused on cancer medicines. We help patients and healthcare providers access
+important medicines in Vanuatu and across the Pacific.
+Prescription medicines are supplied only against a valid prescription. Availability may vary.
++678 528 2543 · getmeds.vu@gmail.com · Golden Port, Namba 2, Port Vila
+
+Footer -- navigation columns
+
+D ES IG N INS T RUCT IO N
+
+    Four columns, Poppins 600 headings, 15px links.
+
+WEBS IT E CO P Y       Services                      Help                                 Company
+                       Oncology and chemotherapy     How it works                         About us
+  Medicines            Named Patient Supply          FAQ                                  Pacific access
+  Medicines we supply  For healthcare professionals  Contact                              Affordable access
+  Conditions           For patients                  Report a side effect                 Services
+  Cancer medicines
+  Medical supplies
+
+Footer -- CTA strip
+
+      D ES IG N INS T RUCT IO N
+
+          Above the columns: a rounded gradient card with one line and the green button.
+
+Getmeds Vanuatu -- Website Content & Design Guide                                                            86 / 90
+ WEBS IT E CO P Y
+
+Need a medicine? Send your prescription and we will check it for you. Button: Request a Medicine
+
+Footer -- legal and disclaimer
+
+      D ES IG N INS T RUCT IO N
+
+          Bottom strip, 14px text.
+
+ WEBS IT E CO P Y
+
+Links: Privacy Policy · Terms of Use · Complaints · Policies and Safety
+Medical disclaimer: The information on this website is general and is not medical advice. Getmeds
+Vanuatu does not diagnose or treat illness. Always follow the advice of your doctor, nurse or pharmacist.
+Do not start, stop or change a medicine without talking to them first. In an emergency, go to your nearest
+hospital.
+© 2026 Getmeds Vanuatu-Pacific. Port Vila, Vanuatu.
+
+Cookie notice
+
+      D ES IG N INS T RUCT IO N
+
+          Small bottom banner, two equal buttons. Default to essential cookies only.
+
+ WEBS IT E CO P Y
+
+We use essential cookies to make this website work. With your permission we also use analytics cookies
+to improve it. Buttons: Accept analytics · Essential only
+
+Getmeds Vanuatu -- Website Content & Design Guide  87 / 90
+PAGE 23
+
+Website Navigation
+
+URL: Site map
+
+P AG E D ES IG N D IRECT IO N
+
+Keep the top menu to seven items so it fits on one line on laptops. "Request a Medicine" is always a
+green button, never a plain link.
+
+Top menu
+
+ WEBS IT E CO P Y
+
+ 1. Home
+ 2. Medicines (dropdown: Medicines we supply · Conditions)
+ 3. Oncology
+ 4. Named Patient Supply
+ 5. How It Works
+ 6. For Healthcare Professionals
+ 7. Contact
+ 8. Button: Request a Medicine
+
+Secondary pages (footer and in-page links)
+
+ WEBS IT E CO P Y
+
+About · For Patients · Pacific Access · Affordable Access · Services · FAQ · Report a Side Effect ·
+Complaints · Policies and Safety · Privacy · Terms
+
+Full site map                                      URL
+                                                   /
+ WEBS IT E CO P Y                                  /about
+                                                   /oncology
+   Page                                            /medicines
+   Home                                            /named-patient-supply
+   About                                           /how-it-works
+   Oncology and Chemotherapy                       /conditions
+   Medicines
+   Named Patient Supply
+   How It Works
+   Conditions hub
+
+Getmeds Vanuatu -- Website Content & Design Guide                                                    88 / 90
+Page                                               URL
+53 condition pages                                 /conditions/[slug]
+Pacific Access                                     /pacific-access
+Affordable Access                                  /affordable-access
+For Healthcare Professionals                       /healthcare-professionals
+For Patients                                       /patients
+Services                                           /services
+FAQ                                                /faq
+Contact                                            /contact
+Report a Side Effect                               /report-a-side-effect
+Complaints                                         /complaints
+Policies and Safety                                /policies-and-safety
+Privacy Policy                                     /privacy
+Terms of Use                                       /terms
+
+Getmeds Vanuatu -- Website Content & Design Guide                             89 / 90
+      PAGE A
+
+   Appendix -- Pre-launch checks
+
+       URL: For the Getmeds team
+
+      P AG E D ES IG N D IRECT IO N
+
+    Internal only. Do not publish.
+
+Items to check before going live
+
+ CHECKLIS T
+
+     [ ] Supporting evidence on file for "first chemotherapy pharmacy in the Pacific"
+     [ ] Named Patient Supply steps match the Office of the Principal Pharmacist's import-approval process
+     [ ] Phone, email, opening hours and WhatsApp use are current
+     [ ] Delivery to outer islands and cold-box process are running as described
+     [ ] Blood pressure and blood sugar checks are offered at the pharmacy
+     [ ] Product ranges exist for every medicine group listed (including allergy, anti-inflammatory, bone
+     health, anaemia and contrast media)
+     [ ] Privacy Policy and Terms of Use reviewed by a lawyer in Vanuatu
+     [ ] A pharmacist has reviewed every condition page
+
+Getmeds Vanuatu -- Website Content & Design Guide  90 / 90
+

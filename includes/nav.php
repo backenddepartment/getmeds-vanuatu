@@ -1,86 +1,60 @@
 <?php
 /**
- * Main navigation. Six items, never more. Dropdowns hold at most five.
- *
- * Works with no JavaScript at all: the panel opens on hover and on focus-within,
- * and every parent label is itself a link to a landing page that lists the same
- * children as body content. Nothing is reachable only through a dropdown.
- *
- * With JavaScript the disclosure buttons appear and the panel becomes
- * click-operated instead of hover-operated, so a tremor or an imprecise pointer
- * cannot close a menu that is being read.
- *
- * The site search sits just before the last item (Contact). On a wide screen it
- * and Contact are pushed to the right end of the row; on a phone the search is
- * a full-width field inside the open menu. It submits to /search with GET, so
- * it works without JavaScript.
+ * Main navigation: the seven items from nav_tree(). Medicines opens a small
+ * dropdown on hover or focus without JavaScript; guide.js adds click and
+ * Escape handling. On a phone the list drops open under the header.
  */
-$here  = current_path();
-$tree  = nav_tree();
-$last  = count($tree) - 1;
+$here = current_path();
+$tree = nav_tree();
+$last = count($tree) - 1;
 // Echo the query back into the field on the results page, and only there.
-$navQ  = ($here === '/search' && isset($_GET['q']) && is_string($_GET['q'])) ? $_GET['q'] : '';
+$navQ = ($here === '/search' && isset($_GET['q']) && is_string($_GET['q'])) ? $_GET['q'] : '';
 ?>
-<nav id="sitenav" class="nav" aria-label="Main">
-  <ul class="nav__list">
+<nav class="g-nav" id="g-nav" aria-label="Main">
+  <ul class="g-nav__list">
     <?php foreach ($tree as $i => $item):
-        $hasPanel = !empty($item['children']);
-        $isHere    = ($here === rtrim($item['url'], '/') || ($item['url'] === '/' && $here === '/'));
-        $isSection = in_section($item['url']) && $item['url'] !== '/';
-        $panelId   = 'navpanel-' . $i;
-        $classes   = 'nav__item' . ($hasPanel ? ' nav__item--parent' : '')
-                   . ($isSection || $isHere ? ' is-current' : '');
+        $kids   = $item['children'] ?? [];
+        $isHere = $item['url'] === '/' ? $here === '/' : in_section($item['url']);
+        if ($kids) {
+            foreach ($kids as $k) {
+                $isHere = $isHere || in_section($k['url']);
+            }
+        }
     ?>
-    <?php if ($i === $last): ?>
-    <li class="nav__item nav__item--search">
-      <form class="navsearch" role="search" method="get" action="<?= e(url('/search/')) ?>">
-        <label class="u-hidden" for="navsearch-q">Search this site</label>
-        <input class="navsearch__input" type="search" id="navsearch-q" name="q"
-               placeholder="How can we help you?" autocomplete="off" maxlength="100"
-               value="<?= e($navQ) ?>">
-        <button class="navsearch__btn" type="submit"><?= icon('search') ?><span class="u-hidden">Search</span></button>
+    <?php if ($i === $last): /* Site search, GET to /search, so it works without JS. */ ?>
+    <li class="g-nav__item g-nav__item--search">
+      <form class="g-navsearch" role="search" method="get" action="<?= e(url('/search/')) ?>">
+        <label class="g-sr" for="g-navsearch-q">Search this site</label>
+        <input class="g-navsearch__input" type="search" id="g-navsearch-q" name="q"
+               placeholder="How can we help you?" autocomplete="off" maxlength="100" value="<?= e($navQ) ?>">
+        <button class="g-navsearch__btn" type="submit" aria-label="Search"><?= gi('search') ?></button>
       </form>
     </li>
     <?php endif; ?>
-    <li class="<?= $classes ?>">
-      <a class="nav__link" href="<?= e(url($item['url'])) ?>"<?= $isHere ? ' aria-current="page"' : '' ?>><?= e($item['label']) ?></a>
-
-      <?php if ($hasPanel): ?>
-      <button class="nav__disc" type="button" aria-expanded="false" aria-controls="<?= $panelId ?>">
-        <span class="u-hidden">Show pages under <?= e($item['label']) ?></span>
-        <svg class="icon icon--chev" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
-          <path d="M3.5 6L8 10.5 12.5 6"/>
-        </svg>
+    <li class="g-nav__item<?= $kids ? ' g-nav__item--drop' : '' ?><?= $isHere ? ' is-current' : '' ?>">
+      <?php if ($kids): ?>
+      <button class="g-nav__link" type="button" aria-expanded="false" aria-controls="g-drop-<?= $i ?>">
+        <?= e($item['label']) ?><?= gi('chev-down') ?>
       </button>
-
-      <?php /* Full width on a wide screen: the section's title and summary on
-               the left, its pages with their one-line summaries on the right.
-               On a phone only the page names show, as a plain list. */ ?>
-      <div class="nav__panel" id="<?= $panelId ?>">
-        <div class="nav__panel-inner">
-          <div class="nav__intro">
-            <p class="nav__intro-title"><?= e($item['label']) ?></p>
-            <?php if (!empty($item['blurb'])): ?>
-            <p class="nav__intro-text"><?= e($item['blurb']) ?></p>
-            <?php endif; ?>
-          </div>
-          <ul class="nav__sub">
-            <?php foreach ($item['children'] as $child):
-                $childHere = ($here === rtrim($child['url'], '/')); ?>
-            <li>
-              <a href="<?= e(url($child['url'])) ?>"<?= $childHere ? ' aria-current="page"' : '' ?>>
-                <span class="nav__sub-title"><?= e($child['label']) ?><?= icon('go') ?></span>
-                <?php if (!empty($child['blurb'])): ?>
-                <span class="nav__sub-blurb"><?= e($child['blurb']) ?></span>
-                <?php endif; ?>
-              </a>
-            </li>
-            <?php endforeach; ?>
-          </ul>
-        </div>
-      </div>
+      <ul class="g-nav__drop" id="g-drop-<?= $i ?>">
+        <?php foreach ($kids as $k): ?>
+        <li><a href="<?= e(url($k['url'])) ?>"<?= $here === $k['url'] ? ' aria-current="page"' : '' ?>><?= e($k['label']) ?></a></li>
+        <?php endforeach; ?>
+      </ul>
+      <?php else: ?>
+      <a class="g-nav__link" href="<?= e(url($item['url'])) ?>"<?= $here === $item['url'] ? ' aria-current="page"' : '' ?>><?= e($item['label']) ?></a>
       <?php endif; ?>
     </li>
     <?php endforeach; ?>
+    <?php /* Language: English / Bislama, switched in the browser (assets/js/i18n.js). */ ?>
+    <li class="g-nav__item g-nav__item--drop g-nav__item--lang" data-no-i18n>
+      <button class="g-nav__link" type="button" aria-expanded="false" aria-controls="g-drop-lang" aria-label="Language">
+        <?= gi('globe') ?><span data-lang-current>English</span><?= gi('chev-down') ?>
+      </button>
+      <ul class="g-nav__drop" id="g-drop-lang">
+        <li><button type="button" class="g-lang__opt" data-lang="en" lang="en">English</button></li>
+        <li><button type="button" class="g-lang__opt" data-lang="bi" lang="bi">Bislama</button></li>
+      </ul>
+    </li>
   </ul>
 </nav>

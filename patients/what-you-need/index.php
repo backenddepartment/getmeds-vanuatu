@@ -1,9 +1,8 @@
 <?php
 /**
- * Merged into /how-it-works on 2026-09-24. The address is kept so old links,
- * bookmarks and search results still land in the right place.
+ * Old page, not in the content guide: 301 to its closest new page
+ * (build brief, owner decision 3).
  */
 require __DIR__ . '/../../includes/bootstrap.php';
 
-header('Location: ' . url('/how-it-works') . '#what-you-need', true, 301);
-exit;
+redirect_to('/how-it-works');

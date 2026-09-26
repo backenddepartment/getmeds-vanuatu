@@ -13,13 +13,14 @@ $desc    = $page['desc']    ?? '';
 $noindex = !empty($page['noindex']);
 ?>
 <!DOCTYPE html>
-<html lang="en-VU" class="no-js">
+<html lang="en" class="no-js">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <?php /* "Page — Getmeds Vanuatu", or the site name alone when that is the title
          (the home page), rather than "Getmeds Vanuatu — Getmeds Vanuatu". */ ?>
-<title><?= $title === cfg('site_name') ? e($title) : e($title) . ' — ' . e(cfg('site_name')) ?></title>
+<?php /* The content guide gives every page a full SEO title; use it verbatim. */ ?>
+<title><?= !empty($page['seo_title']) ? e($page['seo_title']) : ($title === cfg('site_name') ? e($title) : e($title) . ' — ' . e(cfg('site_name'))) ?></title>
 <?php if ($desc !== ''): ?>
 <meta name="description" content="<?= e($desc) ?>">
 <?php endif; ?>
@@ -42,7 +43,9 @@ $noindex = !empty($page['noindex']);
 
 <?php /* Self-hosted, no third-party request anywhere on this page. */ ?>
 <link rel="preload" href="<?= e(url('/assets/fonts/poppins-latin-400-normal.woff2')) ?>" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="<?= e(asset('/assets/css/site.css')) ?>">
+<link rel="preload" href="<?= e(url('/assets/fonts/inter-latin-400-normal.woff2')) ?>" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="<?= e(asset('/assets/css/base.css')) ?>">
+<link rel="stylesheet" href="<?= e(asset('/assets/css/guide.css')) ?>">
 <?php /* The navbar logo, centred on a square: the tab icon (32px, and 192px for
          high-resolution screens), and the icon a phone uses when the site is
          saved to its home screen. */ ?>
@@ -51,7 +54,9 @@ $noindex = !empty($page['noindex']);
 <link rel="apple-touch-icon" href="<?= e(asset('/assets/img/apple-touch-icon.png')) ?>" sizes="180x180">
 
 <?php /* Sets the js flag before first paint so nav never flashes open. */ ?>
-<script>document.documentElement.className='js';</script>
+<?php /* Also applies the remembered language (assets/js/i18n.js): with Bislama
+         chosen the page stays hidden until the swap, at most 2.5s. */ ?>
+<script>(function(d){var c='js';try{var q=/[?&]lang=(bi|en)/.exec(location.search);if(q){localStorage.setItem('gv-lang',q[1]);}if(localStorage.getItem('gv-lang')==='bi'){c+=' lang-bi lang-pending';d.lang='bi';setTimeout(function(){d.classList.remove('lang-pending');},2500);}}catch(e){}d.className=c;})(document.documentElement);</script>
 </head>
-<body>
+<body class="g">
 <a class="skip" href="#main">Skip to content</a>

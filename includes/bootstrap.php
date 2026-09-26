@@ -226,29 +226,31 @@ function csrf_valid(?string $token): bool
 }
 
 /**
- * The site's navigation. The single source for both the header nav and the
- * landing pages that list their own children, so the two can never drift.
+ * The site's navigation (content guide, page 23). Seven items, so the row fits
+ * on one line on a laptop. Medicines carries the guide's one dropdown.
  *
- * Six items, no dropdowns. Every section that used to be a dropdown is now one
- * page with anchors, because a patient hunting through a three-level menu for
- * "where do I order" is a patient who phones a competitor instead.
- *
- * Ordering is deliberately NOT in this list. It is the masthead button, on
- * every page, styled as the only filled control in the header.
+ * The guide also puts a green "Request a Medicine" button in the header. The
+ * owner asked for the header to carry links only, so that button lives in the
+ * page bodies, the footer CTA strip and the phone's sticky bottom bar instead.
  */
 function nav_tree(): array
 {
     return [
-        ['label' => 'Home',     'url' => '/'],
-        ['label' => 'Medicines', 'url' => '/medicines',
-         'blurb' => 'The groups of medicine we supply against a prescription.'],
-        ['label' => 'How It Works', 'url' => '/how-it-works',
-         'blurb' => 'Ordering, what to send, what it costs, and how it reaches you.'],
-        ['label' => 'For Doctors & Hospitals', 'url' => '/providers',
-         'blurb' => 'Institutional ordering, quotes, storage and handling.'],
+        ['label' => 'Home',      'url' => '/'],
         ['label' => 'About Us', 'url' => '/about',
-         'blurb' => 'Who we are, the licences we hold, and the network behind us.'],
-        ['label' => 'Contact',  'url' => '/contact'],
+         'children' => [
+             ['label' => 'About Us',             'url' => '/about'],
+             ['label' => 'How It Works',         'url' => '/how-it-works'],
+             ['label' => 'Named Patient Supply', 'url' => '/named-patient-supply'],
+         ]],
+        ['label' => 'Medicines', 'url' => '/medicines',
+         'children' => [
+             ['label' => 'Medicines we supply', 'url' => '/medicines'],
+             ['label' => 'Conditions',          'url' => '/conditions'],
+         ]],
+        ['label' => 'Oncology',             'url' => '/oncology'],
+        ['label' => 'For Healthcare Professionals', 'url' => '/healthcare-professionals'],
+        ['label' => 'Contact',              'url' => '/contact'],
     ];
 }
 
@@ -263,22 +265,56 @@ function nav_children(string $sectionUrl): array
     return [];
 }
 
-/**
- * The footer's secondary links. Everything a regulator or a careful customer
- * may need, kept out of the main nav so the main nav can stay about ordering.
- */
+/** Footer navigation columns (content guide, page 22). */
+function footer_columns(): array
+{
+    return [
+        'Medicines' => [
+            ['Medicines we supply', '/medicines'],
+            ['Conditions',          '/conditions'],
+            ['Cancer medicines',    '/medicines#oncology'],
+            ['Medical supplies',    '/medicines#medical-supplies'],
+        ],
+        'Services' => [
+            ['Oncology and chemotherapy',    '/oncology'],
+            ['Named Patient Supply',         '/named-patient-supply'],
+            ['For healthcare professionals', '/healthcare-professionals'],
+            ['For patients',                 '/patients'],
+        ],
+        'Help' => [
+            ['How it works',         '/how-it-works'],
+            ['FAQ',                  '/faq'],
+            ['Contact',              '/contact'],
+            ['Report a side effect', '/report-a-side-effect'],
+        ],
+        'Company' => [
+            ['About us',          '/about'],
+            ['Pacific access',    '/pacific-access'],
+            ['Affordable access', '/affordable-access'],
+            ['Services',          '/services'],
+        ],
+    ];
+}
+
+/** The footer's legal strip (content guide, page 22). */
 function footer_links(): array
 {
     return [
-        ['label' => 'Order a Medicine',  'url' => '/order'],
-        ['label' => 'FAQ',               'url' => '/faq'],
-        ['label' => 'Policies & Safety', 'url' => '/policies'],
-        ['label' => 'Report a Side Effect', 'url' => '/policies#side-effects'],
-        ['label' => 'Complaints',        'url' => '/policies#complaints'],
-        ['label' => 'Privacy',           'url' => '/policies#privacy'],
-        ['label' => 'Terms of Use',      'url' => '/policies#terms'],
-        ['label' => 'Search',            'url' => '/search'],
+        ['label' => 'Privacy Policy',      'url' => '/privacy'],
+        ['label' => 'Terms of Use',        'url' => '/terms'],
+        ['label' => 'Complaints',          'url' => '/complaints'],
+        ['label' => 'Policies and Safety', 'url' => '/policies-and-safety'],
     ];
+}
+
+/**
+ * Send an old address to its new page. The old sections were folded into the
+ * content guide's pages; this keeps bookmarks and shared links working.
+ */
+function redirect_to(string $path): void
+{
+    header('Location: ' . url($path), true, 301);
+    exit;
 }
 
 /**
@@ -288,3 +324,4 @@ function footer_links(): array
  */
 require_once INC . '/plates.php';
 require_once INC . '/icons.php';
+require_once INC . '/ui.php';

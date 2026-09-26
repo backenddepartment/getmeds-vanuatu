@@ -1,41 +1,56 @@
 <?php
 /**
- * Masthead: brand and nav. The nav carries the site search and, last and at
- * the far right, Contact. The phone number and hours sit in the footer on
- * every page and in the home hero; "Ask About a Medicine" is reached from the
- * page body (the hero, and each page's own call to action).
+ * Global header (content guide, page 00 "Global header").
  *
- * Source order is brand, Menu button, nav. On a wide screen that is also the
- * left-to-right order of the header row, so keyboard focus travels the way the
- * eye does, and at every width the nav follows directly after the button that
- * opens it. The layouts themselves live in site.css §9.
+ *  - A thin Soft Mint top strip: prescription rule, hours, phone.
+ *  - Desktop: logo left, the seven-item menu centre, the phone number right.
+ *    The guide's green "Request a Medicine" header button is left out at the
+ *    owner's request; it appears in the page bodies and the mobile bar.
+ *  - Phone: logo left, a call icon and the menu button right, and a sticky
+ *    bottom bar with "Request a Medicine" and "Call".
+ *  - Sticky, and compact (64px) once the page has scrolled 100px (guide.js).
  *
  * Opens <main>; includes/footer.php closes it.
  */
-require_once INC . '/icons.php';
 ?>
-<?php /* On the home page the masthead sits over the hero photograph: transparent,
-         with the white logo and white nav. site.js turns it solid once the hero
-         scrolls away or the phone menu opens; without JS it stays solid. */
-$overlay = (current_path() === '/'); ?>
-<header class="masthead<?= $overlay ? ' masthead--overlay' : '' ?>">
-  <div class="masthead__inner shell">
+<?php /* Home page: no top strip, and the header sits see-through over the hero photo.
+         guide.js turns data-overlay into the class, so without JS it stays solid. */
+$homeOverlay = (current_path() === '/'); ?>
+<?php if (!$homeOverlay): ?>
+<div class="g-topstrip">
+  <span>Prescription required for all prescription medicines</span><span class="g-topstrip__hours">Mon–Fri, 8am–5pm</span><span><a href="<?= e(tel_url()) ?>"><?= e(cfg('phone')) ?></a></span>
+</div>
+<?php endif; ?>
 
-    <a class="wordmark" href="<?= e(url('/')) ?>">
-      <img class="wordmark__logo" src="<?= e(asset('/assets/img/logo-getmeds-vanuatu.png')) ?>" width="200" height="123" alt="<?= e(cfg('site_name') . ', ' . cfg('site_descriptor')) ?>">
-      <?php if ($overlay): /* Shown instead of the colour logo while over the hero. */ ?>
-      <img class="wordmark__logo wordmark__logo--light" src="<?= e(asset('/assets/img/logo-getmeds-vanuatu-white.png')) ?>" width="200" height="125" alt="" aria-hidden="true">
+<header class="g-header" id="g-header"<?= $homeOverlay ? ' data-overlay' : '' ?>>
+  <div class="g-wrap g-header__inner">
+    <a class="g-logo" href="<?= e(url('/')) ?>">
+      <img src="<?= e(asset('/assets/img/logo-getmeds-vanuatu.png')) ?>" width="200" height="123" alt="Getmeds Vanuatu-Pacific, home">
+      <?php if ($homeOverlay): ?>
+      <img class="g-logo__light" src="<?= e(asset('/assets/img/logo-getmeds-vanuatu-white.png')) ?>" width="200" height="125" alt="" aria-hidden="true">
       <?php endif; ?>
     </a>
 
-    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="sitenav">
-      <span class="menu-toggle__bars" aria-hidden="true"><span></span><span></span><span></span></span>
-      <span class="menu-toggle__text">Menu</span>
-    </button>
-
     <?php include INC . '/nav.php'; ?>
 
+    <div class="g-header__phone">
+      <span>Call the pharmacy</span>
+      <a href="<?= e(tel_url()) ?>"><?= gi('phone') ?><?= e(cfg('phone')) ?></a>
+    </div>
+
+    <div class="g-header__tools">
+      <a class="g-iconbtn" href="<?= e(tel_url()) ?>" aria-label="Call <?= e(cfg('phone')) ?>"><?= gi('phone') ?></a>
+      <button class="g-iconbtn g-menubtn" type="button" aria-expanded="false" aria-controls="g-nav" aria-label="Menu">
+        <?= gi('menu', 'g-menubtn__open') ?><?= gi('close', 'g-menubtn__close g-hidden') ?>
+      </button>
+    </div>
   </div>
 </header>
+
+<?php /* Phone only: the two actions every page needs, always in reach. */ ?>
+<div class="g-mbar" aria-label="Quick actions">
+  <?= g_btn('Request a Medicine', request_url('medicine'), 'primary') ?>
+  <?= g_btn('Call', tel_url(), 'secondary', 'phone') ?>
+</div>
 
 <main id="main" class="main">

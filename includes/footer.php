@@ -1,98 +1,74 @@
 <?php
 /**
- * Closes <main>, then the footer.
- *
- * A conventional site footer on a blue-to-green wash: the white logo, a line about
- * the pharmacy and how to reach it, then a column of links for each section of
- * the site, then the compliance record and, on a darker bar, the policy links
- * and the small print.
- *
- * The section columns are built from nav_tree(), the same source as the header
- * nav, so a page added to the site appears here without anyone remembering to.
- * Every compliance value comes from config.php so it is edited in one place.
+ * Closes <main>, then the Global Footer (content guide, page 22):
+ * a gradient CTA card, the brand block, four link columns (accordions on a
+ * phone), and a darker legal strip with the medical disclaimer. Then the
+ * cookie notice and the scripts.
  */
-$cols = array_values(array_filter(nav_tree(), static function (array $item): bool {
-    return !empty($item['children']);
-}));
-require_once INC . '/components.php';
 ?>
-<?php /* The Patient Safety note (and Named Patient Access link) that every
-         Medicines and Patients page ends with. It renders nothing elsewhere. */
-section_notes(); ?>
 </main>
 
-<footer class="footer">
-  <div class="footer__main shell">
+<footer class="g-footer">
+  <div class="g-wrap g-footer__cta">
+    <div class="g-cta--card">
+      <p><strong>Need a medicine?</strong> Send your prescription and we will check it for you.</p>
+      <?= g_btn('Request a Medicine', request_url('medicine'), 'primary') ?>
+    </div>
+  </div>
 
-    <div class="footer__brand">
-      <a class="footer__logo" href="<?= e(url('/')) ?>">
-        <img src="<?= e(asset('/assets/img/logo-getmeds-vanuatu-white.png')) ?>" width="200" height="125"
-             loading="lazy" alt="<?= e(cfg('site_name') . ', ' . cfg('site_descriptor')) ?>">
+  <div class="g-wrap g-footer__main">
+    <div class="g-footer__brand">
+      <a href="<?= e(url('/')) ?>">
+        <img src="<?= e(asset('/assets/img/logo-getmeds-vanuatu-white.png')) ?>" width="200" height="125" loading="lazy" alt="Getmeds Vanuatu-Pacific, home">
       </a>
-      <p class="footer__about">
-        A licensed specialty pharmacy in Port Vila, supplying cancer medicines and the
-        medicines that manage their side effects, against a valid prescription.
-      </p>
-      <ul class="footer__contact">
-        <li><?= icon('phone') ?><a href="tel:<?= e(cfg('phone_href')) ?>" class="num"><?= e(cfg('phone')) ?></a></li>
-        <li><?= icon('mail') ?><a href="mailto:<?= e(cfg('email')) ?>"><?= e(cfg('email')) ?></a></li>
-        <li><?= icon('pin') ?><span><?= e(cfg('address_line')) ?>, <?= e(cfg('address_city')) ?>, <?= e(cfg('address_country')) ?></span></li>
-        <li><?= icon('clock') ?><span><?= e(cfg('hours_long')) ?></span></li>
+      <p class="g-footer__name">Getmeds Vanuatu-Pacific</p>
+      <p>A pharmacy in Port Vila focused on cancer medicines. We help patients and healthcare providers access important medicines in Vanuatu and across the Pacific.</p>
+      <p>Prescription medicines are supplied only against a valid prescription. Availability may vary.</p>
+      <ul class="g-footer__contact">
+        <li><?= gi('phone') ?><a href="<?= e(tel_url()) ?>"><?= e(cfg('phone')) ?></a></li>
+        <li><?= gi('mail') ?><a href="mailto:<?= e(cfg('email')) ?>"><?= e(cfg('email')) ?></a></li>
+        <li><?= gi('pin') ?><span>Golden Port, Namba 2, Port Vila</span></li>
       </ul>
     </div>
 
-    <?php foreach ($cols as $i => $col): ?>
-    <nav class="footer__col" aria-labelledby="footer-col-<?= $i ?>">
-      <h2 class="footer__head" id="footer-col-<?= $i ?>"><a href="<?= e(url($col['url'])) ?>"><?= e($col['label']) ?></a></h2>
-      <ul class="footer__links">
-        <?php foreach ($col['children'] as $child): ?>
-        <li><a href="<?= e(url($child['url'])) ?>"><?= e($child['label']) ?></a></li>
+    <?php foreach (footer_columns() as $head => $links): ?>
+    <details class="g-footer__col" open>
+      <summary><h2><?= e($head) ?></h2></summary>
+      <ul>
+        <?php foreach ($links as [$label, $href]): ?>
+        <li><a href="<?= e(url($href)) ?>"><?= e($label) ?></a></li>
         <?php endforeach; ?>
-        <?php if ($col['url'] === '/about'): /* FAQ and Contact have no column of their own. */ ?>
-        <li><a href="<?= e(url('/faq')) ?>">FAQ</a></li>
-        <li><a href="<?= e(url('/contact')) ?>">Contact</a></li>
-        <li><a href="<?= e(url('/order')) ?>">Ask About a Medicine</a></li>
-        <?php endif; ?>
       </ul>
-    </nav>
+    </details>
     <?php endforeach; ?>
-
   </div>
 
-  <?php /* The compliance record block stood here. It printed "Needed
-           LEGAL_ENTITY_NAME" and "Needed PHARMACY_LICENCE_NO" into the footer of
-           all 36 pages. Removed 2026-09-24 with the values themselves: a footer
-           is not the place to advertise what the business has not supplied. */ ?>
-
-  <div class="footer__bottom">
-    <div class="shell">
-      <nav class="footer__policies" aria-label="Policies and compliance">
-        <ul>
-          <?php foreach (footer_links() as $l): ?>
-          <li><a href="<?= e(url($l['url'])) ?>"><?= e($l['label']) ?></a></li>
-          <?php endforeach; ?>
-        </ul>
-      </nav>
-
-      <div class="footer__small">
-        <p>
-          &copy; <?= date('Y') ?> <?= e(cfg('site_name')) ?>. Part of <?= e(cfg('group_name')) ?>:
-          <?= e(implode(', ', cfg('group_sites'))) ?>.
-        </p>
-        <p>
-          Getmeds Vanuatu supplies medicines against a valid prescription from a licensed
-          doctor. It does not provide medical advice, diagnosis or treatment.
-        </p>
-        <?php /* Said plainly, because a site that publishes a licence number does not
-                 get to be vague about whose dispensary is in the photograph. */ ?>
-        <p class="footer__claim--quiet"><?= e(plate_note()) ?></p>
-      </div>
+  <div class="g-footer__legal">
+    <div class="g-wrap">
+      <ul>
+        <?php foreach (footer_links() as $l): ?>
+        <li><a href="<?= e(url($l['url'])) ?>"><?= e($l['label']) ?></a></li>
+        <?php endforeach; ?>
+      </ul>
+      <p><strong>Medical disclaimer:</strong> The information on this website is general and is not medical advice. Getmeds Vanuatu does not diagnose or treat illness. Always follow the advice of your doctor, nurse or pharmacist. Do not start, stop or change a medicine without talking to them first. In an emergency, go to your nearest hospital.</p>
+      <p>&copy; <?= date('Y') ?> Getmeds Vanuatu-Pacific. Port Vila, Vanuatu.</p>
     </div>
   </div>
 </footer>
 
+<?php /* Cookie notice (guide, page 22). Defaults to essential cookies only;
+         no analytics script ships until one is chosen and configured. */ ?>
+<div class="g-cookie" id="g-cookie" role="region" aria-label="Cookie notice">
+  <p>We use essential cookies to make this website work. With your permission we also use analytics cookies to improve it.</p>
+  <div class="g-cookie__btns">
+    <button type="button" class="g-btn g-btn--primary" data-cookie="analytics">Accept analytics</button>
+    <button type="button" class="g-btn g-btn--secondary" data-cookie="essential">Essential only</button>
+  </div>
+</div>
+
 <?php include INC . '/float-contact.php'; ?>
 
-<script src="<?= e(asset('/assets/js/site.js')) ?>" defer></script>
+<script src="<?= e(asset('/assets/js/guide.js')) ?>" defer></script>
+<script src="<?= e(asset('/assets/js/i18n.js')) ?>" defer></script>
 </body>
 </html>

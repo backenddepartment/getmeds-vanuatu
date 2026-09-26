@@ -1,474 +1,150 @@
 <?php
 /**
- * About Getmeds Vanuatu-Pacific, as one page. Who we are, our pharmacists, our
- * licences, the group behind us and the Pacific Network each have a section
- * with its own anchor; the About Us menu links straight to them. The old
- * sub-page addresses redirect here (the index.php left in each old folder,
- * including /pacific-network). The FAQ stays a page of its own at /faq.
+ * About Getmeds Vanuatu (content guide, page 02). A story page: narrow reading
+ * column, calm tone, broken up by full-width photo and colour bands.
+ *
+ * The old /about/licences, /about/our-pharmacists, /about/who-we-are and
+ * /about/part-of-getmeds pages redirect here.
  */
 require __DIR__ . '/../includes/bootstrap.php';
-require_once INC . '/components.php';
 
 $page = [
-    'title' => 'About us',
-    'desc'  => 'Getmeds Vanuatu-Pacific is a licensed specialty pharmacy in Port Vila, focused on '
-             . 'improving access to cancer and essential medicines in Vanuatu and the Pacific.',
-    'ref'   => 'GV-ABT',
+    'title'     => 'About Getmeds Vanuatu',
+    'seo_title' => 'About Getmeds Vanuatu — Medicine Access for Vanuatu and the Pacific',
+    'desc'      => 'Getmeds Vanuatu is a Port Vila pharmacy focused on cancer medicines. Learn why we started and how we help patients across the Pacific get the medicines they need.',
 ];
 
 include INC . '/head.php';
 include INC . '/header.php';
-
-page_hero([
-    'photo'   => 'drawer',
-    'pos'     => '50% 50%',
-    'kicker'  => 'About Getmeds Vanuatu-Pacific',
-    'title'   => 'Improving access to medicines in Vanuatu and the Pacific.',
-    'lede'    => 'Our primary specialisation is cancer medicines, supplied against a prescription '
-               . 'from local stock or sourced individually for the patient who needs them.',
-    'actions' => [
-        ['label' => 'Who we are', 'href' => url('/about') . '#who-we-are', 'fill' => true],
-        ['label' => 'Pacific Network', 'href' => url('/about') . '#pacific-network'],
-    ],
-    'points'  => [
-        ['shield', 'Licensed in Vanuatu'],
-        ['person', 'Registered pharmacists'],
-        ['pin',    'Golden Port, ' . cfg('address_city')],
-    ],
-]);
 ?>
 
-<?php /* Jump links to each section of this page. */ ?>
-<nav class="jumpnav" aria-label="On this page">
-  <div class="shell">
-    <ul class="jumpnav__list">
-      <?php foreach (nav_children('/about') as $item): ?>
-      <li><a href="<?= e(url($item['url'])) ?>"><?= e($item['label']) ?></a></li>
-      <?php endforeach; ?>
+<section class="g-hero g-hero--photo g-hero--half g-about-hero">
+  <div class="g-hero__bg" aria-hidden="true"><?= g_photo('wharf', '', '', true) ?></div>
+  <div class="g-wrap">
+    <?php g_crumbs([['Home', '/'], ['About', null]]); ?>
+    <h1>About Getmeds Vanuatu</h1>
+    <p class="g-hero__lede">Getmeds Vanuatu is a pharmacy in Port Vila. Our main work is making cancer medicines available in Vanuatu and the Pacific. We also supply other important medicines and medical supplies.</p>
+  </div>
+</section>
+
+<section class="g-sec g-bg-white" id="why-we-started" aria-labelledby="why-h">
+  <div class="g-wrap g-split g-split--7-5 g-split--top">
+    <div class="g-about-col">
+      <h2 id="why-h">Why we started</h2>
+      <div class="g-stack g-mt">
+        <p>Cancer is a major health problem in Vanuatu. But for a long time, many cancer medicines were not available here.</p>
+        <p>Many patients were referred overseas for treatment. This can cost a family millions of vatu. When patients came home, some could not continue treatment because the medicine was not available locally. Others had to wait for someone to bring it from overseas.</p>
+        <p>When a treatment cycle is missed, treatment can fail. Getmeds Vanuatu was started so that patients can get their medicine here, on time.</p>
+      </div>
+    </div>
+    <div class="g-diagram g-diagram--v" role="img" aria-label="The problem before Getmeds: diagnosis, then treatment overseas, then home but no medicine.">
+      <div class="g-diagram__step g-diagram__step--grey"><?= gi('doctor') ?><strong>Diagnosis</strong></div>
+      <span class="g-diagram__arrow"><?= gi('arrow') ?></span>
+      <div class="g-diagram__step g-diagram__step--grey"><?= gi('plane') ?><strong>Treatment overseas</strong></div>
+      <span class="g-diagram__arrow"><?= gi('arrow') ?></span>
+      <div class="g-diagram__step g-diagram__step--grey"><?= gi('shelf-empty') ?><strong>Home, but no medicine</strong></div>
+    </div>
+  </div>
+</section>
+
+<section class="g-sec g-bg-mint" id="what-we-do" aria-labelledby="do-h">
+  <div class="g-wrap g-narrow">
+    <div class="g-head"><h2 id="do-h">What we do</h2></div>
+    <?php g_check([
+        "We supply cancer medicines against a doctor's prescription or treatment protocol.",
+        'We keep medicines in stock in Port Vila.',
+        'We import medicines that are not in stock.',
+        'We source hard-to-find medicines for individual patients.',
+        'We supply essential medicines, including antibiotics and medicines for diabetes, blood pressure, cholesterol, heart disease and kidney care.',
+        'We supply medical consumables, devices, equipment and laboratory supplies.',
+        'We offer simple blood pressure and blood sugar checks at our pharmacy.',
+    ], '2'); ?>
+  </div>
+</section>
+
+<section class="g-sec g-bg-white" id="cancer-care" aria-labelledby="cancer-h">
+  <div class="g-wrap g-split">
+    <div>
+      <h2 id="cancer-h">Our focus on cancer care</h2>
+      <p class="g-mt">Getmeds Vanuatu is the first chemotherapy pharmacy in the Pacific. Cancer medicines are our main specialisation.</p>
+      <div class="g-mt"><?php g_box('safety', 'We do not diagnose or treat cancer. That is the work of your doctor. Our job is to make sure the medicine your doctor prescribed is available, checked by a pharmacist and ready when you need it.'); ?></div>
+    </div>
+    <div class="g-media">
+      <?= g_photo('shelves', 'A pharmacist in a white coat checking the label on a medicine bottle in front of shelves of stock.') ?>
+    </div>
+  </div>
+</section>
+
+<section class="g-sec g-bg-sky" id="named-patient" aria-labelledby="nps-h">
+  <div class="g-wrap g-read">
+    <h2 id="nps-h">Medicines for one named patient</h2>
+    <p class="g-mt">Some medicines are not normally available in Vanuatu. Through Named Patient Supply, we help arrange a medicine for one named patient, based on their doctor's prescription. We handle the sourcing and paperwork and keep the patient and doctor informed.</p>
+    <p class="g-mt"><a class="g-link-arrow" href="<?= e(url('/named-patient-supply')) ?>">How Named Patient Supply works <?= gi('arrow') ?></a></p>
+  </div>
+</section>
+
+<section class="g-sec g-bg-navy g-wave g-about-pacific" id="pacific" aria-labelledby="pac-h">
+  <div class="g-wrap g-split">
+    <div>
+      <h2 id="pac-h">Our place in the Pacific</h2>
+      <p class="g-mt">Many Pacific Islands face the same problems: medicines that run out, high import costs for one patient, and long delivery times. From our base in Port Vila, we are working to build better medicine access across the region.</p>
+      <ul class="g-chips g-mt" role="list">
+        <?php foreach (['Solomon Islands', 'Fiji', 'Samoa', 'Tonga', 'Tuvalu', 'Nauru'] as $c): ?>
+        <li class="g-chip g-chip--outline"><?= e($c) ?></li>
+        <?php endforeach; ?>
+      </ul>
+    </div>
+    <div class="g-about-map"><?= g_pacific_map('dark') ?></div>
+  </div>
+</section>
+
+<section class="g-sec g-bg-white" id="getmeds-group" aria-labelledby="group-h">
+  <div class="g-wrap g-read g-about-group">
+    <span class="g-card__icon"><?= gi('globe') ?></span>
+    <div>
+      <h2 id="group-h">Part of the wider Getmeds group</h2>
+      <p class="g-mt">Getmeds Vanuatu is part of the Getmeds group, which also operates in the Philippines and India. This connection helps us source a wide range of medicines for patients in the Pacific.</p>
+    </div>
+  </div>
+</section>
+
+<section class="g-sec g-bg-mint" id="team" aria-labelledby="team-h">
+  <div class="g-wrap">
+    <div class="g-about-col">
+      <h2 id="team-h">Our team</h2>
+      <p class="g-mt">Our team is based in Port Vila and knows the local community. A pharmacist checks every prescription we receive, and our staff follow each patient's order from enquiry to pick-up.</p>
+    </div>
+    <figure class="g-media g-about-team g-mt-lg">
+      <?php /* Cropped from assets/img/vanuatutwo.jpg to drop its social-media banner. */ ?>
+      <picture>
+        <source type="image/webp" srcset="<?= e(asset('/assets/img/team-vanuatu-800.webp')) ?> 800w, <?= e(asset('/assets/img/team-vanuatu-1600.webp')) ?> 1600w" sizes="(max-width: 1248px) 100vw, 1200px">
+        <img src="<?= e(asset('/assets/img/team-vanuatu-1600.jpg')) ?>" srcset="<?= e(asset('/assets/img/team-vanuatu-800.jpg')) ?> 800w, <?= e(asset('/assets/img/team-vanuatu-1600.jpg')) ?> 1600w" sizes="(max-width: 1248px) 100vw, 1200px"
+             width="1600" height="804" loading="lazy" decoding="async"
+             alt="Eight members of the Getmeds Vanuatu team standing together and smiling, most of them holding certificates.">
+      </picture>
+      <figcaption>The Getmeds Vanuatu team at our pharmacy in Golden Port, Port Vila.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="g-sec g-bg-white" id="achieve" aria-labelledby="achieve-h">
+  <div class="g-wrap">
+    <div class="g-head g-head--center"><h2 id="achieve-h">What we want to achieve</h2></div>
+    <ul class="g-dots g-about-dots" role="list">
+      <li>Specialist medicines that are easier to get, wherever someone lives in the Pacific.</li>
+      <li>Fewer patients missing a treatment cycle.</li>
+      <li>Patients and doctors who always know what is available and what it costs.</li>
     </ul>
   </div>
-</nav>
-
-<div class="section shell" style="margin-top:var(--s-6)">
-  <div class="split">
-    <div class="split__body">
-      <div class="prose">
-        <p class="lede" style="max-width:none">
-          Getmeds Vanuatu-Pacific is focused on improving access to medicines in Vanuatu and
-          the wider Pacific region.
-        </p>
-        <p>
-          Our primary specialisation is cancer medicines. Our broader portfolio can also include
-          essential medicines, medical supplies, medical consumables, medical devices and
-          equipment, and other healthcare products, sourced and supplied according to what a
-          prescriber or facility actually needs.
-        </p>
-      </div>
-
-      <h2>What we supply</h2>
-      <?php chunk_facts([
-          ['name' => 'Cancer medicines',
-           'desc' => 'Our core focus, both from local stock and sourced individually per patient.'],
-          ['name' => 'Essential medicines',
-           'desc' => 'Including over-the-counter items, antibiotics, and cardiometabolic medicines '
-                   . 'for conditions such as hypertension, diabetes and cholesterol.'],
-          ['name' => 'Medical supplies, devices and equipment',
-           'desc' => 'Sourced and supplied according to what a prescriber or facility needs.'],
-          ['name' => 'Basic monitoring services',
-           'desc' => 'Such as blood pressure and blood sugar checks, where offered.'],
-      ]); ?>
-    </div>
-    <div class="split__aside">
-      <?php plate('shelves', [
-        'ar'    => '4 / 3',
-      ]); ?>
-    </div>
-  </div>
-</div>
-
-<!-- ============================ Who we are ============================ -->
-<section class="section shell" id="who-we-are" aria-labelledby="who-we-are-h">
-  <h2 id="who-we-are-h">Who we are</h2>
-  <div class="split split--flip">
-    <div class="split__body">
-      <div class="prose">
-        <p>
-          Getmeds Vanuatu is a licensed specialty pharmacy on the ground floor of Golden Port in
-          Port Vila. It is staffed by registered pharmacists. Its work is supplying cancer
-          medicines, the medicines that manage their side effects, and other specialty medicines
-          that need careful storage or importing.
-        </p>
-      </div>
-
-      <h3>What we are</h3>
-      <ul class="clauses">
-        <li>A pharmacy. Licensed in Vanuatu, with a named responsible pharmacist accountable for
-            every medicine that leaves the premises.</li>
-        <li>A cold-chain operation. Monitored storage, logged, with backup power, because a
-            medicine that has been too warm can look perfectly normal and no longer work.</li>
-        <li>An importer. Through <?= e(cfg('group_name')) ?>, which buys at a scale that makes
-            small Vanuatu quantities viable.</li>
-        <li>A phone number somebody answers. For most patients that matters more than anything
-            on this website.</li>
-      </ul>
-
-      <h3>What we are not</h3>
-      <ul class="clauses">
-        <li>Not a clinic. We do not diagnose, we do not treat, and we do not advise on how your
-            illness should be managed. That is your doctor's work and we will not step into it.</li>
-        <li>Not an online shop. There is no cart and no checkout on this site, and there will not
-            be. Cancer medicines cannot responsibly be sold that way.</li>
-        <li>Not a second opinion. If you disagree with your treatment plan, the conversation to
-            have is with your oncologist, not with a pharmacist.</li>
-        <li>Not a substitute for the hospital. Some medicines are supplied through the public
-            system, and if that is the better route for you we will tell you so.</li>
-      </ul>
-    </div>
-    <div class="split__aside">
-      <?php plate('dispensary', [
-        'ar'    => '4 / 5',
-      ]); ?>
-    </div>
-  </div>
-
-  <h3>The premises</h3>
-  <div class="prose">
-    <p>
-      You are welcome to come and look. A pharmacy that asks people to trust its cold chain
-      should be willing to show it, and we are.
-    </p>
-  </div>
 </section>
 
-<section class="section shell" aria-labelledby="value">
-  <h2 id="value">What that means for you</h2>
-  <?php reason_grid([
-      ['icon' => 'box', 'title' => 'Fewer stockouts',
-       'text' => 'We keep a wide sourcing network working in the background, so a course of '
-               . 'treatment is less likely to stall halfway through because a delivery didn’t '
-               . 'arrive.'],
-      ['icon' => 'shield', 'title' => 'Someone accountable',
-       'text' => 'A named, registered pharmacist checks every order — from the first phone call '
-               . 'or enquiry through to the medicine actually in your hand.'],
-      ['icon' => 'card', 'title' => 'A fair price, agreed first',
-       'text' => 'We aim for the best price we can offer, and we always tell you the real figure '
-               . 'before you decide anything. Nothing is ordered until you say yes.'],
-  ]); ?>
-
-  <div class="prose" style="margin-top:var(--s-6)">
-    <p>
-      We do not diagnose, treat, or advise on the management of illness — that is the work of
-      the doctor treating you. What we do is make sure the medicine that’s been prescribed is
-      genuine, has been stored correctly the whole way, is priced as fairly as we can manage,
-      and is here when it’s needed.
-    </p>
-  </div>
-</section>
-
-<section class="section shell" aria-labelledby="why-getmeds">
-  <h2 id="why-getmeds">Why families and hospitals choose us</h2>
-  <?php reason_grid([
-      ['icon' => 'vial', 'title' => 'Cancer care is what we know',
-       'text' => 'It’s our main focus, not one line among many — so we understand what a delay or '
-               . 'a shortage actually costs a patient.'],
-      ['icon' => 'truck', 'title' => 'We chase down hard-to-find medicine',
-       'text' => 'If something isn’t already here, we’ll tell you honestly whether — and how — we '
-               . 'can still get it to you.'],
-      ['icon' => 'check', 'title' => 'We do what we say',
-       'text' => 'The price and the timeline we give you are the real ones, and we follow up '
-               . 'rather than leaving you to chase us.'],
-      ['icon' => 'person', 'title' => 'Your doctor stays in charge',
-       'text' => 'We support the treatment your own doctor has already planned. We never '
-               . 'second-guess it, and we never will.'],
-      ['icon' => 'ship', 'title' => 'Built for the Pacific, not just Vanuatu',
-       'text' => 'A supply line that only works for one country breaks the moment something on '
-               . 'that route goes wrong. We’re building more than one.'],
-  ]); ?>
-</section>
-
-<!-- ========================== Our pharmacists ========================== -->
-<section class="section shell" id="our-pharmacists" aria-labelledby="our-pharmacists-h">
-  <h2 id="our-pharmacists-h">Our pharmacists</h2>
-  <p class="lede">Who dispenses your medicine, what they are accountable for, and how to check they are registered to do it.</p>
-
-  <h3>Responsible pharmacist</h3>
-  <dl class="record">
-    <div class="record__row">
-      <dt>Accountable for</dt>
-      <dd>Every medicine dispensed from these premises, the cold chain, the controlled
-          medicines register, and the conduct of the pharmacy.</dd>
-    </div>
-    <div class="record__row">
-      <dt>Pharmacy licence</dt>
-      <dd>Licensed in Vanuatu to dispense prescription medicines.
-          <span class="record__sub"><a href="#licences">How to verify this</a></span></dd>
-    </div>
-    <div class="record__row">
-      <dt>Premises</dt>
-      <dd><?= e(cfg('address_line')) ?><br><?= e(cfg('address_city')) ?>, <?= e(cfg('address_country')) ?></dd>
-    </div>
-    <div class="record__row">
-      <dt>Part of</dt>
-      <dd><?= e(cfg('group_name')) ?>
-          <span class="record__sub"><a href="<?= e(url('/about') . '#part-of-getmeds') ?>">What that means for supply</a></span></dd>
-    </div>
-  </dl>
-
-  <div class="prose">
-    <p>
-      Every medicine leaving this pharmacy is dispensed by a pharmacist registered in Vanuatu.
-      One of them is the responsible pharmacist, named on our pharmacy licence and accountable
-      under Vanuatu law for every medicine dispensed from these premises, the cold chain, the
-      controlled medicines register, and the conduct of the pharmacy.
-    </p>
-    <p>
-      We do not publish the names or photographs of our staff. The licence is the public
-      record, and <a href="<?= e(url('/about') . '#licences') ?>">you can check it</a>. To speak to
-      the responsible pharmacist, call us and ask.
-    </p>
-  </div>
-
-  <h3>Languages</h3>
-  <div class="prose">
-    <p>
-      Vanuatu's official languages are Bislama, English and French, and a medicine schedule is
-      hard enough to follow in your first language. Tell us when you call which you would
-      rather use and we will find someone who can help.
-    </p>
-  </div>
-
-  <h3>What a pharmacist will do when you collect</h3>
-  <ol class="clauses">
-    <li>Check the prescription against the medicine, and check it against anything else you
-        have told us you take.</li>
-    <li>Go through the schedule with you: how much, how often, with or without food, and what
-        to do if you miss one.</li>
-    <li>Tell you what side effects are expected, which ones mean call us, and which ones mean
-        go to hospital.</li>
-    <li>Explain how to store it at home, and how to bring back what you do not use.</li>
-  </ol>
-  <div class="prose">
-    <p class="small quiet">
-      Bring someone with you if you can. Two people remember a schedule better than one.
-    </p>
-  </div>
-</section>
-
-<!-- ============================ Our licences ============================ -->
-<section class="section shell" id="licences" aria-labelledby="licences-h">
-  <h2 id="licences-h">Our licences</h2>
-  <p class="lede">What we hold, and how to check it yourself rather than taking our word for it.</p>
-
-  <div class="split">
-    <div class="split__body">
-      <h3>The pharmacy, on the record</h3>
-      <dl class="record">
-        <div class="record__row">
-          <dt>Trading as</dt>
-          <dd><?= e(cfg('site_name')) ?> — <?= e(cfg('site_descriptor')) ?></dd>
-        </div>
-        <div class="record__row">
-          <dt>Premises licensed</dt>
-          <dd><?= e(cfg('address_line')) ?><br><?= e(cfg('address_city')) ?>, <?= e(cfg('address_country')) ?></dd>
-        </div>
-        <div class="record__row">
-          <dt>Responsible pharmacist</dt>
-          <dd>A pharmacist registered in Vanuatu is named on the licence and is
-              accountable for every medicine dispensed here.</dd>
-        </div>
-        <div class="record__row">
-          <dt>Part of</dt>
-          <dd><?= e(cfg('group_name')) ?></dd>
-        </div>
-      </dl>
-
-    </div>
-    <div class="split__aside">
-      <?php plate('script', [
-        'ar'    => '4 / 5',
-        'cap'   => 'A licence is a document you can ask to see.',
-      ]); ?>
-    </div>
-  </div>
-
-  <h3>How to verify it</h3>
-  <div class="prose">
-    <p>
-      You should not have to trust a website. A licence number on a page proves nothing on its
-      own, and any pharmacy asking you to spend money on cancer medicine should expect to be
-      checked.
-    </p>
-  </div>
-  <ol class="clauses">
-    <li>Ask us for a copy of the licence. We will send it. If a pharmacy will not show you its
-        licence, that tells you something.</li>
-    <li>Check it with the issuing authority in Vanuatu directly. The registry, not us, is the
-        source of truth.</li>
-    <li>Come to the premises. The licence is displayed there, as it is required to be.</li>
-  </ol>
-
-  <div class="notice notice--safety">
-    <p class="notice__head">Counterfeit cancer medicine exists, and it kills people</p>
-    <p>
-      A website offering cancer medicine without a prescription, at a price well below the
-      market, shipped from an unnamed country, is not a bargain. Falsified oncology product is
-      a documented global problem, and a medicine that contains nothing is indistinguishable
-      from a real one until the treatment fails.
-    </p>
-    <p>
-      Ask any supplier for a licence you can verify, a named pharmacist, and a physical address
-      you could walk into. Including us.
-    </p>
-  </div>
-</section>
-
-<!-- ========================== Part of Getmeds ========================== -->
-<section class="section shell" id="part-of-getmeds" aria-labelledby="part-of-getmeds-h">
-  <h2 id="part-of-getmeds-h">Part of Getmeds</h2>
-  <p class="lede">Why belonging to a larger group is the reason a small market can get these medicines at all.</p>
-
-  <div class="prose">
-    <p>
-      Getmeds Vanuatu is part of <?= e(cfg('group_name')) ?>. The practical effect is
-      purchasing scale. A single pharmacy in Port Vila ordering one course of a targeted
-      therapy is a rounding error to a manufacturer. A group ordering across several markets
-      is a customer.
-    </p>
-    <p>
-      That is not a marketing point. It is the mechanism by which a medicine reaches a patient
-      in Vanuatu at all, and it is worth being plain about.
-    </p>
-  </div>
-
-  <h3>What the group provides</h3>
-  <dl class="record">
-    <div class="record__row">
-      <dt>Purchasing</dt>
-      <dd>Access to supply at quantities a standalone Vanuatu pharmacy could not order.</dd>
-    </div>
-    <div class="record__row">
-      <dt>Sourcing</dt>
-      <dd>Routes to medicines that have never had a Vanuatu distributor.</dd>
-    </div>
-    <div class="record__row">
-      <dt>Cold chain in transit</dt>
-      <dd>Validated shipping into Port Vila, rather than each consignment being improvised.</dd>
-    </div>
-    <div class="record__row">
-      <dt>Group companies</dt>
-      <dd><?= e(implode(', ', cfg('group_sites'))) ?></dd>
-    </div>
-  </dl>
-
-  <h3>What stays local</h3>
-  <ul class="clauses">
-    <li>The pharmacy licence, held in Vanuatu, for these premises.</li>
-    <li>The responsible pharmacist, accountable under Vanuatu law for every medicine dispensed
-        here.</li>
-    <li>Dispensing, counselling and the conversation you have when you collect. Those happen in
-        Port Vila, with a person.</li>
-    <li>The cold chain from our refrigerator to you.</li>
-  </ul>
-
-  <h3>Who you are dealing with</h3>
-  <div class="prose">
-    <p>
-      When you enquire here, a pharmacist in Port Vila reads it. When you collect, you collect
-      here. Group membership changes where the medicine is bought, not who is accountable for
-      it once it arrives.
-    </p>
-  </div>
-</section>
-
-<!-- ========================== Pacific Network ========================== -->
-<section class="section shell" id="pacific-network" aria-labelledby="pacific-network-h">
-  <h2 id="pacific-network-h">Pacific Network</h2>
-  <p class="lede">Connecting cancer medicine access across the Pacific.</p>
-
-  <div class="split">
-    <div class="split__body">
-      <div class="prose">
-        <p>
-          Getmeds Vanuatu-Pacific started in Vanuatu, but the problem it’s built around — small,
-          scattered populations that make individual medicine importation slow and expensive —
-          is a Pacific-wide one, not just a Vanuatu one. Our longer-term work is building
-          partnerships and supply pathways designed to improve access to cancer medicines more
-          broadly across the region.
-        </p>
-        <p>That includes:</p>
-      </div>
-      <ul class="clauses">
-        <li>Working with healthcare providers, hospitals, pharmacies, and government health agencies
-            in more than one Pacific country.</li>
-        <li>Supporting more reliable sourcing and distribution so a single delayed shipment doesn’t
-            stop treatment.</li>
-        <li>Helping reduce treatment interruptions caused by medicine shortages.</li>
-        <li>Developing a regional network for cancer medicines and other essential medicines,
-            rather than a country-by-country one.</li>
-        <li>Supporting patients who return home after overseas cancer treatment and need to continue
-            their medicines locally, so treatment doesn’t lapse between the last overseas dose and
-            the next local one.</li>
-      </ul>
-    </div>
-    <div class="split__aside">
-      <?php plate('island', [
-        'ar'    => '4 / 3',
-      ]); ?>
-    </div>
-  </div>
-
-  <h3>Where this is heading</h3>
-  <div class="prose">
-    <p>
-      Vanuatu is our founding market. We’re also assessing opportunity and building
-      relationships in Fiji, and the countries identified for possible future expansion include
-      Solomon Islands, Samoa, Tonga, Nauru and Tuvalu. This is a staged process — country by
-      country, partnership by partnership — not a claim that we already operate in all of them.
-      Each new country brings its own regulatory pathway, its own hospital and pharmacy
-      partners, and its own supply chain to build properly before we say we’re there.
-    </p>
-  </div>
-  <dl class="record" style="margin-top:var(--s-6)">
-    <div class="record__row">
-      <dt><?= icon('pin') ?>Founding market</dt>
-      <dd>Vanuatu</dd>
-    </div>
-    <div class="record__row">
-      <dt><?= icon('ship') ?>Assessing and building relationships</dt>
-      <dd>Fiji</dd>
-    </div>
-    <div class="record__row">
-      <dt><?= icon('cal') ?>Identified for possible future expansion</dt>
-      <dd>Solomon Islands, Samoa, Tonga, Nauru and Tuvalu</dd>
-    </div>
-  </dl>
-
-  <h3>Who we’re working with</h3>
-  <div class="prose">
-    <p>
-      Across the region this looks like partnerships with hospitals and clinics, retail
-      pharmacies, government health ministries, overseas referral and medical-mission partners,
-      and (where useful) regional distributors — so that a patient’s medicine access doesn’t
-      depend on one single supply line.
-    </p>
-  </div>
-</section>
-
-<section class="section shell" aria-labelledby="questions">
-  <div class="notice">
-    <h2 id="questions" class="notice__head" style="margin-top:0">Still have questions?</h2>
-    <p>
-      Straight answers to the questions people ask us most are on the
-      <a class="body-link" href="<?= e(url('/faq')) ?>">FAQ page</a>. Or call a pharmacist on
-      <?= phone_link('body-link') ?>. You will speak to a person, not a menu.
-    </p>
-  </div>
-
-  <div class="actions">
-    <a class="btn btn--secondary" href="<?= e(url('/order')) ?>">Ask About a Medicine</a>
-    <a class="next-link" href="<?= e(url('/faq')) ?>">Read the FAQ</a>
-    <a class="next-link" href="<?= e(url('/contact')) ?>">Contact the pharmacy</a>
-  </div>
-</section>
+<?php g_cta_band(
+    'Talk to us',
+    'Have a question about a medicine? Our team is here to help.',
+    [
+        ['Request a Medicine', request_url('medicine'), 'primary'],
+        ['Contact Us', url('/contact'), 'white'],
+    ]
+); ?>
 
 <?php include INC . '/footer.php'; ?>

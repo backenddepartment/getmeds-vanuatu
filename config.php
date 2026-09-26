@@ -34,6 +34,9 @@ return [
     'hours_short'      => 'Mon to Fri, 8am to 5pm',
     'hours_long'       => 'Monday to Friday, 8am to 5pm. Closed public holidays.',
 
+    // Shown in the home page stats bar under the hero. Confirm with the pharmacist.
+    'medicines_count'  => '100+',
+
     'group_name'       => 'the Getmeds group',
     'group_sites'      => ['getmeds.ph', 'getmedshealthcare.com'],
 
@@ -75,7 +78,7 @@ return [
     // Prescription uploads. Files land in data/uploads, which .htaccess refuses
     // over HTTP. Keep the cap low: a phone photo of a script is well under 5 MB,
     // and a larger ceiling only invites someone to fill the disk.
-    'upload_max_mb'       => 8,
+    'upload_max_mb'       => 10,
     'upload_max_files'    => 5,
 
     // ---------------------------------------------------------------------
