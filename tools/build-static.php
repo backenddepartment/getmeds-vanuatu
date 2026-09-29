@@ -206,6 +206,26 @@ if ($body && stripos($body, '</html>') !== false) {
     fwrite(STDERR, "  WARN 404 page did not render; the host default will be used\n");
 }
 
+/* Sitemaps and robots.txt. Rendered here rather than copied, so their absolute
+   URLs carry --origin, the address the site is actually published at. */
+foreach (['sitemap.xml', 'sitemap-images.xml', 'robots.txt'] as $gen) {
+    $body = @file_get_contents("http://127.0.0.1:$port/$gen", false, $ctx);
+    $code = 0;
+    foreach ($http_response_header ?? [] as $h) {
+        if (preg_match('~^HTTP/\S+\s+(\d{3})~', $h, $m)) { $code = (int) $m[1]; }
+    }
+    if ($code === 200 && $body) {
+        put($out . '/' . $gen, $body);
+        fwrite(STDERR, "  ok   /$gen\n");
+    } else {
+        fwrite(STDERR, "  FAIL /$gen HTTP $code\n");
+        $fail++;
+    }
+}
+if ($origin === '') {
+    fwrite(STDERR, "  WARN no --origin: sitemap and robots.txt URLs point at 127.0.0.1\n");
+}
+
 proc_terminate($server);
 proc_close($server);
 
@@ -233,7 +253,7 @@ function copy_tree(string $from, string $to): int
 }
 
 $assets = copy_tree($root . '/assets', $out . '/assets');
-foreach (['robots.txt', 'sitemap.xml', 'CNAME'] as $extra) {
+foreach (['CNAME'] as $extra) {
     if (is_file($root . '/' . $extra)) {
         copy($root . '/' . $extra, $out . '/' . $extra);
     }

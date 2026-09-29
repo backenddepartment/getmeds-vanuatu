@@ -18,12 +18,23 @@ include INC . '/head.php';
 include INC . '/header.php';
 ?>
 
-<section class="g-hero g-hero--photo g-hero--half g-about-hero">
-  <div class="g-hero__bg" aria-hidden="true"><?= g_photo('wharf', '', '', true) ?></div>
-  <div class="g-wrap">
-    <?php g_crumbs([['Home', '/'], ['About', null]]); ?>
-    <h1>About Getmeds Vanuatu</h1>
-    <p class="g-hero__lede">Getmeds Vanuatu is a pharmacy in Port Vila. Our main work is making cancer medicines available in Vanuatu and the Pacific. We also supply other important medicines and medical supplies.</p>
+<?php /* Full-screen photo hero, same size and style as the home page's hero
+         (the navbar sits over it, see-through: includes/header.php, guide.css
+         "Home hero"). */ ?>
+<section class="g-homehero" aria-labelledby="about-hero-title">
+  <div class="g-homehero__media">
+    <img src="<?= e(asset('/assets/img/vanuatufive.jpg')) ?>"
+         sizes="100vw" width="2048" height="1139" alt="" loading="eager" fetchpriority="high" decoding="async">
+    <div class="g-homehero__scrim" aria-hidden="true"></div>
+  </div>
+  <div class="g-wrap g-homehero__inner">
+    <p class="g-homehero__kicker">Our Story</p>
+    <h1 class="g-homehero__title" id="about-hero-title">About Getmeds Vanuatu</h1>
+    <p class="g-homehero__lede">Getmeds Vanuatu is a pharmacy in Port Vila. Our main work is making cancer medicines available in Vanuatu and the Pacific. We also supply other important medicines and medical supplies.</p>
+    <div class="g-homehero__btns">
+      <a class="g-homehero__btn g-homehero__btn--fill" href="<?= e(url('/order')) ?>">Order a Medicine</a>
+      <a class="g-homehero__btn g-homehero__btn--line" href="<?= e(tel_url()) ?>">Call <?= e(cfg('phone')) ?></a>
+    </div>
   </div>
 </section>
 
@@ -108,6 +119,22 @@ include INC . '/header.php';
   </div>
 </section>
 
+<section class="g-sec g-bg-white" id="who-we-serve" aria-labelledby="serve-h">
+  <div class="g-wrap">
+    <div class="g-head g-head--center g-serve-split">
+      <span class="g-label">Our Community</span>
+      <h2 id="serve-h">Who we serve</h2>
+    </div>
+    <ul class="g-grid g-grid--5 g-serve-row" role="list">
+      <li><?= gi('users') ?><span>Patients and families</span></li>
+      <li><?= gi('doctor') ?><span>Doctors and oncologists</span></li>
+      <li><?= gi('hospital') ?><span>Hospitals and clinics</span></li>
+      <li><?= gi('bottle') ?><span>Pharmacies</span></li>
+      <li><?= gi('plane') ?><span>Overseas treatment agencies</span></li>
+    </ul>
+  </div>
+</section>
+
 <section class="g-sec g-bg-mint" id="team" aria-labelledby="team-h">
   <div class="g-wrap">
     <div class="g-about-col">
@@ -135,6 +162,32 @@ include INC . '/header.php';
       <li>Fewer patients missing a treatment cycle.</li>
       <li>Patients and doctors who always know what is available and what it costs.</li>
     </ul>
+  </div>
+</section>
+
+<section class="g-sec g-bg-white" id="safety" aria-labelledby="safe-h">
+  <div class="g-wrap">
+    <div class="g-head g-head--center"><h2 id="safe-h">How we keep medicines safe</h2></div>
+    <div class="g-grid g-grid--2">
+      <?= g_card('clipboard', 'Prescription first.', 'Every prescription medicine needs a valid prescription.') ?>
+      <?= g_card('pharmacist', 'Pharmacist-checked.', 'A pharmacist checks every order.') ?>
+      <?= g_card('shield', 'Only what was prescribed.', 'We supply exactly what your doctor prescribed.') ?>
+      <?= g_card('thermo', 'Stored correctly.', 'Medicines that need cold storage are kept between 2 and 8&nbsp;°C, monitored and logged.') ?>
+    </div>
+  </div>
+</section>
+
+<section class="g-sec g-bg-white" id="how-it-works" aria-labelledby="how-h">
+  <div class="g-wrap">
+    <div class="g-head g-head--center"><h2 id="how-h">How it works</h2></div>
+    <?php g_steps([
+        ['Contact us.', 'Call, message or use the online form.'],
+        ['Send the prescription.', "Share your doctor's prescription or treatment protocol."],
+        ['A pharmacist checks it.', 'We confirm the medicine, availability and price.'],
+        ['Confirm and plan.', 'You agree to the price. We give you a pick-up date and plan your next cycle.'],
+        ['Collect your medicine.', 'Pick up on the agreed date. Injectables go to your hospital for your session.'],
+    ], 'h'); ?>
+    <div class="g-btns g-btns--center g-mt-lg"><?= g_btn('Request a Medicine', request_url('medicine'), 'primary') ?></div>
   </div>
 </section>
 

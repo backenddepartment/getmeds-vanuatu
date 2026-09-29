@@ -13,9 +13,10 @@
  * Opens <main>; includes/footer.php closes it.
  */
 ?>
-<?php /* Home page: no top strip, and the header sits see-through over the hero photo.
-         guide.js turns data-overlay into the class, so without JS it stays solid. */
-$homeOverlay = (current_path() === '/'); ?>
+<?php /* Home and About pages: no top strip, and the header sits see-through over
+         the hero photo. guide.js turns data-overlay into the class, so without
+         JS it stays solid. */
+$homeOverlay = in_array(current_path(), ['/', '/about'], true); ?>
 <?php if (!$homeOverlay): ?>
 <div class="g-topstrip">
   <span>Prescription required for all prescription medicines</span><span class="g-topstrip__hours">Mon–Fri, 8am–5pm</span><span><a href="<?= e(tel_url()) ?>"><?= e(cfg('phone')) ?></a></span>

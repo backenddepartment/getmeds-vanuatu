@@ -16,6 +16,20 @@
     var onScroll = function () { header.classList.toggle('is-compact', window.pageYOffset > 100); };
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
+
+    /* The mega menu's `top` must match the header's real rendered height
+       exactly (a hardcoded px value drifted out of sync and left a gap), so
+       measure it instead of guessing. */
+    var syncHeaderHeight = function () {
+      doc.documentElement.style.setProperty('--g-header-h', header.offsetHeight + 'px');
+    };
+    syncHeaderHeight();
+    window.addEventListener('resize', syncHeaderHeight);
+    header.addEventListener('transitionend', syncHeaderHeight);
+    /* Custom fonts can swap in after this first measurement and change the
+       header's height by a pixel or two, so re-measure once they're ready. */
+    if (doc.fonts && doc.fonts.ready) { doc.fonts.ready.then(syncHeaderHeight); }
+    window.addEventListener('load', syncHeaderHeight);
   }
 
   /* 2. Phone menu button. */
@@ -30,21 +44,59 @@
     });
   }
 
-  /* 3. Medicines dropdown: click to open, Escape or outside click to close. */
-  $$('.g-nav__item--drop > button').forEach(function (btn) {
-    var item = btn.parentNode;
-    btn.addEventListener('click', function () {
-      var open = btn.getAttribute('aria-expanded') === 'true';
-      btn.setAttribute('aria-expanded', open ? 'false' : 'true');
-      item.classList.toggle('is-open', !open);
+  /* 3. Dropdown menus (About Us, Medicines, Language): a button click toggles
+     one open; outside click or Escape closes it. A mega menu's panel is
+     `position: fixed`, so it renders away from its trigger — reaching it can
+     cross other header space (another link, the search box) that isn't part
+     of the trigger, which would close it early via plain :hover. A short
+     close delay covering both the trigger and its own panel fixes that.
+     Throughout, the header is marked so its border and (on the see-through
+     pages) its transparency step aside while any of this is open — computed
+     fresh after every change, including once a delayed close finishes, so it
+     reliably reverts once nothing is open any more. */
+  var dropItems = $$('.g-nav__item--drop');
+  var syncMenuOpen = function () {
+    if (!header) { return; }
+    var open = dropItems.some(function (it) {
+      return it.matches(':hover, :focus-within') || it.classList.contains('is-open');
     });
+    header.classList.toggle('g-header--menu-open', open);
+  };
+  dropItems.forEach(function (item) {
+    var btn = item.querySelector('.g-nav__caret') || item.querySelector('button.g-nav__link');
+    var drop = item.querySelector('.g-nav__drop');
+    var closeTimer = null;
+    var open = function () {
+      if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
+      item.classList.add('is-open');
+      if (btn) { btn.setAttribute('aria-expanded', 'true'); }
+      syncMenuOpen();
+    };
+    var close = function () {
+      item.classList.remove('is-open');
+      if (btn) { btn.setAttribute('aria-expanded', 'false'); }
+      syncMenuOpen();
+    };
+    var scheduleClose = function () {
+      if (closeTimer) { clearTimeout(closeTimer); }
+      closeTimer = setTimeout(function () { closeTimer = null; close(); }, 250);
+    };
+    if (btn) {
+      btn.addEventListener('click', function () {
+        if (item.classList.contains('is-open')) { close(); } else { open(); }
+      });
+    }
+    item.addEventListener('mouseenter', open);
+    item.addEventListener('mouseleave', scheduleClose);
+    if (drop) {
+      drop.addEventListener('mouseenter', open);
+      drop.addEventListener('mouseleave', scheduleClose);
+    }
     doc.addEventListener('click', function (ev) {
-      if (!item.contains(ev.target)) { btn.setAttribute('aria-expanded', 'false'); item.classList.remove('is-open'); }
+      if (!item.contains(ev.target)) { close(); }
     });
     doc.addEventListener('keydown', function (ev) {
-      if (ev.key === 'Escape' && item.classList.contains('is-open')) {
-        btn.setAttribute('aria-expanded', 'false'); item.classList.remove('is-open'); btn.focus();
-      }
+      if (ev.key === 'Escape' && item.classList.contains('is-open')) { close(); if (btn) { btn.focus(); } }
     });
   });
 
@@ -176,5 +228,27 @@
     form.addEventListener('input', function () { touched = true; });
     form.addEventListener('submit', function () { touched = false; });
     window.addEventListener('beforeunload', function (ev) { if (touched) { ev.preventDefault(); ev.returnValue = ''; } });
+  });
+
+  /* 12. Scroll-row arrow buttons (e.g. the "What we supply" cards): each
+        click steps one card, and a button greys out at its end of the row. */
+  var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');
+  $$('[data-scroll-target]').forEach(function (btn) {
+    var track = doc.getElementById(btn.getAttribute('data-scroll-target'));
+    if (!track) { return; }
+    var dir = Number(btn.getAttribute('data-scroll'));
+    var update = function () {
+      var max = track.scrollWidth - track.clientWidth;
+      btn.disabled = dir < 0 ? track.scrollLeft <= 2 : track.scrollLeft >= max - 2;
+    };
+    btn.addEventListener('click', function () {
+      var card = track.firstElementChild;
+      var gap = parseFloat(window.getComputedStyle(track).columnGap) || 0;
+      var step = (card ? card.getBoundingClientRect().width : track.clientWidth) + gap;
+      track.scrollBy({ left: step * dir, behavior: reduced && reduced.matches ? 'auto' : 'smooth' });
+    });
+    track.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    update();
   });
 })();

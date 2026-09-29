@@ -20,6 +20,13 @@ if (preg_match('~^/(data|includes|tools|\.github)(/|$)~', $path)) {
     return true;
 }
 
+// Mirrors the sitemap and robots.txt rewrites in .htaccess.
+$generated = ['/sitemap.xml' => 'sitemap.php', '/sitemap-images.xml' => 'sitemap-images.php', '/robots.txt' => 'robots.php'];
+if (isset($generated[$path])) {
+    require $root . '/' . $generated[$path];
+    return true;
+}
+
 $file = realpath($root . $path);
 $rootReal = realpath($root);
 

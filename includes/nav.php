@@ -1,8 +1,10 @@
 <?php
 /**
- * Main navigation: the seven items from nav_tree(). Medicines opens a small
+ * Main navigation: the items from nav_tree(). About Us and Medicines open a
  * dropdown on hover or focus without JavaScript; guide.js adds click and
- * Escape handling. On a phone the list drops open under the header.
+ * Escape handling. About Us also carries its own link (a "linkable" parent):
+ * its label goes straight to /about, and a separate caret button opens the
+ * dropdown. On a phone the list drops open under the header.
  */
 $here = current_path();
 $tree = nav_tree();
@@ -31,8 +33,31 @@ $navQ = ($here === '/search' && isset($_GET['q']) && is_string($_GET['q'])) ? $_
       </form>
     </li>
     <?php endif; ?>
-    <li class="g-nav__item<?= $kids ? ' g-nav__item--drop' : '' ?><?= $isHere ? ' is-current' : '' ?>">
-      <?php if ($kids): ?>
+    <li class="g-nav__item<?= $kids ? ' g-nav__item--drop' : '' ?><?= !empty($item['linkable']) ? ' g-nav__item--linkable' : '' ?><?= $isHere ? ' is-current' : '' ?>">
+      <?php if ($kids && !empty($item['linkable'])): ?>
+      <a class="g-nav__link" href="<?= e(url($item['url'])) ?>"<?= $here === $item['url'] ? ' aria-current="page"' : '' ?>><?= e($item['label']) ?></a>
+      <button class="g-nav__caret" type="button" aria-expanded="false" aria-controls="g-drop-<?= $i ?>" aria-label="<?= e($item['label']) ?> menu">
+        <?= gi('chev-down') ?>
+      </button>
+      <div class="g-nav__drop g-nav__drop--mega" id="g-drop-<?= $i ?>">
+        <?php if (!empty($item['menu_intro'])): ?>
+        <div class="g-nav__drop__intro">
+          <h2><?= e($item['menu_intro']['heading']) ?></h2>
+          <p><?= e($item['menu_intro']['text']) ?></p>
+        </div>
+        <?php endif; ?>
+        <ul class="g-nav__drop__links">
+          <?php foreach ($kids as $k): ?>
+          <li>
+            <a href="<?= e(url($k['url'])) ?>"<?= $here === $k['url'] ? ' aria-current="page"' : '' ?>>
+              <span class="g-nav__drop__label"><?= e($k['label']) ?></span>
+              <?php if (!empty($k['desc'])): ?><span class="g-nav__drop__desc"><?= e($k['desc']) ?></span><?php endif; ?>
+            </a>
+          </li>
+          <?php endforeach; ?>
+        </ul>
+      </div>
+      <?php elseif ($kids): ?>
       <button class="g-nav__link" type="button" aria-expanded="false" aria-controls="g-drop-<?= $i ?>">
         <?= e($item['label']) ?><?= gi('chev-down') ?>
       </button>

@@ -237,19 +237,32 @@ function nav_tree(): array
 {
     return [
         ['label' => 'Home',      'url' => '/'],
-        ['label' => 'About Us', 'url' => '/about',
+        ['label' => 'About Us', 'url' => '/about', 'linkable' => true,
+         'menu_intro' => [
+             'heading' => 'About Us',
+             'text'    => 'Our story, how Getmeds works, and the specialist care we focus on.',
+         ],
          'children' => [
-             ['label' => 'About Us',             'url' => '/about'],
-             ['label' => 'How It Works',         'url' => '/how-it-works'],
-             ['label' => 'Named Patient Supply', 'url' => '/named-patient-supply'],
+             ['label' => 'How It Works',         'url' => '/how-it-works',
+              'desc'  => 'The steps from sending a prescription to picking up your medicine.'],
+             ['label' => 'Named Patient Supply', 'url' => '/named-patient-supply',
+              'desc'  => "Sourcing a prescribed medicine that isn't normally available in Vanuatu."],
+             ['label' => 'Oncology',             'url' => '/oncology',
+              'desc'  => 'Cancer and chemotherapy medicines, our main specialisation.'],
          ]],
-        ['label' => 'Medicines', 'url' => '/medicines',
+        ['label' => 'Medicines', 'url' => '/medicines', 'linkable' => true,
+         'menu_intro' => [
+             'heading' => 'Medicines',
+             'text'    => 'What we supply, and the conditions we cover.',
+         ],
          'children' => [
-             ['label' => 'Medicines we supply', 'url' => '/medicines'],
-             ['label' => 'Conditions',          'url' => '/conditions'],
+             ['label' => 'Medicines we supply', 'url' => '/medicines',
+              'desc'  => 'Browse every medicine group we stock, import or source.'],
+             ['label' => 'Conditions',          'url' => '/conditions',
+              'desc'  => 'Find medicines by the condition they treat.'],
          ]],
-        ['label' => 'Oncology',             'url' => '/oncology'],
         ['label' => 'For Healthcare Professionals', 'url' => '/healthcare-professionals'],
+        ['label' => 'Articles', 'url' => '/articles'],
         ['label' => 'Contact',              'url' => '/contact'],
     ];
 }
@@ -304,6 +317,7 @@ function footer_links(): array
         ['label' => 'Terms of Use',        'url' => '/terms'],
         ['label' => 'Complaints',          'url' => '/complaints'],
         ['label' => 'Policies and Safety', 'url' => '/policies-and-safety'],
+        ['label' => 'Sitemap',             'url' => '/sitemap'],
     ];
 }
 

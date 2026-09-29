@@ -3,8 +3,9 @@
  * Home (content guide, page 01).
  *
  * Section order as the guide sets it: hero, trust strip, intro, why, oncology,
- * Named Patient Supply, categories, Pacific, affordability, how it works, who
- * we serve, professionals/patients split, safety, final CTA, footer.
+ * Named Patient Supply (paired with Across the Pacific), categories,
+ * affordability, how it works, who we serve, professionals/patients split,
+ * safety, final CTA, footer.
  * The hero keeps the owner's H1, lede and kicker (BUILD-BRIEF, owner decision 2).
  */
 require __DIR__ . '/includes/bootstrap.php';
@@ -74,6 +75,51 @@ include INC . '/header.php';
   </div>
 </section>
 
+<section class="g-sec g-bg-white g-cat-sec" aria-labelledby="cat-h">
+  <div class="g-wrap">
+    <div class="g-split g-cat-head">
+      <div>
+        <span class="g-label">Our Medicines</span>
+        <h2 id="cat-h">What we supply</h2>
+      </div>
+      <div>
+        <p class="g-lead">Getmeds stocks and sources medicines across every major category, from cancer treatment to everyday supplies. Every item is checked by a pharmacist before it reaches you.</p>
+        <div class="g-btns g-mt"><?= g_btn('See all medicine groups', url('/medicines'), 'secondary') ?></div>
+      </div>
+    </div>
+    <?php
+    $tiles = [
+        ['oncology', 'ribbon', 'Cancer medicines', 'Chemotherapy, hormone therapy and other cancer medicines'],
+        ['haematology', 'drop', 'Blood disorders', 'Medicines for blood cancers and blood conditions'],
+        ['supportive-care', 'heart', 'Supportive care', 'Medicines used alongside cancer treatment, such as anti-sickness medicine'],
+        ['diabetes', 'gauge', 'Diabetes', 'Medicines and supplies for people living with diabetes'],
+        ['cardiology', 'pulse', 'Heart and blood pressure', 'Medicines for high blood pressure, cholesterol and heart disease'],
+        ['renal', 'kidney', 'Kidney and dialysis', 'Medicines used in kidney care and dialysis'],
+        ['antibiotics', 'bug', 'Antibiotics', 'Medicines used to treat bacterial infections'],
+        ['medical-supplies', 'box', 'Medical supplies', 'Single-use consumables, devices and equipment'],
+    ];
+    ?>
+    <div class="g-catrow">
+      <div class="g-catrow__track" id="cat-track">
+        <?php foreach ($tiles as $i => [$anchor, $ic, $name, $line]): ?>
+        <a class="g-catcard" href="<?= e(url('/medicines') . '#' . $anchor) ?>">
+          <h3><?= e($name) ?></h3>
+          <p><?= e($line) ?></p>
+          <span class="g-catcard__img" aria-hidden="true">
+            <?= gi('image') ?>
+            <span class="g-catcard__imgtext">No Image</span>
+          </span>
+        </a>
+        <?php endforeach; ?>
+      </div>
+      <div class="g-catrow__nav">
+        <button class="g-catrow__arrow g-catrow__arrow--prev" type="button" data-scroll="-1" data-scroll-target="cat-track" aria-label="Scroll to previous medicine groups"><?= gi('arrow') ?></button>
+        <button class="g-catrow__arrow g-catrow__arrow--next" type="button" data-scroll="1" data-scroll-target="cat-track" aria-label="Scroll to more medicine groups"><?= gi('arrow') ?></button>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="g-sec g-bg-white g-why-sec" aria-labelledby="why-h">
   <div class="g-wrap g-why2">
     <div class="g-why2__head">
@@ -92,93 +138,45 @@ include INC . '/header.php';
   </div>
 </section>
 
-<section class="g-sec g-bg-white" aria-labelledby="onc-h">
-  <div class="g-wrap g-split">
-    <div>
-      <span class="g-label g-label--pink">Oncology and chemotherapy</span>
+<section class="g-sec g-onc-sec" aria-labelledby="onc-h">
+  <div class="g-wrap g-onc">
+    <div class="g-onc__body">
+      <span class="g-label">Oncology and Chemotherapy</span>
       <h2 id="onc-h">Cancer and chemotherapy medicines</h2>
       <div class="g-stack g-mt">
         <p>Cancer treatment often needs medicine in cycles, over many months. If one cycle is missed or late, treatment can be interrupted.</p>
-        <p>Getmeds Vanuatu supplies cancer medicines against a doctor's prescription or treatment protocol. We supply medicines in three ways:</p>
+        <p>Getmeds Vanuatu supplies cancer medicines against a doctor's prescription or treatment protocol. We supply medicines in three ways: in stock, for import, or sourced on request.</p>
+        <p>Injectable chemotherapy is given at a hospital. We work with your treating team so the medicine is ready for your session.</p>
       </div>
-      <ul class="g-routes g-mt" role="list">
-        <li><span class="g-chip g-chip--pink"><?= gi('shelf') ?>In stock</span><span>ready in Port Vila</span></li>
-        <li><span class="g-chip g-chip--pink"><?= gi('plane') ?>For import</span><span>ordered for you from our suppliers</span></li>
-        <li><span class="g-chip g-chip--pink"><?= gi('search') ?>Sourced on request</span><span>found for you when a medicine is hard to get</span></li>
-      </ul>
-      <p class="g-mt">Injectable chemotherapy is given at a hospital. We work with your treating team so the medicine is ready for your session.</p>
       <div class="g-btns g-mt"><?= g_btn('Learn about cancer medicines', url('/oncology'), 'primary') ?></div>
-    </div>
-    <div class="g-media">
-      <?= g_photo('carton', 'Gloved hands taking a blister pack of tablets out of its medicine box.') ?>
     </div>
   </div>
 </section>
 
-<section class="g-sec g-bg-sky" aria-labelledby="nps-h">
-  <div class="g-wrap g-split">
-    <div class="g-diagram" role="img" aria-label="Named Patient Supply in three steps: the doctor's prescription, Getmeds sources and imports, the medicine for one named patient.">
-      <div class="g-diagram__step"><?= gi('clipboard') ?><strong>Doctor's prescription</strong></div>
-      <span class="g-diagram__arrow"><?= gi('arrow') ?></span>
-      <div class="g-diagram__step"><?= gi('plane') ?><strong>Getmeds sources and imports</strong></div>
-      <span class="g-diagram__arrow"><?= gi('arrow') ?></span>
-      <div class="g-diagram__step"><?= gi('user-tag') ?><strong>Medicine for one named patient</strong></div>
+<section class="g-sec g-bg-white g-nps-sec" aria-labelledby="nps-h">
+  <div class="g-nps">
+    <div class="g-nps__pacific">
+      <span class="g-label">Pacific Islands</span>
+      <h2>Across the Pacific</h2>
+      <div class="g-stack g-mt">
+        <p>Access to important medicines should not depend on where you live. From Port Vila, Getmeds is working to make medicines easier to reach across the Pacific Islands.</p>
+        <p>If you are a patient, doctor or hospital outside Vanuatu, contact us and we will tell you what we can do.</p>
+      </div>
+      <div class="g-btns g-mt"><?= g_btn('Pacific access', url('/pacific-access'), 'primary') ?></div>
     </div>
-    <div>
+    <div class="g-nps__body">
+      <span class="g-label">Hard-to-Find Medicines</span>
       <h2 id="nps-h">Named Patient Supply</h2>
       <div class="g-stack g-mt">
         <p>Sometimes a doctor prescribes a medicine that is not normally available in Vanuatu. Named Patient Supply is a way to get that medicine for one named patient, based on their prescription.</p>
         <p>Getmeds helps the doctor and patient with the request, the paperwork and the import. Not every medicine can be supplied this way, and we will tell you clearly what is possible.</p>
       </div>
-      <p class="g-mt"><a class="g-link-arrow" href="<?= e(url('/named-patient-supply')) ?>">How Named Patient Supply works <?= gi('arrow') ?></a></p>
+      <div class="g-btns g-mt"><?= g_btn('How Named Patient Supply works', url('/named-patient-supply'), 'primary') ?></div>
     </div>
   </div>
 </section>
 
-<section class="g-sec g-bg-white" aria-labelledby="cat-h">
-  <div class="g-wrap">
-    <div class="g-head g-head--center"><h2 id="cat-h">What we supply</h2></div>
-    <?php
-    $tiles = [
-        ['oncology', 'ribbon', 'Cancer medicines', 'Chemotherapy, hormone therapy and other cancer medicines'],
-        ['haematology', 'drop', 'Blood disorders', 'Medicines for blood cancers and blood conditions'],
-        ['supportive-care', 'heart', 'Supportive care', 'Medicines used alongside cancer treatment, such as anti-sickness medicine'],
-        ['diabetes', 'gauge', 'Diabetes', 'Medicines and supplies for people living with diabetes'],
-        ['cardiology', 'pulse', 'Heart and blood pressure', 'Medicines for high blood pressure, cholesterol and heart disease'],
-        ['renal', 'kidney', 'Kidney and dialysis', 'Medicines used in kidney care and dialysis'],
-        ['antibiotics', 'bug', 'Antibiotics', 'Medicines used to treat bacterial infections'],
-        ['medical-supplies', 'box', 'Medical supplies', 'Single-use consumables, devices and equipment'],
-    ];
-    ?>
-    <div class="g-grid g-grid--4 g-grid--m2 g-tiles">
-      <?php foreach ($tiles as $i => [$anchor, $ic, $name, $line]): ?>
-      <a class="g-card g-card--link g-card--compact<?= $i === 0 ? ' g-card--pink-top' : '' ?>" href="<?= e(url('/medicines') . '#' . $anchor) ?>">
-        <span class="g-card__icon"><?= gi($ic) ?></span>
-        <h3><?= e($name) ?></h3>
-        <p><?= e($line) ?></p>
-        <span class="g-card__go" aria-hidden="true"><?= gi('arrow') ?></span>
-      </a>
-      <?php endforeach; ?>
-    </div>
-    <div class="g-btns g-btns--center g-mt-lg"><?= g_btn('See all medicine groups', url('/medicines'), 'secondary') ?></div>
-  </div>
-</section>
-
-<section class="g-sec g-bg-navy g-wave g-home-pacific" aria-labelledby="pac-h">
-  <div class="g-wrap g-split">
-    <div>
-      <h2 id="pac-h">Across the Pacific</h2>
-      <div class="g-stack g-mt">
-        <p>Access to important medicines should not depend on where you live. From Port Vila, Getmeds is working to make medicines easier to reach across the Pacific Islands.</p>
-        <p>If you are a patient, doctor or hospital outside Vanuatu, contact us and we will tell you what we can do.</p>
-      </div>
-      <p class="g-mt"><a class="g-link-arrow" href="<?= e(url('/pacific-access')) ?>">Pacific access <?= gi('arrow') ?></a></p>
-    </div>
-    <div class="g-split__media--first g-home-map"><?= g_pacific_map('dark') ?></div>
-  </div>
-</section>
-
-<section class="g-sec g-bg-mint" aria-labelledby="aff-h">
+<section class="g-sec g-bg-mint g-aff-sec" aria-labelledby="aff-h">
   <div class="g-wrap g-split">
     <div>
       <h2 id="aff-h">More affordable access</h2>
@@ -191,72 +189,65 @@ include INC . '/header.php';
   </div>
 </section>
 
-<section class="g-sec g-bg-white" aria-labelledby="how-h">
-  <div class="g-wrap">
-    <div class="g-head g-head--center"><h2 id="how-h">How it works</h2></div>
-    <?php g_steps([
-        ['Contact us.', 'Call, message or use the online form.'],
-        ['Send the prescription.', "Share your doctor's prescription or treatment protocol."],
-        ['A pharmacist checks it.', 'We confirm the medicine, availability and price.'],
-        ['Confirm and plan.', 'You agree to the price. We give you a pick-up date and plan your next cycle.'],
-        ['Collect your medicine.', 'Pick up on the agreed date. Injectables go to your hospital for your session.'],
-    ], 'h'); ?>
-    <div class="g-btns g-btns--center g-mt-lg"><?= g_btn('Request a Medicine', request_url('medicine'), 'primary') ?></div>
-  </div>
-</section>
-
-<section class="g-sec g-bg-sky" aria-labelledby="serve-h">
-  <div class="g-wrap">
-    <div class="g-head g-head--center"><h2 id="serve-h">Who we serve</h2></div>
-    <div class="g-grid g-grid--5 g-scrollrow g-serve">
-      <?= g_card('users', 'Patients and families', 'Help getting the medicine your doctor prescribed', 'g-card--compact') ?>
-      <?= g_card('doctor', 'Doctors and oncologists', 'A local source for cancer and specialist medicines', 'g-card--compact') ?>
-      <?= g_card('hospital', 'Hospitals and clinics', 'Supply for wards, clinics and treatment units', 'g-card--compact') ?>
-      <?= g_card('bottle', 'Pharmacies', 'Access to medicines you do not normally stock', 'g-card--compact') ?>
-      <?= g_card('plane', 'Overseas treatment agencies', 'Medicine continuity for patients who return home', 'g-card--compact') ?>
-    </div>
-  </div>
-</section>
-
-<section class="g-sec g-bg-white" aria-labelledby="split-h">
+<section class="g-sec g-bg-white g-split-sec" aria-labelledby="split-h">
   <div class="g-wrap">
     <h2 id="split-h" class="g-sr">Enquiries for healthcare professionals and for patients</h2>
     <div class="g-grid g-grid--2 g-home-split">
-      <div class="g-card g-card--navy">
-        <span class="g-card__icon"><?= gi('doctor') ?></span>
-        <h3>For doctors, hospitals and pharmacies</h3>
-        <p>Send us a prescription, a treatment protocol or a product list. We will reply with availability and a quotation. Let us quote for your requirement.</p>
-        <div class="g-btns"><?= g_btn('Healthcare Professional Enquiry', request_url('professional'), 'primary') ?></div>
-      </div>
-      <div class="g-card g-card--pink-top g-home-split__pt">
-        <span class="g-card__icon"><?= gi('heart') ?></span>
-        <h3>For patients and families</h3>
-        <p>You do not need to know medical words to ask us for help. Send us your prescription and tell us how to reach you. A pharmacist will explain the next steps.</p>
-        <div class="g-btns"><?= g_btn('Patient Enquiry', request_url('patient'), 'primary') ?></div>
-      </div>
+      <img class="g-home-split__img" src="<?= e(asset('/assets/img/families.png')) ?>" width="1200" height="630" loading="lazy" decoding="async" alt="For doctors, hospitals and pharmacies: send us a prescription, a treatment protocol or a product list. We will reply with availability and a quotation.">
+      <img class="g-home-split__img" src="<?= e(asset('/assets/img/patients.png')) ?>" width="1200" height="630" loading="lazy" decoding="async" alt="For patients and families: you do not need to know medical words to ask us for help. Send us your prescription and tell us how to reach you.">
     </div>
   </div>
 </section>
 
-<section class="g-sec g-bg-white g-sec--flushtop" aria-labelledby="safe-h">
-  <div class="g-wrap">
-    <div class="g-head g-head--center"><h2 id="safe-h">How we keep medicines safe</h2></div>
-    <div class="g-grid g-grid--2">
-      <?= g_card('clipboard', 'Prescription first.', 'Every prescription medicine needs a valid prescription.') ?>
-      <?= g_card('pharmacist', 'Pharmacist-checked.', 'A pharmacist checks every order.') ?>
-      <?= g_card('shield', 'Only what was prescribed.', 'We supply exactly what your doctor prescribed.') ?>
-      <?= g_card('thermo', 'Stored correctly.', 'Medicines that need cold storage are kept between 2 and 8&nbsp;°C, monitored and logged.') ?>
+<section class="g-sec g-bg-white g-home-faq" aria-labelledby="faq-h">
+  <div class="g-wrap g-home-faq__split">
+    <div class="g-home-faq__intro">
+      <span class="g-label">FAQ</span>
+      <h2 id="faq-h">Medicines and Access Questions</h2>
+      <div class="g-btns g-mt">
+        <?= g_btn('View all FAQs', url('/faq'), 'primary') ?>
+        <?= g_btn('Contact us', url('/contact'), 'secondary') ?>
+      </div>
+    </div>
+    <div class="g-home-faq__list">
+      <?php
+      $homeFaq = [
+          ['What is Named Patient Supply?',
+           'It is a way to get a prescribed medicine that is not normally available in Vanuatu, ordered for one named patient. Not every medicine can be supplied this way.'],
+          ['Do I need a prescription?',
+           "Yes, for all prescription medicines. Cancer medicines must follow a doctor's prescription or treatment protocol. We only supply what your doctor prescribed."],
+          ['How does pricing work?',
+           'Prices depend on the medicine, amount and source. We give you a clear quotation before you commit. You pay nothing until you agree.'],
+          ['How long does supply take?',
+           'It depends on whether the medicine is in stock, needs to be imported, or must be specially sourced. We give you the earliest possible date when we quote.'],
+          ['Can patients from other Pacific Islands access Getmeds?',
+           'We are working to expand access across the Pacific and welcome enquiries from other Pacific countries. Contact us with your country and the medicine you need, and we will tell you what is possible.'],
+      ];
+      ?>
+      <?php foreach ($homeFaq as $i => [$q, $a]): ?>
+      <details class="g-home-faq__item"<?= $i === 0 ? ' open' : '' ?>>
+        <summary>
+          <span><?= e($q) ?></span>
+          <span class="g-home-faq__toggle" aria-hidden="true"><?= gi('chev-down') ?></span>
+        </summary>
+        <p><?= e($a) ?></p>
+      </details>
+      <?php endforeach; ?>
     </div>
   </div>
 </section>
 
-<?php g_cta_band(
-    'Need a medicine? Start with your prescription.',
-    'Send it to us and a pharmacist will reply with what we can supply and the price.',
-    [
-        ['Request a Medicine', request_url('medicine'), 'primary'],
-        ['Call ' . cfg('phone'), tel_url(), 'white', 'phone'],
-    ]
-); ?>
+<section class="g-sec g-home-cta" aria-label="Need a medicine? Start with your prescription.">
+  <div class="g-wrap g-home-cta__inner">
+    <div class="g-home-cta__text">
+      <h2>Need a medicine? Start with your prescription.</h2>
+      <p>Send it to us and a pharmacist will reply with what we can supply and the price.</p>
+    </div>
+    <div class="g-home-cta__btns">
+      <a class="g-home-cta__btn g-home-cta__btn--white" href="<?= e(request_url('medicine')) ?>">Request a Medicine</a>
+      <a class="g-home-cta__btn g-home-cta__btn--dark" href="<?= e(tel_url()) ?>"><?= gi('phone') ?><span>Call <?= e(cfg('phone')) ?></span></a>
+    </div>
+  </div>
+</section>
 
 <?php include INC . '/footer.php'; ?>

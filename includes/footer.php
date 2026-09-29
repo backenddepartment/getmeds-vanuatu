@@ -1,21 +1,14 @@
 <?php
 /**
  * Closes <main>, then the Global Footer (content guide, page 22):
- * a gradient CTA card, the brand block, four link columns (accordions on a
- * phone), and a darker legal strip with the medical disclaimer. Then the
+ * the brand block, four link columns plus a Contact column (accordions on a
+ * phone), and a legal strip with the copyright and policy links. Then the
  * cookie notice and the scripts.
  */
 ?>
 </main>
 
 <footer class="g-footer">
-  <div class="g-wrap g-footer__cta">
-    <div class="g-cta--card">
-      <p><strong>Need a medicine?</strong> Send your prescription and we will check it for you.</p>
-      <?= g_btn('Request a Medicine', request_url('medicine'), 'primary') ?>
-    </div>
-  </div>
-
   <div class="g-wrap g-footer__main">
     <div class="g-footer__brand">
       <a href="<?= e(url('/')) ?>">
@@ -24,11 +17,6 @@
       <p class="g-footer__name">Getmeds Vanuatu-Pacific</p>
       <p>A pharmacy in Port Vila focused on cancer medicines. We help patients and healthcare providers access important medicines in Vanuatu and across the Pacific.</p>
       <p>Prescription medicines are supplied only against a valid prescription. Availability may vary.</p>
-      <ul class="g-footer__contact">
-        <li><?= gi('phone') ?><a href="<?= e(tel_url()) ?>"><?= e(cfg('phone')) ?></a></li>
-        <li><?= gi('mail') ?><a href="mailto:<?= e(cfg('email')) ?>"><?= e(cfg('email')) ?></a></li>
-        <li><?= gi('pin') ?><span>Golden Port, Namba 2, Port Vila</span></li>
-      </ul>
     </div>
 
     <?php foreach (footer_columns() as $head => $links): ?>
@@ -41,17 +29,25 @@
       </ul>
     </details>
     <?php endforeach; ?>
+
+    <details class="g-footer__col" open>
+      <summary><h2>Contact</h2></summary>
+      <ul class="g-footer__contact">
+        <li><?= gi('phone') ?><a href="<?= e(tel_url()) ?>"><?= e(cfg('phone')) ?></a></li>
+        <li><?= gi('mail') ?><a href="mailto:<?= e(cfg('email')) ?>"><?= e(cfg('email')) ?></a></li>
+        <li><?= gi('pin') ?><span>Golden Port, Namba 2, Port Vila</span></li>
+      </ul>
+    </details>
   </div>
 
   <div class="g-footer__legal">
     <div class="g-wrap">
+      <p>&copy; <?= date('Y') ?> Getmeds Vanuatu-Pacific. Port Vila, Vanuatu.</p>
       <ul>
         <?php foreach (footer_links() as $l): ?>
         <li><a href="<?= e(url($l['url'])) ?>"><?= e($l['label']) ?></a></li>
         <?php endforeach; ?>
       </ul>
-      <p><strong>Medical disclaimer:</strong> The information on this website is general and is not medical advice. Getmeds Vanuatu does not diagnose or treat illness. Always follow the advice of your doctor, nurse or pharmacist. Do not start, stop or change a medicine without talking to them first. In an emergency, go to your nearest hospital.</p>
-      <p>&copy; <?= date('Y') ?> Getmeds Vanuatu-Pacific. Port Vila, Vanuatu.</p>
     </div>
   </div>
 </footer>

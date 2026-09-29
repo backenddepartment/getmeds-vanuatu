@@ -26,6 +26,12 @@ Options -Indexes
   RewriteRule ^includes/ - [F,L]
   RewriteRule ^docs/ - [F,L]
 
+  # Sitemaps and robots.txt are generated from the pages that exist, so they
+  # never go stale. tools/build-static.php writes the same three as real files.
+  RewriteRule ^sitemap\.xml$ sitemap.php [L]
+  RewriteRule ^sitemap-images\.xml$ sitemap-images.php [L]
+  RewriteRule ^robots\.txt$ robots.php [L]
+
   # Strip a trailing index.php so the canonical URL is the directory.
   RewriteCond %{THE_REQUEST} \s/+(.*/)?index\.php[\s?] [NC]
   RewriteRule ^(.*/)?index\.php$ /%1 [R=301,L]
