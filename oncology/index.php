@@ -91,14 +91,14 @@ include INC . '/header.php';
             <text x="180" y="196" text-anchor="middle" font-family="Poppins, sans-serif" font-size="17" font-weight="600" fill="#0B2A5B">cycle</text>
             <?php foreach ([[1, 180, 60], [2, 300, 180], [4, 60, 180]] as [$n, $x, $y]): ?>
             <circle cx="<?= $x ?>" cy="<?= $y ?>" r="36" fill="#3D7F27"/>
-            <text x="<?= $x ?>" y="<?= $y - 4 ?>" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" font-weight="600" fill="#fff">Cycle</text>
+            <text x="<?= $x ?>" y="<?= $y - 4 ?>" text-anchor="middle" font-family="Poppins, sans-serif" font-size="12" font-weight="600" fill="#fff">Cycle</text>
             <text x="<?= $x ?>" y="<?= $y + 17 ?>" text-anchor="middle" font-family="Poppins, sans-serif" font-size="22" font-weight="700" fill="#fff"><?= $n ?></text>
             <?php endforeach; ?>
             <circle cx="180" cy="300" r="36" fill="#EEF1F4" stroke="#9AA7B3" stroke-width="2" stroke-dasharray="5 5"/>
-            <text x="180" y="296" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" font-weight="600" fill="#5A6B7B">Cycle</text>
+            <text x="180" y="296" text-anchor="middle" font-family="Poppins, sans-serif" font-size="12" font-weight="600" fill="#5A6B7B">Cycle</text>
             <text x="180" y="317" text-anchor="middle" font-family="Poppins, sans-serif" font-size="22" font-weight="700" fill="#5A6B7B">3</text>
             <rect x="122" y="344" width="116" height="28" rx="14" fill="#FDEEF4" stroke="#E8508A" stroke-width="1.5"/>
-            <text x="180" y="363" text-anchor="middle" font-family="Inter, sans-serif" font-size="14" font-weight="600" fill="#B8245C">Missed cycle</text>
+            <text x="180" y="363" text-anchor="middle" font-family="Poppins, sans-serif" font-size="14" font-weight="600" fill="#B8245C">Missed cycle</text>
           </svg>
         </div>
       </div>

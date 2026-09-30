@@ -66,7 +66,7 @@ function pac_hero_map(): string
     ];
     foreach ($pins as [$n, $x, $y, $lx, $ly, $a]) {
         $s .= '<circle cx="' . $x . '" cy="' . $y . '" r="8" fill="#fff"/><circle cx="' . $x . '" cy="' . $y . '" r="4" fill="#0B2A5B"/>'
-            . '<text x="' . $lx . '" y="' . $ly . '" text-anchor="' . $a . '" font-family="Inter, sans-serif" font-size="20" font-weight="600" fill="#fff">' . e($n) . '</text>';
+            . '<text x="' . $lx . '" y="' . $ly . '" text-anchor="' . $a . '" font-family="Poppins, sans-serif" font-size="20" font-weight="600" fill="#fff">' . e($n) . '</text>';
     }
     // Vanuatu: the green pin.
     $vx = 336; $vy = 330;
@@ -74,7 +74,7 @@ function pac_hero_map(): string
         . '<path d="M' . $vx . ' ' . ($vy - 44) . 'c-12 0-22 10-22 22 0 16 22 38 22 38s22-22 22-38c0-12-10-22-22-22z" fill="#6BB33F" stroke="#fff" stroke-width="2.5"/>'
         . '<circle cx="' . $vx . '" cy="' . ($vy - 22) . '" r="7" fill="#fff"/>'
         . '<text x="' . ($vx + 34) . '" y="' . ($vy - 14) . '" font-family="Poppins, sans-serif" font-size="28" font-weight="700" fill="#fff">Vanuatu</text>'
-        . '<text x="' . ($vx + 34) . '" y="' . ($vy + 10) . '" font-family="Inter, sans-serif" font-size="15" fill="rgba(255,255,255,.85)">Port Vila</text>';
+        . '<text x="' . ($vx + 34) . '" y="' . ($vy + 10) . '" font-family="Poppins, sans-serif" font-size="15" fill="rgba(255,255,255,.85)">Port Vila</text>';
     return $s . '</svg>';
 }
 

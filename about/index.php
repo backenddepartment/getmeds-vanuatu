@@ -39,21 +39,34 @@ include INC . '/header.php';
 </section>
 
 <section class="g-sec g-bg-white" id="why-we-started" aria-labelledby="why-h">
-  <div class="g-wrap g-split g-split--7-5 g-split--top">
-    <div class="g-about-col">
-      <h2 id="why-h">Why we started</h2>
-      <div class="g-stack g-mt">
+  <div class="g-wrap">
+    <?php /* The problem, as a chain of arrows: each head lies over the start of
+             the next (guide.css "Arrow chain"; guide.js slides them in). */
+    $chain = [['doctor', 'Diagnosis'], ['plane', 'Treatment overseas'], ['shelf-empty', 'Home, but no medicine']]; ?>
+    <ol class="g-chain" aria-label="The problem before Getmeds: diagnosis, then treatment overseas, then home but no medicine.">
+      <?php foreach ($chain as $i => [$icon, $label]): ?>
+      <li class="g-chain__step" style="--g-chain-i: <?= $i ?>; z-index: <?= count($chain) - $i ?>">
+        <span class="g-chain__shape" aria-hidden="true"></span>
+        <span class="g-chain__label"><?= gi($icon) ?><?= e($label) ?></span>
+      </li>
+      <?php endforeach; ?>
+    </ol>
+    <div class="g-split g-split--top g-why-start">
+      <div class="g-why-start__head">
+        <span class="g-label">About Us</span>
+        <h2 id="why-h">Why we started</h2>
+        <figure class="g-why-start__photo">
+          <img src="<?= e(asset('/assets/img/vanuatufour-800.jpg')) ?>"
+               srcset="<?= e(asset('/assets/img/vanuatufour-800.jpg')) ?> 800w, <?= e(asset('/assets/img/vanuatufour-1200.jpg')) ?> 1200w"
+               sizes="(max-width: 63.99em) 100vw, 580px" width="800" height="447" loading="lazy" decoding="async"
+               alt="A Getmeds Vanuatu training session: a presenter explains a medicine verification website on a large screen to local staff.">
+        </figure>
+      </div>
+      <div class="g-stack">
         <p>Cancer is a major health problem in Vanuatu. But for a long time, many cancer medicines were not available here.</p>
         <p>Many patients were referred overseas for treatment. This can cost a family millions of vatu. When patients came home, some could not continue treatment because the medicine was not available locally. Others had to wait for someone to bring it from overseas.</p>
         <p>When a treatment cycle is missed, treatment can fail. Getmeds Vanuatu was started so that patients can get their medicine here, on time.</p>
       </div>
-    </div>
-    <div class="g-diagram g-diagram--v" role="img" aria-label="The problem before Getmeds: diagnosis, then treatment overseas, then home but no medicine.">
-      <div class="g-diagram__step g-diagram__step--grey"><?= gi('doctor') ?><strong>Diagnosis</strong></div>
-      <span class="g-diagram__arrow"><?= gi('arrow') ?></span>
-      <div class="g-diagram__step g-diagram__step--grey"><?= gi('plane') ?><strong>Treatment overseas</strong></div>
-      <span class="g-diagram__arrow"><?= gi('arrow') ?></span>
-      <div class="g-diagram__step g-diagram__step--grey"><?= gi('shelf-empty') ?><strong>Home, but no medicine</strong></div>
     </div>
   </div>
 </section>

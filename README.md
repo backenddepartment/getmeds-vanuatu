@@ -111,6 +111,39 @@ records how to recreate them if you want to re-run the audit.
 
 ---
 
+## Global healthcare news on `/articles`
+
+The headlines come from [newsdata.io](https://newsdata.io/). The server fetches
+them, keeps them in `data/cache/news.json`, and asks again once they are three
+hours old. There is no cron job: the first visit after the cache expires
+refreshes it. The code is `includes/news.php`; the settings (search words,
+categories, how many, how long to keep) are the `news_*` values in `config.php`.
+
+**The API key is never committed.** It is read from, in this order:
+
+1. the `NEWSDATA_API_KEY` environment variable, or
+2. `data/secrets.php` (copy `data/secrets.example.php`, paste the key in).
+
+`data/secrets.php` and `data/cache/` are in `.gitignore`, and `.htaccess` refuses
+everything under `/data/` over HTTP.
+
+| Where the site runs | What to do |
+| --- | --- |
+| XAMPP, or any PHP host | Put the key in `data/secrets.php`. `data/` must be writable by PHP. |
+| GitHub Pages (static) | Add a repository secret named `NEWSDATA_API_KEY`. The deploy workflow rebuilds every six hours, and the headlines are as fresh as the last build. |
+
+With no key, or when the service cannot be reached and nothing is cached, the
+page shows "There are no headlines to show right now" above the guides. It never
+fails. Reasons for a failed fetch are written to the PHP error log, prefixed
+`[getmeds news]`.
+
+To force a refresh, delete `data/cache/news.json` and reload `/articles`.
+
+The news photographs are loaded from each outlet's own server, which is why
+`img-src` in the `.htaccess` CSP allows `https:`.
+
+---
+
 ## The `/providers` gate
 
 `/providers` and everything under it carries a `noindex` tag and an interstitial

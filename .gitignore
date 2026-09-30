@@ -10,6 +10,13 @@
 # HTTP; this is the other half of that.
 /data/enquiries.log
 
+# API keys (the newsdata.io key for /articles). data/secrets.example.php is the
+# committed template; the real file stays on the machine it was written on.
+/data/secrets.php
+
+# Headlines fetched for /articles. Rebuilt on demand, so never worth committing.
+/data/cache/
+
 # OS and editor noise.
 Thumbs.db
 .DS_Store

@@ -43,7 +43,6 @@ $noindex = !empty($page['noindex']);
 
 <?php /* Self-hosted, no third-party request anywhere on this page. */ ?>
 <link rel="preload" href="<?= e(url('/assets/fonts/poppins-latin-400-normal.woff2')) ?>" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="<?= e(url('/assets/fonts/inter-latin-400-normal.woff2')) ?>" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="<?= e(asset('/assets/css/base.css')) ?>">
 <link rel="stylesheet" href="<?= e(asset('/assets/css/guide.css')) ?>">
 <?php /* The navbar logo, centred on a square: the tab icon (32px, and 192px for

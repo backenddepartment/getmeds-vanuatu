@@ -17,11 +17,13 @@
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
 
-    /* The mega menu's `top` must match the header's real rendered height
+    /* The mega menu's `top` must match the bar's real rendered height
        exactly (a hardcoded px value drifted out of sync and left a gap), so
-       measure it instead of guessing. */
+       measure it instead of guessing. The bar is the header's ::before: the
+       header's own box keeps one height whether the bar is compact or not. */
     var syncHeaderHeight = function () {
-      doc.documentElement.style.setProperty('--g-header-h', header.offsetHeight + 'px');
+      var bar = parseFloat(window.getComputedStyle(header, '::before').height);
+      doc.documentElement.style.setProperty('--g-header-h', (bar || header.offsetHeight) + 'px');
     };
     syncHeaderHeight();
     window.addEventListener('resize', syncHeaderHeight);
@@ -169,8 +171,107 @@
           if (hit && q !== '' && it.tagName === 'DETAILS') { it.open = true; }
         }
       });
-      if (empty) { empty.classList.toggle('g-hidden', shown !== 0); }
+      if (empty) {
+        empty.classList.toggle('g-hidden', shown !== 0);
+        $$('[data-filter-query]', empty).forEach(function (el) { el.textContent = input.value.trim(); });
+      }
     });
+  });
+
+  /* 7b. News photos and outlet icons come from other servers, and some refuse
+         to be shown on another site. One that fails is removed, which leaves
+         the stand-in picture (or the globe icon) that sits behind it. currentSrc is empty until a lazy image has
+         actually been requested, so one still waiting is not mistaken for broken. */
+  $$('img[data-fallback]').forEach(function (img) {
+    var drop = function () { if (img.parentNode) { img.parentNode.removeChild(img); } };
+    if (img.complete && img.currentSrc && img.naturalWidth === 0) { drop(); return; }
+    img.addEventListener('error', drop);
+  });
+
+  /* 7c. Pages: a grid with data-paginate="9" shows nine cards at a time, with
+         page numbers in the element named by data-pager. The number of pages
+         follows the number of cards, so more headlines simply add pages.
+         While a search box (data-filter) that covers the grid has words in
+         it, every match shows on one page and the numbers step aside. */
+  $$('[data-paginate]').forEach(function (grid) {
+    var per = parseInt(grid.getAttribute('data-paginate'), 10) || 9;
+    var pager = doc.getElementById(grid.getAttribute('data-pager'));
+    var cards = $$('[data-filter-item]', grid);
+    var pages = Math.ceil(cards.length / per);
+    if (!pager || pages < 2) { return; }
+    var current = 1;
+    var arrow = grid.querySelector('.g-article-card__go svg');
+    var searching = function () {
+      return $$('[data-filter]').some(function (i) {
+        var t = doc.querySelector(i.getAttribute('data-filter'));
+        return t && t.contains(grid) && i.value.trim() !== '';
+      });
+    };
+    var button = function (label, page, cls, aria) {
+      var b = doc.createElement('button');
+      b.type = 'button';
+      b.className = 'g-pager__btn' + (cls ? ' ' + cls : '');
+      if (typeof label === 'string') { b.textContent = label; } else if (label) { b.appendChild(label.cloneNode(true)); }
+      if (aria) { b.setAttribute('aria-label', aria); }
+      if (page === current && !cls) { b.setAttribute('aria-current', 'page'); }
+      if (page < 1 || page > pages) { b.disabled = true; }
+      b.setAttribute('data-page', page);
+      return b;
+    };
+    var show = function (page, moved) {
+      current = Math.min(Math.max(page, 1), pages);
+      if (searching()) {
+        cards.forEach(function (c) { c.classList.remove('g-pageoff'); });
+        pager.hidden = true;
+        return;
+      }
+      cards.forEach(function (c, i) {
+        c.classList.toggle('g-pageoff', Math.floor(i / per) + 1 !== current);
+      });
+      pager.innerHTML = '';
+      pager.appendChild(button(arrow, current - 1, 'g-pager__btn--prev', 'Previous page'));
+      for (var n = 1; n <= pages; n++) { pager.appendChild(button(String(n), n, '', 'Page ' + n)); }
+      pager.appendChild(button(arrow, current + 1, 'g-pager__btn--next', 'Next page'));
+      pager.hidden = false;
+      if (moved) {
+        /* Glide back to the top of the grid, unless it is more than a screen
+           and a half away (nine cards stacked on a phone): a long glide only
+           makes the reader wait. */
+        var still = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        var far = Math.abs(grid.getBoundingClientRect().top) > window.innerHeight * 1.5;
+        grid.scrollIntoView({ behavior: still || far ? 'auto' : 'smooth', block: 'start' });
+        var now = pager.querySelector('[aria-current]');
+        if (now) { now.focus({ preventScroll: true }); }
+      }
+    };
+    pager.addEventListener('click', function (ev) {
+      var b = ev.target.closest('.g-pager__btn');
+      if (!b || b.disabled) { return; }
+      show(parseInt(b.getAttribute('data-page'), 10), true);
+    });
+    $$('[data-filter]').forEach(function (i) {
+      i.addEventListener('input', function () { show(current, false); });
+    });
+    show(1, false);
+  });
+
+  /* 7d. Arrow chain: the arrows slide in, one after another, when 40% of the
+         chain is on screen, and reset once it has left the screen so they
+         play again next time. Without JS, or with reduced motion, they simply
+         show. */
+  $$('.g-chain').forEach(function (chain) {
+    if (!('IntersectionObserver' in window)) { return; }
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) { return; }
+    var START_AT = 0.4;
+    var set = function (phase) {
+      chain.classList.remove('is-armed', 'is-shown');
+      chain.classList.add('is-' + phase);
+    };
+    set('armed');
+    new IntersectionObserver(function (entries) {
+      var entry = entries[0];
+      if (entry.intersectionRatio >= START_AT) { set('shown'); } else if (!entry.isIntersecting) { set('armed'); }
+    }, { threshold: [0, START_AT] }).observe(chain);
   });
 
   /* 8. Enquiry type cards: select the type in the form and scroll to it. */

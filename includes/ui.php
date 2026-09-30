@@ -325,7 +325,7 @@ function g_pacific_map(string $tone = 'dark', string $label = 'Map of the South-
     }
     foreach ($places as [$n, $x, $y, , $anchor]) {
         $s .= '<circle cx="' . $x . '" cy="' . $y . '" r="5" fill="' . $pin . '"/>'
-            . '<text x="' . $x . '" y="' . ($y - 14) . '" text-anchor="' . $anchor . '" font-family="Inter, sans-serif" font-size="15" font-weight="600" fill="' . $txt . '">' . e($n) . '</text>';
+            . '<text x="' . $x . '" y="' . ($y - 14) . '" text-anchor="' . $anchor . '" font-family="Poppins, sans-serif" font-size="15" font-weight="600" fill="' . $txt . '">' . e($n) . '</text>';
     }
     $s .= '<path d="M' . $vx . ' ' . ($vy - 30) . 'c-9 0-16 7-16 16 0 12 16 28 16 28s16-16 16-28c0-9-7-16-16-16z" fill="#6BB33F" stroke="#fff" stroke-width="2"/>'
         . '<circle cx="' . $vx . '" cy="' . ($vy - 14) . '" r="5" fill="#fff"/>'

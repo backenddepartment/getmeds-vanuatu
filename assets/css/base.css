@@ -1,5 +1,6 @@
 @charset "UTF-8";
-/* Poppins (headings), self-hosted. Carried over from the old site.css. */
+/* Poppins, self-hosted: the site's one typeface, for headings and body text
+   alike. Carried over from the old site.css. */
 @font-face {
   font-family: 'Poppins'; font-style: normal; font-weight: 400; font-display: swap;
   src: url('../fonts/poppins-latin-400-normal.woff2') format('woff2');

@@ -2,7 +2,8 @@
 /**
  * Global header (content guide, page 00 "Global header").
  *
- *  - A thin Soft Mint top strip: prescription rule, hours, phone.
+ *  - No top strip: the guide's Soft Mint strip (prescription rule, hours,
+ *    phone) is left out at the owner's request. The phone is in the header.
  *  - Desktop: logo left, the seven-item menu centre, the phone number right.
  *    The guide's green "Request a Medicine" header button is left out at the
  *    owner's request; it appears in the page bodies and the mobile bar.
@@ -13,15 +14,10 @@
  * Opens <main>; includes/footer.php closes it.
  */
 ?>
-<?php /* Home and About pages: no top strip, and the header sits see-through over
-         the hero photo. guide.js turns data-overlay into the class, so without
-         JS it stays solid. */
-$homeOverlay = in_array(current_path(), ['/', '/about'], true); ?>
-<?php if (!$homeOverlay): ?>
-<div class="g-topstrip">
-  <span>Prescription required for all prescription medicines</span><span class="g-topstrip__hours">Mon–Fri, 8am–5pm</span><span><a href="<?= e(tel_url()) ?>"><?= e(cfg('phone')) ?></a></span>
-</div>
-<?php endif; ?>
+<?php /* Home, About and Articles pages: the header sits see-through over the
+         hero photo. guide.js turns data-overlay into the class, so without JS
+         it stays solid. */
+$homeOverlay = in_array(current_path(), ['/', '/about', '/articles'], true); ?>
 
 <header class="g-header" id="g-header"<?= $homeOverlay ? ' data-overlay' : '' ?>>
   <div class="g-wrap g-header__inner">

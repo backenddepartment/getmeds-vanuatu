@@ -24,6 +24,12 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  # The news on /articles is fetched while the pages are rendered, so a static
+  # site's headlines are as old as its last build. This rebuilds four times a
+  # day. GitHub switches a schedule off after 60 days with no commits to the
+  # repository; "Run workflow" on the Actions tab switches it back on.
+  schedule:
+    - cron: '17 */6 * * *'
 
 # Lets the deploy job publish to Pages using OIDC rather than a token.
 permissions:
@@ -95,7 +101,12 @@ jobs:
             echo "origin=https://${{ github.repository_owner }}.github.io" >> "$GITHUB_OUTPUT"
           fi
 
+      # NEWSDATA_API_KEY is a repository secret (Settings -> Secrets and
+      # variables -> Actions). Without it the build still succeeds; /articles is
+      # published with its guides and no headlines.
       - name: Render the site to static HTML
+        env:
+          NEWSDATA_API_KEY: ${{ secrets.NEWSDATA_API_KEY }}
         run: |
           php tools/build-static.php \
             --base='${{ steps.site.outputs.base }}' \

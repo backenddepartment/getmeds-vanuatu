@@ -98,6 +98,40 @@ return [
     'provider_gate'       => getenv('GV_PROVIDER_GATE') ?: 'interstitial',
 
     // ---------------------------------------------------------------------
+    // Global healthcare news on /articles (newsdata.io)
+    //
+    // The API key is NOT set here, because this file is committed. It is read
+    // from the NEWSDATA_API_KEY environment variable, or from data/secrets.php.
+    // See includes/news.php and the README.
+    // ---------------------------------------------------------------------
+
+    // Set false to remove the news from /articles without touching the page.
+    'news_enabled'        => true,
+
+    // What counts as healthcare news. Words joined with OR; a phrase goes in
+    // double quotes. The free plan allows 100 characters.
+    'news_query'          => 'pharmaceutical OR "clinical trial" OR biotech OR "global health" OR oncology OR vaccine',
+
+    // newsdata.io categories, comma separated, and the language of the articles.
+    'news_categories'     => 'health,science',
+    'news_language'       => 'en',
+
+    // Which outlets to draw from: 'top' is the best-known tenth, 'medium' the
+    // best-known third, 'low' the best-known half. '' takes any outlet, which
+    // lets in press releases and stock promotions.
+    'news_priority'       => 'top',
+
+    // How many headlines to fetch in all, and how many to a page. More
+    // headlines than fit on one page add pages of their own. The grid is
+    // three across, so keep the page size a multiple of three.
+    'news_count'          => 27,
+    'news_per_page'       => 9,
+
+    // How long headlines are kept before asking for new ones. Each refresh
+    // costs up to four of the free plan's 200 daily credits (27 headlines).
+    'news_cache_hours'    => 3,
+
+    // ---------------------------------------------------------------------
     // Analytics
     //
     // Leave false. Turning this on legally requires a cookie notice, which the
