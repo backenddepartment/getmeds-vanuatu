@@ -115,7 +115,7 @@ include INC . '/head.php';
 include INC . '/header.php';
 ?>
 
-<section class="g-hero g-hero--sky g-hero--40 g-pg">
+<section class="g-hero g-bg-white g-hero--40 g-pg">
   <div class="g-wrap g-split g-split--7-5">
     <div>
       <h1>Medicines we supply</h1>

@@ -274,6 +274,35 @@
     }, { threshold: [0, START_AT] }).observe(chain);
   });
 
+  /* 7e. What we do band (About): the photo widens to full width as the band
+         scrolls in, and the panel fades up once it is on screen. */
+  $$('.g-wwd').forEach(function (band) {
+    if (!('IntersectionObserver' in window)) { return; }
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) { return; }
+    band.setAttribute('data-armed', '');
+    var frame = 0;
+    var update = function () {
+      frame = 0;
+      var vh = window.innerHeight || 1;
+      // 0 while the top edge is at the bottom of the screen, 1 once it has risen a quarter of the way up.
+      var p = Math.min(1, Math.max(0, (vh - band.getBoundingClientRect().top) / (vh * 0.75)));
+      band.style.setProperty('--band-progress', p.toFixed(4));
+    };
+    var onScroll = function () { if (!frame) { frame = window.requestAnimationFrame(update); } };
+    update();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    // Watch the panel, not the band: the band is taller than the screen.
+    var panel = band.querySelector('.g-wwd__panel');
+    var io = new IntersectionObserver(function (entries) {
+      if (entries.some(function (en) { return en.isIntersecting; })) {
+        band.classList.add('is-revealed');
+        io.disconnect();
+      }
+    }, { rootMargin: '0px 0px -18% 0px' });
+    if (panel) { io.observe(panel); }
+  });
+
   /* 8. Enquiry type cards: select the type in the form and scroll to it. */
   $$('[data-set-type]').forEach(function (card) {
     card.addEventListener('click', function (ev) {

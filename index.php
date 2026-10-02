@@ -22,19 +22,26 @@ include INC . '/header.php';
 
 <?php /* Full-screen photo hero. The navbar sits over it, see-through, on this page only
          (includes/header.php, guide.css "Home hero"). */ ?>
-<section class="g-homehero" aria-labelledby="hero-title">
+<section class="g-homehero g-homehero--split" aria-labelledby="hero-title">
   <div class="g-homehero__media">
-    <img src="<?= e(asset('/assets/img/homeherosection-1200.jpg')) ?>"
-         srcset="<?= e(asset('/assets/img/homeherosection-800.jpg')) ?> 800w, <?= e(asset('/assets/img/homeherosection-1200.jpg')) ?> 1200w, <?= e(asset('/assets/img/homeherosection.png')) ?> 1600w"
-         sizes="100vw" width="1200" height="628" alt="" loading="eager" fetchpriority="high" decoding="async">
+    <img src="<?= e(asset('/assets/img/homepagebg.jpg')) ?>"
+         width="1920" height="884" alt="" loading="eager" fetchpriority="high" decoding="async">
   </div>
+  <?php /* Content sits at the bottom of the photo: headline left, description
+           and buttons right, then a rule and the kicker under it. */ ?>
   <div class="g-wrap g-homehero__inner">
-    <p class="g-homehero__kicker">Licensed pharmacy · <?= e(cfg('address_city')) ?>, <?= e(cfg('address_country')) ?></p>
-    <h1 class="g-homehero__title" id="hero-title">Affordable Medicines. Better Access. Stronger Cancer Care.</h1>
-    <p class="g-homehero__lede">Getmeds Vanuatu-Pacific helps patients and healthcare providers access essential and cancer medicines through reliable sourcing, more affordable pricing, and a growing supply network across the Pacific.</p>
-    <div class="g-homehero__btns">
-      <a class="g-homehero__btn g-homehero__btn--fill" href="<?= e(url('/order')) ?>">Order a Medicine</a>
-      <a class="g-homehero__btn g-homehero__btn--line" href="<?= e(tel_url()) ?>">Call <?= e(cfg('phone')) ?></a>
+    <div class="g-homehero__row">
+      <h1 class="g-homehero__title" id="hero-title"><span>Affordable Medicines.</span> <span>Better Access.</span> <span>Stronger Cancer Care.</span></h1>
+      <div class="g-homehero__side">
+        <p class="g-homehero__lede">Getmeds Vanuatu-Pacific helps patients and healthcare providers access essential and cancer medicines through reliable sourcing, more affordable pricing, and a growing supply network across the Pacific.</p>
+        <div class="g-homehero__btns">
+          <a class="g-homehero__btn g-homehero__btn--fill" href="<?= e(url('/order')) ?>">Order a Medicine</a>
+          <a class="g-homehero__btn g-homehero__btn--line" href="<?= e(tel_url()) ?>">Call <?= e(cfg('phone')) ?></a>
+        </div>
+      </div>
+    </div>
+    <div class="g-homehero__foot">
+      <p class="g-homehero__kicker">Licensed pharmacy · <?= e(cfg('address_city')) ?>, <?= e(cfg('address_country')) ?></p>
     </div>
   </div>
 </section>

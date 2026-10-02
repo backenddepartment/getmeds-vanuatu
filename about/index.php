@@ -21,25 +21,99 @@ include INC . '/header.php';
 <?php /* Full-screen photo hero, same size and style as the home page's hero
          (the navbar sits over it, see-through: includes/header.php, guide.css
          "Home hero"). */ ?>
-<section class="g-homehero" aria-labelledby="about-hero-title">
+<section class="g-homehero g-homehero--split" aria-labelledby="about-hero-title">
   <div class="g-homehero__media">
-    <img src="<?= e(asset('/assets/img/vanuatufive.jpg')) ?>"
-         sizes="100vw" width="2048" height="1139" alt="" loading="eager" fetchpriority="high" decoding="async">
+    <img src="<?= e(asset('/assets/img/aboutusbg.jpg')) ?>"
+         width="1920" height="881" alt="" loading="eager" fetchpriority="high" decoding="async">
     <div class="g-homehero__scrim" aria-hidden="true"></div>
   </div>
+  <?php /* Same bottom layout as the home hero: headline left, description and
+           buttons right, then a rule and the kicker under it. */ ?>
   <div class="g-wrap g-homehero__inner">
-    <p class="g-homehero__kicker">Our Story</p>
-    <h1 class="g-homehero__title" id="about-hero-title">About Getmeds Vanuatu</h1>
-    <p class="g-homehero__lede">Getmeds Vanuatu is a pharmacy in Port Vila. Our main work is making cancer medicines available in Vanuatu and the Pacific. We also supply other important medicines and medical supplies.</p>
-    <div class="g-homehero__btns">
-      <a class="g-homehero__btn g-homehero__btn--fill" href="<?= e(url('/order')) ?>">Order a Medicine</a>
-      <a class="g-homehero__btn g-homehero__btn--line" href="<?= e(tel_url()) ?>">Call <?= e(cfg('phone')) ?></a>
+    <div class="g-homehero__row">
+      <h1 class="g-homehero__title" id="about-hero-title">Cancer Medicines, Here in Vanuatu.</h1>
+      <div class="g-homehero__side">
+        <p class="g-homehero__lede">Getmeds Vanuatu is a pharmacy in Port Vila. Our main work is making cancer medicines available in Vanuatu and the Pacific. We also supply other important medicines and medical supplies.</p>
+        <div class="g-homehero__btns">
+          <a class="g-homehero__btn g-homehero__btn--fill" href="<?= e(url('/order')) ?>">Order a Medicine</a>
+          <a class="g-homehero__btn g-homehero__btn--line" href="<?= e(tel_url()) ?>">Call <?= e(cfg('phone')) ?></a>
+        </div>
+      </div>
+    </div>
+    <div class="g-homehero__foot">
+      <p class="g-homehero__kicker">Our Story</p>
+    </div>
+  </div>
+</section>
+
+<section class="g-sec g-bg-white" id="about-getmeds" aria-labelledby="about-h">
+  <div class="g-wrap">
+    <?php /* Same layout as "Why we started" further down: eyebrow and title left, text right. */ ?>
+    <div class="g-split g-why-start">
+      <div class="g-why-start__intro">
+        <span class="g-label">About Us</span>
+        <h2 id="about-h">About Getmeds Vanuatu</h2>
+        <picture class="g-about-avatars">
+          <source type="image/webp" srcset="<?= e(asset('/assets/img/avatars-600.webp')) ?> 600w, <?= e(asset('/assets/img/avatars-1200.webp')) ?> 1200w" sizes="(max-width: 47.99em) 100vw, 560px">
+          <img src="<?= e(asset('/assets/img/avatars-1200.png')) ?>" srcset="<?= e(asset('/assets/img/avatars-600.png')) ?> 600w, <?= e(asset('/assets/img/avatars-1200.png')) ?> 1200w" sizes="(max-width: 47.99em) 100vw, 560px"
+               width="1200" height="228" loading="lazy" decoding="async"
+               alt="Portraits of seven members of the Getmeds Vanuatu team.">
+        </picture>
+      </div>
+      <div class="g-stack">
+        <p class="g-about-intro">Getmeds Vanuatu is a pharmacy at Golden Port, Port Vila. We are the first chemotherapy pharmacy in the Pacific. Our main work is making cancer medicines available to patients in Vanuatu and across the Pacific Islands.</p>
+        <p>We work with patients, families, doctors and hospitals. A pharmacist checks every prescription, and our team follows each order from the first enquiry until the medicine is collected.</p>
+        <p>We also supply essential medicines, medical supplies and equipment. As part of the Getmeds group, which also works in the Philippines and India, we can source a wide range of medicines for patients in the Pacific.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<?php /* Photo band that widens from inset to full width as it scrolls in, with a
+         white panel overlapping its bottom edge that fades up (guide.css "What
+         we do band"; guide.js sets --band-progress). */ ?>
+<section class="g-wwd" id="what-we-do" aria-labelledby="do-h">
+  <div class="g-wwd__media" aria-hidden="true">
+    <picture>
+      <source type="image/webp" srcset="<?= e(asset('/assets/img/aboutbackground-800.webp')) ?> 800w, <?= e(asset('/assets/img/aboutbackground-1200.webp')) ?> 1200w" sizes="100vw">
+      <img src="<?= e(asset('/assets/img/aboutbackground-1200.jpg')) ?>" srcset="<?= e(asset('/assets/img/aboutbackground-800.jpg')) ?> 800w, <?= e(asset('/assets/img/aboutbackground-1200.jpg')) ?> 1200w" sizes="100vw"
+           width="1200" height="630" alt="" loading="lazy" decoding="async">
+    </picture>
+  </div>
+  <div class="g-wrap">
+    <div class="g-wwd__panel">
+      <div class="g-wwd__head">
+        <div>
+          <span class="g-label">What We Do</span>
+          <h2 id="do-h">We supply the medicines patients need, here in Vanuatu</h2>
+        </div>
+        <p class="g-wwd__lead">From our pharmacy in Port Vila, we supply cancer medicines and other important medicines and medical supplies.</p>
+      </div>
+      <div class="g-wwd__list">
+        <?php g_check([
+            "We supply cancer medicines against a doctor's prescription or treatment protocol.",
+            'We keep medicines in stock in Port Vila.',
+            'We import medicines that are not in stock.',
+            'We source hard-to-find medicines for individual patients.',
+            'We supply essential medicines, including antibiotics and medicines for diabetes, blood pressure, cholesterol, heart disease and kidney care.',
+            'We supply medical consumables, devices, equipment and laboratory supplies.',
+            'We offer simple blood pressure and blood sugar checks at our pharmacy.',
+        ], '2'); ?>
+      </div>
     </div>
   </div>
 </section>
 
 <section class="g-sec g-bg-white" id="why-we-started" aria-labelledby="why-h">
   <div class="g-wrap">
+    <?php /* Eyebrow and title, then the story under them. */ ?>
+    <div class="g-why-start g-why-start--stacked">
+      <div class="g-why-start__intro">
+        <span class="g-label">Our Story</span>
+        <h2 id="why-h">Why we started</h2>
+      </div>
+      <p class="g-why-start__story">Cancer is a major health problem in Vanuatu. But for a long time, many cancer medicines were not available here. Many patients were referred overseas for treatment. This can cost a family millions of vatu. When patients came home, some could not continue treatment because the medicine was not available locally. Others had to wait for someone to bring it from overseas. When a treatment cycle is missed, treatment can fail. Getmeds Vanuatu was started so that patients can get their medicine here, on time.</p>
+    </div>
     <?php /* The problem, as a chain of arrows: each head lies over the start of
              the next (guide.css "Arrow chain"; guide.js slides them in). */
     $chain = [['doctor', 'Diagnosis'], ['plane', 'Treatment overseas'], ['shelf-empty', 'Home, but no medicine']]; ?>
@@ -51,38 +125,6 @@ include INC . '/header.php';
       </li>
       <?php endforeach; ?>
     </ol>
-    <div class="g-split g-split--top g-why-start">
-      <div class="g-why-start__head">
-        <span class="g-label">About Us</span>
-        <h2 id="why-h">Why we started</h2>
-        <figure class="g-why-start__photo">
-          <img src="<?= e(asset('/assets/img/vanuatufour-800.jpg')) ?>"
-               srcset="<?= e(asset('/assets/img/vanuatufour-800.jpg')) ?> 800w, <?= e(asset('/assets/img/vanuatufour-1200.jpg')) ?> 1200w"
-               sizes="(max-width: 63.99em) 100vw, 580px" width="800" height="447" loading="lazy" decoding="async"
-               alt="A Getmeds Vanuatu training session: a presenter explains a medicine verification website on a large screen to local staff.">
-        </figure>
-      </div>
-      <div class="g-stack">
-        <p>Cancer is a major health problem in Vanuatu. But for a long time, many cancer medicines were not available here.</p>
-        <p>Many patients were referred overseas for treatment. This can cost a family millions of vatu. When patients came home, some could not continue treatment because the medicine was not available locally. Others had to wait for someone to bring it from overseas.</p>
-        <p>When a treatment cycle is missed, treatment can fail. Getmeds Vanuatu was started so that patients can get their medicine here, on time.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="g-sec g-bg-mint" id="what-we-do" aria-labelledby="do-h">
-  <div class="g-wrap g-narrow">
-    <div class="g-head"><h2 id="do-h">What we do</h2></div>
-    <?php g_check([
-        "We supply cancer medicines against a doctor's prescription or treatment protocol.",
-        'We keep medicines in stock in Port Vila.',
-        'We import medicines that are not in stock.',
-        'We source hard-to-find medicines for individual patients.',
-        'We supply essential medicines, including antibiotics and medicines for diabetes, blood pressure, cholesterol, heart disease and kidney care.',
-        'We supply medical consumables, devices, equipment and laboratory supplies.',
-        'We offer simple blood pressure and blood sugar checks at our pharmacy.',
-    ], '2'); ?>
   </div>
 </section>
 

@@ -326,13 +326,13 @@ body {
    click alike); on the see-through pages the bar turns solid for that long. */
 .g-nav__drop__intro { flex: 0 0 240px; }
 .g .g-nav__drop__intro h2 {
-  font-family: var(--g-head); font-weight: 600; font-size: 23px; margin: 0 0 10px;
+  font-family: var(--g-head); font-weight: 600; font-size: 19px; margin: 0 0 8px;
   color: #1D9FDA;
   background: linear-gradient(to bottom, #1D9FDA 0%, #1D9FDA 55%, #4DB6E6 100%);
   -webkit-background-clip: text; background-clip: text;
   -webkit-text-fill-color: transparent;
 }
-.g .g-nav__drop__intro p { font-size: 15px; line-height: 1.55; color: var(--g-muted); margin: 0; max-width: none; }
+.g .g-nav__drop__intro p { font-size: 13px; line-height: 1.55; color: var(--g-muted); margin: 0; max-width: none; }
 .g-nav__drop__links { flex: 1; display: flex; gap: 8px; list-style: none; margin: 0; padding: 0; }
 .g-nav__drop__links li { flex: 1; }
 .g-nav__drop a {
@@ -340,8 +340,25 @@ body {
   color: var(--g-navy); text-decoration: none; font-weight: 600; font-size: 18px;
 }
 .g-nav__drop a:hover { background: var(--g-sky); color: var(--g-blue-text); }
-.g-nav__drop__label { display: block; font-size: 20px; font-weight: 600; }
-.g .g-nav__drop__desc { display: block; margin-top: 6px; font-size: 15px; line-height: 1.5; font-weight: 400; color: var(--g-muted); }
+.g-nav__drop__label { display: block; font-size: 16px; font-weight: 600; }
+.g .g-nav__drop__desc { display: block; margin-top: 4px; font-size: 13px; line-height: 1.5; font-weight: 400; color: var(--g-muted); }
+/* Mega menu links: on hover the title and description turn blue and a
+   blue-to-white line draws in under the title, instead of the pale blue box. */
+.g-nav__drop--mega a:hover { background: none; }
+.g-nav__drop--mega .g-nav__drop__label { display: inline-block; position: relative; padding-bottom: 6px; }
+.g-nav__drop--mega .g-nav__drop__label::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 3px;
+  border-radius: 3px; background: linear-gradient(to right, #1D9FDA, #fff);
+  transform: scaleX(0); transform-origin: left; transition: transform .25s ease;
+}
+.g-nav__drop--mega a:hover .g-nav__drop__label::after,
+.g-nav__drop--mega a:focus-visible .g-nav__drop__label::after { transform: scaleX(1); }
+.g .g-nav__drop--mega .g-nav__drop__label,
+.g .g-nav__drop--mega .g-nav__drop__desc { transition: color .2s ease; }
+.g .g-nav__drop--mega a:hover .g-nav__drop__label,
+.g .g-nav__drop--mega a:hover .g-nav__drop__desc,
+.g .g-nav__drop--mega a:focus-visible .g-nav__drop__label,
+.g .g-nav__drop--mega a:focus-visible .g-nav__drop__desc { color: #1D9FDA; }
 
 .g-header__phone {
   flex: none; display: flex; flex-direction: column; align-items: flex-end;
@@ -1069,21 +1086,16 @@ a.g-chip:hover { border-color: var(--g-blue); }
 .g-about-col { max-width: 720px; }
 /* Why we started: the arrow chain across the top, then the eyebrow, heading
    and a photo on the left, and the story on the right. */
-.g-why-start { margin-top: 64px; }
-.g .g-why-start h2 { color: #111; font-size: clamp(34px, 3.4vw, 48px); line-height: 1.12; }
-.g .g-why-start .g-label { text-transform: none; letter-spacing: 0; font-size: 15px; color: #1D9FDA; }
+/* About: "Why we started" eyebrow and title on the left, the story on the
+   right, tops level; the arrow chain runs under both. */
+.g .g-why-start__intro .g-label { display: block; text-transform: none; letter-spacing: 0; font-size: 15px; color: #1D9FDA; }
+.g .g-why-start__intro h2 { margin-top: 12px; color: #111; font-size: clamp(38px, 4vw, 60px); line-height: 1.1; }
+.g-why-start { align-items: start; }
+/* Why we started (About): title on top, the story under it as one paragraph across the full width. */
+.g .g-why-start--stacked .g-why-start__story { margin: 24px 0 0; max-width: none; font-size: clamp(17px, 1.5vw, 20px); line-height: 1.7; }
 .g .g-why-start .g-stack p { font-size: 16px; line-height: 1.7; }
-/* The photo ends level with the last line of the story beside it: the left
-   column stretches to the row's height and the photo takes what the eyebrow
-   and heading leave. The image is taken out of the flow so its own size
-   cannot make the row taller. */
-.g-why-start.g-split--top { align-items: stretch; }
-.g-why-start__head { display: flex; flex-direction: column; }
-.g-why-start__photo { position: relative; flex: 1 1 0; min-height: 140px; margin: 24px 0 0; border-radius: var(--g-r-card); overflow: hidden; }
-.g-why-start__photo img { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; }
-/* Stacked, there is nothing beside it to match: a fixed shape instead. */
-@media (max-width: 63.99em) { .g-why-start__photo { flex: none; min-height: 0; aspect-ratio: 16 / 9; } }
-@media (max-width: 47.99em) { .g-why-start { margin-top: 40px; } }
+.g .g-why-start + .g-chain { margin-top: 56px; }
+@media (max-width: 47.99em) { .g .g-why-start + .g-chain { margin-top: 40px; } }
 
 /* Arrow chain: a row of arrows, each one's head lying over the start of the
    next. --g-chain-head is the length of an arrowhead; --g-chain-inset how far
@@ -1133,7 +1145,71 @@ a.g-chip:hover { border-color: var(--g-blue); }
 .g-chain__label {
   position: relative; display: flex; flex-direction: column; align-items: center; gap: 6px;
   font-family: var(--g-head); font-size: 17px; font-weight: 600; line-height: 1.2;
-  text-align: center; color: #fff; text-shadow: 0 1px 2px rgba(11,42,91,.25);
+  text-align: center; color: #fff;
+}
+/* The About page's first section sits closer up under the hero, and "Why we
+   started" follows it on the same white without a full gap between them. */
+#about-getmeds { padding-top: calc(var(--g-sec) * .7); }
+/* About: the team portraits strip under the "About Getmeds Vanuatu" title. */
+.g-about-avatars { display: block; margin-top: 28px; max-width: 560px; }
+.g-about-avatars img { display: block; width: 100%; height: auto; }
+/* About: the opening paragraph in the site's blue gradient text, repeated
+   per line (1.7em = its line height) so every line gets the same fade. */
+.g .g-why-start .g-stack p.g-about-intro {
+  font-weight: 600;
+  color: #1D9FDA;
+  background: linear-gradient(to bottom, #1D9FDA 0%, #1D9FDA 50%, #4DB6E6 100%) 0 0 / 100% 1.7em repeat-y;
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+#why-we-started { padding-top: calc(var(--g-sec) * .4); }
+
+/* What we do band (About): the photo widens from inset to full width and
+   squares its corners as --band-progress goes 0 -> 1 (set by guide.js while
+   scrolling), and a white panel overlaps its bottom edge, fading up once it
+   comes into view. Without JS, or with reduced motion, both simply show. */
+.g-wwd {
+  --band-progress: 1;
+  --band-inset: clamp(16px, 6vw, 110px);
+  position: relative;
+  background: #fff;
+  /* The photo is 52.5% of the width tall; 30% leaves its bottom ~22% under the panel. */
+  padding: 30% 0 var(--g-sec);
+}
+.g-wwd__media {
+  position: absolute; top: 0;
+  left: calc(var(--band-inset) * (1 - var(--band-progress)));
+  right: calc(var(--band-inset) * (1 - var(--band-progress)));
+  border-radius: calc(28px * (1 - var(--band-progress)));
+  overflow: hidden; line-height: 0;
+}
+.g-wwd__media img { display: block; width: 100%; height: auto; }
+.g-wwd__panel {
+  position: relative; z-index: 1;
+  padding: 40px 48px;
+  background: #fff; border-radius: 24px;
+  box-shadow: 0 16px 40px rgba(11, 42, 91, .08);
+}
+.g-wwd[data-armed] .g-wwd__panel {
+  opacity: 0; transform: translateY(56px);
+  transition: opacity .75s cubic-bezier(.2, .8, .2, 1), transform .75s cubic-bezier(.2, .8, .2, 1);
+}
+.g-wwd[data-armed].is-revealed .g-wwd__panel { opacity: 1; transform: none; }
+.g-wwd__head { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+.g .g-wwd__head h2 { margin: 0; font-size: clamp(24px, 2.4vw, 30px); line-height: 1.2; color: #111; }
+.g .g-wwd__lead { margin: 0; max-width: 640px; font-size: 15px; line-height: 1.7; color: var(--g-muted); }
+.g-wwd__list { margin-top: 28px; }
+.g-wwd .g-wwd__head .g-label { font-size: 12px; margin-bottom: 8px; }
+.g-wwd .g-check { gap: 10px; }
+.g .g-wwd .g-check li { font-size: 15px; line-height: 1.55; grid-template-columns: 22px 1fr; gap: 10px; }
+.g-wwd .g-check li > .g-i { width: 20px; height: 20px; margin-top: 2px; }
+@media (max-width: 56.25em) {
+  .g-wwd__panel { padding: 32px 28px; border-radius: 20px; }
+  .g-wwd__head { grid-template-columns: 1fr; gap: 20px; }
+  .g-wwd__list { margin-top: 24px; }
+}
+@media (max-width: 35em) {
+  .g-wwd__panel { padding: 28px 20px; border-radius: 16px; }
 }
 .g-chain__label .g-i { width: 26px; height: 26px; }
 /* Entrance: armed = hidden, waiting off to the left; shown = each eases in. */
@@ -1503,6 +1579,29 @@ ul.g-chips { padding-left: 0; }
   .g-homehero .g-homehero__inner { padding-top: 120px; }
 }
 .js .g-header[data-overlay]:not(.is-compact):not(.is-open):not(.g-header--menu-open)::before { background: transparent; }
+
+/* Home page variant: content at the bottom of the photo. Big headline left,
+   description and buttons right, then a thin white rule with the kicker. */
+.g-homehero--split .g-homehero__inner { justify-content: flex-end; padding-bottom: 14px; }
+.g-homehero__row {
+  display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  gap: 56px; align-items: end;
+}
+.g .g-homehero--split .g-homehero__title { font-size: clamp(36px, 3.3vw, 60px); line-height: 1.1; max-width: none; margin: 0; }
+.g-homehero--split .g-homehero__title > span { display: block; }
+.g .g-homehero--split .g-homehero__lede { margin: 0; max-width: 34em; font-size: 15px; line-height: 1.6; }
+.g-homehero--split .g-homehero__btns { margin-top: 20px; gap: 10px; }
+.g .g-homehero--split .g-homehero__btn { min-height: 36px; padding: 0 18px; font-size: 13.5px; }
+.g-homehero__foot { margin-top: 28px; padding-top: 10px; border-top: 2px solid rgba(255,255,255,.85); }
+.g .g-homehero--split .g-homehero__kicker { font-size: 14px; font-weight: 500; opacity: 1; }
+@media (max-width: 63.99em) {
+  .g-homehero__row { grid-template-columns: 1fr; gap: 20px; }
+}
+@media (max-width: 47.99em) {
+  .g-homehero--split .g-homehero__inner { padding-bottom: 14px; }
+  .g-homehero__foot { margin-top: 24px; padding-top: 10px; }
+  .g .g-homehero--split .g-homehero__kicker { font-size: 13px; }
+}
 .js .g-header[data-overlay]:not(.is-compact):not(.is-open):not(.g-header--menu-open) .g-logo img:not(.g-logo__light) { display: none; }
 .js .g-header[data-overlay]:not(.is-compact):not(.is-open):not(.g-header--menu-open) .g-logo__light { display: block !important; }
 .js .g .g-header[data-overlay]:not(.is-compact):not(.is-open):not(.g-header--menu-open) .g-nav__list > li > .g-nav__link,
@@ -1745,7 +1844,8 @@ ul.g-chips { padding-left: 0; }
   .g-onc__body { margin-left: 0; }
 }
 
-/* Why Getmeds title: big, Getmeds blue fading to a pale blue-white at the bottom of each line, like the buttons. */
+/* Why Getmeds title: big, Getmeds blue fading to a pale blue-white at the
+   bottom of each line, like the buttons. */
 .g .g-why2__head h2 {
   font-size: clamp(52px, 6vw, 88px); line-height: 1.05; padding-bottom: .08em;
   color: #1D9FDA;
