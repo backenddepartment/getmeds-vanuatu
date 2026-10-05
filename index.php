@@ -112,9 +112,9 @@ include INC . '/header.php';
         <a class="g-catcard" href="<?= e(url('/medicines') . '#' . $anchor) ?>">
           <h3><?= e($name) ?></h3>
           <p><?= e($line) ?></p>
-          <span class="g-catcard__img" aria-hidden="true">
-            <?= gi('image') ?>
-            <span class="g-catcard__imgtext">No Image</span>
+          <span class="g-catcard__go">
+            <span>View medicines</span>
+            <span class="g-catcard__arrow" aria-hidden="true"><?= gi('arrow') ?></span>
           </span>
         </a>
         <?php endforeach; ?>

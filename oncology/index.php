@@ -2,10 +2,8 @@
 /**
  * Oncology and Chemotherapy (content guide, page 03). The flagship page.
  *
- * Care Pink accents on the normal navy/blue/green system, and a sticky in-page
- * menu on the left on desktop (guide.js marks the section in view). The menu
- * sits in an absolutely placed rail over the sections, so each section keeps
- * its full-width background; every section leaves the rail's column empty.
+ * Care Pink accents on the normal navy/blue/green system. Sections use the
+ * full content width (the old sticky in-page side menu was removed).
  * No needles, IV drips or sick-looking people anywhere on the page.
  */
 require __DIR__ . '/../includes/bootstrap.php';
@@ -16,23 +14,11 @@ $page = [
     'desc'      => "Getmeds Vanuatu supplies chemotherapy and cancer medicines in Port Vila against a doctor's prescription. In stock, imported or sourced for each patient.",
 ];
 
-$menu = [
-    'local-access'  => 'Why local access matters',
-    'supply'        => 'How we supply',
-    'types'         => 'Types of cancer medicine',
-    'injectable'    => 'Injectable chemotherapy',
-    'cycles'        => 'Planning each cycle',
-    'professionals' => 'For doctors and hospitals',
-    'patients'      => 'For patients',
-    'pacific'       => 'Across the Pacific',
-    'important'     => 'Important note',
-];
-
 include INC . '/head.php';
 include INC . '/header.php';
 ?>
 
-<section class="g-hero g-hero--grad g-wave g-onc-hero">
+<section class="g-hero g-bg-white g-onc-hero">
   <div class="g-wrap g-split g-split--7-5">
     <div>
       <span class="g-pilltag">First chemotherapy pharmacy in the Pacific</span>
@@ -55,18 +41,8 @@ include INC . '/header.php';
 </section>
 
 <div class="g-onc">
-  <div class="g-onc__rail">
-    <nav class="g-sidemenu" data-spy aria-label="On this page">
-      <ul>
-        <?php foreach ($menu as $id => $label): ?>
-        <li><a href="#<?= e($id) ?>"><?= e($label) ?></a></li>
-        <?php endforeach; ?>
-      </ul>
-    </nav>
-  </div>
-
   <section class="g-sec g-bg-white" id="local-access" aria-labelledby="local-h">
-    <div class="g-wrap g-withside"><div class="g-onc__sp"></div>
+    <div class="g-wrap">
       <div class="g-split">
         <div>
           <h2 id="local-h" class="g-onc-h">Why local access matters</h2>
@@ -106,7 +82,7 @@ include INC . '/header.php';
   </section>
 
   <section class="g-sec g-bg-mint" id="supply" aria-labelledby="supply-h">
-    <div class="g-wrap g-withside"><div class="g-onc__sp"></div>
+    <div class="g-wrap">
       <div>
         <div class="g-head"><h2 id="supply-h" class="g-onc-h">How we supply cancer medicines</h2></div>
         <div class="g-grid g-grid--4 g-onc-cards">
@@ -121,7 +97,7 @@ include INC . '/header.php';
   </section>
 
   <section class="g-sec g-bg-white" id="types" aria-labelledby="types-h">
-    <div class="g-wrap g-withside"><div class="g-onc__sp"></div>
+    <div class="g-wrap">
       <div>
         <div class="g-head">
           <h2 id="types-h" class="g-onc-h">Types of cancer medicine we handle</h2>
@@ -141,7 +117,7 @@ include INC . '/header.php';
   </section>
 
   <section class="g-sec g-bg-sky" id="injectable" aria-labelledby="inj-h">
-    <div class="g-wrap g-withside"><div class="g-onc__sp"></div>
+    <div class="g-wrap">
       <div class="g-onc-read">
         <h2 id="inj-h" class="g-onc-h">Injectable chemotherapy</h2>
         <div class="g-stack g-mt">
@@ -157,7 +133,7 @@ include INC . '/header.php';
   </section>
 
   <section class="g-sec g-bg-white" id="cycles" aria-labelledby="cyc-h">
-    <div class="g-wrap g-withside"><div class="g-onc__sp"></div>
+    <div class="g-wrap">
       <div>
         <div class="g-head">
           <h2 id="cyc-h" class="g-onc-h">Planning each treatment cycle</h2>
@@ -186,19 +162,8 @@ include INC . '/header.php';
     </div>
   </section>
 
-  <section class="g-sec g-bg-white g-onc-flush" id="professionals" aria-labelledby="pro-h">
-    <div class="g-wrap g-withside"><div class="g-onc__sp"></div>
-      <div class="g-card g-card--navy g-onc-pro">
-        <span class="g-card__icon"><?= gi('doctor') ?></span>
-        <h2 id="pro-h">For doctors, oncologists and hospitals</h2>
-        <p class="g-mt-sm">Send us the prescription or treatment protocol. Our pharmacist will confirm availability, supply route and price. We support single patients and ongoing supply to wards and clinics.</p>
-        <div class="g-btns"><?= g_btn('Healthcare Professional Enquiry', request_url('professional'), 'primary') ?></div>
-      </div>
-    </div>
-  </section>
-
   <section class="g-sec g-bg-white g-onc-flush" id="patients" aria-labelledby="pat-h">
-    <div class="g-wrap g-withside"><div class="g-onc__sp"></div>
+    <div class="g-wrap">
       <div class="g-card g-card--pink-left g-onc-pat">
         <span class="g-card__icon"><?= gi('heart') ?></span>
         <h2 id="pat-h">For patients and families</h2>
@@ -211,32 +176,37 @@ include INC . '/header.php';
     </div>
   </section>
 
-  <section class="g-sec g-bg-mint" id="pacific" aria-labelledby="pac-h">
-    <div class="g-wrap g-withside"><div class="g-onc__sp"></div>
-      <div class="g-onc-read g-onc-pacific">
-        <span class="g-card__icon"><?= gi('map') ?></span>
-        <div>
-          <h2 id="pac-h" class="g-onc-h">Cancer medicine access across the Pacific</h2>
-          <p class="g-mt">Many Pacific Islands have the same gaps in cancer medicine supply. Getmeds is working to extend access from Vanuatu to other Pacific countries. Contact us to ask what is possible for your country.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <section class="g-sec g-sec--tight g-bg-white" id="important" aria-label="Important note">
-    <div class="g-wrap g-withside"><div class="g-onc__sp"></div>
+    <div class="g-wrap">
       <div><?php g_box('safety', '<strong>Important:</strong> Getmeds Vanuatu supplies medicines. We do not diagnose cancer or choose treatment. Always follow the advice of your doctor or oncologist. Do not change a medicine, dose or schedule without speaking to them first.'); ?></div>
     </div>
   </section>
 </div>
 
-<?php g_cta_band(
-    'Ask about a cancer medicine',
-    'Send the prescription and we will check what we can supply.',
-    [
-        ['Request a Cancer Medicine', request_url('cancer'), 'primary'],
-        ['Call Us', tel_url(), 'white', 'phone'],
-    ]
-); ?>
+<?php /* Pacific banner, joined straight onto the CTA banner below: same layout
+         as the How It Works hospitals banner, with the Vanuatu aerial photo
+         (img/vanuatugeo.jpg) behind a navy overlay (guide.css "g-onc-pac"). */ ?>
+<section class="g-sec g-home-cta g-onc-pac" id="pacific" aria-labelledby="pac-h">
+  <div class="g-wrap g-home-cta__inner">
+    <div class="g-home-cta__text">
+      <h2 id="pac-h">Cancer medicine access across the Pacific</h2>
+      <p>Many Pacific Islands have the same gaps in cancer medicine supply. Getmeds is working to extend access from Vanuatu to other Pacific countries. Contact us to ask what is possible for your country.</p>
+    </div>
+  </div>
+</section>
+
+<?php /* Same CTA banner as the About page (guide.css "g-home-cta"), with this page's text. */ ?>
+<section class="g-sec g-home-cta" aria-label="Ask about a cancer medicine">
+  <div class="g-wrap g-home-cta__inner">
+    <div class="g-home-cta__text">
+      <h2>Ask about a cancer medicine</h2>
+      <p>Send the prescription and we will check what we can supply.</p>
+    </div>
+    <div class="g-home-cta__btns">
+      <a class="g-home-cta__btn g-home-cta__btn--white" href="<?= e(request_url('cancer')) ?>">Request a Cancer Medicine</a>
+      <a class="g-home-cta__btn g-home-cta__btn--dark" href="<?= e(tel_url()) ?>"><?= gi('phone') ?><span>Call <?= e(cfg('phone')) ?></span></a>
+    </div>
+  </div>
+</section>
 
 <?php include INC . '/footer.php'; ?>

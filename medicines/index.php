@@ -3,10 +3,11 @@
  * /medicines — Content & Design Guide, page 04.
  *
  * A reference page people scan: a short Sky Tint hero, a sticky bar of
- * category chips, the three-step availability strip, then one expandable card
- * per medicine group in the guide's order (anchors are linked from the menu and
- * other pages; guide.js opens the card whose id matches the URL hash). Groups,
- * not products: no product photos, no prices, no medicine names.
+ * category chips, one expandable card per medicine group in the guide's order
+ * (anchors are linked from the menu and other pages; guide.js opens the card
+ * whose id matches the URL hash), then the three-step availability strip just
+ * above the medical supplies band. Groups, not products: no product photos,
+ * no prices, no medicine names.
  *
  * data/medicines.php stays: the legacy search page still reads it.
  */
@@ -116,44 +117,18 @@ include INC . '/header.php';
 ?>
 
 <section class="g-hero g-bg-white g-hero--40 g-pg">
-  <div class="g-wrap g-split g-split--7-5">
-    <div>
+  <div class="g-wrap">
+    <div class="g-med-hero__text">
       <h1>Medicines we supply</h1>
-      <p class="g-hero__lede">Getmeds Vanuatu supplies medicines across several medical areas. Cancer medicines are our main focus. We also supply essential medicines and medical supplies.</p>
-      <p class="g-pg-mt">We list medicine groups, not every product. Stock changes, and we do not want to promise a medicine we cannot supply. Send us the prescription and a pharmacist will check it for you.</p>
-      <div class="g-mt">
-        <?php g_box('safety', '<strong>Prescription medicines need a valid prescription. Availability may vary.</strong>'); ?>
-      </div>
-    </div>
-    <div class="g-hero__media g-med-illus">
-      <svg viewBox="0 0 360 260" role="img" aria-label="Illustration of medicine boxes on a pharmacy shelf">
-        <rect x="10" y="10" width="340" height="240" rx="20" fill="#fff"/>
-        <!-- shelves -->
-        <rect x="30" y="112" width="300" height="8" rx="4" fill="#0B2A5B"/>
-        <rect x="30" y="212" width="300" height="8" rx="4" fill="#0B2A5B"/>
-        <!-- top shelf boxes -->
-        <rect x="46" y="52" width="58" height="60" rx="6" fill="#1E9BD7"/>
-        <rect x="46" y="70" width="58" height="14" fill="#fff" opacity=".85"/>
-        <rect x="112" y="36" width="44" height="76" rx="6" fill="#2FB5A6"/>
-        <path d="M134 56v16M126 64h16" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
-        <rect x="164" y="62" width="70" height="50" rx="6" fill="#E8508A"/>
-        <rect x="164" y="80" width="70" height="12" fill="#fff" opacity=".85"/>
-        <rect x="242" y="46" width="72" height="66" rx="6" fill="#EEF7F2" stroke="#6BB33F" stroke-width="3"/>
-        <path d="M278 66v26M265 79h26" stroke="#6BB33F" stroke-width="6" stroke-linecap="round"/>
-        <!-- bottom shelf boxes -->
-        <rect x="46" y="150" width="80" height="62" rx="6" fill="#F2F8FC" stroke="#1E9BD7" stroke-width="3"/>
-        <rect x="58" y="170" width="56" height="10" rx="3" fill="#1E9BD7"/>
-        <rect x="58" y="186" width="36" height="8" rx="3" fill="#1E9BD7" opacity=".5"/>
-        <rect x="134" y="134" width="50" height="78" rx="6" fill="#0B2A5B"/>
-        <path d="M159 158v18M150 167h18" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
-        <rect x="192" y="160" width="60" height="52" rx="6" fill="#6BB33F"/>
-        <rect x="192" y="176" width="60" height="12" fill="#fff" opacity=".85"/>
-        <rect x="260" y="142" width="54" height="70" rx="6" fill="#1E9BD7" opacity=".85"/>
-        <rect x="270" y="160" width="34" height="8" rx="3" fill="#fff"/>
-        <rect x="270" y="174" width="24" height="8" rx="3" fill="#fff" opacity=".7"/>
-      </svg>
+      <p class="g-hero__lede">Getmeds Vanuatu supplies medicines across several medical areas. Cancer medicines are our main focus. We also supply essential medicines and medical supplies. We list medicine groups, not every product. Stock changes, and we do not want to promise a medicine we cannot supply. Send us the prescription and a pharmacist will check it for you. Prescription medicines need a valid prescription. Availability may vary.</p>
     </div>
   </div>
+  <?php /* assets/img/medicinebg, edge to edge under the text. */ ?>
+  <picture class="g-med-hero__img">
+    <source type="image/webp" srcset="<?= e(asset('/assets/img/medicinebg-1024.webp')) ?> 1024w, <?= e(asset('/assets/img/medicinebg-full.webp')) ?> 1774w" sizes="100vw">
+    <img src="<?= e(asset('/assets/img/medicinebg-full.jpg')) ?>" srcset="<?= e(asset('/assets/img/medicinebg-1024.jpg')) ?> 1024w, <?= e(asset('/assets/img/medicinebg-full.jpg')) ?> 1774w" sizes="100vw"
+         width="1774" height="387" alt="" decoding="async">
+  </picture>
 </section>
 
 <div class="g-medpage">
@@ -167,40 +142,20 @@ include INC . '/header.php';
     </div>
   </nav>
 
-  <section class="g-sec g-sec--tight g-bg-white" aria-labelledby="check-h">
+  <section class="g-sec g-bg-white" id="medicine-groups" aria-labelledby="groups-h">
     <div class="g-wrap">
-      <div class="g-head g-head--center">
-        <h2 id="check-h">How to check if we can supply your medicine</h2>
-      </div>
-      <div class="g-steps-sm">
-        <?php g_steps([
-            ['', 'Send us the medicine name and the prescription.'],
-            ['', 'Our pharmacist checks availability, supply route and price.'],
-            ['', 'We reply with the next steps.'],
-        ], 'h'); ?>
-      </div>
-      <div class="g-btns g-btns--center g-mt-lg">
-        <?= g_btn('Request a Medicine', request_url('medicine')) ?>
-      </div>
-    </div>
-  </section>
-
-  <section class="g-sec g-bg-mint" id="medicine-groups" aria-labelledby="groups-h">
-    <div class="g-wrap g-narrow">
-      <div class="g-head">
-        <h2 id="groups-h">Medicine groups</h2>
+      <div class="g-head g-groups-head">
+        <div>
+          <span class="g-label">What We Supply</span>
+          <h2 id="groups-h">Medicine groups</h2>
+        </div>
+        <p class="g-groups-head__sub">We supply <?= count($groups) ?> groups of medicines, from cancer and blood disorders to diabetes, heart and kidney care, antibiotics and everyday medicines. Open a group to see what it covers, what we provide, who may need it and how to get it.</p>
       </div>
       <div class="g-acc g-acc--cards g-medcards">
         <?php foreach ($groups as $i => [$id, $icon, $name, $what, $provides, $who, $ctaLabel, $ctaHref]): ?>
-        <details class="g-acc__item <?= $i === 0 ? 'g-top-pink' : 'g-top-blue' ?>" id="<?= e($id) ?>" data-mobile-closed>
+        <details class="g-acc__item" id="<?= e($id) ?>" data-mobile-closed>
           <summary>
-            <span class="g-acc__title">
-              <span class="g-medcard__icon<?= $i === 0 ? ' g-medcard__icon--pink' : '' ?>"><?= gi($icon) ?></span>
-              <span>
-                <h3 class="g-medcard__name"><?= e($name) ?></h3>
-                <span class="g-acc__sum"><?= e($what) ?></span>
-              </span>
-            </span>
+            <h3 class="g-medcard__name"><?= e($name) ?></h3>
           </summary>
           <div class="g-acc__body g-medcard__body">
             <dl class="g-medcard__dl">
@@ -224,8 +179,33 @@ include INC . '/header.php';
   </section>
 </div>
 
-<section class="g-sec g-bg-white" id="medical-supplies" aria-labelledby="supplies-h">
-  <div class="g-wrap g-split">
+<?php /* Same blue-gradient band as the About page safety section: eyebrow,
+         title and button left, the three steps right (guide.css "About safety
+         band" + "Medicines check band"). */ ?>
+<section class="g-sec g-about-safe g-medcheck" id="check" aria-labelledby="check-h">
+  <div class="g-wrap g-split g-split--top">
+    <div>
+      <span class="g-label">Check Availability</span>
+      <h2 id="check-h">How to check if we can supply your medicine</h2>
+      <div class="g-btns g-medcheck__btns">
+        <?= g_btn('Request a Medicine', request_url('medicine'), 'white') ?>
+      </div>
+    </div>
+    <div class="g-medcheck__steps">
+      <?php g_steps([
+          ['', 'Send us the medicine name and the prescription.'],
+          ['', 'Our pharmacist checks availability, supply route and price.'],
+          ['', 'We reply with the next steps.'],
+      ], 'v'); ?>
+    </div>
+  </div>
+</section>
+
+<?php /* Three columns: text left, the cross-shaped photo collage centred
+         (img/cross-crop.png, cross.png with its white margins trimmed), and a
+         "what we supply" list right; guide.css "Medical supplies band". */ ?>
+<section class="g-sec g-bg-white g-supplies" id="medical-supplies" aria-labelledby="supplies-h">
+  <div class="g-wrap g-supplies__grid">
     <div class="g-stack">
       <h2 id="supplies-h">Medical supplies, devices and equipment</h2>
       <p>We supply single-use medical consumables, medical devices, medical equipment and laboratory supplies. This includes supplies used in cancer treatment, and devices for asthma, diabetes and blood pressure care.</p>
@@ -233,19 +213,35 @@ include INC . '/header.php';
         <?= g_btn('Request a Quotation', request_url('quotation'), 'secondary') ?>
       </div>
     </div>
-    <div class="g-media g-med-photo">
-      <?= g_photo('dispenser', 'A hand drawing single-use supplies from labelled pharmacy storage bins marked alcohol pads, ointments and tape.') ?>
+    <figure class="g-supplies__cross">
+      <img src="<?= e(asset('/assets/img/cross-crop.png')) ?>" width="614" height="1038" alt="" loading="lazy" decoding="async">
+    </figure>
+    <div class="g-supplies__info">
+      <h3>What we supply</h3>
+      <ul class="g-supplies__list">
+        <li>Single-use medical consumables</li>
+        <li>Devices for asthma, diabetes and blood pressure</li>
+        <li>Medical equipment</li>
+        <li>Laboratory supplies</li>
+      </ul>
+      <h3 class="g-mt">Who we supply</h3>
+      <p>Hospitals, clinics and patients across Vanuatu.</p>
     </div>
   </div>
 </section>
 
-<?php g_cta_band(
-    'Can\'t see your medicine?',
-    'We can source many products that are not listed here. Some items may take longer or cost more because of freight or import paperwork. We will tell you before you commit.',
-    [
-        ['Request a Medicine', request_url('medicine'), 'primary'],
-        ['Talk to Our Team', tel_url(), 'white', 'phone'],
-    ]
-); ?>
+<?php /* Same CTA banner as the home and About pages (guide.css "g-home-cta"). */ ?>
+<section class="g-sec g-home-cta" aria-label="Can't see your medicine?">
+  <div class="g-wrap g-home-cta__inner">
+    <div class="g-home-cta__text">
+      <h2>Can't see your medicine?</h2>
+      <p>We can source many products that are not listed here. Some items may take longer or cost more because of freight or import paperwork. We will tell you before you commit.</p>
+    </div>
+    <div class="g-home-cta__btns">
+      <a class="g-home-cta__btn g-home-cta__btn--white" href="<?= e(request_url('medicine')) ?>">Request a Medicine</a>
+      <a class="g-home-cta__btn g-home-cta__btn--dark" href="<?= e(tel_url()) ?>"><?= gi('phone') ?><span>Talk to Our Team</span></a>
+    </div>
+  </div>
+</section>
 
 <?php include INC . '/footer.php'; ?>

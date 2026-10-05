@@ -1,4 +1,4 @@
-﻿@charset "UTF-8";
+@charset "UTF-8";
 /* ==========================================================================
    Getmeds Vanuatu — Global Design System (content guide, page 00)
 
@@ -324,15 +324,15 @@ body {
 }
 /* guide.js adds .g-header--menu-open while a menu is open (hover, focus and
    click alike); on the see-through pages the bar turns solid for that long. */
-.g-nav__drop__intro { flex: 0 0 240px; }
+.g-nav__drop__intro { flex: 0 0 300px; }
 .g .g-nav__drop__intro h2 {
-  font-family: var(--g-head); font-weight: 600; font-size: 19px; margin: 0 0 8px;
+  font-family: var(--g-head); font-weight: 600; font-size: 26px; margin: 0 0 10px;
   color: #1D9FDA;
   background: linear-gradient(to bottom, #1D9FDA 0%, #1D9FDA 55%, #4DB6E6 100%);
   -webkit-background-clip: text; background-clip: text;
   -webkit-text-fill-color: transparent;
 }
-.g .g-nav__drop__intro p { font-size: 13px; line-height: 1.55; color: var(--g-muted); margin: 0; max-width: none; }
+.g .g-nav__drop__intro p { font-size: 16px; line-height: 1.6; color: var(--g-muted); margin: 0; max-width: none; }
 .g-nav__drop__links { flex: 1; display: flex; gap: 8px; list-style: none; margin: 0; padding: 0; }
 .g-nav__drop__links li { flex: 1; }
 .g-nav__drop a {
@@ -342,6 +342,13 @@ body {
 .g-nav__drop a:hover { background: var(--g-sky); color: var(--g-blue-text); }
 .g-nav__drop__label { display: block; font-size: 16px; font-weight: 600; }
 .g .g-nav__drop__desc { display: block; margin-top: 4px; font-size: 13px; line-height: 1.5; font-weight: 400; color: var(--g-muted); }
+/* Mega menu (desktop): bigger titles and text. */
+@media (min-width: 80em) {
+  /* Title and text sit tight together; the label keeps 4px for its hover line. */
+  .g .g-nav__drop--mega .g-nav__drop__label { font-size: 20px; line-height: 1.25; padding-bottom: 4px; }
+  .g .g-nav__drop--mega .g-nav__drop__desc { margin-top: 0; font-size: 16px; line-height: 1.55; }
+  .g .g-nav__drop__intro h2 { line-height: 1.2; margin-bottom: 4px; }
+}
 /* Mega menu links: on hover the title and description turn blue and a
    blue-to-white line draws in under the title, instead of the pale blue box. */
 .g-nav__drop--mega a:hover { background: none; }
@@ -793,6 +800,14 @@ a.g-chip:hover { border-color: var(--g-blue); }
 .g-filterbar { position: sticky; top: 64px; z-index: 30; background: #fff; border-bottom: 1px solid var(--g-line); padding-block: 12px; }
 .g-filterbar .g-chips { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 2px; }
 .g-filterbar .g-chip { white-space: nowrap; }
+/* Medicines filter chips: centred, smaller, site blue-gradient pill with a soft shadow.
+   Auto margins centre the row but still let it scroll on narrow screens; the
+   list's padding gives the shadow room, since the scroll box clips overflow. */
+.g-medpage .g-filterbar ul.g-chips { padding: 4px 4px 8px; }
+.g-filterbar .g-chips li:first-child { margin-left: auto; }
+.g-filterbar .g-chips li:last-child { margin-right: auto; }
+.g-filterbar .g-chip { background: linear-gradient(to bottom, #1D9FDA 0%, #1D9FDA 55%, #4DB6E6 100%); border: 0; color: #fff; font-size: 13px; padding: 6px 14px; box-shadow: 0 2px 6px rgba(19, 108, 153, .3); }
+.g-filterbar a.g-chip:hover { background: linear-gradient(to bottom, #1583B6 0%, #1583B6 55%, #3AA6D8 100%); color: #fff; }
 
 .g-bigsearch { position: relative; max-width: 720px; }
 .g-bigsearch input { width: 100%; height: 56px; border-radius: 999px; border: 1.5px solid #B9C7D3; padding: 0 20px 0 52px; font: inherit; font-size: 17px; background: #fff; }
@@ -859,22 +874,42 @@ a.g-chip:hover { border-color: var(--g-blue); }
    ========================================================================== */
 .g-hero--40 { min-height: 40vh; display: flex; align-items: center; padding-block: 48px; }
 .g-hero--40 > .g-wrap { width: 100%; }
-.g-med-illus svg, .g-nps-illus svg { max-width: 420px; margin-left: auto; border-radius: 0; }
+.g-nps-illus img { display: block; width: 100%; max-width: 520px; height: auto; margin-left: auto; border-radius: 0; box-shadow: none; aspect-ratio: 900 / 847; object-fit: contain; mix-blend-mode: multiply; }
+/* multiply: the photo's off-white ground disappears into the white hero. */
+/* Medicines hero: smaller text across the full width, then the medicinebg
+   photo edge to edge under it (the section loses its bottom padding). */
+.g-med-hero__text { max-width: 1120px; margin-inline: auto; text-align: center; }
+.g .g-med-hero__text h1 { font-size: clamp(34px, 4vw, 56px); font-weight: 600; line-height: 1.15; color: #111; max-width: none; }
+.g .g-med-hero__text .g-hero__lede { margin: 20px auto 0; font-size: clamp(17px, 1.4vw, 21px); line-height: 1.6; font-weight: 500; color: #333; max-width: 1060px; }
+.g .g-med-hero__text p { font-size: 16px; max-width: none; }
+.g .g-med-hero__text .g-box p { font-size: 15px; }
+.g-hero--40:has(.g-med-hero__img) { flex-direction: column; align-items: stretch; padding-bottom: 0; }
+.g-med-hero__img { display: block; margin-top: 40px; }
+.g-med-hero__img img { display: block; width: 100%; height: auto; }
 .g-steps-sm { max-width: 900px; margin-inline: auto; }
 .g-steps-sm .g-step__num { width: 40px; height: 40px; font-size: 17px; }
 .g-steps-sm .g-steps--h::before { top: 20px; }
 .g-steps-sm .g-step__text { font-size: 17px; }
-.g-medcards .g-acc__item > summary { padding: 16px 4px; }
-.g .g-medcard__name { font-size: 20px; line-height: 1.3; }
-.g-medcard__icon { display: inline-flex; flex: none; width: 48px; height: 48px; border-radius: 12px; align-items: center; justify-content: center; background: var(--g-sky); color: var(--g-blue); }
-.g-medcard__icon--pink { background: #FDEEF4; color: var(--g-pink); }
-.g-acc__title .g-medcard__icon .g-i { width: 26px; height: 26px; color: inherit; }
-.g-medcards .g-acc__item[open] .g-acc__sum { display: none; }
-.g-medcard__body { padding: 0 4px 24px 66px; }
-.g-medcard__dl { margin: 0; display: grid; gap: 12px; }
-.g-medcard__dl dt { font-weight: 600; color: var(--g-navy); }
+/* Medicine groups: compact FAQ-style cards, two per row. Pale slate fill, no
+   border, shadow or icon; the group name and a small grey chevron only, with
+   the details in small grey text when opened. align-items: start keeps an
+   opened card from stretching its row partner. */
+.g-acc--cards.g-medcards { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 16px; align-items: start; }
+@media (max-width: 47.99em) { .g-acc--cards.g-medcards { grid-template-columns: 1fr; } }
+.g-acc--cards.g-medcards .g-acc__item { border: 0; box-shadow: none; border-radius: 16px; background: #F8FAFC; padding: 0 24px; }
+.g-medcards .g-acc__item > summary { min-height: 0; padding: 20px 0; }
+.g-medcards .g-acc__item > summary::after {
+  content: ""; width: 8px; height: 8px; border: 0; border-radius: 0;
+  border-right: 2px solid #94A3B8; border-bottom: 2px solid #94A3B8;
+  transform: translateY(-3px) rotate(45deg); transition: transform .2s ease;
+}
+.g-medcards .g-acc__item[open] > summary::after { content: ""; transform: translateY(2px) rotate(-135deg); }
+.g .g-medcard__name { margin: 0; font-size: 16px; line-height: 1.4; font-weight: 600; color: #0F172A; }
+.g-medcard__body { padding: 0 0 20px; }
+.g-medcard__dl { margin: 0; display: grid; gap: 12px; font-size: 15.5px; line-height: 1.7; color: #64748B; }
+.g-medcard__dl dt { font-weight: 600; color: #0F172A; }
 .g-medcard__dl dd { margin: 0; }
-.g-medcard__body .g-btns { margin-top: 20px; }
+.g-medcard__body .g-btns { margin-top: 16px; }
 .g-med-photo img { aspect-ratio: 4 / 3; }
 /* Shared by the Medicines, Named Patient Supply and How It Works pages:
    ".g p { margin: 0 }" outranks single-class margin helpers on <p>. */
@@ -882,15 +917,103 @@ a.g-chip:hover { border-color: var(--g-blue); }
 .g .g-pg-mt { margin-top: 20px; }
 .g-medpage ul.g-chips, .g-tl ul.g-chips { list-style: none; margin: 0; padding: 0; }
 .g-tl ul.g-chips { margin-top: 16px; }
+/* "Medicine groups" heading: eyebrow and black title sized like the About page sections. */
+.g .g-groups-head .g-label { display: block; text-transform: none; letter-spacing: 0; font-size: 15px; color: #1D9FDA; }
+.g .g-groups-head h2 { margin-top: 12px; color: #000; font-size: clamp(38px, 4vw, 60px); line-height: 1.1; }
+/* Subtext to the right of the eyebrow and title, bottom-aligned with the title. */
+.g-groups-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px 64px; align-items: end; }
+.g .g-groups-head .g-groups-head__sub { margin: 0; max-width: 560px; justify-self: end; color: #000; font-size: 17px; line-height: 1.7; }
+@media (max-width: 63.99em) {
+  .g-groups-head { grid-template-columns: 1fr; }
+  .g .g-groups-head .g-groups-head__sub { justify-self: start; }
+}
+/* Medical supplies band: text left, the cross collage centred, and a short
+   "what we supply" list right. Equal side columns keep the cross in the
+   middle. Tablets: text and list side by side, cross below; phones: stacked. */
+.g-supplies__grid { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 56px; align-items: center; }
+.g-supplies__cross { margin: 0; }
+.g-supplies__cross img { display: block; width: auto; height: auto; max-height: 460px; max-width: 100%; margin-inline: auto; }
+.g .g-supplies__info h3 { font-size: 20px; font-weight: 600; color: #000; margin: 0; }
+.g .g-supplies__info h3.g-mt { margin-top: 24px; }
+.g .g-supplies__info p { margin-top: 10px; color: #000; }
+.g-supplies__list { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 10px; }
+.g-supplies__list li { display: flex; gap: 10px; align-items: baseline; color: #000; }
+.g-supplies__list li::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #1D9FDA; flex: none; transform: translateY(-1px); }
+@media (max-width: 63.99em) {
+  .g-supplies__grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 40px; }
+  .g-supplies__cross { grid-column: 1 / -1; grid-row: 2; }
+  .g-supplies__cross img { max-height: 380px; }
+}
 @media (max-width: 47.99em) {
-  .g-medcard__body { padding-left: 4px; }
-  .g .g-medcard__name { font-size: 18px; }
+  .g-supplies__grid { grid-template-columns: 1fr; gap: 32px; }
+  .g-supplies__cross { grid-row: auto; }
+  .g-supplies__cross img { max-height: 340px; }
+}
+@media (max-width: 47.99em) {
+  .g-acc--cards.g-medcards .g-acc__item { padding: 0 20px; }
 }
 
 /* ==========================================================================
    Page: Named Patient Supply (/named-patient-supply, guide page 05)
    ========================================================================== */
 .g-nps-first { padding-top: 24px; }
+/* NPS meaning columns: two columns, each an eyebrow, black title and text,
+   with a photo pinned to the bottom so both photos line up. */
+.g-nps-cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 56px; }
+.g-nps-col { display: flex; flex-direction: column; }
+.g .g-nps-col .g-label { display: block; text-transform: none; letter-spacing: 0; font-size: 15px; color: #1D9FDA; }
+.g .g-nps-col h2 { margin: 12px 0 0; color: #000; font-size: clamp(28px, 2.6vw, 38px); line-height: 1.15; }
+.g .g-nps-col p { margin-top: 16px; max-width: none; color: #000; font-size: 17px; line-height: 1.7; }
+@media (max-width: 47.99em) { .g-nps-cols { grid-template-columns: 1fr; gap: 48px; } }
+/* Plain blue-dot lists in the columns (no icons). */
+.g .g-nps-col .g-nps-dots { list-style: none; margin: 20px 0 0; padding: 0; display: grid; gap: 12px; }
+.g .g-nps-dots li { display: flex; gap: 12px; align-items: baseline; color: #000; font-size: 17px; line-height: 1.6; }
+.g-nps-dots li::before { content: ""; flex: none; width: 8px; height: 8px; border-radius: 50%; background: #1D9FDA; transform: translateY(-2px); }
+.g .g-nps-dots + p { margin-top: 24px; }
+.g .g-nps-col p.g-nps-missing { color: #1D9FDA; }
+/* Full-width connection banner under both columns: the site blue as a soft
+   tint over the photo, and a white heartbeat lifeline across it with a
+   brighter pulse travelling left to right. */
+.g-nps-band { position: relative; margin: 56px 0 0; overflow: hidden; }
+.g-nps-band img { display: block; width: 100%; height: auto; min-height: 220px; object-fit: cover; }
+.g-nps-band::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(90deg, rgba(29,159,218,.42) 0%, rgba(29,159,218,.22) 50%, rgba(77,182,230,.38) 100%);
+}
+.g-nps-band__line { position: absolute; left: 0; top: 50%; z-index: 1; width: 100%; height: 34%; transform: translateY(-50%); overflow: visible; }
+.g-nps-band__line path { fill: none; stroke: rgba(255,255,255,.75); stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round; vector-effect: non-scaling-stroke; filter: drop-shadow(0 0 4px rgba(29,159,218,.8)); }
+.g-nps-band__line .g-nps-band__pulse { stroke: #fff; stroke-width: 3; vector-effect: none; stroke-dasharray: 70 1000; animation: g-lifeline 4s linear infinite; }
+@keyframes g-lifeline { from { stroke-dashoffset: 1070; } to { stroke-dashoffset: 0; } }
+/* The band image sits flush on the blue "When may it be used?" band below. */
+.g-sec.g-nps-first { padding-bottom: 0; }
+/* NPS uses band: the About safety band, with the uses as a white-dot list,
+   the limit as a softer note, and "The prescription comes first" in a glassy
+   panel. */
+.g-nps-uses__list { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+.g .g-nps-uses__list li { display: flex; gap: 14px; align-items: baseline; color: #fff; font-size: clamp(17px, 1.4vw, 20px); line-height: 1.6; font-weight: 500; }
+.g-nps-uses__list li::before { content: ""; flex: none; width: 9px; height: 9px; border-radius: 50%; background: #fff; transform: translateY(-2px); }
+.g .g-about-safe__text p.g-nps-uses__note { margin-top: 24px; font-size: 16px; line-height: 1.7; font-weight: 400; color: rgba(255,255,255,.9); }
+.g-nps-uses__rx {
+  margin-top: 28px; padding: 22px 24px; border-radius: 16px;
+  background: linear-gradient(to bottom, rgba(255,255,255,.26) 0%, rgba(255,255,255,.1) 100%);
+  border: 1px solid rgba(255,255,255,.5);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.6), 0 8px 24px rgba(11,42,91,.12);
+}
+.g .g-nps-uses__rx h3 { margin: 0; color: #fff; font-size: 20px; }
+.g .g-nps-uses__rx p { margin-top: 8px; max-width: none; color: #fff; font-size: 16px; line-height: 1.7; font-weight: 400; }
+.g-nps-uses .g-nps-uses__rx { max-width: none; padding: 26px 30px; }
+@media (prefers-reduced-motion: reduce) { .g-nps-band__line .g-nps-band__pulse { animation: none; stroke-dasharray: none; stroke: transparent; } }
+/* White hero; the "In simple words" summary sits under the lede as plain
+   text, no box or border. */
+/* Small top gap under the navbar, like How It Works. */
+.g-hero.g-nps-hero { padding-top: 24px; padding-bottom: 40px; }
+/* Eyebrow and title styled like How It Works ("How to request a medicine"). */
+.g .g-nps-hero .g-label { display: block; text-transform: none; letter-spacing: 0; font-size: 15px; color: #1D9FDA; }
+.g .g-nps-hero h1 { margin-top: 12px; color: #111; font-size: clamp(38px, 4vw, 60px); line-height: 1.1; font-weight: 600; }
+.g .g-nps-hero .g-hero__lede { color: #1D9FDA; font-weight: 600; }
+.g .g-nps-hero .g-nps-simple { margin-top: 16px; font-size: 17px; line-height: 1.7; color: #333; max-width: 60ch; }
+.g .g-nps-hero .g-nps-simple strong { color: #111; }
+.g .g-nps-hero .g-btns { margin-top: 28px; }
 .g-nps-bigicon { width: 56px; height: 56px; background: #fff; }
 .g-nps-bigicon .g-i { width: 30px; height: 30px; }
 .g-nps-bullets { list-style: none; margin: 0; padding: 0; }
@@ -898,52 +1021,88 @@ a.g-chip:hover { border-color: var(--g-blue); }
 .g-nps-dot { flex: none; width: 12px; height: 12px; border-radius: 50%; background: var(--g-green); margin-top: 9px; }
 .g-nps-rx { padding: 28px; }
 .g .g-nps-rx__h { font-size: 24px; margin-bottom: 8px; }
-.g-nps-helps { list-style: none; margin: 0; padding: 0; }
-.g-nps-helps .g-card { text-align: center; }
-.g-nps-helps .g-card p { margin-inline: auto; }
+/* NPS how band: #61A644 green, white eyebrow, title and step text, and
+   glassy step numbers (translucent white, frosted, bright rim). */
+.g-nps-how { background: linear-gradient(90deg, #1D9FDA 0%, #61A644 100%); color: #fff; }
+.g .g-nps-how .g-label { display: block; text-transform: none; letter-spacing: 0; font-size: 15px; font-weight: 600; color: #fff; }
+/* Heading row above the green band: tighter bottom so it reads as the band's title. */
+.g-sec.g-nps-how-head { padding-top: 16px; padding-bottom: 40px; }
+.g .g-nps-how-head #how-h { color: #000; }
+/* Same eyebrow and title sizes as "When to Use It / When may it be used?"
+   (the About safety band), in blue and black for the white background. */
+.g .g-nps-how-head .g-nps-col .g-label { font-size: 18px; font-weight: 600; }
+.g .g-nps-how-head .g-nps-col h2 { margin-top: 20px; font-size: clamp(38px, 4vw, 60px); line-height: 1.1; }
+.g .g-nps-how .g-steps { row-gap: 40px; }
+.g .g-nps-how .g-step__title { color: #fff; }
+.g .g-nps-how .g-step__text { color: rgba(255,255,255,.92); }
+.g-nps-how .g-step__num {
+  background: linear-gradient(to bottom, rgba(255,255,255,.36) 0%, rgba(255,255,255,.12) 100%);
+  border: 1px solid rgba(255,255,255,.6);
+  -webkit-backdrop-filter: blur(10px) saturate(140%); backdrop-filter: blur(10px) saturate(140%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.75), inset 0 -6px 12px rgba(255,255,255,.12);
+  color: #fff;
+}
+/* NPS helps: eyebrow and black title left, one paragraph right, both
+   aligned to the top of the section. */
+.g-nps-helps { align-items: start; }
+.g .g-nps-helps__text { max-width: none; color: #000; font-size: clamp(17px, 1.5vw, 20px); line-height: 1.75; }
 
 /* ==========================================================================
    Page: How It Works (/how-it-works, guide page 06) — vertical timeline on
    every screen size, sticky Request a Medicine button on desktop.
    ========================================================================== */
-.g-hiw-hero { padding-bottom: 24px; }
-.g-hiw-main { padding-top: 40px; }
-.g-hiw-layout { display: grid; grid-template-columns: minmax(0, 1fr) 280px; gap: 64px; align-items: start; }
-.g-hiw-side { align-self: stretch; }
-.g-hiw-side .g-sidecard { top: 110px; }
-.g-hiw-side .g-btn { width: 100%; }
+/* Eyebrow, title and lede styled like the About page "Our Story / Why we started". */
+.g .g-hiw-hero .g-label { display: block; text-transform: none; letter-spacing: 0; font-size: 15px; color: #1D9FDA; }
+.g .g-hiw-hero h1 { margin-top: 12px; color: #111; font-size: clamp(38px, 4vw, 60px); line-height: 1.1; font-weight: 600; }
+/* Trust points as small blue-gradient pills with white icon and text. */
+.g .g-hiw-hero .g-trust { gap: 10px; }
+.g-hiw-hero .g-trust li {
+  padding: 8px 14px; border-radius: 10px; font-size: 14px; color: #fff;
+  background: linear-gradient(to bottom, #1D9FDA 0%, #1D9FDA 55%, #4DB6E6 100%);
+  box-shadow: inset 0 -3px 6px rgba(255,255,255,.3), 0 2px 6px rgba(29,159,218,.2);
+}
+.g-hiw-hero .g-trust .g-i { width: 17px; height: 17px; color: #fff; }
+.g .g-hiw-hero .g-hero__lede { margin-top: 24px; max-width: none; font-size: clamp(17px, 1.5vw, 20px); line-height: 1.7; }
+/* Intro sticky on the left, compact steps on the right. The section sits
+   right under the navbar, so it needs only a small top gap. */
+.g-sec.g-hiw-main { padding-top: 32px; }
+@media (max-width: 47.99em) { .g-sec.g-hiw-main { padding-top: 24px; } }
+.g-hiw-layout { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 64px; align-items: start; }
+.g-hiw-intro { position: sticky; top: 110px; }
+.g .g-hiw-intro .g-trust { margin-top: 24px; }
+.g-hiw-intro__btns { margin-top: 28px; }
+/* Steps: small numbers in the blue button gradient, joined by a blue line,
+   with compact cards. */
 .g-tl { list-style: none; margin: 0; padding: 0; }
-.g-tl__step { position: relative; display: grid; grid-template-columns: 72px minmax(0, 1fr); column-gap: 32px; padding-bottom: 48px; }
+.g-tl__step { position: relative; display: grid; grid-template-columns: 44px minmax(0, 1fr); column-gap: 20px; padding-bottom: 24px; }
 .g-tl__step:last-child { padding-bottom: 0; }
-.g-tl__step:not(:last-child)::before { content: ""; position: absolute; left: 34px; top: 72px; bottom: 0; border-left: 4px solid var(--g-green); }
+.g-tl__step:not(:last-child)::before { content: ""; position: absolute; left: 21px; top: 44px; bottom: 0; border-left: 2px solid #4DB6E6; }
 .g-tl__num {
   display: flex; align-items: center; justify-content: center;
-  width: 72px; height: 72px; border-radius: 50%;
-  background: var(--g-green-btn); color: #fff;
-  font-family: var(--g-head); font-weight: 700; font-size: 30px;
-  position: relative; z-index: 1; box-shadow: 0 0 0 6px #fff;
+  width: 44px; height: 44px; border-radius: 50%;
+  background: linear-gradient(to bottom, #1D9FDA 0%, #1D9FDA 55%, #4DB6E6 100%); color: #fff;
+  font-family: var(--g-head); font-weight: 600; font-size: 18px;
+  position: relative; z-index: 1; box-shadow: 0 0 0 5px #fff, 0 2px 6px rgba(29,159,218,.25);
 }
-.g-tl__body { background: #fff; border: 1px solid var(--g-line); border-radius: var(--g-r-card); box-shadow: var(--g-shadow); padding: 28px 32px; }
-.g-tl__icon { display: inline-flex; gap: 6px; padding: 10px; border-radius: 12px; background: var(--g-sky); color: var(--g-blue); margin-bottom: 14px; }
-.g-tl__icon .g-i { width: 28px; height: 28px; }
-.g .g-tl__title { font-size: 26px; margin-bottom: 10px; }
-.g-hiw-after { display: flex; gap: 24px; align-items: flex-start; }
-.g-hiw-loop { flex: none; width: 64px; height: 64px; background: #fff; margin: 0; }
-.g-hiw-loop .g-i { width: 34px; height: 34px; }
-.g-hiw-hosp { padding: 40px; }
-.g-hiw-hosp .g-btns { margin-top: 24px; }
+.g-tl__body { background: #fff; border: 1px solid var(--g-line); border-radius: 14px; box-shadow: var(--g-shadow); padding: 20px 22px; font-size: 15px; line-height: 1.6; }
+.g-tl__icon { display: inline-flex; gap: 4px; padding: 7px; border-radius: 10px; background: var(--g-sky); color: #1D9FDA; margin-bottom: 10px; }
+.g-tl__icon .g-i { width: 20px; height: 20px; }
+.g .g-tl__title { font-size: 19px; margin-bottom: 6px; }
+.g .g-tl__body p { font-size: 15px; line-height: 1.6; }
+/* "After your first order": a sixth card lined up with the step cards
+   (number column + gap), with no number or line. */
+.g-tl__extra { margin: 24px 0 0 64px; }
+@media (max-width: 47.99em) { .g-tl__extra { margin: 20px 0 0 48px; } }
 @media (max-width: 63.99em) {
-  .g-hiw-layout { grid-template-columns: 1fr; }
-  .g-hiw-side { display: none; }
+  .g-hiw-layout { grid-template-columns: 1fr; gap: 40px; }
+  .g-hiw-intro { position: static; }
 }
 @media (max-width: 47.99em) {
-  .g-tl__step { grid-template-columns: 48px minmax(0, 1fr); column-gap: 16px; padding-bottom: 32px; }
-  .g-tl__step:not(:last-child)::before { left: 22px; top: 48px; }
-  .g-tl__num { width: 48px; height: 48px; font-size: 22px; }
-  .g-tl__body { padding: 20px; }
-  .g .g-tl__title { font-size: 21px; }
-  .g-hiw-after { flex-direction: column; gap: 16px; }
-  .g-hiw-hosp { padding: 28px 20px; }
+  .g-tl__step { grid-template-columns: 36px minmax(0, 1fr); column-gap: 12px; padding-bottom: 20px; }
+  .g-tl__step:not(:last-child)::before { left: 17px; top: 36px; }
+  .g-tl__num { width: 36px; height: 36px; font-size: 16px; }
+  .g-tl__body { padding: 16px; }
+  .g .g-tl__title { font-size: 18px; }
 }
 
 /* ==========================================================================
@@ -1000,25 +1159,44 @@ a.g-chip:hover { border-color: var(--g-blue); }
 .g-tiles .g-card h3 { font-size: 19px; }
 .g-tiles p { font-size: 16px; }
 .g-about-pacific { position: relative; overflow: hidden; }
-@media (max-width: 63.99em) { .g-about-map svg { max-height: 280px; } }
-/* Who we serve: centered eyebrow and title, then a row of icon + gradient-text items. */
-.g .g-serve-split .g-label { text-transform: none; letter-spacing: 0; font-size: 15px; color: #1D9FDA; }
-.g .g-serve-split h2 {
-  margin-top: 12px; font-size: clamp(52px, 6vw, 88px); line-height: 1.05; padding-bottom: .08em;
-  color: #1D9FDA;
-  background: linear-gradient(to bottom, #1D9FDA 0%, #1D9FDA 50%, #4DB6E6 78%, #B5E3F7 100%) 0 0 / 100% 1.05em repeat-y;
-  -webkit-background-clip: text; background-clip: text;
-  -webkit-text-fill-color: transparent;
+.g-about-map { display: block; width: 100%; }
+/* Wider text column that runs close to the map; the text sits a little lower
+   so it lines up with the body of the map rather than its top edge. */
+@media (min-width: 64em) {
+  .g-about-pacific .g-split { grid-template-columns: minmax(0, 1fr) minmax(0, 480px); gap: 40px; }
+  .g-about-pacific .g-split > div:first-child { padding-top: 40px; }
 }
-.g-serve-row { margin-top: 48px; list-style: none; padding: 0; gap: 32px 24px; }
-.g-serve-row li { display: flex; flex-direction: column; gap: 14px; text-align: left; }
-.g-serve-row .g-i { width: 32px; height: 32px; color: #1D9FDA; stroke-width: 1.6; }
-.g .g-serve-row span {
-  display: block; font-family: var(--g-head); font-weight: 700; font-size: 18px; line-height: 1.3;
-  color: #1D9FDA;
-  background: linear-gradient(to bottom, #1D9FDA 0%, #1D9FDA 55%, #4DB6E6 100%);
-  -webkit-background-clip: text; background-clip: text;
-  -webkit-text-fill-color: transparent;
+.g-about-map img { display: block; width: 100%; height: auto; }
+/* Text starts near the top, close under the named patient band. */
+.g-sec.g-about-pacific { padding-top: 72px; padding-bottom: 0; }
+/* The map runs well below the Pacific text, so on desktop "Who we serve" moves
+   up into the empty space under that text. */
+@media (min-width: 64em) { .g-sec.g-serve-sec { margin-top: -56px; position: relative; background: transparent; } }
+.g .g-about-pacific h2 { margin-top: 0; }
+.g .g-about-pacific h2, .g .g-about-pacific p { color: #000; }
+/* Countries as a horizontal bullet list: blue dot, black text, no pill. */
+.g .g-about-pacific .g-chips { gap: 12px 28px; }
+.g .g-about-pacific .g-chip { background: none; border: 0; border-radius: 0; padding: 0; color: #000; font-size: 17px; gap: 10px; }
+.g .g-about-pacific .g-chip::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #1D9FDA; flex: none; }
+/* Who we serve: eyebrow and title on the left, sized like "Why we started",
+   then one row of blue-gradient pills (same as the Pacific country pills).
+   No top padding: the Pacific section's bottom space is the gap. */
+.g-sec.g-serve-sec { padding-top: 0; }
+.g .g-serve-split { text-align: left; margin-inline: 0; }
+.g .g-serve-split .g-label { display: block; text-transform: none; letter-spacing: 0; font-size: 15px; color: #1D9FDA; }
+.g .g-serve-split h2 { margin-top: 12px; color: #000; font-size: clamp(38px, 4vw, 60px); line-height: 1.1; }
+.g-serve-row { margin: 0; list-style: none; padding: 0; display: flex; flex-wrap: nowrap; gap: 3px; max-width: none; }
+.g .g-serve-split { margin-bottom: 24px; }
+.g .g-serve-row li {
+  flex: 1 1 auto; text-align: center; white-space: nowrap;
+  padding: 30px 18px; border-radius: 999px;
+  background: linear-gradient(90deg, #1D9FDA 0%, #4DB6E6 100%); color: #fff;
+  font-family: var(--g-head); font-weight: 600; font-size: 16px; line-height: 1.3;
+}
+/* Not enough room for one line below desktop: let them wrap. */
+@media (max-width: 74.99em) {
+  .g-serve-row { flex-wrap: wrap; }
+  .g .g-serve-row li { flex: 0 1 auto; padding: 22px 24px; }
 }
 /* Less space between More affordable access and this split. */
 .g-split-sec { padding-top: 56px; }
@@ -1075,6 +1253,19 @@ a.g-chip:hover { border-color: var(--g-blue); }
   color: #fff !important;
 }
 .g-home-cta__btn .g-i { width: 18px; height: 18px; }
+/* How It Works hospitals banner: hospital photo under a navy-to-blue overlay,
+   sitting directly on top of the blue CTA banner that follows it. */
+/* Oncology Pacific banner: same treatment, Vanuatu aerial photo. */
+.g-home-cta.g-onc-pac {
+  background:
+    linear-gradient(90deg, rgba(11,42,91,.88) 0%, rgba(11,42,91,.7) 45%, rgba(29,159,218,.45) 100%),
+    url('../img/vanuatugeo.jpg') center 45% / cover no-repeat;
+}
+.g-home-cta.g-hiw-hosp {
+  background:
+    linear-gradient(90deg, rgba(11,42,91,.88) 0%, rgba(11,42,91,.7) 45%, rgba(29,159,218,.45) 100%),
+    url('../img/ordermedicinehospitals.jpg') center 40% / cover no-repeat;
+}
 .g-home-cta__btn:hover { background: rgba(255,255,255,.42); }
 @media (max-width: 47.99em) {
   .g-home-cta__inner { flex-direction: column; align-items: flex-start; }
@@ -1245,19 +1436,94 @@ a.g-chip:hover { border-color: var(--g-blue); }
 }
 .g-diagram--v { flex-direction: column; }
 .g-diagram--v .g-diagram__arrow { transform: rotate(90deg); }
-.g-about-group { display: grid; grid-template-columns: 48px 1fr; gap: 20px; align-items: start; }
-figure.g-about-team { margin-inline: 0; margin-bottom: 0; }
-.g-about-team img { aspect-ratio: 1600 / 804; }
-.g-about-team figcaption { text-align: center; }
-.g-about-dots { max-width: 920px; }
-.g-about-dots li { display: flex; justify-content: center; align-items: baseline; gap: 14px; }
-.g-about-dots li::before { flex: none; }
-@media (max-width: 47.99em) { .g-about-dots { font-size: 19px; } .g-about-dots li { justify-content: flex-start; } }
+/* About focus/group: two columns, eyebrow matches the site's other eyebrows,
+   title and text in black. */
+.g .g-about-focus .g-label { display: block; text-transform: none; letter-spacing: 0; font-size: 15px; color: #1D9FDA; }
+.g .g-about-focus h2, .g .g-about-focus p { color: #000; }
+.g .g-about-focus h2 { margin-top: 0; }
+/* Sits right under "Why we started": only that section's bottom padding between them. */
+.g-sec.g-about-focus { padding-top: 0; }
+/* About named patient band: firstsectionbg photo (subject on the right), white
+   words on the left over a soft navy fade so they stay readable. */
+.g-about-nps {
+  background-color: #2aa9cf;
+  background-image:
+    linear-gradient(90deg, rgba(11,42,91,.55) 0%, rgba(11,42,91,.3) 40%, rgba(11,42,91,0) 60%),
+    url('../img/firstsectionbg-1600.jpg');
+  background-size: cover;
+  background-position: right top;
+}
+@media (min-width: 60em) { .g-about-nps { min-height: 32rem; display: flex; align-items: center; } }
+.g-about-nps__text { max-width: 560px; }
+.g .g-about-nps h2, .g .g-about-nps a { color: #fff; }
+.g .g-about-nps p { color: rgba(255,255,255,.95); }
+@media (max-width: 47.99em) {
+  .g-about-nps {
+    background-image:
+      linear-gradient(rgba(11,42,91,.6), rgba(11,42,91,.6)),
+      url('../img/firstsectionbg-800.jpg');
+    background-position: left center;
+  }
+}
+/* Our team: eyebrow and title left, text right, then the ourteam photo with
+   the Connect With Us! button in the photo's empty bottom-right notch. */
+.g-sec#team { padding-top: 0; }
+.g-sec.g-serve-sec { padding-bottom: 56px; }
+.g .g-about-team__lead { font-size: 17px; line-height: 1.7; color: #000; max-width: none; }
+.g #team .g-why-start__intro h2 { color: #000; }
+figure.g-about-team { position: relative; margin: 0; }
+.g-about-team img { display: block; width: 100%; height: auto; aspect-ratio: 1853 / 867; }
+/* About safety band: the site's blue gradient, white eyebrow and large title
+   left, two white paragraphs right. */
+.g-about-safe { background: linear-gradient(135deg, #1D9FDA 0%, #4DB6E6 100%); color: #fff; }
+.g .g-about-safe .g-label { display: block; text-transform: none; letter-spacing: 0; font-size: 18px; font-weight: 600; color: #fff; }
+.g .g-about-safe h2 { margin-top: 20px; color: #fff; font-size: clamp(38px, 4vw, 60px); line-height: 1.1; }
+.g .g-about-safe__text p { color: #fff; font-size: clamp(17px, 1.5vw, 22px); line-height: 1.85; font-weight: 500; max-width: none; }
+.g .g-about-safe__text p + p { margin-top: 24px; }
+/* Medicines check band (not ".g-check", which is the checklist component):
+   the safety band above, eyebrow, title and a white button left, the three
+   steps as a white vertical timeline right, centred against the title. */
+.g-medcheck .g-split { align-items: center; }
+.g .g-medcheck .g-medcheck__btns { margin-top: 32px; }
+/* Glass: translucent white fill, frosted blur, bright rim and top highlight. */
+.g .g-medcheck .g-btn,
+.g-medcheck .g-steps--v .g-step__num {
+  background: linear-gradient(to bottom, rgba(255,255,255,.34) 0%, rgba(255,255,255,.12) 100%);
+  border: 1px solid rgba(255,255,255,.6);
+  -webkit-backdrop-filter: blur(10px) saturate(140%); backdrop-filter: blur(10px) saturate(140%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.75), inset 0 -6px 12px rgba(255,255,255,.12), 0 8px 24px rgba(11,42,91,.16);
+  color: #fff !important; text-shadow: 0 1px 2px rgba(11,42,91,.2);
+}
+.g .g-medcheck .g-btn:hover { background: linear-gradient(to bottom, rgba(255,255,255,.46) 0%, rgba(255,255,255,.2) 100%); color: #fff !important; }
+.g-medcheck .g-steps--v .g-step { grid-template-columns: 52px 1fr; column-gap: 22px; align-items: center; padding-bottom: 32px; }
+.g-medcheck .g-steps--v .g-step:last-child { padding-bottom: 0; }
+.g-medcheck .g-steps--v .g-step:not(:last-child)::before { left: 25px; top: 52px; border-left: 2px solid rgba(255,255,255,.55); }
+.g-medcheck .g-steps--v .g-step__num { width: 52px; height: 52px; font-size: 20px; }
+.g-medcheck .g-steps--v .g-step__body { padding-top: 0; }
+.g .g-medcheck .g-step__text { margin: 0; color: #fff; font-size: clamp(17px, 1.4vw, 20px); line-height: 1.5; font-weight: 500; max-width: none; }
+@media (max-width: 63.99em) { .g-medcheck .g-split { gap: 40px; } }
+/* What we want to achieve: heading and blue-dot bullets in the photo's notch
+   (it starts about 31% across and 70% down). Below desktop the notch is too
+   small, so the list follows the photo instead. */
+.g-about-team__goals { position: absolute; left: 32%; right: 2%; bottom: 2%; }
+.g .g-about-team__goals h3 { margin: 0 0 12px; color: #000; font-size: 20px; line-height: 1.3; }
+.g-about-team__goals ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; max-width: none; }
+/* Same blue gradient text and weight as the "About Getmeds Vanuatu" intro. */
+.g .g-about-team__goals li {
+  position: relative; padding-left: 20px; font-size: 16px; line-height: 1.5; font-weight: 600;
+  color: #1D9FDA;
+  background: linear-gradient(to bottom, #1D9FDA 0%, #1D9FDA 50%, #4DB6E6 100%) 0 0 / 100% 1.5em repeat-y;
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.g-about-team__goals li::before { content: ""; position: absolute; left: 0; top: .6em; width: 8px; height: 8px; border-radius: 50%; background: #1D9FDA; }
+@media (max-width: 74.99em) { .g-about-team__goals { position: static; margin-top: 24px; } }
 ul.g-chips { padding-left: 0; }
 
 /* Oncology: pink-tinted hero, Care Pink accents, sticky side menu rail. */
-.g-onc-hero { background: linear-gradient(90deg, rgba(232,80,138,.42) 0, rgba(232,80,138,0) 38%), var(--g-grad-text); }
-.g-onc-hero .g-pilltag { color: #fff; }
+/* Plain white hero (no gradient or wave); the pill tag in the site blue. */
+.g-onc-hero { background: #fff; }
+.g-onc-hero .g-pilltag { color: #1D9FDA; }
 .g-onc-hero .g-hero__media img { object-position: 50% 20%; }
 .g-onc-h::before { content: ""; display: block; width: 40px; height: 3px; border-radius: 2px; background: var(--g-pink); margin-bottom: 14px; }
 .g-onc-cards .g-card__icon { background: #FDEEF4; color: var(--g-pink); }
@@ -1859,7 +2125,7 @@ ul.g-chips { padding-left: 0; }
 .g .g-nps-sec h2 { margin-top: 12px; color: #111; }
 
 /* What we supply: blue eyebrow, black heading; one scrollable row of cards,
-   each in the site's blue button gradient, with a grey "no image" tile. */
+   each in the site's blue button gradient, with a "View medicines" arrow footer. */
 .g-cat-head { margin-bottom: 40px; }
 .g .g-cat-head .g-label { display: block; text-transform: none; letter-spacing: 0; font-size: 15px; color: #1D9FDA; }
 .g .g-cat-head h2 { margin-top: 12px; color: #111; font-size: clamp(38px, 4vw, 60px); line-height: 1.1; }
@@ -1872,7 +2138,7 @@ ul.g-chips { padding-left: 0; }
 }
 .g-catrow__track::-webkit-scrollbar { display: none; }
 .g-catcard {
-  flex: 0 0 240px; scroll-snap-align: start; display: flex; flex-direction: column;
+  flex: 0 0 400px; scroll-snap-align: start; display: flex; flex-direction: column;
   background: linear-gradient(to bottom, #1D9FDA 0%, #1D9FDA 55%, #4DB6E6 100%);
   border: 0; border-radius: var(--g-r-card);
   box-shadow: var(--g-shadow); padding: 20px; text-decoration: none; color: #fff;
@@ -1881,13 +2147,27 @@ ul.g-chips { padding-left: 0; }
 .g-catcard:hover { box-shadow: 0 8px 22px rgba(17,17,17,.1); transform: translateY(-2px); background: linear-gradient(to bottom, #1583B6 0%, #1583B6 55%, #3AA6D8 100%); }
 .g-catcard h3 { margin: 0 0 4px; font-size: 17px; color: #fff; }
 .g-catcard p { font-size: 14px; line-height: 1.5; color: rgba(255,255,255,.9); margin-bottom: 16px; }
-.g-catcard__img {
-  margin-top: auto; height: 120px; border-radius: 12px; flex: none;
-  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
-  background: #E4E9EF; color: #8A97A6;
+/* Card footer: "View medicines" with an arrow in a glassy circle, pinned to
+   the bottom so every card lines up. The arrow fills white and slides on
+   hover/focus, so the whole card reads as a link. */
+/* Landscape cards: wide and short, so the footer sits close under the text. */
+.g-catcard { min-height: auto; aspect-ratio: 16 / 7; padding: 22px 24px 18px; }
+.g-catcard p { margin-bottom: 12px; }
+.g-catcard__go {
+  margin-top: auto; padding-top: 14px; border-top: 1px solid rgba(255,255,255,.3);
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  font-size: 14px; font-weight: 600; color: #fff;
 }
-.g-catcard__img .g-i { width: 32px; height: 32px; stroke-width: 1.6; }
-.g-catcard__imgtext { font-size: 13px; font-weight: 500; }
+.g-catcard__arrow {
+  display: inline-flex; align-items: center; justify-content: center; flex: none;
+  width: 36px; height: 36px; border-radius: 50%;
+  background: rgba(255,255,255,.2); border: 1px solid rgba(255,255,255,.55);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.6);
+  transition: background .2s ease, color .2s ease, transform .2s ease;
+}
+.g-catcard__arrow .g-i { width: 18px; height: 18px; }
+.g-catcard:hover .g-catcard__arrow, .g-catcard:focus-visible .g-catcard__arrow { background: #fff; color: #1D9FDA; transform: translateX(4px); }
+.g-catcard:focus-visible { outline: 3px solid #1D9FDA; outline-offset: 3px; }
 
 .g-catrow__nav { display: flex; justify-content: flex-end; gap: 10px; margin-top: 16px; }
 .g-catrow__arrow {
@@ -1900,7 +2180,7 @@ ul.g-chips { padding-left: 0; }
 .g-catrow__arrow:hover { border-color: #1D9FDA; color: #1D9FDA; }
 .g-catrow__arrow:disabled { opacity: .35; cursor: default; border-color: var(--g-line); color: #111; }
 @media (max-width: 47.99em) {
-  .g-catcard { flex: 0 0 78%; }
+  .g-catcard { flex: 0 0 86%; aspect-ratio: auto; min-height: 170px; }
   .g-catrow__nav { display: none; }
 }
 

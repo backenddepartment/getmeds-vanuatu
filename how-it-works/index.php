@@ -3,10 +3,11 @@
  * /how-it-works — Content & Design Guide, page 06 (How It Works / Request a
  * Medicine).
  *
- * The five steps are the whole page: a vertical timeline on every screen size,
- * a green line joining the numbers, each step a large numbered block with an
- * icon. On desktop a sticky "Request a Medicine" button sits to the right. The
- * old patient sub-pages (delivery, how-to-order, what-you-need) redirect here.
+ * The five steps are the whole page: on desktop the intro (title, trust pills,
+ * "Request a Medicine") stays sticky on the left and the steps run down the
+ * right as a compact timeline, blue-gradient numbers joined by a blue line.
+ * Smaller screens stack them. The old patient sub-pages (delivery,
+ * how-to-order, what-you-need) redirect here.
  */
 require __DIR__ . '/../includes/bootstrap.php';
 
@@ -20,21 +21,26 @@ include INC . '/head.php';
 include INC . '/header.php';
 ?>
 
-<section class="g-hero g-bg-white g-hiw-hero g-pg">
-  <div class="g-wrap">
-    <h1>How to request a medicine</h1>
-    <p class="g-hero__lede">Five simple steps. A pharmacist checks every request. You see the price before you pay anything.</p>
-    <?php g_trust([
-        ['shield',  'Pharmacist-checked'],
-        ['receipt', 'Price before you pay'],
-        ['file',    'Prescription required'],
-    ]); ?>
-  </div>
-</section>
-
-<section class="g-sec g-bg-white g-hiw-main" aria-label="Five steps">
+<?php /* Intro (eyebrow, title, lede, trust pills, button) sticky on the left,
+         the five steps as a compact blue timeline on the right. */ ?>
+<section class="g-sec g-bg-white g-hiw-main">
   <div class="g-wrap g-hiw-layout">
-    <ol class="g-tl" role="list">
+    <div class="g-hiw-hero g-hiw-intro">
+      <span class="g-label">How It Works</span>
+      <h1>How to request a medicine</h1>
+      <p class="g-hero__lede">Five simple steps. A pharmacist checks every request. You see the price before you pay anything.</p>
+      <?php g_trust([
+          ['shield',  'Pharmacist-checked'],
+          ['receipt', 'Price before you pay'],
+          ['file',    'Prescription required'],
+      ]); ?>
+      <div class="g-btns g-hiw-intro__btns">
+        <?= g_btn('Request a Medicine', request_url('medicine'), 'primary', 'pill') ?>
+      </div>
+    </div>
+
+    <div class="g-hiw-steps">
+    <ol class="g-tl" role="list" aria-label="Five steps">
 
       <li class="g-tl__step" id="step-1">
         <span class="g-tl__num" aria-hidden="true">1</span>
@@ -108,44 +114,44 @@ include INC . '/header.php';
 
     </ol>
 
-    <aside class="g-hiw-side" aria-label="Request a Medicine">
-      <div class="g-sidecard">
-        <?= g_btn('Request a Medicine', request_url('medicine'), 'primary', 'pill') ?>
-      </div>
-    </aside>
-  </div>
-</section>
-
-<section class="g-sec g-bg-mint" aria-labelledby="after-h">
-  <div class="g-wrap g-narrow g-hiw-after">
-    <span class="g-card__icon g-hiw-loop"><?= gi('refresh') ?></span>
-    <div class="g-stack">
-      <h2 id="after-h">After your first order</h2>
+    <?php /* Not a step: a sixth card in the same column as the step cards,
+             with no number and no timeline line. */ ?>
+    <div class="g-tl__body g-tl__extra" aria-labelledby="after-h">
+      <span class="g-tl__icon"><?= gi('refresh') ?></span>
+      <h2 class="g-tl__title" id="after-h">After your first order</h2>
       <p>For ongoing treatment, we keep in touch before each cycle. If your doctor changes your medicine or dose, send us the new prescription and we will update your supply.</p>
     </div>
-  </div>
-</section>
-
-<section class="g-sec g-bg-white" aria-labelledby="hosp-h">
-  <div class="g-wrap g-narrow">
-    <div class="g-card g-card--navy g-hiw-hosp">
-      <span class="g-card__icon"><?= gi('hospital') ?></span>
-      <h2 id="hosp-h">For hospitals, clinics and pharmacies</h2>
-      <p class="g-pg-mt">Send your requirement or product list. We reply with a quotation. After you confirm, we source, receive and supply the order, and keep a full record.</p>
-      <div class="g-btns">
-        <?= g_btn('Request a Quotation', request_url('quotation'), 'white') ?>
-      </div>
     </div>
   </div>
 </section>
 
-<?php g_cta_band(
-    'Start your request',
-    '',
-    [
-        ['Request a Medicine', request_url('medicine'), 'primary'],
-        ['Call Us', tel_url(), 'white', 'phone'],
-    ]
-); ?>
+<?php /* Hospitals banner, joined straight onto the "Start your request" banner
+         below: same layout and buttons, hospital photo behind a navy overlay
+         (guide.css "g-hiw-hosp"). */ ?>
+<section class="g-sec g-home-cta g-hiw-hosp" aria-labelledby="hosp-h">
+  <div class="g-wrap g-home-cta__inner">
+    <div class="g-home-cta__text">
+      <h2 id="hosp-h">For hospitals, clinics and pharmacies</h2>
+      <p>Send your requirement or product list. We reply with a quotation. After you confirm, we source, receive and supply the order, and keep a full record.</p>
+    </div>
+    <div class="g-home-cta__btns">
+      <a class="g-home-cta__btn g-home-cta__btn--white" href="<?= e(request_url('quotation')) ?>">Request a Quotation</a>
+    </div>
+  </div>
+</section>
+
+<?php /* Same CTA banner as the home and About pages (guide.css "g-home-cta"), with this page's text. */ ?>
+<section class="g-sec g-home-cta" aria-label="Start your request">
+  <div class="g-wrap g-home-cta__inner">
+    <div class="g-home-cta__text">
+      <h2>Start your request</h2>
+      <p>Send us the medicine name and prescription, or call us and our team will help.</p>
+    </div>
+    <div class="g-home-cta__btns">
+      <a class="g-home-cta__btn g-home-cta__btn--white" href="<?= e(request_url('medicine')) ?>">Request a Medicine</a>
+      <a class="g-home-cta__btn g-home-cta__btn--dark" href="<?= e(tel_url()) ?>"><?= gi('phone') ?><span>Call <?= e(cfg('phone')) ?></span></a>
+    </div>
+  </div>
+</section>
 
 <?php include INC . '/footer.php'; ?>

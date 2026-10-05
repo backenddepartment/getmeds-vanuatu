@@ -128,106 +128,114 @@ include INC . '/header.php';
   </div>
 </section>
 
-<section class="g-sec g-bg-white" id="cancer-care" aria-labelledby="cancer-h">
-  <div class="g-wrap g-split">
-    <div>
+<?php /* Cancer focus and the Getmeds group side by side, each with its own
+         eyebrow; all text in black (guide.css "About focus/group"). The group
+         column keeps id="getmeds-group" for the old /about/part-of-getmeds redirect. */ ?>
+<section class="g-sec g-bg-white g-about-focus" id="cancer-care" aria-label="Our focus and the Getmeds group">
+  <div class="g-wrap g-split g-split--top">
+    <div aria-labelledby="cancer-h">
+      <span class="g-label">Cancer Care</span>
       <h2 id="cancer-h">Our focus on cancer care</h2>
-      <p class="g-mt">Getmeds Vanuatu is the first chemotherapy pharmacy in the Pacific. Cancer medicines are our main specialisation.</p>
-      <div class="g-mt"><?php g_box('safety', 'We do not diagnose or treat cancer. That is the work of your doctor. Our job is to make sure the medicine your doctor prescribed is available, checked by a pharmacist and ready when you need it.'); ?></div>
+      <p class="g-mt">Getmeds Vanuatu is the first chemotherapy pharmacy in the Pacific. Cancer medicines are our main specialisation. We do not diagnose or treat cancer. That is the work of your doctor. Our job is to make sure the medicine your doctor prescribed is available, checked by a pharmacist and ready when you need it.</p>
     </div>
-    <div class="g-media">
-      <?= g_photo('shelves', 'A pharmacist in a white coat checking the label on a medicine bottle in front of shelves of stock.') ?>
-    </div>
-  </div>
-</section>
-
-<section class="g-sec g-bg-sky" id="named-patient" aria-labelledby="nps-h">
-  <div class="g-wrap g-read">
-    <h2 id="nps-h">Medicines for one named patient</h2>
-    <p class="g-mt">Some medicines are not normally available in Vanuatu. Through Named Patient Supply, we help arrange a medicine for one named patient, based on their doctor's prescription. We handle the sourcing and paperwork and keep the patient and doctor informed.</p>
-    <p class="g-mt"><a class="g-link-arrow" href="<?= e(url('/named-patient-supply')) ?>">How Named Patient Supply works <?= gi('arrow') ?></a></p>
-  </div>
-</section>
-
-<section class="g-sec g-bg-navy g-wave g-about-pacific" id="pacific" aria-labelledby="pac-h">
-  <div class="g-wrap g-split">
-    <div>
-      <h2 id="pac-h">Our place in the Pacific</h2>
-      <p class="g-mt">Many Pacific Islands face the same problems: medicines that run out, high import costs for one patient, and long delivery times. From our base in Port Vila, we are working to build better medicine access across the region.</p>
-      <ul class="g-chips g-mt" role="list">
-        <?php foreach (['Solomon Islands', 'Fiji', 'Samoa', 'Tonga', 'Tuvalu', 'Nauru'] as $c): ?>
-        <li class="g-chip g-chip--outline"><?= e($c) ?></li>
-        <?php endforeach; ?>
-      </ul>
-    </div>
-    <div class="g-about-map"><?= g_pacific_map('dark') ?></div>
-  </div>
-</section>
-
-<section class="g-sec g-bg-white" id="getmeds-group" aria-labelledby="group-h">
-  <div class="g-wrap g-read g-about-group">
-    <span class="g-card__icon"><?= gi('globe') ?></span>
-    <div>
+    <div id="getmeds-group" aria-labelledby="group-h">
+      <span class="g-label">Our Network</span>
       <h2 id="group-h">Part of the wider Getmeds group</h2>
       <p class="g-mt">Getmeds Vanuatu is part of the Getmeds group, which also operates in the Philippines and India. This connection helps us source a wide range of medicines for patients in the Pacific.</p>
     </div>
   </div>
 </section>
 
-<section class="g-sec g-bg-white" id="who-we-serve" aria-labelledby="serve-h">
+<?php /* Photo background (assets/img/firstsectionbg), words on the left clear
+         of the subject (guide.css "About named patient band"). */ ?>
+<section class="g-sec g-about-nps" id="named-patient" aria-labelledby="nps-h">
+  <div class="g-wrap"><div class="g-about-nps__text">
+    <h2 id="nps-h">Medicines for one named patient</h2>
+    <p class="g-mt">Some medicines are not normally available in Vanuatu. Through Named Patient Supply, we help arrange a medicine for one named patient, based on their doctor's prescription. We handle the sourcing and paperwork and keep the patient and doctor informed.</p>
+    <?php /* Same glass pill button as the home CTA banner. */ ?>
+    <p class="g-mt-lg"><a class="g-home-cta__btn" href="<?= e(url('/named-patient-supply')) ?>">How Named Patient Supply works</a></p>
+  </div></div>
+</section>
+
+<section class="g-sec g-bg-white g-about-pacific" id="pacific" aria-labelledby="pac-h">
+  <div class="g-wrap g-split g-split--top">
+    <div>
+      <h2 id="pac-h">Our place in the Pacific</h2>
+      <p class="g-mt">Many Pacific Islands face the same problems: medicines that run out, high import costs for one patient, and long delivery times. From our base in Port Vila, we are working to build better medicine access across the region.</p>
+      <ul class="g-chips g-mt" role="list">
+        <?php foreach (['Solomon Islands', 'Fiji', 'Samoa', 'Tonga', 'Tuvalu', 'Nauru'] as $c): ?>
+        <li class="g-chip"><?= e($c) ?></li>
+        <?php endforeach; ?>
+      </ul>
+    </div>
+    <picture class="g-about-map">
+      <source type="image/webp" srcset="<?= e(asset('/assets/img/vanuatumap-800.webp')) ?> 800w, <?= e(asset('/assets/img/vanuatumap-1200.webp')) ?> 1200w" sizes="(max-width: 47.99em) 100vw, 600px">
+      <img src="<?= e(asset('/assets/img/vanuatumap.png')) ?>" width="1480" height="1063" loading="lazy" decoding="async"
+           alt="Map of the Pacific with Vanuatu at the centre, linked to Solomon Islands, Nauru, Tuvalu, Samoa, Fiji and Tonga.">
+    </picture>
+  </div>
+</section>
+
+<section class="g-sec g-bg-white g-serve-sec" id="who-we-serve" aria-labelledby="serve-h">
   <div class="g-wrap">
-    <div class="g-head g-head--center g-serve-split">
+    <div class="g-head g-serve-split">
       <span class="g-label">Our Community</span>
       <h2 id="serve-h">Who we serve</h2>
     </div>
-    <ul class="g-grid g-grid--5 g-serve-row" role="list">
-      <li><?= gi('users') ?><span>Patients and families</span></li>
-      <li><?= gi('doctor') ?><span>Doctors and oncologists</span></li>
-      <li><?= gi('hospital') ?><span>Hospitals and clinics</span></li>
-      <li><?= gi('bottle') ?><span>Pharmacies</span></li>
-      <li><?= gi('plane') ?><span>Overseas treatment agencies</span></li>
+    <ul class="g-serve-row" role="list">
+      <li>Patients and families</li>
+      <li>Doctors and oncologists</li>
+      <li>Hospitals and clinics</li>
+      <li>Pharmacies</li>
+      <li>Overseas treatment agencies</li>
     </ul>
   </div>
 </section>
 
-<section class="g-sec g-bg-mint" id="team" aria-labelledby="team-h">
+<section class="g-sec g-bg-white" id="team" aria-labelledby="team-h">
   <div class="g-wrap">
-    <div class="g-about-col">
-      <h2 id="team-h">Our team</h2>
-      <p class="g-mt">Our team is based in Port Vila and knows the local community. A pharmacist checks every prescription we receive, and our staff follow each patient's order from enquiry to pick-up.</p>
+    <?php /* Same layout as "About Getmeds Vanuatu": eyebrow and title left, text right. */ ?>
+    <div class="g-split g-why-start">
+      <div class="g-why-start__intro">
+        <span class="g-label">Our People</span>
+        <h2 id="team-h">Our team</h2>
+      </div>
+      <p class="g-about-team__lead">Our team is based in Port Vila and knows the local community. A pharmacist checks every prescription we receive, and our staff follow each patient's order from enquiry to pick-up.</p>
     </div>
-    <figure class="g-media g-about-team g-mt-lg">
-      <?php /* Cropped from assets/img/vanuatutwo.jpg to drop its social-media banner. */ ?>
+    <?php /* assets/img/ourteam: the photo has an empty notch at its bottom right,
+             where the Connect With Us! button sits (guide.css "Our team"). */ ?>
+    <figure class="g-about-team g-mt-lg">
       <picture>
-        <source type="image/webp" srcset="<?= e(asset('/assets/img/team-vanuatu-800.webp')) ?> 800w, <?= e(asset('/assets/img/team-vanuatu-1600.webp')) ?> 1600w" sizes="(max-width: 1248px) 100vw, 1200px">
-        <img src="<?= e(asset('/assets/img/team-vanuatu-1600.jpg')) ?>" srcset="<?= e(asset('/assets/img/team-vanuatu-800.jpg')) ?> 800w, <?= e(asset('/assets/img/team-vanuatu-1600.jpg')) ?> 1600w" sizes="(max-width: 1248px) 100vw, 1200px"
-             width="1600" height="804" loading="lazy" decoding="async"
-             alt="Eight members of the Getmeds Vanuatu team standing together and smiling, most of them holding certificates.">
+        <source type="image/webp" srcset="<?= e(asset('/assets/img/ourteam-800.webp')) ?> 800w, <?= e(asset('/assets/img/ourteam-1600.webp')) ?> 1600w" sizes="(max-width: 1248px) 100vw, 1200px">
+        <img src="<?= e(asset('/assets/img/ourteam.png')) ?>"
+             width="1853" height="867" loading="lazy" decoding="async"
+             alt="Seven members of the Getmeds Vanuatu team standing together in an office, one holding a Getmeds Vanuatu-Pacific sign.">
       </picture>
-      <figcaption>The Getmeds Vanuatu team at our pharmacy in Golden Port, Port Vila.</figcaption>
+      <?php /* "What we want to achieve" sits in the photo's empty bottom-right notch. */ ?>
+      <div class="g-about-team__goals">
+        <h3 id="achieve-h">What we want to achieve</h3>
+        <ul role="list" aria-labelledby="achieve-h">
+          <li>Specialist medicines that are easier to get, wherever someone lives in the Pacific.</li>
+          <li>Fewer patients missing a treatment cycle.</li>
+          <li>Patients and doctors who always know what is available and what it costs.</li>
+        </ul>
+      </div>
     </figure>
   </div>
 </section>
 
-<section class="g-sec g-bg-white" id="achieve" aria-labelledby="achieve-h">
-  <div class="g-wrap">
-    <div class="g-head g-head--center"><h2 id="achieve-h">What we want to achieve</h2></div>
-    <ul class="g-dots g-about-dots" role="list">
-      <li>Specialist medicines that are easier to get, wherever someone lives in the Pacific.</li>
-      <li>Fewer patients missing a treatment cycle.</li>
-      <li>Patients and doctors who always know what is available and what it costs.</li>
-    </ul>
-  </div>
-</section>
-
-<section class="g-sec g-bg-white" id="safety" aria-labelledby="safe-h">
-  <div class="g-wrap">
-    <div class="g-head g-head--center"><h2 id="safe-h">How we keep medicines safe</h2></div>
-    <div class="g-grid g-grid--2">
-      <?= g_card('clipboard', 'Prescription first.', 'Every prescription medicine needs a valid prescription.') ?>
-      <?= g_card('pharmacist', 'Pharmacist-checked.', 'A pharmacist checks every order.') ?>
-      <?= g_card('shield', 'Only what was prescribed.', 'We supply exactly what your doctor prescribed.') ?>
-      <?= g_card('thermo', 'Stored correctly.', 'Medicines that need cold storage are kept between 2 and 8&nbsp;°C, monitored and logged.') ?>
+<?php /* Blue-gradient band: eyebrow and title left, the four safety points
+         (prescription, pharmacist check, only what was prescribed, cold storage)
+         as two paragraphs right (guide.css "About safety band"). */ ?>
+<section class="g-sec g-about-safe" id="safety" aria-labelledby="safe-h">
+  <div class="g-wrap g-split g-split--top">
+    <div>
+      <span class="g-label">Medicine Safety</span>
+      <h2 id="safe-h">How we keep medicines safe</h2>
+    </div>
+    <div class="g-about-safe__text">
+      <p>Every prescription medicine we supply needs a valid prescription from your doctor. A pharmacist checks each order before it is ready, and we supply exactly what your doctor prescribed, nothing more and nothing different.</p>
+      <p>Medicines that need cold storage are kept between 2 and 8&nbsp;°C, with the temperature monitored and logged, so every medicine reaches you in the condition it should.</p>
     </div>
   </div>
 </section>
@@ -246,13 +254,18 @@ include INC . '/header.php';
   </div>
 </section>
 
-<?php g_cta_band(
-    'Talk to us',
-    'Have a question about a medicine? Our team is here to help.',
-    [
-        ['Request a Medicine', request_url('medicine'), 'primary'],
-        ['Contact Us', url('/contact'), 'white'],
-    ]
-); ?>
+<?php /* Same CTA banner as the home page (guide.css "g-home-cta"), with this page's text. */ ?>
+<section class="g-sec g-home-cta" aria-label="Talk to us">
+  <div class="g-wrap g-home-cta__inner">
+    <div class="g-home-cta__text">
+      <h2>Talk to us</h2>
+      <p>Have a question about a medicine? Our team is here to help.</p>
+    </div>
+    <div class="g-home-cta__btns">
+      <a class="g-home-cta__btn g-home-cta__btn--white" href="<?= e(request_url('medicine')) ?>">Request a Medicine</a>
+      <a class="g-home-cta__btn g-home-cta__btn--dark" href="<?= e(tel_url()) ?>"><?= gi('phone') ?><span>Call <?= e(cfg('phone')) ?></span></a>
+    </div>
+  </div>
+</section>
 
 <?php include INC . '/footer.php'; ?>
