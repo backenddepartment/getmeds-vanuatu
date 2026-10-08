@@ -126,6 +126,44 @@ function news_items(): array
     return array_slice($items, 0, $limit);
 }
 
+/**
+ * One headline card, as shown on /articles and in the home page's Latest
+ * articles section. Links to the outlet's own page in a new tab.
+ */
+function news_card(array $n): void
+{
+    ?>
+      <a class="g-article-card" data-filter-item href="<?= e($n['link']) ?>" target="_blank" rel="noopener noreferrer nofollow">
+        <div class="g-article-card__media<?= $n['image'] === '' ? ' g-article-card__media--none' : '' ?>">
+          <?php /* The stand-in picture, behind the outlet's photo: it shows when
+                   an article has no photo, or its photo fails to load (guide.js
+                   removes a broken one). Resized copies of
+                   assets/img/articlenoimagefallback.png. */ ?>
+          <picture class="g-article-card__ph" aria-hidden="true">
+            <source type="image/webp" srcset="<?= e(asset('/assets/img/articlenoimagefallback-800.webp')) ?> 800w, <?= e(asset('/assets/img/articlenoimagefallback-1200.webp')) ?> 1200w" sizes="(max-width: 47.99em) 100vw, 400px">
+            <img src="<?= e(asset('/assets/img/articlenoimagefallback-800.jpg')) ?>" srcset="<?= e(asset('/assets/img/articlenoimagefallback-800.jpg')) ?> 800w, <?= e(asset('/assets/img/articlenoimagefallback-1200.jpg')) ?> 1200w" sizes="(max-width: 47.99em) 100vw, 400px" alt="" width="800" height="450" loading="lazy" decoding="async">
+          </picture>
+          <?php if ($n['image'] !== ''): ?>
+          <img src="<?= e($n['image']) ?>" alt="" width="800" height="500" loading="lazy" decoding="async" referrerpolicy="no-referrer" data-fallback>
+          <?php endif; ?>
+          <?php if ($n['category'] !== ''): ?><span class="g-article-card__badge"><?= e($n['category']) ?></span><?php endif; ?>
+          <?php if ($n['time']): ?><span class="g-article-card__tag"><?= e(gmdate('j M Y', $n['time'])) ?></span><?php endif; ?>
+        </div>
+        <h3 class="g-article-card__title"><?= e($n['title']) ?></h3>
+        <?php if ($n['excerpt'] !== ''): ?><p class="g-article-card__excerpt"><?= e($n['excerpt']) ?></p><?php endif; ?>
+        <div class="g-article-card__foot">
+          <?php /* The outlet's own icon. The globe behind it shows when the
+                   outlet has none, or its icon fails to load (guide.js). */ ?>
+          <span class="g-article-card__source">
+            <?php if (($n['icon'] ?? '') !== ''): ?><img class="g-article-card__favicon" src="<?= e($n['icon']) ?>" alt="" width="20" height="20" loading="lazy" decoding="async" referrerpolicy="no-referrer" data-fallback><?php endif; ?><?= gi('globe') ?>
+            <?= e($n['source'] !== '' ? $n['source'] : 'News outlet') ?>
+          </span>
+          <span class="g-article-card__go">Read article <?= gi('arrow') ?><span class="g-sr"> (opens in a new tab)</span></span>
+        </div>
+      </a>
+    <?php
+}
+
 function news_cache_read(): ?array
 {
     $file = news_cache_file();

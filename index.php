@@ -9,12 +9,15 @@
  * The hero keeps the owner's H1, lede and kicker (BUILD-BRIEF, owner decision 2).
  */
 require __DIR__ . '/includes/bootstrap.php';
+require INC . '/news.php';
 
 $page = [
     'title'     => 'Getmeds Vanuatu',
     'seo_title' => 'Getmeds Vanuatu — Cancer Medicines and Chemotherapy Pharmacy, Port Vila',
     'desc'      => 'Getmeds Vanuatu helps patients and doctors get cancer medicines and other important medicines in Vanuatu and across the Pacific. Send a prescription to start.',
 ];
+
+$news = array_slice(news_items(), 0, 3);
 
 include INC . '/head.php';
 include INC . '/header.php';
@@ -205,6 +208,29 @@ include INC . '/header.php';
     </div>
   </div>
 </section>
+
+<?php /* Latest articles: the three newest headlines from /articles, in the same
+         cards (includes/news.php). Left out when there are none to show. */ ?>
+<?php if ($news): ?>
+<section class="g-sec g-bg-white g-home-news" aria-labelledby="news-h">
+  <div class="g-wrap">
+    <div class="g-home-news__head">
+      <div>
+        <span class="g-label">Latest Articles</span>
+        <h2 id="news-h">Healthcare News</h2>
+      </div>
+      <div class="g-home-news__side">
+        <p>Recent headlines on medicines, cancer care and global health, from independent news outlets.</p>
+        <div class="g-btns"><?= g_btn('View all articles', url('/articles'), 'primary') ?></div>
+      </div>
+    </div>
+    <?php /* Headlines are the outlets' own words: left out of the Bislama swap. */ ?>
+    <div class="g-articles-grid g-mt" data-no-i18n>
+      <?php foreach ($news as $n) { news_card($n); } ?>
+    </div>
+  </div>
+</section>
+<?php endif; ?>
 
 <section class="g-sec g-bg-white g-home-faq" aria-labelledby="faq-h">
   <div class="g-wrap g-home-faq__split">

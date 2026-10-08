@@ -133,13 +133,33 @@ $cards = [
 $mapSrc = 'https://www.google.com/maps?q=Golden+Port,+Namba+2,+Port+Vila,+Vanuatu&output=embed';
 ?>
 
-<section class="g-hero g-hero--sky g-hero--short">
-  <div class="g-wrap">
-    <?php g_crumbs([['Home', '/'], ['Contact', null]]); ?>
-    <h1>Contact us</h1>
-    <p class="g-hero__lede">Tell us what you need. A member of our team will reply, and a pharmacist checks every medicine request. The phone is the fastest way to reach us.</p>
-    <div class="g-btns g-only-m">
-      <?= g_btn('Call ' . cfg('phone'), tel_url(), 'primary', 'phone') ?>
+<?php /* Full-screen photo hero, same size and style as the home page's hero
+         (the navbar sits over it, see-through: includes/header.php, guide.css
+         "Home hero"). The team photo is bright, so a bottom shade keeps the
+         white text readable (guide.css "Contact hero"). */ ?>
+<section class="g-homehero g-homehero--split g-contacthero" aria-labelledby="contact-hero-title">
+  <div class="g-homehero__media">
+    <picture>
+      <source type="image/webp" srcset="<?= e(asset('/assets/img/team-vanuatu-800.webp')) ?> 800w, <?= e(asset('/assets/img/team-vanuatu-1600.webp')) ?> 1600w" sizes="100vw">
+      <img src="<?= e(asset('/assets/img/team-vanuatu-1600.jpg')) ?>"
+           srcset="<?= e(asset('/assets/img/team-vanuatu-800.jpg')) ?> 800w, <?= e(asset('/assets/img/team-vanuatu-1600.jpg')) ?> 1600w" sizes="100vw"
+           width="1600" height="804" alt="" loading="eager" fetchpriority="high" decoding="async">
+    </picture>
+    <div class="g-homehero__scrim" aria-hidden="true"></div>
+  </div>
+  <div class="g-wrap g-homehero__inner">
+    <div class="g-homehero__row">
+      <h1 class="g-homehero__title" id="contact-hero-title">Talk to Our Team in Port Vila.</h1>
+      <div class="g-homehero__side">
+        <p class="g-homehero__lede">Tell us what you need. A member of our team will reply, and a pharmacist checks every medicine request. The phone is the fastest way to reach us.</p>
+        <div class="g-homehero__btns">
+          <a class="g-homehero__btn g-homehero__btn--fill" href="#send-an-enquiry">Send an Enquiry</a>
+          <a class="g-homehero__btn g-homehero__btn--line" href="<?= e(tel_url()) ?>">Call <?= e(cfg('phone')) ?></a>
+        </div>
+      </div>
+    </div>
+    <div class="g-homehero__foot">
+      <p class="g-homehero__kicker">Contact Us · <?= e(cfg('address_city')) ?>, <?= e(cfg('address_country')) ?></p>
     </div>
   </div>
 </section>

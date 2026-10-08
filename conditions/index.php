@@ -37,7 +37,7 @@ include INC . '/head.php';
 include INC . '/header.php';
 ?>
 
-<section class="g-hero g-hero--sky g-hero--short">
+<section class="g-hero g-bg-white g-conds-hero">
   <div class="g-wrap">
     <?php g_crumbs([['Home', '/'], ['Conditions', null]]); ?>
     <h1>Medicine access by condition</h1>

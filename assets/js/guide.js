@@ -255,11 +255,11 @@
     show(1, false);
   });
 
-  /* 7d. Arrow chain: the arrows slide in, one after another, when 40% of the
-         chain is on screen, and reset once it has left the screen so they
-         play again next time. Without JS, or with reduced motion, they simply
-         show. */
-  $$('.g-chain').forEach(function (chain) {
+  /* 7d. Arrow chain, and the oncology treatment cycle: the parts come in,
+         one after another, when 40% of it is on screen, and reset once it
+         has left the screen so they play again next time. Without JS, or
+         with reduced motion, they simply show. */
+  $$('.g-chain, .g-onc-cycle').forEach(function (chain) {
     if (!('IntersectionObserver' in window)) { return; }
     if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) { return; }
     var START_AT = 0.4;

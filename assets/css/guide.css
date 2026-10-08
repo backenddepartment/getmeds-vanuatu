@@ -326,13 +326,13 @@ body {
    click alike); on the see-through pages the bar turns solid for that long. */
 .g-nav__drop__intro { flex: 0 0 300px; }
 .g .g-nav__drop__intro h2 {
-  font-family: var(--g-head); font-weight: 600; font-size: 26px; margin: 0 0 10px;
+  font-family: var(--g-head); font-weight: 600; font-size: 22px; margin: 0 0 10px;
   color: #1D9FDA;
   background: linear-gradient(to bottom, #1D9FDA 0%, #1D9FDA 55%, #4DB6E6 100%);
   -webkit-background-clip: text; background-clip: text;
   -webkit-text-fill-color: transparent;
 }
-.g .g-nav__drop__intro p { font-size: 16px; line-height: 1.6; color: var(--g-muted); margin: 0; max-width: none; }
+.g .g-nav__drop__intro p { font-size: 14.5px; line-height: 1.6; color: var(--g-muted); margin: 0; max-width: none; }
 .g-nav__drop__links { flex: 1; display: flex; gap: 8px; list-style: none; margin: 0; padding: 0; }
 .g-nav__drop__links li { flex: 1; }
 .g-nav__drop a {
@@ -345,8 +345,8 @@ body {
 /* Mega menu (desktop): bigger titles and text. */
 @media (min-width: 80em) {
   /* Title and text sit tight together; the label keeps 4px for its hover line. */
-  .g .g-nav__drop--mega .g-nav__drop__label { font-size: 20px; line-height: 1.25; padding-bottom: 4px; }
-  .g .g-nav__drop--mega .g-nav__drop__desc { margin-top: 0; font-size: 16px; line-height: 1.55; }
+  .g .g-nav__drop--mega .g-nav__drop__label { font-size: 17px; line-height: 1.25; padding-bottom: 4px; }
+  .g .g-nav__drop--mega .g-nav__drop__desc { margin-top: 0; font-size: 14.5px; line-height: 1.55; }
   .g .g-nav__drop__intro h2 { line-height: 1.2; margin-bottom: 4px; }
 }
 /* Mega menu links: on hover the title and description turn blue and a
@@ -817,6 +817,24 @@ a.g-chip:hover { border-color: var(--g-blue); }
 .g-az span { display: inline-flex; width: 34px; height: 34px; align-items: center; justify-content: center; color: #B0BCC7; font-size: 15px; }
 @media (max-width: 63.99em) { .g-az { display: none; } }
 
+/* Conditions list hero: plain white, black title as on the other page heroes,
+   a quiet search field and borderless A–Z, one hairline under it all. */
+.g-hero.g-conds-hero { padding-top: 32px; padding-bottom: 32px; border-bottom: 1px solid var(--g-line); }
+.g .g-conds-hero .g-crumbs { font-size: 14px; color: var(--g-muted); }
+.g .g-conds-hero .g-crumbs a { color: var(--g-muted); }
+.g .g-conds-hero .g-crumbs [aria-current] { color: #1D9FDA; }
+.g .g-conds-hero h1 { color: #111; font-size: clamp(34px, 3.4vw, 52px); line-height: 1.1; font-weight: 600; }
+.g .g-conds-hero .g-hero__lede { margin-top: 14px; font-size: 18px; line-height: 1.65; color: var(--g-muted); max-width: 70ch; }
+.g-conds-hero .g-bigsearch { margin-top: 28px; }
+.g-conds-hero .g-bigsearch input { height: 52px; border: 1px solid var(--g-line); background: #F7F9FB; font-size: 16px; transition: border-color .15s, background-color .15s, box-shadow .15s; }
+.g-conds-hero .g-bigsearch input:focus { outline: none; background: #fff; border-color: #1D9FDA; box-shadow: 0 0 0 4px rgba(29, 159, 218, .15); }
+.g-conds-hero .g-bigsearch .g-i { top: 14px; }
+.g-conds-hero .g-az { gap: 2px; margin-top: 20px; }
+.g-conds-hero .g-az a { width: 32px; height: 32px; border: 0; background: transparent; color: var(--g-navy); font-size: 14px; transition: background-color .15s, color .15s; }
+.g-conds-hero .g-az a:hover, .g-conds-hero .g-az a:focus-visible { background: var(--g-sky); color: var(--g-blue-text); }
+.g-conds-hero .g-az span { width: 32px; height: 32px; font-size: 14px; color: #C9D2DA; }
+@media (prefers-reduced-motion: reduce) { .g-conds-hero .g-bigsearch input, .g-conds-hero .g-az a { transition: none; } }
+
 .g-cgroups { columns: 3; column-gap: 40px; }
 .g-cgroup { break-inside: avoid; margin-bottom: 32px; }
 .g-cgroup h2 { font-size: 22px; display: flex; gap: 10px; align-items: center; }
@@ -1198,12 +1216,27 @@ a.g-chip:hover { border-color: var(--g-blue); }
   .g-serve-row { flex-wrap: wrap; }
   .g .g-serve-row li { flex: 0 1 auto; padding: 22px 24px; }
 }
-/* Less space between More affordable access and this split. */
-.g-split-sec { padding-top: 56px; }
-@media (max-width: 47.99em) { .g-split-sec { padding-top: 40px; } }
+/* The two split images run edge to edge and sit flush under the More
+   affordable access photo: no top padding, no side gutter, square corners. */
+.g-split-sec { padding-top: 0; padding-bottom: 56px; }
+@media (max-width: 47.99em) { .g-split-sec { padding-bottom: 40px; } }
+.g-split-sec > .g-wrap { max-width: none; padding-inline: 0; }
 
-.g-home-split { align-items: start; }
-.g-home-split__img { display: block; width: 100%; height: auto; border-radius: 8px; }
+.g-home-split { align-items: start; gap: 0; }
+.g-home-split__img { display: block; width: 100%; height: auto; }
+
+/* Home page's Latest articles: eyebrow and title on the left (same sizes as
+   What we supply and the other home sections), a short line and a small link
+   to /articles on the right, then three headline cards (.g-articles-grid).
+   Sits close under the split images: no top padding of its own. */
+.g-home-news { padding-top: 0; }
+.g-home-news__head { display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 16px 48px; }
+.g .g-home-news__head .g-label { display: block; text-transform: none; letter-spacing: 0; font-size: 15px; color: #1D9FDA; }
+.g .g-home-news__head h2 { margin-top: 12px; color: #111; font-size: clamp(38px, 4vw, 60px); line-height: 1.1; }
+.g-home-news__side { max-width: 360px; }
+.g .g-home-news__side p { margin: 0; font-size: 15px; line-height: 1.6; color: var(--g-muted); }
+.g .g-home-news__side .g-btns { margin-top: 14px; }
+.g .g-home-news__side .g-btn { min-height: 40px; padding: 0 18px; font-size: 14px; width: auto; }
 
 /* Home page's FAQ preview: eyebrow, big bold title and two buttons on the
    left, a short accordion of real FAQ questions on the right. */
@@ -1522,9 +1555,17 @@ ul.g-chips { padding-left: 0; }
 
 /* Oncology: pink-tinted hero, Care Pink accents, sticky side menu rail. */
 /* Plain white hero (no gradient or wave); the pill tag in the site blue. */
-.g-onc-hero { background: #fff; }
-.g-onc-hero .g-pilltag { color: #1D9FDA; }
-.g-onc-hero .g-hero__media img { object-position: 50% 20%; }
+.g-onc-hero { background: #fff; overflow-x: clip; }
+.g-hero.g-onc-hero { padding-top: 24px; padding-bottom: 40px; }
+.g-onc-hero .g-split { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 48px; align-items: start; }
+.g-onc-hero__media img { aspect-ratio: auto; object-fit: contain; border-radius: 0; max-width: 560px; margin-inline: auto; }
+@media (max-width: 63.99em) {
+  .g-onc-hero .g-split { grid-template-columns: 1fr; }
+  .g-onc-hero__media img { aspect-ratio: auto; max-width: 480px; }
+}
+/* Eyebrow and title as in the Named Patient Supply hero (.g-nps-hero). */
+.g .g-onc-hero .g-label { display: block; text-transform: none; letter-spacing: 0; font-size: 15px; color: #1D9FDA; }
+.g .g-onc-hero h1 { margin-top: 12px; color: #111; font-size: clamp(38px, 4vw, 60px); line-height: 1.1; font-weight: 600; }
 .g-onc-h::before { content: ""; display: block; width: 40px; height: 3px; border-radius: 2px; background: var(--g-pink); margin-bottom: 14px; }
 .g-onc-cards .g-card__icon { background: #FDEEF4; color: var(--g-pink); }
 .g-onc-cards .g-card--compact h3 { font-size: 19px; }
@@ -1536,29 +1577,104 @@ ul.g-chips { padding-left: 0; }
 }
 .g-onc__rail .g-sidemenu { pointer-events: auto; background: rgba(255,255,255,.92); border-radius: 12px; padding: 8px 8px 8px 0; }
 .g-onc [id] { scroll-margin-top: 90px; }
-.g-onc-read { max-width: 760px; }
 .g-onc-cycle svg { display: block; width: 100%; max-width: 380px; height: auto; margin-inline: auto; }
+.g #local-access .g-stack p { max-width: none; }
+
+/* Treatment cycle build (guide.js 7d): nodes pop in and arrows swing along
+   the ring in order, each part waiting its --d. Shown as-is without JS. */
+.g-cyc__part { transform-box: fill-box; transform-origin: center; }
+.g-cyc__arrow { transform-box: view-box; transform-origin: 180px 180px; }
+.g-onc-cycle.is-armed .g-cyc__part { opacity: 0; transition: none; }
+.g-onc-cycle.is-armed .g-cyc__node,
+.g-onc-cycle.is-armed .g-cyc__badge { transform: scale(.4); }
+.g-onc-cycle.is-armed .g-cyc__arrow { transform: rotate(-30deg); }
+.g-onc-cycle.is-armed .g-cyc__centre { transform: translateY(8px); }
+.g-onc-cycle.is-shown .g-cyc__part {
+  opacity: 1; transform: none;
+  transition: opacity .45s ease var(--d), transform .6s cubic-bezier(.34, 1.56, .64, 1) var(--d);
+}
+.g-onc-cycle.is-shown .g-cyc__arrow { transition-timing-function: ease, cubic-bezier(.22, 1, .36, 1); }
+.g-onc-cycle.is-shown .g-cyc__badge { animation: g-cyc-shake .5s ease calc(var(--d) + .6s) 1; }
+@keyframes g-cyc-shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-5px); } 40% { transform: translateX(5px); }
+  60% { transform: translateX(-3px); } 80% { transform: translateX(3px); }
+}
+
+/* Cancer ribbon strip under the oncology hero: the list is printed twice and
+   the track slides by one copy's width (-50%), so the loop has no seam. */
+.g-onc-ribbons {
+  overflow: hidden; background: #fff; padding-block: 24px;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+          mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+}
+.g-onc-ribbons__track { display: flex; width: max-content; animation: g-onc-ribbons 60s linear infinite; }
+.g-onc-ribbons:hover .g-onc-ribbons__track { animation-play-state: paused; }
+.g .g-onc-ribbons__list { display: flex; align-items: flex-end; gap: 48px; margin: 0; padding: 0 24px; list-style: none; }
+.g-onc-ribbons__list li { flex: none; }
+.g-onc-ribbons__list img { display: block; height: 150px; width: auto; }
+@keyframes g-onc-ribbons { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@media (max-width: 47.99em) {
+  .g .g-onc-ribbons__list { gap: 32px; padding: 0 16px; }
+  .g-onc-ribbons__list img { height: 110px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .g-onc-ribbons { overflow-x: auto; -webkit-mask-image: none; mask-image: none; }
+  .g-onc-ribbons__track { animation: none; }
+  .g-onc-ribbons__list[aria-hidden] { display: none; }
+}
 .g-onc-pro, .g-onc-pat { padding: 40px; }
 .g-onc-pro h2, .g-onc-pat h2 { font-size: 28px; }
 .g-onc-pat .g-card__icon { background: #FDEEF4; color: var(--g-pink); }
 .g-onc-flush + .g-onc-flush { padding-top: 0; }
+/* Patients picture: full width, square corners, no space below it, so How we
+   supply cancer medicines sits straight under it. */
+.g-onc-patimg { padding-top: 0; padding-bottom: 0; }
+/* Why local access matters: blue eyebrow and black title, same sizes as
+   How we supply cancer medicines. */
+/* Less space below it, so Our Range / Types of cancer medicine sits close,
+   and less space between that heading row and its gradient band. */
+.g-onc #local-access.g-sec { padding-top: 16px; padding-bottom: 32px; }
+.g-onc #local-access .g-split { align-items: start; }
+.g-sec.g-nps-how-head#types { padding-bottom: 24px; }
+.g .g-onc #local-access .g-label { display: block; text-transform: none; letter-spacing: 0; font-size: 15px; color: #1D9FDA; }
+.g .g-onc #local-access h2 { margin: 12px 0 0; color: #000; font-size: clamp(28px, 2.6vw, 38px); line-height: 1.15; }
+/* Types of cancer medicine: the NPS how band, with an icon in each glassy
+   circle in place of a step number. */
+.g-onc-types .g-step__num .g-i { width: 22px; height: 22px; }
+/* The Important note sits close under the injectable / treatment cycle columns. */
+.g-sec.g-onc-treat { padding-bottom: 40px; }
+/* The Important note here is a light tint of the site blue, not amber. */
+.g-onc-patimg .g-box--safety { background: #E8F5FC; border-left-color: #1D9FDA; }
+.g-onc-patimg .g-box--safety > .g-i { color: #1D9FDA; }
+.g-onc-patimg__link { display: block; margin-top: 32px; }
+.g-onc-patimg__link img { display: block; width: 100%; height: auto; }
+
+/* How we supply cancer medicines: eyebrow, title and the pharmacist line at
+   the same sizes as Named Patient Supply's "The Basics" (.g-nps-col); the
+   four routes stacked on the right as solid site-blue cards with white text
+   and plain white icons (no shadow, no icon tile). */
+.g-onc-supply__split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 56px; align-items: start; }
+.g .g-onc-supply__intro .g-label { display: block; text-transform: none; letter-spacing: 0; font-size: 15px; color: #1D9FDA; }
+.g .g-onc-supply__intro h2 { margin: 12px 0 0; color: #000; font-size: clamp(28px, 2.6vw, 38px); line-height: 1.15; }
+.g .g-onc-supply__intro p { margin-top: 16px; max-width: none; color: #000; font-size: 17px; line-height: 1.7; }
+.g-onc-supply__panel { display: grid; gap: 10px; }
+.g .g-onc-supply__panel .g-card {
+  display: grid; grid-template-columns: 26px 1fr; column-gap: 14px; align-items: start;
+  padding: 14px 18px; border-radius: 14px; background: #1D9FDA; border: 0; box-shadow: none;
+}
+.g .g-onc-supply__panel .g-card__icon { grid-row: span 2; width: 26px; height: 26px; margin: 0; background: none; border-radius: 0; color: #fff; }
+.g .g-onc-supply__panel .g-card__icon .g-i { width: 26px; height: 26px; }
+.g .g-onc-supply__panel .g-card h3 { margin: 0 0 2px; font-size: 17px; line-height: 1.3; color: #fff; }
+.g .g-onc-supply__panel .g-card p { margin: 0; font-size: 15px; line-height: 1.5; color: #fff; }
+@media (max-width: 63.99em) {
+  .g-onc-supply__split { grid-template-columns: 1fr; gap: 32px; }
+}
 .g-onc-pacific { display: grid; grid-template-columns: 48px 1fr; gap: 20px; align-items: start; }
-.g-onc-cal { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; position: relative; }
-.g-onc-cal__m { background: #fff; border: 1px solid var(--g-line); border-radius: 12px; box-shadow: var(--g-shadow); overflow: hidden; text-align: center; }
-.g-onc-cal__h { display: block; background: var(--g-navy); color: #fff; font-family: var(--g-head); font-weight: 600; font-size: 15px; padding: 6px 4px; border-top: 4px solid var(--g-pink); }
-.g-onc-cal::before { content: ""; position: absolute; left: 8%; right: 8%; top: 50%; border-top: 2px dotted var(--g-green); z-index: 0; }
-.g-onc-cal__m { position: relative; z-index: 1; }
-.g-onc-cal__grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; padding: 12px 10px 6px; }
-.g-onc-cal__grid i { aspect-ratio: 1; border-radius: 3px; background: var(--g-sky); display: flex; align-items: center; justify-content: center; }
-.g-onc-cal__grid i.is-pick { background: var(--g-green-btn); color: #fff; }
-.g-onc-cal__grid i .g-i { width: 80%; height: 80%; stroke-width: 3; }
-.g-onc-cal__f { display: block; font-size: 14px; font-weight: 600; color: var(--g-green-btn); padding: 4px 4px 8px; }
 @media (max-width: 63.99em) {
   .g-onc__sp, .g-onc__rail { display: none; }
 }
 @media (max-width: 47.99em) {
-  .g-onc-cal { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .g-onc-cal::before { display: none; }
   .g-onc-pro, .g-onc-pat { padding: 28px 20px; }
   .g-onc-pro h2, .g-onc-pat h2 { font-size: 24px; }
 }
@@ -1845,6 +1961,19 @@ ul.g-chips { padding-left: 0; }
   .g-homehero .g-homehero__inner { padding-top: 120px; }
 }
 .js .g-header[data-overlay]:not(.is-compact):not(.is-open):not(.g-header--menu-open)::before { background: transparent; }
+
+/* Contact hero: the team photo, faces kept in view, with a navy shade rising
+   from the bottom under the white headline and buttons. */
+.g-contacthero .g-homehero__media picture { display: contents; }
+.g-contacthero .g-homehero__media img { object-position: 50% 25%; }
+.g-contacthero .g-homehero__media::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(to top, rgba(8, 22, 40, .88) 0%, rgba(8, 22, 40, .6) 35%, rgba(8, 22, 40, .15) 65%, rgba(8, 22, 40, 0) 100%);
+}
+@media (max-width: 47.99em) {
+  .g-contacthero .g-homehero__media img { object-position: 50% 30%; }
+  .g-contacthero .g-homehero__media::after { background: linear-gradient(to top, rgba(8, 22, 40, .9) 0%, rgba(8, 22, 40, .7) 50%, rgba(8, 22, 40, .2) 80%, rgba(8, 22, 40, 0) 100%); }
+}
 
 /* Home page variant: content at the bottom of the photo. Big headline left,
    description and buttons right, then a thin white rule with the kicker. */
@@ -2203,7 +2332,7 @@ ul.g-chips { padding-left: 0; }
    photo sits behind the same padding-block the mint background used). */
 .g-aff-sec {
   background-image:
-    linear-gradient(rgba(255,255,255,.78), rgba(255,255,255,.78)),
+    linear-gradient(rgba(255,255,255,.62), rgba(255,255,255,.62)),
     url('../img/accessible.png');
   background-size: cover;
   background-position: center;

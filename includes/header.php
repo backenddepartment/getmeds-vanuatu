@@ -14,10 +14,10 @@
  * Opens <main>; includes/footer.php closes it.
  */
 ?>
-<?php /* Home, About and Articles pages: the header sits see-through over the
-         hero photo. guide.js turns data-overlay into the class, so without JS
-         it stays solid. */
-$homeOverlay = in_array(current_path(), ['/', '/about', '/articles'], true); ?>
+<?php /* Home, About, Articles and Contact pages: the header sits see-through
+         over the hero photo. guide.js turns data-overlay into the class, so
+         without JS it stays solid. */
+$homeOverlay = in_array(current_path(), ['/', '/about', '/articles', '/contact'], true); ?>
 
 <header class="g-header" id="g-header"<?= $homeOverlay ? ' data-overlay' : '' ?>>
   <div class="g-wrap g-header__inner">

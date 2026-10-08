@@ -21,7 +21,7 @@ include INC . '/header.php';
 <section class="g-hero g-bg-white g-onc-hero">
   <div class="g-wrap g-split g-split--7-5">
     <div>
-      <span class="g-pilltag">First chemotherapy pharmacy in the Pacific</span>
+      <span class="g-label">First chemotherapy pharmacy in the Pacific</span>
       <h1>Cancer and chemotherapy medicines in Vanuatu</h1>
       <p class="g-hero__lede">Getmeds Vanuatu is the first chemotherapy pharmacy in the Pacific. We supply cancer medicines in Port Vila, so patients can continue their treatment closer to home.</p>
       <div class="g-btns">
@@ -29,156 +29,185 @@ include INC . '/header.php';
         <?= g_btn('Healthcare Professional Enquiry', request_url('professional'), 'white') ?>
       </div>
     </div>
-    <div class="g-hero__media">
-      <?php /* Cropped from assets/img/vanuatutwo.jpg (real Getmeds Vanuatu photo). */ ?>
+    <div class="g-hero__media g-onc-hero__media">
       <picture>
-        <source type="image/webp" srcset="<?= e(asset('/assets/img/oncology-hero-720.webp')) ?>">
-        <img src="<?= e(asset('/assets/img/oncology-hero-720.jpg')) ?>" width="720" height="900" loading="eager" decoding="async"
-             alt="Three smiling women from Port Vila holding their certificates of completion.">
+        <source type="image/webp" srcset="<?= e(asset('/assets/img/oncology-ribbon-hero-cutout-800.webp')) ?> 800w, <?= e(asset('/assets/img/oncology-ribbon-hero-cutout-1400.webp')) ?> 1400w" sizes="(min-width: 64em) 560px, 480px">
+        <img src="<?= e(asset('/assets/img/oncology-ribbon-hero-cutout.png')) ?>" width="1436" height="991" alt="The islands of Vanuatu in blue beside a blue cancer awareness ribbon." decoding="async" fetchpriority="high">
       </picture>
     </div>
+  </div>
+</section>
+
+<?php
+$ribbons = [
+    'breast' => 'Breast', 'lung' => 'Lung', 'prostate' => 'Prostate', 'colorectal' => 'Colorectal',
+    'leukemia' => 'Leukemia', 'lymphoma' => 'Lymphoma', 'multiple-myeloma' => 'Multiple myeloma',
+    'ovarian' => 'Ovarian', 'liver' => 'Liver', 'pancreatic' => 'Pancreatic', 'brain' => 'Brain',
+    'childhood' => 'Childhood', 'stomach' => 'Stomach', 'cervical' => 'Cervical',
+    'head-neck' => 'Head & Neck', 'skin' => 'Skin', 'testicular' => 'Testicular',
+    'uterine' => 'Uterine', 'melanoma' => 'Melanoma', 'thyroid' => 'Thyroid',
+];
+?>
+<section class="g-onc-ribbons" aria-label="Cancer types">
+  <div class="g-onc-ribbons__track">
+    <?php foreach ([false, true] as $copy): ?>
+      <ul class="g-onc-ribbons__list"<?= $copy ? ' aria-hidden="true"' : '' ?>>
+        <?php foreach ($ribbons as $file => $name):
+          [$w, $h] = getimagesize(APP_ROOT . "/assets/img/ribbons/$file.png"); ?>
+          <li>
+            <picture>
+              <source srcset="<?= e(asset("/assets/img/ribbons/$file.webp")) ?>" type="image/webp">
+              <img src="<?= e(asset("/assets/img/ribbons/$file.png")) ?>" width="<?= $w ?>" height="<?= $h ?>" alt="<?= $copy ? '' : e($name) ?>" loading="lazy" decoding="async">
+            </picture>
+          </li>
+        <?php endforeach; ?>
+      </ul>
+    <?php endforeach; ?>
   </div>
 </section>
 
 <div class="g-onc">
   <section class="g-sec g-bg-white" id="local-access" aria-labelledby="local-h">
     <div class="g-wrap">
-      <div class="g-split">
+      <div class="g-split g-split--7-5">
         <div>
-          <h2 id="local-h" class="g-onc-h">Why local access matters</h2>
+          <span class="g-label">Closer to Home</span>
+          <h2 id="local-h">Why local access matters</h2>
           <div class="g-stack g-mt">
-            <p>Cancer treatment is often given in cycles. Each cycle needs the right medicine at the right time.</p>
-            <p>In the past, many patients in Vanuatu travelled overseas for treatment. When they came home, the medicine for their next cycle was often not available. Some waited for a traveller to bring it. Some missed cycles.</p>
-            <p>Having cancer medicines in Vanuatu helps patients stay on the schedule their doctor planned.</p>
+            <p>Cancer treatment is often given in cycles, and each cycle needs the right medicine at the right time for the treatment to work as planned. In the past, many patients in Vanuatu travelled overseas for treatment, only to find that the medicine for their next cycle was not available when they came home. Some had to wait for a traveller to bring it, and some missed cycles altogether, which can make treatment less effective. Having cancer medicines here in Vanuatu means patients can continue their care closer to family and stay on the schedule their doctor planned.</p>
           </div>
         </div>
         <div class="g-onc-cycle">
           <svg viewBox="0 0 360 380" role="img" aria-label="A treatment cycle: Cycle 1, Cycle 2, Cycle 3 and Cycle 4 in a circle. Cycle 3 is greyed out and labelled missed cycle.">
             <defs>
-              <marker id="ah-g" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z" fill="#6BB33F"/></marker>
+              <marker id="ah-g" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z" fill="#1D9FDA"/></marker>
               <marker id="ah-x" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z" fill="#9AA7B3"/></marker>
             </defs>
-            <circle cx="180" cy="180" r="120" fill="none" stroke="#EEF7F2" stroke-width="18"/>
-            <path d="M217.1 65.9 A120 120 0 0 1 294.1 142.9" fill="none" stroke="#6BB33F" stroke-width="3" marker-end="url(#ah-g)"/>
-            <path d="M294.1 217.1 A120 120 0 0 1 217.1 294.1" fill="none" stroke="#9AA7B3" stroke-width="3" stroke-dasharray="5 6" marker-end="url(#ah-x)"/>
-            <path d="M142.9 294.1 A120 120 0 0 1 65.9 217.1" fill="none" stroke="#9AA7B3" stroke-width="3" stroke-dasharray="5 6" marker-end="url(#ah-x)"/>
-            <path d="M65.9 142.9 A120 120 0 0 1 142.9 65.9" fill="none" stroke="#6BB33F" stroke-width="3" marker-end="url(#ah-g)"/>
-            <text x="180" y="174" text-anchor="middle" font-family="Poppins, sans-serif" font-size="17" font-weight="600" fill="#0B2A5B">Treatment</text>
-            <text x="180" y="196" text-anchor="middle" font-family="Poppins, sans-serif" font-size="17" font-weight="600" fill="#0B2A5B">cycle</text>
-            <?php foreach ([[1, 180, 60], [2, 300, 180], [4, 60, 180]] as [$n, $x, $y]): ?>
-            <circle cx="<?= $x ?>" cy="<?= $y ?>" r="36" fill="#3D7F27"/>
-            <text x="<?= $x ?>" y="<?= $y - 4 ?>" text-anchor="middle" font-family="Poppins, sans-serif" font-size="12" font-weight="600" fill="#fff">Cycle</text>
-            <text x="<?= $x ?>" y="<?= $y + 17 ?>" text-anchor="middle" font-family="Poppins, sans-serif" font-size="22" font-weight="700" fill="#fff"><?= $n ?></text>
+            <g class="g-cyc__part g-cyc__arrow" style="--d:.6s"><path d="M217.1 65.9 A120 120 0 0 1 294.1 142.9" fill="none" stroke="#1D9FDA" stroke-width="3" marker-end="url(#ah-g)"/></g>
+            <g class="g-cyc__part g-cyc__arrow" style="--d:1.4s"><path d="M294.1 217.1 A120 120 0 0 1 217.1 294.1" fill="none" stroke="#9AA7B3" stroke-width="3" stroke-dasharray="5 6" marker-end="url(#ah-x)"/></g>
+            <g class="g-cyc__part g-cyc__arrow" style="--d:2.6s"><path d="M142.9 294.1 A120 120 0 0 1 65.9 217.1" fill="none" stroke="#9AA7B3" stroke-width="3" stroke-dasharray="5 6" marker-end="url(#ah-x)"/></g>
+            <g class="g-cyc__part g-cyc__arrow" style="--d:3.4s"><path d="M65.9 142.9 A120 120 0 0 1 142.9 65.9" fill="none" stroke="#1D9FDA" stroke-width="3" marker-end="url(#ah-g)"/></g>
+            <g class="g-cyc__part g-cyc__centre" style="--d:0s">
+              <text x="180" y="174" text-anchor="middle" font-family="Poppins, sans-serif" font-size="17" font-weight="600" fill="#0B2A5B">Treatment</text>
+              <text x="180" y="196" text-anchor="middle" font-family="Poppins, sans-serif" font-size="17" font-weight="600" fill="#0B2A5B">cycle</text>
+            </g>
+            <?php foreach ([[1, 180, 60, '.2s'], [2, 300, 180, '1s'], [4, 60, 180, '3s']] as [$n, $x, $y, $d]): ?>
+            <g class="g-cyc__part g-cyc__node" style="--d:<?= $d ?>">
+              <circle cx="<?= $x ?>" cy="<?= $y ?>" r="36" fill="#1D9FDA"/>
+              <text x="<?= $x ?>" y="<?= $y - 4 ?>" text-anchor="middle" font-family="Poppins, sans-serif" font-size="12" font-weight="600" fill="#fff">Cycle</text>
+              <text x="<?= $x ?>" y="<?= $y + 17 ?>" text-anchor="middle" font-family="Poppins, sans-serif" font-size="22" font-weight="700" fill="#fff"><?= $n ?></text>
+            </g>
             <?php endforeach; ?>
-            <circle cx="180" cy="300" r="36" fill="#EEF1F4" stroke="#9AA7B3" stroke-width="2" stroke-dasharray="5 5"/>
-            <text x="180" y="296" text-anchor="middle" font-family="Poppins, sans-serif" font-size="12" font-weight="600" fill="#5A6B7B">Cycle</text>
-            <text x="180" y="317" text-anchor="middle" font-family="Poppins, sans-serif" font-size="22" font-weight="700" fill="#5A6B7B">3</text>
-            <rect x="122" y="344" width="116" height="28" rx="14" fill="#FDEEF4" stroke="#E8508A" stroke-width="1.5"/>
-            <text x="180" y="363" text-anchor="middle" font-family="Poppins, sans-serif" font-size="14" font-weight="600" fill="#B8245C">Missed cycle</text>
+            <g class="g-cyc__part g-cyc__node g-cyc__node--missed" style="--d:1.8s">
+              <circle cx="180" cy="300" r="36" fill="#EEF1F4" stroke="#9AA7B3" stroke-width="2" stroke-dasharray="5 5"/>
+              <text x="180" y="296" text-anchor="middle" font-family="Poppins, sans-serif" font-size="12" font-weight="600" fill="#5A6B7B">Cycle</text>
+              <text x="180" y="317" text-anchor="middle" font-family="Poppins, sans-serif" font-size="22" font-weight="700" fill="#5A6B7B">3</text>
+            </g>
+            <g class="g-cyc__part g-cyc__badge" style="--d:2.2s">
+              <rect x="136" y="346" width="88" height="22" rx="11" fill="#D93A3F"/>
+              <text x="180" y="361" text-anchor="middle" font-family="Poppins, sans-serif" font-size="11" font-weight="600" fill="#fff">Missed cycle</text>
+            </g>
           </svg>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="g-sec g-bg-mint" id="supply" aria-labelledby="supply-h">
-    <div class="g-wrap">
-      <div>
-        <div class="g-head"><h2 id="supply-h" class="g-onc-h">How we supply cancer medicines</h2></div>
-        <div class="g-grid g-grid--4 g-onc-cards">
-          <?= g_card('shelf', 'In stock', 'The medicine is kept at our pharmacy in Port Vila.') ?>
-          <?= g_card('plane', 'For import', 'We order the medicine for you from our suppliers.') ?>
-          <?= g_card('search', 'Sourced on request', 'We search for a medicine that is hard to find or often out of stock.') ?>
-          <?= g_card('user-tag', 'Named Patient Supply', 'We help arrange a medicine that is not normally available in Vanuatu, for one named patient.') ?>
-        </div>
-        <p class="g-mt-lg g-lead">Our pharmacist will tell you which route applies to your medicine and how long it may take.</p>
+  <?php /* Same layout as Named Patient Supply's "Step by Step / How it works":
+           white heading row (eyebrow and big black title left, subtext right),
+           then the six types on the blue-to-green band in three columns, each
+           with its icon in the glassy circle where the step number would be
+           (guide.css "NPS how band"). */ ?>
+  <section class="g-sec g-bg-white g-nps-how-head" id="types" aria-labelledby="types-h">
+    <div class="g-wrap g-split g-split--top g-nps-helps">
+      <div class="g-nps-col">
+        <span class="g-label">Our Range</span>
+        <h2 id="types-h">Types of cancer medicine we handle</h2>
       </div>
+      <p class="g-nps-helps__text">We supply cancer medicines from first-line treatments through to more advanced medicines, always against your doctor's prescription or treatment protocol. Some we keep in stock in Port Vila; others we import or source for each patient. If your medicine is not listed here, ask us anyway. They include:</p>
+    </div>
+  </section>
+  <section class="g-sec g-nps-how g-onc-types" aria-label="The types of cancer medicine">
+    <div class="g-wrap">
+      <ul class="g-steps g-steps--rows3" role="list">
+        <?php foreach ([
+            ['flask', 'Chemotherapy', 'Given as an injection or drip in hospital, or as tablets at home'],
+            ['pill', 'Hormone therapy', 'Medicines used for cancers that respond to hormones'],
+            ['scan', 'Targeted and biological medicines', 'Newer medicines aimed at specific features of a cancer'],
+            ['drop', 'Medicines for blood cancers', 'Used in cancers such as leukaemia, lymphoma and myeloma'],
+            ['heart', 'Supportive care medicines', 'Medicines used alongside treatment, such as anti-sickness medicine'],
+            ['box', 'Medical consumables', 'Single-use medical consumables used during cancer treatment'],
+        ] as [$icon, $title, $text]): ?>
+        <li class="g-step">
+          <span class="g-step__num" aria-hidden="true"><?= gi($icon) ?></span>
+          <span class="g-step__title"><?= e($title) ?></span>
+          <p class="g-step__text"><?= e($text) ?></p>
+        </li>
+        <?php endforeach; ?>
+      </ul>
     </div>
   </section>
 
-  <section class="g-sec g-bg-white" id="types" aria-labelledby="types-h">
-    <div class="g-wrap">
-      <div>
-        <div class="g-head">
-          <h2 id="types-h" class="g-onc-h">Types of cancer medicine we handle</h2>
-          <p>We supply cancer medicines from first-line treatments through to more advanced medicines. They include:</p>
-        </div>
-        <div class="g-grid g-grid--3 g-onc-cards">
-          <?= g_card('flask', 'Chemotherapy', 'Given as an injection or drip in hospital, or as tablets at home', 'g-card--compact') ?>
-          <?= g_card('pill', 'Hormone therapy', 'Medicines used for cancers that respond to hormones', 'g-card--compact') ?>
-          <?= g_card('scan', 'Targeted and biological medicines', 'Newer medicines aimed at specific features of a cancer', 'g-card--compact') ?>
-          <?= g_card('drop', 'Medicines for blood cancers', 'Used in cancers such as leukaemia, lymphoma and myeloma', 'g-card--compact') ?>
-          <?= g_card('heart', 'Supportive care medicines', 'Medicines used alongside treatment, such as anti-sickness medicine', 'g-card--compact') ?>
-          <?= g_card('box', 'Single-use medical consumables used during cancer treatment', '', 'g-card--compact') ?>
-        </div>
-        <div class="g-mt-lg"><?php g_box('info', 'We do not list every medicine on this website because stock changes. Please contact us to check a specific medicine.'); ?></div>
+  <?php /* Injectable chemotherapy and Planning each treatment cycle side by
+           side, in the style of Named Patient Supply's "Before You Start /
+           Our Promise" columns: blue eyebrow, black title, plain blue bullets
+           (guide.css "NPS meaning columns"). */ ?>
+  <section class="g-sec g-bg-white g-onc-treat" aria-label="Injectable chemotherapy and planning each treatment cycle">
+    <div class="g-wrap g-nps-cols">
+      <div class="g-nps-col" id="injectable" aria-labelledby="inj-h">
+        <span class="g-label">Hospital Treatment</span>
+        <h2 id="inj-h">Injectable chemotherapy</h2>
+        <p>Some chemotherapy is given by injection or drip. These medicines must be given by trained staff in a hospital.</p>
+        <p>If your medicine is an injectable, we prepare the supply for your session. Your chemotherapy session takes place at Vila Central Hospital or Vanuatu Private Hospital, as arranged by your treating team.</p>
       </div>
-    </div>
-  </section>
-
-  <section class="g-sec g-bg-sky" id="injectable" aria-labelledby="inj-h">
-    <div class="g-wrap">
-      <div class="g-onc-read">
-        <h2 id="inj-h" class="g-onc-h">Injectable chemotherapy</h2>
-        <div class="g-stack g-mt">
-          <p>Some chemotherapy is given by injection or drip. These medicines must be given by trained staff in a hospital.</p>
-          <p>If your medicine is an injectable, we prepare the supply for your session. Your chemotherapy session takes place at Vila Central Hospital or Vanuatu Private Hospital, as arranged by your treating team.</p>
-        </div>
-        <ul class="g-chips g-mt" role="list">
-          <li class="g-chip g-chip--stat"><?= gi('building') ?>Vila Central Hospital</li>
-          <li class="g-chip g-chip--stat"><?= gi('building') ?>Vanuatu Private Hospital</li>
+      <div class="g-nps-col" id="cycles" aria-labelledby="cyc-h">
+        <span class="g-label">Your Schedule</span>
+        <h2 id="cyc-h">Planning each treatment cycle</h2>
+        <p>We do not just supply one order. We help you plan ahead.</p>
+        <ul class="g-nps-dots" role="list">
+          <li>We give you a pick-up date for each cycle.</li>
+          <li>A pharmacist explains how to handle your medicine.</li>
+          <li>We plan your next cycle with you, so your medicine is ready on time.</li>
+          <li>If your doctor changes your treatment, tell us and we will update your supply.</li>
         </ul>
       </div>
     </div>
   </section>
 
-  <section class="g-sec g-bg-white" id="cycles" aria-labelledby="cyc-h">
+  <?php /* For patients and families: the home page's patients picture (its
+           words are in the picture, and in the alt text), full width, with
+           How we supply cancer medicines straight under it. Links to the
+           patient enquiry. The Important note stays above it. The picture is
+           the original lossless assets/img/patients.png, with a high-quality
+           WebP copy for browsers that take it. */ ?>
+  <section class="g-sec g-bg-white g-onc-flush g-onc-patimg" id="patients" aria-labelledby="pat-h">
     <div class="g-wrap">
-      <div>
-        <div class="g-head">
-          <h2 id="cyc-h" class="g-onc-h">Planning each treatment cycle</h2>
-          <p>We do not just supply one order. We help you plan ahead.</p>
-        </div>
-        <div class="g-split g-split--7-5">
-          <div class="g-onc-cal" role="img" aria-label="Four calendar pages, one for each treatment cycle, each with its pick-up date ticked in green.">
-            <?php for ($c = 1; $c <= 4; $c++): ?>
-            <div class="g-onc-cal__m">
-              <span class="g-onc-cal__h">Cycle <?= $c ?></span>
-              <span class="g-onc-cal__grid">
-                <?php for ($d = 0; $d < 15; $d++): ?><i<?= $d === 7 ? ' class="is-pick"' : '' ?>><?= $d === 7 ? gi('check') : '' ?></i><?php endfor; ?>
-              </span>
-              <span class="g-onc-cal__f">Pick-up</span>
-            </div>
-            <?php endfor; ?>
-          </div>
-          <ul class="g-check g-check--doc" role="list">
-            <li><?= gi('calendar') ?><span>We give you a pick-up date for each cycle.</span></li>
-            <li><?= gi('pharmacist') ?><span>A pharmacist explains how to handle your medicine.</span></li>
-            <li><?= gi('refresh') ?><span>We plan your next cycle with you, so your medicine is ready on time.</span></li>
-            <li><?= gi('chat') ?><span>If your doctor changes your treatment, tell us and we will update your supply.</span></li>
-          </ul>
-        </div>
-      </div>
+      <h2 id="pat-h" class="g-sr">For patients and families</h2>
+      <div id="important"><?php g_box('safety', '<strong>Important:</strong> Getmeds Vanuatu supplies medicines. We do not diagnose cancer or choose treatment. Always follow the advice of your doctor or oncologist. Do not change a medicine, dose or schedule without speaking to them first.'); ?></div>
     </div>
+    <a class="g-onc-patimg__link" href="<?= e(request_url('patient')) ?>">
+      <picture>
+        <source type="image/webp" srcset="<?= e(asset('/assets/img/patients-banner.webp')) ?>">
+        <img src="<?= e(asset('/assets/img/patients.png')) ?>" width="1200" height="630" loading="lazy" decoding="async" alt="For patients and families: you do not need to know medical words to ask us for help. Send us your prescription and tell us how to reach you. A pharmacist will explain the next steps. Make a patient enquiry.">
+      </picture>
+    </a>
   </section>
 
-  <section class="g-sec g-bg-white g-onc-flush" id="patients" aria-labelledby="pat-h">
-    <div class="g-wrap">
-      <div class="g-card g-card--pink-left g-onc-pat">
-        <span class="g-card__icon"><?= gi('heart') ?></span>
-        <h2 id="pat-h">For patients and families</h2>
-        <div class="g-stack g-mt-sm">
-          <p>You need a prescription or treatment protocol from your doctor. We can only supply the medicine your doctor prescribed. This keeps you safe.</p>
-          <p>If you are not sure what to send, call us. We will help you.</p>
-        </div>
-        <div class="g-btns"><?= g_btn('Patient Enquiry', request_url('patient'), 'primary') ?></div>
+  <?php /* Eyebrow, title and the pharmacist line on the left; the four supply
+           routes stacked in a blue panel on the right (guide.css "g-onc-supply"). */ ?>
+  <section class="g-sec g-bg-white g-onc-supply" id="supply" aria-labelledby="supply-h">
+    <div class="g-wrap g-onc-supply__split">
+      <div class="g-onc-supply__intro">
+        <span class="g-label">Supply Routes</span>
+        <h2 id="supply-h">How we supply cancer medicines</h2>
+        <p>Our pharmacist will tell you which route applies to your medicine and how long it may take.</p>
       </div>
-    </div>
-  </section>
-
-  <section class="g-sec g-sec--tight g-bg-white" id="important" aria-label="Important note">
-    <div class="g-wrap">
-      <div><?php g_box('safety', '<strong>Important:</strong> Getmeds Vanuatu supplies medicines. We do not diagnose cancer or choose treatment. Always follow the advice of your doctor or oncologist. Do not change a medicine, dose or schedule without speaking to them first.'); ?></div>
+      <div class="g-onc-supply__panel">
+        <?= g_card('shelf', 'In stock', 'The medicine is kept at our pharmacy in Port Vila.') ?>
+        <?= g_card('plane', 'For import', 'We order the medicine for you from our suppliers.') ?>
+        <?= g_card('search', 'Sourced on request', 'We search for a medicine that is hard to find or often out of stock.') ?>
+        <?= g_card('user-tag', 'Named Patient Supply', 'We help arrange a medicine that is not normally available in Vanuatu, for one named patient.') ?>
+      </div>
     </div>
   </section>
 </div>
