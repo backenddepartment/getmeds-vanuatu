@@ -1,29 +1,22 @@
 <?php
 /**
- * Contact (content guide, page 15).
+ * Contact (content guide, page 15) — enquiry-hub layout.
  *
- * One screen: the four enquiry types and the enquiry form on the left (7/12),
- * a sticky contact card and the Golden Port map on the right (5/12). On a
- * phone: call button first, then enquiry types, form, details, map.
+ * Top to bottom: a light gradient hero (text left, diamond photo collage
+ * right), the four ways to reach us, one big enquiry card where a type
+ * selector swaps between five separate forms (each enquiry type asks only
+ * for what it needs), the Golden Port location with the map, a "before you
+ * reach out" band with gradient accordion cards, the other-reasons cards and
+ * the emergency note.
  *
  * Every "Request a Medicine"-style button on the site lands here through
- * request_url($type), which adds ?type=…#enquiry; the type pre-selects the
- * form's Enquiry type. ?country= and ?medicine= pre-fill those fields too.
+ * request_url($type), which adds ?type=…#enquiry; the type picks which form
+ * shows. ?country= and ?medicine= pre-fill those fields. Without JavaScript
+ * all five forms show stacked, each under its own heading, and the selector
+ * hides; each form posts its own _form kind, so only the submitted one runs.
  */
 require __DIR__ . '/../includes/bootstrap.php';
 require_once INC . '/forms.php';
-
-// request_url() types -> the value of the form's Enquiry type option.
-$typeMap = [
-    'medicine'     => 'medicine',
-    'cancer'       => 'cancer',
-    'nps'          => 'nps',
-    'quotation'    => 'quotation',
-    'professional' => 'quotation',
-    'patient'      => 'medicine',
-    'pacific'      => 'medicine',
-    'other'        => 'other',
-];
 
 $countries = [
     'vanuatu'         => 'Vanuatu',
@@ -37,61 +30,157 @@ $countries = [
     'other'           => 'Other',
 ];
 
-$schema = [
-    'iam' => [
-        'label' => 'I am a…', 'type' => 'select', 'required' => true,
-        'options' => [
-            'patient'  => 'Patient or family member',
-            'doctor'   => 'Doctor',
-            'hospital' => 'Hospital or clinic',
-            'pharmacy' => 'Pharmacy',
-            'other'    => 'Other organisation',
+$consent = static fn(): array => [
+    'label' => 'Consent', 'type' => 'consent', 'required' => true,
+    'html'  => 'I agree that Getmeds may use these details to respond to my enquiry. (<a href="'
+             . e(url('/privacy')) . '">Privacy Policy</a>)',
+];
+
+/* The five enquiry types. Each is its own form with its own gform kind, so
+   each asks only the questions that type needs. 'kind' must stay unique per
+   form; 'enquiry' and 'quotation' keep their historic names so the log and
+   email subjects read the same as before. */
+$forms = [
+    'medicine' => [
+        'option' => 'Medicine Enquiry (Patients & Families)',
+        'title'  => 'Medicine enquiry',
+        'quote'  => '“I need a medicine my doctor prescribed, or I want to know if you can supply it and what it costs.”',
+        'kind'   => 'enquiry',
+        'submit' => 'Send Medicine Enquiry',
+        'schema' => [
+            'iam' => ['label' => 'I am', 'type' => 'select', 'required' => true, 'options' => [
+                'patient' => 'The patient', 'family' => 'A family member or friend', 'other' => 'Someone else',
+            ]],
+            'name'    => ['label' => 'Full name', 'type' => 'text', 'required' => true,
+                          'help' => 'The name of the person we should contact'],
+            'patient' => ['label' => 'Patient name (if different)', 'type' => 'text',
+                          'help' => 'Only if you are asking for someone else'],
+            'phone'   => ['label' => 'Phone or WhatsApp number', 'type' => 'tel', 'required' => true,
+                          'help' => 'Include your country code, for example +678'],
+            'email'   => ['label' => 'Email', 'type' => 'email'],
+            'country' => ['label' => 'Country', 'type' => 'select', 'required' => true, 'options' => []],
+            'island'  => ['label' => 'Island or town', 'type' => 'text',
+                          'help' => 'Helps us plan collection or delivery'],
+            'medicine' => ['label' => 'Medicine name(s)', 'type' => 'text', 'required' => true,
+                           'help' => 'Write it as it appears on the prescription'],
+            'prescription' => ['label' => 'Upload prescription', 'type' => 'file',
+                               'help' => 'A clear photo or PDF. We need this before we can supply a prescription medicine'],
+            'date_needed'  => ['label' => 'Date needed', 'type' => 'date'],
+            'message'      => ['label' => 'Message', 'type' => 'textarea', 'help' => 'Anything else we should know'],
+            'consent'      => [],
         ],
     ],
-    'name' => ['label' => 'Full name', 'type' => 'text', 'required' => true,
-               'help' => 'The name of the person we should contact'],
-    'patient' => ['label' => 'Patient name (if different)', 'type' => 'text',
-                  'help' => 'Only if you are asking for someone else'],
-    'phone' => ['label' => 'Phone or WhatsApp number', 'type' => 'tel', 'required' => true,
-                'help' => 'Include your country code, for example +678'],
-    'email' => ['label' => 'Email', 'type' => 'email',
-                'help' => 'Optional, but helpful for sending quotations'],
-    'country' => ['label' => 'Country', 'type' => 'select', 'required' => true,
-                  'help' => 'Vanuatu or another Pacific country', 'options' => $countries],
-    'island' => ['label' => 'Island or town', 'type' => 'text',
-                 'help' => 'Helps us plan collection or delivery'],
-    'enquiry_type' => [
-        'label' => 'Enquiry type', 'type' => 'select', 'required' => true,
-        'options' => [
-            'medicine'  => 'Medicine',
-            'cancer'    => 'Cancer medicine',
-            'nps'       => 'Named Patient Supply',
-            'quotation' => 'Quotation',
-            'other'     => 'Other',
+    'cancer' => [
+        'option' => 'Cancer Medicine Enquiry',
+        'title'  => 'Cancer medicine enquiry',
+        'quote'  => '“A cancer medicine has been prescribed and I need it supplied in Vanuatu, cycle by cycle.”',
+        'kind'   => 'cancer-enquiry',
+        'submit' => 'Send Cancer Medicine Enquiry',
+        'schema' => [
+            'name'    => ['label' => 'Full name', 'type' => 'text', 'required' => true],
+            'phone'   => ['label' => 'Phone or WhatsApp number', 'type' => 'tel', 'required' => true,
+                          'help' => 'Include your country code, for example +678'],
+            'email'   => ['label' => 'Email', 'type' => 'email'],
+            'country' => ['label' => 'Country', 'type' => 'select', 'required' => true, 'options' => []],
+            'hospital' => ['label' => 'Treating doctor or hospital', 'type' => 'text',
+                           'help' => 'Where the treatment is planned or happening'],
+            'medicine' => ['label' => 'Cancer medicine name(s)', 'type' => 'text', 'required' => true,
+                           'help' => 'As written on the prescription or protocol'],
+            'prescription' => ['label' => 'Upload prescription or treatment protocol', 'type' => 'file',
+                               'help' => 'A clear photo or PDF. A pharmacist reviews it before anything is supplied'],
+            'cycle'   => ['label' => 'Date of the next treatment cycle', 'type' => 'date',
+                          'help' => 'So we can plan the supply around your treatment'],
+            'message' => ['label' => 'Message', 'type' => 'textarea'],
+            'consent' => [],
         ],
     ],
-    'medicine' => ['label' => 'Medicine name(s)', 'type' => 'text',
-                   'help' => 'Write it as it appears on the prescription'],
-    'prescription' => ['label' => 'Upload prescription or treatment protocol', 'type' => 'file',
-                       'help' => 'A clear photo or PDF. We need this before we can supply a prescription medicine'],
-    'date_needed' => ['label' => 'Date needed', 'type' => 'date',
-                      'help' => 'For example, the date of the next treatment cycle'],
-    'message' => ['label' => 'Message', 'type' => 'textarea',
-                  'help' => 'Anything else we should know'],
-    'consent' => ['label' => 'Consent', 'type' => 'consent', 'required' => true,
-                  'html' => 'I agree that Getmeds may use these details to respond to my enquiry. (<a href="'
-                          . e(url('/privacy')) . '">Privacy Policy</a>)'],
+    'nps' => [
+        'option' => 'Named Patient Supply',
+        'title'  => 'Named Patient Supply enquiry',
+        'quote'  => '“The medicine is not normally available in Vanuatu and needs to be sourced for a named patient.”',
+        'kind'   => 'nps-enquiry',
+        'submit' => 'Send Named Patient Supply Enquiry',
+        'schema' => [
+            'iam' => ['label' => 'I am', 'type' => 'select', 'required' => true, 'options' => [
+                'patient' => 'The patient', 'family' => 'A family member or friend',
+                'doctor' => 'A doctor', 'pharmacist' => 'A pharmacist', 'other' => 'Someone else',
+            ]],
+            'name'    => ['label' => 'Full name', 'type' => 'text', 'required' => true],
+            'phone'   => ['label' => 'Phone or WhatsApp number', 'type' => 'tel', 'required' => true,
+                          'help' => 'Include your country code, for example +678'],
+            'email'   => ['label' => 'Email', 'type' => 'email'],
+            'country' => ['label' => 'Country', 'type' => 'select', 'required' => true, 'options' => []],
+            'medicine' => ['label' => 'Medicine name and strength', 'type' => 'text', 'required' => true,
+                           'help' => 'For example the brand or generic name, and the dose'],
+            'doctor'  => ['label' => 'Prescribing doctor', 'type' => 'text', 'required' => true,
+                          'help' => 'Named Patient Supply always starts from a prescription'],
+            'prescription' => ['label' => 'Upload prescription', 'type' => 'file',
+                               'help' => 'A clear photo or PDF'],
+            'why'     => ['label' => 'Why is it hard to get? (if you know)', 'type' => 'textarea',
+                          'help' => 'For example: not registered here, out of stock, or no local supplier'],
+            'consent' => [],
+        ],
+    ],
+    'quotation' => [
+        'option' => 'Quotation (Healthcare Professionals)',
+        'title'  => 'Request a quotation',
+        'quote'  => '“We are a hospital, clinic or pharmacy and need a line-by-line quotation for medicines or supplies.”',
+        'kind'   => 'quotation',
+        'submit' => 'Request a Quotation',
+        'schema' => [
+            'facility' => ['label' => 'Facility name', 'type' => 'text', 'required' => true],
+            'contact'  => ['label' => 'Contact person', 'type' => 'text', 'required' => true],
+            'role'     => ['label' => 'Role', 'type' => 'text'],
+            'email'    => ['label' => 'Email', 'type' => 'email', 'required' => true],
+            'phone'    => ['label' => 'Phone', 'type' => 'tel', 'required' => true],
+            'country'  => ['label' => 'Country', 'type' => 'select', 'required' => true, 'options' => []],
+            'products' => ['label' => 'Product list or protocol (upload)', 'type' => 'file',
+                           'help' => 'Photo, scan or PDF of the product list, tender or treatment protocol'],
+            'needed'   => ['label' => 'Date needed', 'type' => 'date'],
+            'notes'    => ['label' => 'Notes', 'type' => 'textarea',
+                           'help' => 'Quantities, preferred brands, delivery location, tender references'],
+            'consent'  => [],
+        ],
+    ],
+    'other' => [
+        'option' => 'Something Else',
+        'title'  => 'General enquiry',
+        'quote'  => '“I have a question that does not fit the other forms.”',
+        'kind'   => 'general-enquiry',
+        'submit' => 'Send Enquiry',
+        'schema' => [
+            'name'    => ['label' => 'Full name', 'type' => 'text', 'required' => true],
+            'phone'   => ['label' => 'Phone or WhatsApp number', 'type' => 'tel', 'required' => true,
+                          'help' => 'Include your country code, for example +678'],
+            'email'   => ['label' => 'Email', 'type' => 'email'],
+            'message' => ['label' => 'How can we help?', 'type' => 'textarea', 'required' => true],
+            'consent' => [],
+        ],
+    ],
+];
+foreach ($forms as &$f) {
+    if (isset($f['schema']['country'])) { $f['schema']['country']['options'] = $countries; }
+    $f['schema']['consent'] = $consent();
+}
+unset($f);
+
+// request_url() types -> which form shows.
+$typeMap = [
+    'medicine'     => 'medicine',
+    'patient'      => 'medicine',
+    'pacific'      => 'medicine',
+    'cancer'       => 'cancer',
+    'nps'          => 'nps',
+    'quotation'    => 'quotation',
+    'professional' => 'quotation',
+    'other'        => 'other',
 ];
 
 // Pre-fill from the link that brought the visitor here (whitelisted values only).
 $reqType = isset($_GET['type']) && is_string($_GET['type']) ? strtolower(trim($_GET['type'])) : '';
+$active  = $typeMap[$reqType] ?? 'medicine';
 $prefill = [];
-if (isset($typeMap[$reqType])) {
-    $prefill['enquiry_type'] = $typeMap[$reqType];
-}
-if ($reqType === 'professional') {
-    $prefill['iam'] = 'doctor';
-} elseif ($reqType === 'patient') {
+if ($reqType === 'patient') {
     $prefill['iam'] = 'patient';
 }
 if (isset($_GET['country']) && is_string($_GET['country'])) {
@@ -108,7 +197,17 @@ if (isset($_GET['medicine']) && is_string($_GET['medicine'])) {
     $prefill['medicine'] = trim(mb_substr($_GET['medicine'], 0, 120, 'UTF-8'));
 }
 
-$state = gform_run('enquiry', $schema, $prefill);
+// Run every form; each only processes a POST whose _form matches its kind.
+$states = [];
+foreach ($forms as $key => $f) {
+    $states[$key] = gform_run($f['kind'], $f['schema'], $prefill);
+}
+// A posted form becomes the one on screen, so its errors or thank-you show.
+if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
+    foreach ($forms as $key => $f) {
+        if (($_POST['_form'] ?? '') === $f['kind']) { $active = $key; }
+    }
+}
 
 $page = [
     'title'     => 'Contact us',
@@ -120,132 +219,172 @@ $page = [
 include INC . '/head.php';
 include INC . '/header.php';
 
-$cards = [
-    ['patient',      'user',      'Patient',              'Patient Enquiry',
-     'Need a medicine your doctor prescribed? Start here.'],
-    ['professional', 'doctor',    'Healthcare professional', 'Healthcare Professional Enquiry',
-     'Doctors, hospitals, clinics and pharmacies: request a quotation.'],
-    ['medicine',     'pill',      'Medicine',             'Medicine Enquiry',
-     'Check if we can supply a medicine and what it costs.'],
-    ['nps',          'user-tag',  'Named Patient Supply', 'Named Patient Supply Enquiry',
-     'Need a medicine not normally available in Vanuatu?'],
-];
-$mapSrc = 'https://www.google.com/maps?q=Golden+Port,+Namba+2,+Port+Vila,+Vanuatu&output=embed';
 ?>
 
-<?php /* Full-screen photo hero, same size and style as the home page's hero
-         (the navbar sits over it, see-through: includes/header.php, guide.css
-         "Home hero"). The team photo is bright, so a bottom shade keeps the
-         white text readable (guide.css "Contact hero"). */ ?>
-<section class="g-homehero g-homehero--split g-contacthero" aria-labelledby="contact-hero-title">
-  <div class="g-homehero__media">
-    <picture>
-      <source type="image/webp" srcset="<?= e(asset('/assets/img/team-vanuatu-800.webp')) ?> 800w, <?= e(asset('/assets/img/team-vanuatu-1600.webp')) ?> 1600w" sizes="100vw">
-      <img src="<?= e(asset('/assets/img/team-vanuatu-1600.jpg')) ?>"
-           srcset="<?= e(asset('/assets/img/team-vanuatu-800.jpg')) ?> 800w, <?= e(asset('/assets/img/team-vanuatu-1600.jpg')) ?> 1600w" sizes="100vw"
-           width="1600" height="804" alt="" loading="eager" fetchpriority="high" decoding="async">
-    </picture>
-    <div class="g-homehero__scrim" aria-hidden="true"></div>
-  </div>
-  <div class="g-wrap g-homehero__inner">
-    <div class="g-homehero__row">
-      <h1 class="g-homehero__title" id="contact-hero-title">Talk to Our Team in Port Vila.</h1>
-      <div class="g-homehero__side">
-        <p class="g-homehero__lede">Tell us what you need. A member of our team will reply, and a pharmacist checks every medicine request. The phone is the fastest way to reach us.</p>
-        <div class="g-homehero__btns">
-          <a class="g-homehero__btn g-homehero__btn--fill" href="#send-an-enquiry">Send an Enquiry</a>
-          <a class="g-homehero__btn g-homehero__btn--line" href="<?= e(tel_url()) ?>">Call <?= e(cfg('phone')) ?></a>
-        </div>
+<?php /* Light gradient hero: label, two-tone headline and the two actions on
+         the left, a diamond photo collage on the right (guide.css
+         "Contact enquiry hub"). */ ?>
+<section class="g-chero" aria-labelledby="contact-hero-title">
+  <div class="g-wrap g-chero__grid">
+    <div class="g-chero__text">
+      <span class="g-label">Contact Us</span>
+      <h1 id="contact-hero-title"><em>One team</em> for medicines, quotations and partnerships</h1>
+      <p class="g-chero__lede">Send us a prescription, a medicine question or a product list. The more detail you share, the faster we can come back with availability, price and next steps. A pharmacist checks every medicine request.</p>
+      <div class="g-btns g-chero__btns">
+        <a class="g-btn g-btn--grad" href="#enquiry">Send Us Your Enquiry</a>
+        <?= g_call_btn('Talk to Our Team', 'secondary') ?>
       </div>
     </div>
-    <div class="g-homehero__foot">
-      <p class="g-homehero__kicker">Contact Us · <?= e(cfg('address_city')) ?>, <?= e(cfg('address_country')) ?></p>
+    <div class="g-chero__collage" aria-hidden="true">
+      <span class="g-chero__dia g-chero__dia--1"><img src="<?= e(asset('/assets/img/team-vanuatu-800.jpg')) ?>" alt="" loading="eager" decoding="async"></span>
+      <span class="g-chero__dia g-chero__dia--2"><img src="<?= e(asset('/assets/img/photo/dispensary-480.jpg')) ?>" alt="" loading="lazy" decoding="async"></span>
+      <span class="g-chero__dia g-chero__dia--3"><img src="<?= e(asset('/assets/img/photo/island-480.jpg')) ?>" alt="" loading="lazy" decoding="async"></span>
     </div>
   </div>
 </section>
 
-<section class="g-sec g-bg-white g-sec--tight">
-  <div class="g-wrap g-split g-split--7-5 g-split--top g-contact">
-    <div class="g-contact__main">
-      <h2>How can we help?</h2>
-      <div class="g-typecards g-mt">
-        <?php foreach ($cards as [$type, $ic, $kind, $btn, $text]): ?>
-        <a class="g-card g-card--link g-card--compact g-typecard<?= ($reqType === $type) ? ' is-selected' : '' ?>"
-           href="<?= e(request_url($type)) ?>" data-set-type="<?= e($type) ?>">
-          <span class="g-card__icon"><?= gi($ic) ?></span>
-          <h3><?= e($kind) ?></h3>
-          <p><?= e($text) ?></p>
-          <span class="g-card__go"><?= e($btn) ?> <?= gi('arrow') ?></span>
-        </a>
-        <?php endforeach; ?>
+<section class="g-sec g-sec--tight g-bg-white g-ways" aria-labelledby="ways-h">
+  <div class="g-wrap">
+    <span class="g-label">Contact Details</span>
+    <h2 id="ways-h">Ways to reach us</h2>
+    <div class="g-ways__grid g-mt">
+      <div class="g-ways__item">
+        <h3><span class="g-ways__badge"><?= gi('phone') ?></span> Phone</h3>
+        <ul>
+          <li><?= gi('phone') ?><a href="<?= e(tel_url()) ?>"><?= e(cfg('phone')) ?></a></li>
+          <li><?= gi('clock') ?><span>Monday to Friday, 8am to 5pm</span></li>
+        </ul>
       </div>
+      <div class="g-ways__item">
+        <h3><span class="g-ways__badge"><?= gi('chat') ?></span> WhatsApp</h3>
+        <ul>
+          <li><?= gi('chat') ?><a href="<?= e(whatsapp_url()) ?>">Message us on WhatsApp</a></li>
+          <li><?= gi('image') ?><span>A photo of the prescription is enough to start</span></li>
+        </ul>
+      </div>
+      <div class="g-ways__item">
+        <h3><span class="g-ways__badge"><?= gi('mail') ?></span> Email</h3>
+        <ul>
+          <li><?= gi('mail') ?><a href="mailto:<?= e(cfg('email')) ?>"><?= e(cfg('email')) ?></a></li>
+          <li><?= gi('clock') ?><span>Answered within one working day — not for anything urgent</span></li>
+        </ul>
+      </div>
+      <div class="g-ways__item">
+        <h3><span class="g-ways__badge"><?= gi('pin') ?></span> Visit us</h3>
+        <ul>
+          <li><?= gi('pin') ?><span>Ground Floor, Room 1006, Golden Port, Namba 2 Area, Port Vila</span></li>
+          <li><?= gi('building') ?><span>Ground floor, no stairs</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
 
-      <h2 class="g-mt-lg" id="send-an-enquiry">Send an enquiry</h2>
-      <div class="g-mt">
-        <?php gform_render('enquiry', $schema, $state, [
-            'id'      => 'enquiry',
-            'submit'  => 'Send Enquiry',
+<?php /* The enquiry card: one type selector, five separate forms. JS shows the
+         form matching the selector; without JS all five show, each under its
+         own heading, and the selector hides. */ ?>
+<section class="g-sec g-iform-sec" id="enquiry" aria-labelledby="iform-h">
+  <div class="g-wrap g-iform-grid">
+    <aside class="g-cloc g-oreasons" aria-labelledby="oreasons-h">
+      <span class="g-label">More Help</span>
+      <h2 id="oreasons-h">Other reasons to get in touch</h2>
+      <div class="g-oreasons__list">
+        <a href="<?= e(url('/report-a-side-effect')) ?>">
+          <h3>Report a side effect</h3>
+          <p>Something happened after taking a medicine we supplied.</p>
+        </a>
+        <a href="<?= e(url('/complaints')) ?>">
+          <h3>Make a complaint</h3>
+          <p>If something went wrong, we want to hear it.</p>
+        </a>
+        <a href="<?= e(url('/policies-and-safety')) ?>#returns">
+          <h3>Return or dispose of medicine</h3>
+          <p>Unused cancer medicine must not go in household rubbish.</p>
+        </a>
+      </div>
+    </aside>
+    <div class="g-iform">
+      <span class="g-label">Enquiry Form</span>
+      <h2 id="iform-h">Send us your enquiry</h2>
+      <div class="g-field g-iform__type">
+        <label for="enq-type">Enquiry type</label>
+        <select id="enq-type">
+          <?php foreach ($forms as $key => $f): ?>
+          <option value="<?= e($key) ?>"<?= $key === $active ? ' selected' : '' ?>><?= e($f['option']) ?></option>
+          <?php endforeach; ?>
+        </select>
+      </div>
+      <?php foreach ($forms as $key => $f): ?>
+      <div class="g-iform__panel<?= $key === $active ? ' is-active' : '' ?>" data-panel="<?= e($key) ?>">
+        <h3 class="g-iform__ptitle"><?= e($f['title']) ?></h3>
+        <p class="g-iform__quote"><?= e($f['quote']) ?></p>
+        <?php gform_render($f['kind'], $f['schema'], $states[$key], [
+            'id'      => 'form-' . $key,
+            'submit'  => $f['submit'],
             'success' => 'Thank you. We have received your enquiry. Our team will contact you within one working day. If your medicine is urgent, please call us.',
-            'intro'   => 'Fill in what you can. If you are not sure, leave it blank and we will ask you. Fields marked * are required.',
             'warn'    => true,
         ]); ?>
       </div>
+      <?php endforeach; ?>
     </div>
+  </div>
+</section>
 
-    <aside class="g-contact__side" aria-labelledby="visit-or-call">
-      <div class="g-contactcard">
-        <div class="g-card">
-          <h2 id="visit-or-call" class="g-h3">Visit or call</h2>
-          <ul class="g-mt">
-            <li><?= gi('pin') ?><div><strong>Address</strong><br>Ground Floor, Room 1006, Golden Port, Namba 2 Area, Port Vila, Shefa, Vanuatu</div></li>
-            <li><?= gi('phone') ?><div><strong>Phone</strong><br><a href="<?= e(tel_url()) ?>"><?= e(cfg('phone')) ?></a></div></li>
-            <li><?= gi('mail') ?><div><strong>Email</strong><br><a href="mailto:<?= e(cfg('email')) ?>"><?= e(cfg('email')) ?></a> (answered within one working day; do not use email for anything urgent)</div></li>
-            <li><?= gi('clock') ?><div><strong>Opening hours</strong><br>Monday to Friday, 8am to 5pm. Closed on public holidays.</div></li>
-            <li><?= gi('building') ?><div><strong>Finding us</strong><br>We are on the ground floor of Golden Port in the Namba 2 area, room 1006. No stairs.</div></li>
-          </ul>
-        </div>
-        <iframe class="g-mapframe" src="<?= e($mapSrc) ?>" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
-                title="Map showing Getmeds Vanuatu at Golden Port, Namba 2 Area, Port Vila"></iframe>
+<?php /* Before-you-send band: intro left, four gradient accordion cards right.
+         data-single (guide.js) keeps one card open at a time. */ ?>
+<section class="g-sec g-know" aria-labelledby="know-h">
+  <div class="g-wrap g-know__grid">
+    <div class="g-know__intro">
+      <span class="g-know__dots" aria-hidden="true"><i></i><i></i></span>
+      <span class="g-label">Before You Send</span>
+      <h2 id="know-h">What to know before you reach out</h2>
+      <p>Four short notes on sending a prescription, requesting a quotation, choosing the right form and what happens next.</p>
+      <div class="g-btns g-know__btns">
+        <a class="g-btn g-btn--grad" href="#enquiry">Send an Enquiry</a>
+        <?= g_call_btn('Talk to Our Team', 'secondary') ?>
       </div>
-    </aside>
-  </div>
-</section>
-
-<section class="g-sec g-bg-mint g-sec--tight">
-  <div class="g-wrap g-narrow">
-    <h2 class="g-center">What happens next</h2>
-    <div class="g-mt-lg">
-      <?php g_steps([
-          ['We receive your enquiry.', ''],
-          ['A pharmacist reviews any prescription.', ''],
-          ['We contact you with availability, price and next steps.', ''],
-      ], 'h'); ?>
     </div>
-  </div>
-</section>
-
-<section class="g-sec g-bg-white g-sec--tight">
-  <div class="g-wrap">
-    <h2>Other reasons to get in touch</h2>
-    <div class="g-grid g-grid--3 g-mt">
-      <a class="g-card g-card--link g-card--compact" href="<?= e(url('/report-a-side-effect')) ?>">
-        <span class="g-card__icon"><?= gi('pulse') ?></span>
-        <h3>Report a side effect</h3>
-        <p>Something happened after taking a medicine we supplied.</p>
-        <span class="g-card__go">Report a side effect <?= gi('arrow') ?></span>
-      </a>
-      <a class="g-card g-card--link g-card--compact" href="<?= e(url('/complaints')) ?>">
-        <span class="g-card__icon"><?= gi('chat') ?></span>
-        <h3>Make a complaint</h3>
-        <p>If something went wrong, we want to hear it.</p>
-        <span class="g-card__go">Make a complaint <?= gi('arrow') ?></span>
-      </a>
-      <a class="g-card g-card--link g-card--compact" href="<?= e(url('/policies-and-safety')) ?>#returns">
-        <span class="g-card__icon"><?= gi('refresh') ?></span>
-        <h3>Return or dispose of medicine</h3>
-        <p>Unused cancer medicine must not go in household rubbish.</p>
-        <span class="g-card__go">Returns and safe disposal <?= gi('arrow') ?></span>
-      </a>
+    <div class="g-know__cards" data-single>
+      <details class="g-know__card g-know__card--1" open>
+        <summary>
+          <span class="g-know__kicker">Request a Medicine</span>
+          <span class="g-know__title">Send the prescription first</span>
+          <span class="g-know__toggle" aria-hidden="true"></span>
+        </summary>
+        <div class="g-know__body">
+          <p>The fastest route: the medicine name and a clear photo or PDF of the prescription. A pharmacist checks availability, the supply route and the price, and we reply with the next steps. Prescription medicines are never supplied without one.</p>
+        </div>
+      </details>
+      <details class="g-know__card g-know__card--2">
+        <summary>
+          <span class="g-know__kicker">Request a Quotation</span>
+          <span class="g-know__title">Line-by-line quotations</span>
+          <span class="g-know__toggle" aria-hidden="true"></span>
+        </summary>
+        <div class="g-know__body">
+          <p>Hospitals, clinics and pharmacies: share the product names, strengths, quantities and the delivery location — a list or tender document is perfect. You receive a line-by-line quotation your team can review and compare.</p>
+        </div>
+      </details>
+      <details class="g-know__card g-know__card--3">
+        <summary>
+          <span class="g-know__kicker">Enquiry Routes</span>
+          <span class="g-know__title">The right form for every enquiry</span>
+          <span class="g-know__toggle" aria-hidden="true"></span>
+        </summary>
+        <div class="g-know__body">
+          <p>Each enquiry type has its own short form that asks only for what that request needs — a patient medicine enquiry, a cancer medicine, Named Patient Supply, a facility quotation, or anything else. Not sure? Pick any form, or just call us.</p>
+        </div>
+      </details>
+      <details class="g-know__card g-know__card--4">
+        <summary>
+          <span class="g-know__kicker">Next Steps</span>
+          <span class="g-know__title">What happens after you reach out</span>
+          <span class="g-know__toggle" aria-hidden="true"></span>
+        </summary>
+        <div class="g-know__body">
+          <p>We confirm we have received your enquiry, a pharmacist reviews any prescription, and we contact you with availability, price and next steps — within one working day. If a medicine is urgent, call us instead.</p>
+        </div>
+      </details>
     </div>
   </div>
 </section>
@@ -262,23 +401,17 @@ $mapSrc = 'https://www.google.com/maps?q=Golden+Port,+Namba+2,+Port+Vila,+Vanuat
   </div>
 </section>
 
-<?php /* The enquiry cards carry the site-wide types (patient, professional…);
-         the form's Enquiry type has the guide's five options. guide.js sets the
-         select to the card's type; this maps it to the matching option. */ ?>
+<?php /* The type selector swaps which form panel shows. The server already
+         marks the right panel active (from ?type= or the posted form), so
+         this only handles changes after load. */ ?>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-  var map = <?= json_encode($typeMap) ?>;
-  var sel = document.querySelector('select[name="enquiry_type"]');
-  var iam = document.querySelector('select[name="iam"]');
+  var sel = document.getElementById('enq-type');
   if (!sel) { return; }
-  Array.prototype.forEach.call(document.querySelectorAll('[data-set-type]'), function (card) {
-    card.addEventListener('click', function () {
-      var t = card.getAttribute('data-set-type');
-      sel.value = map[t] || '';
-      if (iam && iam.value === '') {
-        if (t === 'professional') { iam.value = 'doctor'; }
-        if (t === 'patient') { iam.value = 'patient'; }
-      }
+  var panels = document.querySelectorAll('.g-iform__panel');
+  sel.addEventListener('change', function () {
+    Array.prototype.forEach.call(panels, function (p) {
+      p.classList.toggle('is-active', p.getAttribute('data-panel') === sel.value);
     });
   });
 });

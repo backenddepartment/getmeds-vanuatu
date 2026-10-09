@@ -39,20 +39,33 @@ include INC . '/head.php';
 include INC . '/header.php';
 ?>
 
-<section class="g-hero g-hero--navy" aria-labelledby="hcp-h1">
-  <div class="g-wrap">
-    <div class="g-split g-split--7-5">
-      <div>
-        <h1 id="hcp-h1">For healthcare professionals</h1>
-        <p class="g-hero__lede">A local source for cancer medicines, specialist medicines and medical supplies in Vanuatu and the Pacific. Let us quote for your requirement.</p>
-        <div class="g-btns">
-          <?= g_btn('Request a Quotation', '#quote', 'primary', 'receipt') ?>
-          <?= g_call_btn('Talk to Our Pharmacist', 'white') ?>
+<?php /* Full-screen photo hero, same build as the home page (guide.css
+         "Home hero"): the navbar sits see-through over the photo
+         (includes/header.php), headline left, lede and buttons right, then a
+         rule and the kicker. .g-hcphero adds a navy gradient over the grey
+         photo so the white text stays readable. */ ?>
+<section class="g-homehero g-homehero--split g-hcphero" aria-labelledby="hcp-h1">
+  <div class="g-homehero__media">
+    <picture>
+      <source type="image/webp" srcset="<?= e(asset('/assets/img/photo/notes-800.webp')) ?> 800w, <?= e(asset('/assets/img/photo/notes-1280.webp')) ?> 1280w" sizes="100vw">
+      <img src="<?= e(asset('/assets/img/photo/notes-1280.jpg')) ?>"
+           srcset="<?= e(asset('/assets/img/photo/notes-800.jpg')) ?> 800w, <?= e(asset('/assets/img/photo/notes-1280.jpg')) ?> 1280w" sizes="100vw"
+           width="1280" height="854" alt="" loading="eager" fetchpriority="high" decoding="async">
+    </picture>
+  </div>
+  <div class="g-wrap g-homehero__inner">
+    <div class="g-homehero__row">
+      <h1 class="g-homehero__title" id="hcp-h1"><span>For healthcare</span> <span>professionals</span></h1>
+      <div class="g-homehero__side">
+        <p class="g-homehero__lede">A local source for cancer medicines, specialist medicines and medical supplies in Vanuatu and the Pacific. Let us quote for your requirement.</p>
+        <div class="g-homehero__btns">
+          <a class="g-homehero__btn g-homehero__btn--fill" href="#quote">Request a Quotation</a>
+          <a class="g-homehero__btn g-homehero__btn--line" href="<?= e(tel_url()) ?>">Talk to Our Pharmacist</a>
         </div>
       </div>
-      <div class="g-hero__media g-hcp-hero__media">
-        <?= g_photo('notes', 'A doctor writing notes at a desk beside a stethoscope.', '', true) ?>
-      </div>
+    </div>
+    <div class="g-homehero__foot">
+      <p class="g-homehero__kicker">Licensed pharmacy · <?= e(cfg('address_city')) ?>, <?= e(cfg('address_country')) ?></p>
     </div>
   </div>
 </section>
@@ -165,10 +178,5 @@ include INC . '/header.php';
     </div>
   </div>
 </section>
-
-<?php g_cta_band('Let us quote for your requirement', '', [
-    ['Request a Quotation', '#quote', 'primary', 'receipt'],
-    ['Healthcare Professional Enquiry', request_url('professional'), 'white', 'mail'],
-]); ?>
 
 <?php include INC . '/footer.php'; ?>

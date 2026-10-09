@@ -132,7 +132,9 @@ include INC . '/header.php';
 </section>
 
 <div class="g-medpage">
-  <nav class="g-filterbar" aria-label="Medicine groups">
+  <?php /* data-slider: guide.js glides the chips in a loop near the top of
+           the page; once the bar sticks they become the plain buttons. */ ?>
+  <nav class="g-filterbar" data-slider aria-label="Medicine groups">
     <div class="g-wrap">
       <ul class="g-chips" role="list">
         <?php foreach ($chips as $label => $anchor): ?>

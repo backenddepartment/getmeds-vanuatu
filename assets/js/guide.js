@@ -381,4 +381,56 @@
     window.addEventListener('resize', update);
     update();
   });
+
+  /* 13. Medicines filter bar (data-slider): near the top of the page the
+        chips glide sideways in a slow loop, like a slider; once the bar
+        sticks under the header they settle into the plain row of buttons.
+        The loop needs the row cloned once (hidden from screen readers and
+        the tab order), and travels exactly one copy's width — measured
+        here, because the flex gap would make a translateX(-50%) loop jump.
+        Hovering or focusing a chip pauses the glide so it can be clicked.
+        Without JS, or with reduced motion, the plain buttons simply show. */
+  $$('.g-filterbar[data-slider]').forEach(function (bar) {
+    var list = bar.querySelector('.g-chips');
+    if (!list || !('IntersectionObserver' in window)) { return; }
+    if (reduced && reduced.matches) { return; }
+    var items = $$('li', list);
+    if (!items.length) { return; }
+    items[items.length - 1].classList.add('g-chip-last');
+    items.forEach(function (li) {
+      var copy = li.cloneNode(true);
+      copy.classList.add('g-chip-clone');
+      copy.setAttribute('aria-hidden', 'true');
+      $$('a', copy).forEach(function (a) { a.tabIndex = -1; });
+      list.appendChild(copy);
+    });
+    var SPEED = 50; /* px per second */
+    /* The ticker is laid out very differently from the stuck button row
+       (font size, dot separators), so the loop distance must be measured
+       while the is-slider styles apply — hence the class goes on first, and
+       size() skips the stuck state, where the clones are display:none and
+       measure as zero. */
+    bar.classList.add('is-slider');
+    var size = function () {
+      /* offsetLeft, not getBoundingClientRect: the measurement must ignore
+         the animation's own transform. */
+      var clone = list.querySelector('.g-chip-clone');
+      var dist = clone ? clone.offsetLeft - items[0].offsetLeft : 0;
+      if (dist <= 0) { return; }
+      list.style.setProperty('--g-slide-dist', -dist + 'px');
+      list.style.setProperty('--g-slide-time', Math.max(10, Math.round(dist / SPEED)) + 's');
+    };
+    size();
+    window.addEventListener('resize', size);
+    if (doc.fonts && doc.fonts.ready) { doc.fonts.ready.then(size); }
+    /* A zero-height sentinel just above the bar tells stuck from not: once it
+       passes under the sticky line (64px header), the bar is pinned. */
+    var sentinel = doc.createElement('span');
+    bar.parentNode.insertBefore(sentinel, bar);
+    new IntersectionObserver(function (entries) {
+      var en = entries[0];
+      var stuck = !en.isIntersecting && en.boundingClientRect.top < 65;
+      bar.classList.toggle('is-slider', !stuck);
+    }, { rootMargin: '-65px 0px 0px 0px' }).observe(sentinel);
+  });
 })();
