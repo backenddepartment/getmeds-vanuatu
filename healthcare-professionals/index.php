@@ -17,11 +17,16 @@ $page = [
 ];
 
 $quoteSchema = [
-    'facility' => ['label' => 'Facility name', 'type' => 'text', 'required' => true],
-    'contact'  => ['label' => 'Contact person', 'type' => 'text', 'required' => true],
-    'role'     => ['label' => 'Role', 'type' => 'text'],
-    'email'    => ['label' => 'Email', 'type' => 'email', 'required' => true],
-    'phone'    => ['label' => 'Phone', 'type' => 'tel', 'required' => true],
+    'facility' => ['label' => 'Facility name', 'type' => 'text', 'required' => true,
+                   'placeholder' => 'e.g. Vila Central Hospital'],
+    'contact'  => ['label' => 'Contact person', 'type' => 'text', 'required' => true,
+                   'placeholder' => 'e.g. Dr Marie Kalo'],
+    'role'     => ['label' => 'Role', 'type' => 'text',
+                   'placeholder' => 'e.g. Chief Pharmacist'],
+    'email'    => ['label' => 'Email', 'type' => 'email', 'required' => true,
+                   'placeholder' => 'e.g. pharmacy@hospital.vu'],
+    'phone'    => ['label' => 'Phone', 'type' => 'tel', 'required' => true,
+                   'placeholder' => 'e.g. +678 555 1234'],
     'country'  => ['label' => 'Country', 'type' => 'select', 'required' => true, 'options' => [
         'vanuatu' => 'Vanuatu', 'solomon' => 'Solomon Islands', 'fiji' => 'Fiji', 'samoa' => 'Samoa',
         'tonga' => 'Tonga', 'tuvalu' => 'Tuvalu', 'nauru' => 'Nauru', 'other' => 'Other Pacific country',
@@ -29,7 +34,8 @@ $quoteSchema = [
     'products' => ['label' => 'Product list or protocol (upload)', 'type' => 'file',
                    'help' => 'Photo, scan or PDF of the prescription, treatment protocol or product list.'],
     'needed'   => ['label' => 'Date needed', 'type' => 'date'],
-    'notes'    => ['label' => 'Notes', 'type' => 'textarea'],
+    'notes'    => ['label' => 'Notes', 'type' => 'textarea',
+                   'placeholder' => 'e.g. Paclitaxel 100 mg x 6 vials, preferred brand, deliver to Vila Central Hospital, tender ref 2026-14'],
     'consent'  => ['label' => 'Consent', 'type' => 'consent', 'required' => true,
                    'html' => 'I agree that Getmeds Vanuatu may use these details to reply to this request, as set out in the <a href="' . e(url('/privacy')) . '">Privacy Policy</a>.'],
 ];
@@ -72,20 +78,23 @@ include INC . '/header.php';
 
 <section class="g-sec g-bg-white" aria-labelledby="who">
   <div class="g-wrap">
-    <div class="g-head"><h2 id="who">Who we work with</h2></div>
-    <?php g_table(['You are', 'How we can help'], [
-        ['Doctors and GPs', 'Check if a prescribed medicine is available and supply it to your patient'],
-        ['Oncologists and haematologists', 'Supply of cancer medicines by treatment protocol, cycle by cycle'],
-        ['Hospitals', 'Supply to wards and treatment units, including injectable chemotherapy'],
-        ['Clinics', 'Medicines, consumables and devices for your patients'],
-        ['Pharmacists and pharmacies', 'Access to medicines you do not normally stock'],
-        ['Procurement and purchasing teams', 'Quotations for medicines, supplies and equipment'],
-        ['Overseas treatment agencies', 'Local medicine supply for patients who return home to continue treatment'],
-    ]); ?>
+    <div class="g-split g-who-split">
+      <div class="g-stack">
+        <span class="g-label">Our Partners</span>
+        <h2 id="who">Who we work with</h2>
+        <p>Doctors and GPs ask us to check whether a prescribed medicine is available and to supply it to their patient. Oncologists and haematologists rely on us for cancer medicines supplied by treatment protocol, cycle by cycle.</p>
+        <p>Hospitals order supply for wards and treatment units, including injectable chemotherapy, and clinics come to us for the medicines, consumables and devices their patients need. Pharmacists and pharmacies use us for access to medicines they do not normally stock.</p>
+        <p>We also prepare quotations for procurement and purchasing teams covering medicines, supplies and equipment, and arrange local supply for overseas treatment agencies whose patients return home to continue treatment.</p>
+      </div>
+      <figure class="g-who-split__media">
+        <img src="<?= e(asset('/assets/img/ordermedicinehospitals.jpg')) ?>"
+             alt="Medicines being prepared for a hospital order" loading="lazy">
+      </figure>
+    </div>
   </div>
 </section>
 
-<section class="g-sec g-bg-mint" aria-labelledby="supply">
+<section class="g-sec g-bg-white" aria-labelledby="supply">
   <div class="g-wrap">
     <div class="g-head"><h2 id="supply">What we supply</h2></div>
     <ul class="g-hcp-supply" role="list">
@@ -156,25 +165,26 @@ include INC . '/header.php';
   </div>
 </section>
 
-<section class="g-sec g-bg-navy g-wave g-hcp-expect" aria-labelledby="expect">
-  <div class="g-wrap">
-    <div class="g-head g-head--center"><h2 id="expect">What you can expect</h2></div>
-    <div class="g-grid g-grid--3">
+<?php /* Blue-gradient band, same style as the About "Medicine Safety" band:
+         eyebrow and title left, the three points stacked right. */ ?>
+<section class="g-sec g-about-safe" aria-labelledby="expect">
+  <div class="g-wrap g-split g-split--top">
+    <div>
+      <span class="g-label">Working With Us</span>
+      <h2 id="expect">What you can expect</h2>
+    </div>
+    <div class="g-about-safe__text">
       <?php foreach ([
-          ['box',    'Availability', 'A wide range of products, reliable availability, fewer stock-outs and fast order fulfilment'],
-          ['shield', 'Assurance', 'Consistent service, accurate orders, professional communication and reliable follow-up'],
-          ['star',   'Advantage', 'Affordable or competitive prices, flexible solutions and long-term partnership'],
-      ] as [$ic, $t, $d]): ?>
-      <div class="g-hcp-a">
-        <span class="g-hcp-a__icon"><?= gi($ic) ?></span>
+          ['Availability', 'A wide range of products, reliable availability, fewer stock-outs and fast order fulfilment.'],
+          ['Assurance', 'Consistent service, accurate orders, professional communication and reliable follow-up.'],
+          ['Advantage', 'Affordable or competitive prices, flexible solutions and long-term partnership.'],
+      ] as [$t, $d]): ?>
+      <div class="g-expect__item">
         <h3><?= e($t) ?></h3>
         <p><?= e($d) ?></p>
       </div>
       <?php endforeach; ?>
-    </div>
-    <div class="g-hcp-partner">
-      <?= gi('users') ?>
-      <p><strong>Partnership</strong> We work with you as a long-term partner.</p>
+      <p class="g-expect__note"><strong>Partnership</strong> &mdash; we work with you as a long-term partner.</p>
     </div>
   </div>
 </section>

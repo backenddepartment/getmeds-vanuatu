@@ -194,6 +194,7 @@ function gform_render(string $kind, array $schema, array $state, array $o = []):
           $aria  = trim($descr) !== '' ? ' aria-describedby="' . e(trim($descr)) . '"' : '';
           $reqA  = $req ? ' required aria-required="true"' : '';
           $label = e((string) $def['label']) . ($req ? ' <span class="g-req" aria-hidden="true">*</span>' : '');
+          $ph    = isset($def['placeholder']) ? ' placeholder="' . e((string) $def['placeholder']) . '"' : '';
       ?>
       <div class="g-field<?= $err !== '' ? ' g-field--error' : '' ?>">
         <?php if ($type === 'radio'): ?>
@@ -215,7 +216,7 @@ function gform_render(string $kind, array $schema, array $state, array $o = []):
         <label for="<?= e($fid) ?>"><?= $label ?></label>
         <?php if ($help !== ''): ?><span class="g-help" id="<?= e($fid) ?>-h"><?= e($help) ?></span><?php endif; ?>
         <?php if ($type === 'textarea'): ?>
-        <textarea id="<?= e($fid) ?>" name="<?= e($name) ?>" rows="5"<?= $reqA ?><?= $aria ?>><?= e($val) ?></textarea>
+        <textarea id="<?= e($fid) ?>" name="<?= e($name) ?>" rows="5"<?= $reqA ?><?= $aria ?><?= $ph ?>><?= e($val) ?></textarea>
         <?php elseif ($type === 'select'): ?>
         <select id="<?= e($fid) ?>" name="<?= e($name) ?>"<?= $reqA ?><?= $aria ?>>
           <option value="">Choose one</option>
@@ -224,10 +225,29 @@ function gform_render(string $kind, array $schema, array $state, array $o = []):
           <?php endforeach; ?>
         </select>
         <?php elseif ($type === 'file'): ?>
-        <input type="file" id="<?= e($fid) ?>" name="prescription[]" multiple accept=".jpg,.jpeg,.png,.pdf,.heic,.heif,.webp,image/*,application/pdf" data-thumbs="<?= e($fid) ?>-t"<?= $aria ?>>
+        <div class="g-upzone">
+          <input type="file" id="<?= e($fid) ?>" name="prescription[]" multiple accept=".jpg,.jpeg,.png,.pdf,.heic,.heif,.webp,image/*,application/pdf" data-thumbs="<?= e($fid) ?>-t"<?= $aria ?>>
+          <span class="g-upzone__art" aria-hidden="true">
+            <svg viewBox="0 0 100 76" width="100" height="76" fill="none">
+              <rect x="32" y="6" width="34" height="46" rx="4" fill="#DCEEF8" transform="rotate(6 49 29)"/>
+              <g class="g-upz-doc">
+                <rect x="24" y="10" width="36" height="48" rx="4" fill="#fff" stroke="#0B2A5B" stroke-width="2"/>
+                <text x="30" y="27" font-size="11" font-weight="700" fill="#1E9BD7">Rx</text>
+                <path d="M31 35h22M31 41h22M31 47h13" stroke="#B9C7D3" stroke-width="2" stroke-linecap="round"/>
+              </g>
+              <circle class="g-upz-ring" cx="68" cy="53" r="16" stroke="#1E9BD7" stroke-width="1.5" stroke-dasharray="3 5"/>
+              <circle cx="68" cy="53" r="12" fill="#1E9BD7"/>
+              <g class="g-upz-arrow" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M68 59v-11"/>
+                <path d="m63 52.5 5-5 5 5"/>
+              </g>
+            </svg>
+          </span>
+          <span class="g-upzone__txt"><strong>Choose a file</strong> or drag it here</span>
+        </div>
         <div class="g-thumbs" id="<?= e($fid) ?>-t" aria-live="polite"></div>
         <?php else: ?>
-        <input type="<?= e($type) ?>" id="<?= e($fid) ?>" name="<?= e($name) ?>" value="<?= e($val) ?>"<?= $reqA ?><?= $aria ?><?= $type === 'tel' ? ' autocomplete="tel" inputmode="tel"' : '' ?><?= $type === 'email' ? ' autocomplete="email"' : '' ?>>
+        <input type="<?= e($type) ?>" id="<?= e($fid) ?>" name="<?= e($name) ?>" value="<?= e($val) ?>"<?= $reqA ?><?= $aria ?><?= $ph ?><?= $type === 'tel' ? ' autocomplete="tel" inputmode="tel"' : '' ?><?= $type === 'email' ? ' autocomplete="email"' : '' ?>>
         <?php endif; ?>
         <?php endif; ?>
         <?php if ($err !== ''): ?><span class="g-field__err" id="<?= e($fid) ?>-e"><?= e($err) ?></span><?php endif; ?>

@@ -260,8 +260,9 @@ function nav_tree(): array
               'desc'  => 'Browse every medicine group we stock, import or source.'],
              ['label' => 'Conditions',          'url' => '/conditions',
               'desc'  => 'Find medicines by the condition they treat.'],
+             ['label' => 'For Healthcare Professionals', 'url' => '/healthcare-professionals',
+              'desc'  => 'Quotations, bulk supply and support for hospitals, clinics and pharmacies.'],
          ]],
-        ['label' => 'For Healthcare Professionals', 'url' => '/healthcare-professionals'],
         ['label' => 'Articles', 'url' => '/articles'],
         ['label' => 'Contact',              'url' => '/contact'],
     ];

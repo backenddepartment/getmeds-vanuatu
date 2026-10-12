@@ -86,46 +86,45 @@ include INC . '/header.php';
 </section>
 
 <section class="g-sec g-bg-white g-cat-sec" aria-labelledby="cat-h">
-  <div class="g-wrap">
-    <div class="g-split g-cat-head">
-      <div>
-        <span class="g-label">Our Medicines</span>
-        <h2 id="cat-h">What we supply</h2>
+  <div class="g-supply">
+    <div class="g-supply__media">
+      <img src="<?= e(asset('/assets/img/medicinecta.png')) ?>" width="1024" height="1536"
+           loading="lazy" decoding="async"
+           alt="Getmeds Vanuatu-Pacific medicine bottle with blister packs of capsules and tablets on blue and green blocks.">
+      <div class="g-supply__caption">
+        <span class="g-supply__eyebrow">Getmeds<br>Product Range</span>
+        <p class="g-supply__title">Essential to Advanced Therapies</p>
+        <p class="g-supply__meta">8 medicine groups &nbsp;&middot;&nbsp; Stocked, imported and sourced</p>
       </div>
-      <div>
-        <p class="g-lead">Getmeds stocks and sources medicines across every major category, from cancer treatment to everyday supplies. Every item is checked by a pharmacist before it reaches you.</p>
-        <div class="g-btns g-mt"><?= g_btn('See all medicine groups', url('/medicines'), 'secondary') ?></div>
-      </div>
+      <a class="g-supply__plus" href="<?= e(url('/medicines')) ?>" aria-label="See all medicine groups">+</a>
     </div>
-    <?php
-    $tiles = [
-        ['oncology', 'ribbon', 'Cancer medicines', 'Chemotherapy, hormone therapy and other cancer medicines'],
-        ['haematology', 'drop', 'Blood disorders', 'Medicines for blood cancers and blood conditions'],
-        ['supportive-care', 'heart', 'Supportive care', 'Medicines used alongside cancer treatment, such as anti-sickness medicine'],
-        ['diabetes', 'gauge', 'Diabetes', 'Medicines and supplies for people living with diabetes'],
-        ['cardiology', 'pulse', 'Heart and blood pressure', 'Medicines for high blood pressure, cholesterol and heart disease'],
-        ['renal', 'kidney', 'Kidney and dialysis', 'Medicines used in kidney care and dialysis'],
-        ['antibiotics', 'bug', 'Antibiotics', 'Medicines used to treat bacterial infections'],
-        ['medical-supplies', 'box', 'Medical supplies', 'Single-use consumables, devices and equipment'],
-    ];
-    ?>
-    <div class="g-catrow">
-      <div class="g-catrow__track" id="cat-track">
-        <?php foreach ($tiles as $i => [$anchor, $ic, $name, $line]): ?>
-        <a class="g-catcard" href="<?= e(url('/medicines') . '#' . $anchor) ?>">
-          <h3><?= e($name) ?></h3>
-          <p><?= e($line) ?></p>
-          <span class="g-catcard__go">
-            <span>View medicines</span>
-            <span class="g-catcard__arrow" aria-hidden="true"><?= gi('arrow') ?></span>
-          </span>
-        </a>
+    <div class="g-supply__body">
+      <h2 id="cat-h" class="g-supply__h">
+        <span>A portfolio built around</span>
+        <strong>Pacific disease patterns.</strong>
+      </h2>
+      <?php
+      $chips = [
+          ['oncology', 'Cancer Medicines'],
+          ['haematology', 'Blood Disorders'],
+          ['supportive-care', 'Supportive Care'],
+          ['diabetes', 'Diabetes'],
+          ['cardiology', 'Heart &amp; Blood Pressure'],
+          ['renal', 'Kidney &amp; Dialysis'],
+          ['antibiotics', 'Antibiotics'],
+          ['medical-supplies', 'Medical Supplies'],
+      ];
+      ?>
+      <div class="g-supply__chips">
+        <?php foreach ($chips as [$anchor, $name]): ?>
+        <a class="g-supply__chip" href="<?= e(url('/medicines') . '#' . $anchor) ?>"><?= $name ?></a>
         <?php endforeach; ?>
       </div>
-      <div class="g-catrow__nav">
-        <button class="g-catrow__arrow g-catrow__arrow--prev" type="button" data-scroll="-1" data-scroll-target="cat-track" aria-label="Scroll to previous medicine groups"><?= gi('arrow') ?></button>
-        <button class="g-catrow__arrow g-catrow__arrow--next" type="button" data-scroll="1" data-scroll-target="cat-track" aria-label="Scroll to more medicine groups"><?= gi('arrow') ?></button>
-      </div>
+      <nav class="g-supply__tabs" aria-label="Medicine shortcuts">
+        <a class="is-active" href="<?= e(url('/medicines')) ?>">All Medicines</a>
+        <a href="<?= e(url('/patients/how-to-order')) ?>">How to Order</a>
+        <a href="<?= e(url('/order')) ?>">Order Medicines</a>
+      </nav>
     </div>
   </div>
 </section>

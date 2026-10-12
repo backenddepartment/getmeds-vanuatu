@@ -743,7 +743,18 @@ a.g-chip:hover { border-color: var(--g-blue); }
 }
 .g-footer::before { content: ""; display: block; height: 4px; background: var(--g-grad); }
 .g-footer a { color: #fff; text-decoration: none; }
-.g-footer a:hover { text-decoration: underline; }
+/* Footer links: same draw-in line as the Global Network mega menu, but in a
+   white-to-transparent fade so it reads on the blue footer. */
+.g-footer__col a, .g-footer__legal a {
+  display: inline-block; position: relative; padding-bottom: 3px;
+}
+.g-footer__col a::after, .g-footer__legal a::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 2px;
+  border-radius: 2px; background: linear-gradient(to right, #fff, rgba(255,255,255,0));
+  transform: scaleX(0); transform-origin: left; transition: transform .25s ease;
+}
+.g-footer__col a:hover::after, .g-footer__col a:focus-visible::after,
+.g-footer__legal a:hover::after, .g-footer__legal a:focus-visible::after { transform: scaleX(1); }
 .g-footer__main { display: grid; grid-template-columns: minmax(0, 1.5fr) repeat(5, minmax(0, 1fr)); align-items: start; gap: 28px; padding-block: 40px; }
 .g-footer__brand img { height: 56px; width: auto; display: block; margin-bottom: 14px; }
 .g-footer__brand p { color: rgba(255,255,255,.9); max-width: 40ch; }
@@ -807,7 +818,9 @@ a.g-chip:hover { border-color: var(--g-blue); }
   .g-sidemenu { display: none; }
 }
 
-.g-filterbar { position: sticky; top: 64px; z-index: 30; background: #fff; border-bottom: 1px solid var(--g-line); padding-block: 12px; }
+/* Not sticky: the chip bar scrolls away with the page instead of pinning
+   under the header. */
+.g-filterbar { background: #fff; border-bottom: 1px solid var(--g-line); padding-block: 12px; }
 .g-filterbar .g-chips { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 2px; }
 .g-filterbar .g-chip { white-space: nowrap; }
 /* Medicines filter chips: centred, smaller, site blue-gradient pill with a soft shadow.
@@ -932,16 +945,17 @@ a.g-chip:hover { border-color: var(--g-blue); }
 .g-hero--40 > .g-wrap { width: 100%; }
 .g-nps-illus img { display: block; width: 100%; max-width: 520px; height: auto; margin-left: auto; border-radius: 0; box-shadow: none; aspect-ratio: 900 / 847; object-fit: contain; mix-blend-mode: multiply; }
 /* multiply: the photo's off-white ground disappears into the white hero. */
-/* Medicines hero: smaller text across the full width, then the medicinebg
-   photo edge to edge under it (the section loses its bottom padding). */
-.g-med-hero__text { max-width: 1120px; margin-inline: auto; text-align: center; }
-.g .g-med-hero__text h1 { font-size: clamp(34px, 4vw, 56px); font-weight: 600; line-height: 1.15; color: #111; max-width: none; }
-.g .g-med-hero__text .g-hero__lede { margin: 20px auto 0; font-size: clamp(17px, 1.4vw, 21px); line-height: 1.6; font-weight: 500; color: #333; max-width: 1060px; }
+/* Medicines hero: the medicinebg photo sits inside the page gutters with
+   rounded corners, and the hero text is overlaid on a navy tint. */
+.g-med-hero__banner { position: relative; border-radius: var(--g-r-card); overflow: hidden; }
+.g-med-hero__banner .g-med-hero__img { position: absolute; inset: 0; }
+.g-med-hero__banner .g-med-hero__img img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.g-med-hero__text { position: relative; z-index: 1; text-align: left; padding: clamp(44px, 6vw, 88px) clamp(24px, 4vw, 64px); }
+.g .g-med-hero__text h1 { font-size: clamp(26px, 2.6vw, 38px); font-weight: 600; line-height: 1.15; color: #fff; max-width: none; }
+.g .g-med-hero__text .g-hero__lede { margin: 18px 0 0; font-size: clamp(15px, 1.2vw, 17px); line-height: 1.65; font-weight: 400; color: #fff; max-width: 900px; }
 .g .g-med-hero__text p { font-size: 16px; max-width: none; }
 .g .g-med-hero__text .g-box p { font-size: 15px; }
-.g-hero--40:has(.g-med-hero__img) { flex-direction: column; align-items: stretch; padding-bottom: 0; }
-.g-med-hero__img { display: block; margin-top: 40px; }
-.g-med-hero__img img { display: block; width: 100%; height: auto; }
+.g-hero--40:has(.g-med-hero__banner) { flex-direction: column; align-items: stretch; }
 .g-steps-sm { max-width: 900px; margin-inline: auto; }
 .g-steps-sm .g-step__num { width: 40px; height: 40px; font-size: 17px; }
 .g-steps-sm .g-steps--h::before { top: 20px; }
@@ -2379,6 +2393,64 @@ ul.g-chips { padding-left: 0; }
 /* Less space between What we supply and Why Getmeds Vanuatu. */
 .g-cat-sec { padding-bottom: 0; }
 
+/* What we supply, split layout: full-bleed photo panel on the left with a
+   caption overlay, and on the right a two-tone heading, outlined category
+   chips and a small shortcut tab row over a faint grid background. */
+.g-supply { display: grid; grid-template-columns: minmax(0, 40%) minmax(0, 1fr); min-height: 640px; }
+.g-supply__media { position: relative; overflow: hidden; }
+.g-supply__media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; }
+.g-supply__media::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(10, 35, 54, .72) 0%, rgba(10, 35, 54, .25) 32%, rgba(10, 35, 54, 0) 55%);
+}
+.g-supply__caption { position: absolute; left: 32px; right: 96px; bottom: 28px; z-index: 1; color: #fff; }
+.g-supply__eyebrow { display: block; font-size: 19px; line-height: 1.35; font-weight: 400; color: rgba(255,255,255,.95); }
+.g .g-supply__title { margin: 10px 0 0; font-size: clamp(24px, 2.4vw, 32px); line-height: 1.2; font-weight: 600; color: #fff; }
+.g .g-supply__meta { margin: 14px 0 0; font-size: 15px; color: rgba(255,255,255,.92); }
+.g-supply__plus {
+  position: absolute; right: 24px; bottom: 24px; z-index: 1;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 44px; height: 44px; font-size: 30px; font-weight: 300; line-height: 1;
+  color: #fff; text-decoration: none; transition: transform .2s ease;
+}
+.g-supply__plus:hover { transform: scale(1.2); }
+.g-supply__body {
+  display: flex; flex-direction: column; justify-content: center;
+  padding: clamp(48px, 6vw, 96px) clamp(28px, 5vw, 88px);
+  background-color: #fff;
+  background-image:
+    linear-gradient(to right, rgba(17,17,17,.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(17,17,17,.045) 1px, transparent 1px);
+  background-size: 92px 92px;
+}
+.g .g-supply__h { margin: 0 0 40px; font-size: clamp(32px, 3.4vw, 50px); line-height: 1.18; }
+.g-supply__h span { display: block; font-weight: 300; color: #6b7280; }
+.g-supply__h strong { display: block; font-weight: 600; color: #1D9FDA; }
+.g-supply__chips { display: flex; flex-wrap: wrap; gap: 16px; max-width: 880px; }
+.g .g-supply__chip {
+  display: inline-flex; align-items: center;
+  padding: 10px 22px; border: 1px solid #8ecdef; border-radius: 999px;
+  background: #fff; color: #1D9FDA; font-size: 15px; font-weight: 500;
+  text-decoration: none; white-space: nowrap;
+  transition: background .2s ease, color .2s ease, border-color .2s ease;
+}
+.g .g-supply__chip:hover, .g .g-supply__chip:focus-visible { background: #1D9FDA; border-color: #1D9FDA; color: #fff; }
+.g-supply__tabs { display: flex; flex-wrap: wrap; gap: 36px; margin-top: 56px; }
+.g-supply__tabs a { font-size: 15px; color: #8a9199; text-decoration: none; transition: color .2s ease; }
+.g-supply__tabs a:hover { color: #111; }
+.g-supply__tabs a.is-active { color: #111; font-weight: 600; }
+@media (max-width: 63.99em) {
+  .g-supply { grid-template-columns: 1fr; min-height: 0; }
+  .g-supply__media { aspect-ratio: 4 / 3; }
+  .g-supply__media img { position: absolute; }
+  .g-supply__caption { left: var(--g-gutter); right: 88px; bottom: 22px; }
+  .g-supply__body { padding: 40px var(--g-gutter) 48px; }
+  .g .g-supply__h { margin-bottom: 28px; }
+  .g-supply__chips { gap: 12px; }
+  .g-supply__chip { padding: 8px 18px; font-size: 14px; }
+  .g-supply__tabs { margin-top: 36px; gap: 24px; }
+}
+
 /* More affordable access: photo background, section height untouched (the
    photo sits behind the same padding-block the mint background used). */
 .g-aff-sec {
@@ -2568,17 +2640,19 @@ ul.g-chips { padding-left: 0; }
 .g-iform .g-choice { font-size: 14.5px; }
 .g-iform .g-choice input { width: 19px; height: 19px; }
 .g-iform .g-form button[type=submit] { min-height: 48px; font-size: 15.5px; }
-/* The type selector: the brand-gradient pill that swaps the forms. */
+/* The type selector: the brand-gradient pill that swaps the forms. The
+   selector repeats .g-iform so it outweighs the generic .g-iform .g-field
+   select rule above, which otherwise shrinks the gradient layer to 16px. */
 .g-iform__type { margin-top: 24px; }
-.g-iform__type select {
+.g-iform .g-iform__type select {
   width: 100%; border: 0; border-radius: 12px; padding: 12px 44px 12px 16px; font: inherit; font-weight: 600; font-size: 15px;
   color: #fff;
   appearance: none; -webkit-appearance: none; cursor: pointer;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E"), linear-gradient(135deg, #136C99 0%, #1E9BD7 55%, #4DB6E6 100%);
   background-repeat: no-repeat, no-repeat; background-position: right 18px center, 0 0; background-size: 20px, cover;
 }
-.g-iform__type select:focus-visible { outline: 3px solid var(--g-blue); outline-offset: 3px; }
-.g-iform__type select option { color: var(--g-ink); background: #fff; font-weight: 500; }
+.g-iform .g-iform__type select:focus-visible { outline: 3px solid var(--g-blue); outline-offset: 3px; }
+.g-iform .g-iform__type select option { color: var(--g-ink); background: #fff; font-weight: 500; }
 .g .g-iform__quote { font-style: italic; color: var(--g-muted); font-size: 14px; margin: 14px 0 0; }
 .g-iform__panel { margin-top: 8px; }
 .g-iform__panel .g-form { margin-top: 24px; }
@@ -2653,8 +2727,221 @@ html:not(.js) .g-iform__panel { margin-top: 40px; border-top: 1px solid var(--g-
 .g-know__toggle::before, .g-know__toggle::after { content: ""; position: absolute; left: 50%; top: 50%; translate: -50% -50%; background: var(--g-blue-text); border-radius: 2px; }
 .g-know__toggle::before { width: 14px; height: 2.5px; }
 .g-know__toggle::after { width: 2.5px; height: 14px; }
-.g-know__card[open] .g-know__toggle::after { display: none; }
+.g-know__toggle::after { transition: transform .3s ease, opacity .3s ease; }
+.g-know__card[open] .g-know__toggle::after { transform: rotate(90deg); opacity: 0; }
 .g-know__body { padding: 0 24px 24px; }
+.g-know__card[open] .g-know__body { animation: g-know-reveal .4s ease .12s both; }
+@keyframes g-know-reveal {
+  from { opacity: 0; translate: 0 8px; }
+  to { opacity: 1; translate: 0 0; }
+}
+@media (prefers-reduced-motion: reduce) { .g-know__card[open] .g-know__body { animation: none; } }
 .g .g-know__body p { color: rgba(255, 255, 255, .95); font-size: 15.5px; line-height: 1.65; }
 .g-know__card summary:focus-visible { outline: 3px solid #fff; outline-offset: -6px; border-radius: 18px; }
 @media (max-width: 63.99em) { .g-know__grid { grid-template-columns: 1fr; gap: 32px; } }
+
+/* --- Upload dropzone: animated prescription illustration ----------------- */
+/* The invisible file input covers the whole zone, so click and drag-drop both
+   land on the native control. */
+.g-upzone {
+  position: relative; display: grid; justify-items: center; gap: 2px;
+  padding: 20px 16px 16px; text-align: center;
+  border: 2px dashed #B9C7D3; border-radius: var(--g-r-ctl); background: var(--g-sky);
+  transition: border-color .2s ease, background-color .2s ease;
+}
+.g-field .g-upzone input[type=file],
+.g-iform .g-field .g-upzone input[type=file] {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  opacity: 0; cursor: pointer; margin: 0; padding: 0; border: 0;
+}
+.g-upzone:hover, .g-upzone:focus-within { border-color: var(--g-blue); background: #E8F5FC; }
+.g-upzone:focus-within { outline: 3px solid rgba(30, 155, 215, .3); }
+.g-upzone__art svg { display: block; overflow: visible; }
+.g-upzone__art text { font-family: inherit; }
+.g-upzone__txt { font-size: 14.5px; color: var(--g-blue-text); pointer-events: none; }
+.g-upzone__txt strong { color: var(--g-navy); }
+.g-upz-doc, .g-upz-arrow, .g-upz-ring { transform-box: fill-box; transform-origin: center; }
+.g-upz-doc { animation: g-upz-bob 3.2s ease-in-out infinite; }
+.g-upz-arrow { animation: g-upz-rise 1.8s ease-in-out infinite; }
+.g-upz-ring { animation: g-upz-pulse 1.8s ease-in-out infinite; }
+.g-upzone:hover .g-upz-arrow, .g-upzone:focus-within .g-upz-arrow { animation-duration: 1s; }
+@keyframes g-upz-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-2.5px); }
+}
+@keyframes g-upz-rise {
+  0% { transform: translateY(4px); opacity: 0; }
+  30% { opacity: 1; }
+  70% { transform: translateY(-2px); opacity: 1; }
+  100% { transform: translateY(-5px); opacity: 0; }
+}
+@keyframes g-upz-pulse {
+  0%, 100% { transform: scale(1); opacity: .35; }
+  50% { transform: scale(1.12); opacity: .9; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .g-upz-doc, .g-upz-arrow, .g-upz-ring { animation: none; }
+}
+
+/* --- Page dialog: data-modal links (consent Privacy Policy) -------------- */
+.g-pagedlg {
+  width: min(680px, calc(100vw - 32px)); max-height: min(82vh, 740px);
+  margin: auto; padding: 0; border: 0; border-radius: 20px;
+  display: flex; flex-direction: column; overflow: hidden;
+  box-shadow: 0 24px 64px rgba(11, 42, 91, .35);
+  color: var(--g-ink, #1a1a1a);
+}
+.g-pagedlg[open] { animation: g-dlg-in .25s ease; }
+.g-pagedlg::backdrop { background: rgba(15, 15, 15, .55); }
+/* Fixed header: title, date and the X stay put; only the body scrolls, so
+   the thin scrollbar starts below the header and never meets the button. */
+.g-pagedlg__head {
+  flex: none; display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 16px; padding: 22px 20px 12px 32px; border-bottom: 1px solid #ECEFF2;
+}
+.g .g-pagedlg__titles h1 { font-size: 18px; font-weight: 600; margin: 0; color: #000; }
+.g .g-pagedlg__titles .g-legal__date { font-size: 12.5px; color: #555; margin: 2px 0 0; }
+.g-pagedlg__body {
+  overflow: auto; margin-right: 6px; padding: 16px 26px 32px 32px; min-width: 0; color: #000;
+  scrollbar-width: thin; scrollbar-color: #D4D9DE transparent;
+}
+.g-pagedlg__body::-webkit-scrollbar { width: 6px; }
+.g-pagedlg__body::-webkit-scrollbar-thumb { background: #D4D9DE; border-radius: 3px; }
+.g-pagedlg__body::-webkit-scrollbar-track { background: transparent; }
+.g .g-pagedlg__body h2 { font-size: 14.5px; font-weight: 600; margin: 18px 0 2px; color: #000; }
+.g .g-pagedlg__body h2:first-child { margin-top: 0; }
+.g .g-pagedlg__body p { margin: 4px 0 0; font-size: 13.5px; line-height: 1.6; color: #000; }
+.g .g-pagedlg__body a { color: #000; }
+.g-pagedlg__close {
+  flex: none;
+  width: 38px; height: 38px; border: 0; border-radius: 50%; cursor: pointer;
+  background: var(--g-sky); color: var(--g-navy); font-size: 22px; line-height: 1;
+  display: grid; place-items: center; transition: background .2s, color .2s;
+}
+.g-pagedlg__close:hover { background: var(--g-navy); color: #fff; }
+@keyframes g-dlg-in {
+  from { opacity: 0; translate: 0 14px; }
+  to { opacity: 1; translate: 0 0; }
+}
+@media (prefers-reduced-motion: reduce) { .g-pagedlg[open] { animation: none; } }
+@media (max-width: 47.99em) { .g-pagedlg__body { padding: 24px 20px 32px; } }
+
+/* --- Navbar, round 4 ----------------------------------------------------- */
+/* For Healthcare Professionals moved into the Medicines menu, so the search
+   field takes the freed room. Last in the file: these widths override the
+   earlier per-breakpoint search rules. */
+@media (min-width: 110em) { .g .g-navsearch__input { width: clamp(300px, 19vw, 380px); } }
+@media (min-width: 90em) and (max-width: 109.99em) { .g .g-navsearch__input { width: 280px; } }
+@media (min-width: 80em) and (max-width: 89.99em) { .g .g-navsearch__input { width: 250px; } }
+
+/* The language menu: a small card with a heading and radio-style options. */
+.g-nav__item--lang .g-nav__drop--lang { min-width: 200px; padding: 10px; }
+/* Desktop: the card hangs from the navbar's bottom edge, like the mega
+   menus, instead of from the button itself. */
+@media (min-width: 80em) {
+  .g-nav__item--lang .g-nav__drop--lang {
+    position: fixed; top: calc(var(--g-header-h, 85px) - 2px);
+    left: auto; right: max(24px, calc((100vw - var(--g-max)) / 2));
+  }
+}
+.g .g-lang__head {
+  padding: 6px 14px 8px; font-family: var(--g-head); font-size: 14px; font-weight: 500;
+  color: #111;
+}
+.g .g-lang__opt {
+  display: flex; align-items: center; gap: 10px;
+  font-weight: 500; font-size: 14.5px; transition: background .15s ease;
+}
+.g .g-lang__opt::after {
+  content: ""; flex: none; width: 18px; height: 18px; border-radius: 50%; margin-left: auto;
+  border: 2px solid #C9D4DD; transition: border-color .15s ease, background-color .15s ease;
+}
+/* The flag: in the navbar button and beside each option, lightly rounded. */
+.g-lang__flag {
+  display: block; flex: none; width: 22px; height: 14px; border-radius: 3px;
+  object-fit: cover; box-shadow: 0 0 0 1px rgba(0, 0, 0, .12);
+}
+.g-lang__opt .g-lang__flag { width: 20px; height: 13px; }
+.g-nav__item--lang > .g-nav__link { display: inline-flex; align-items: center; gap: 8px; }
+
+/* --- Global Network: the Getmeds family, right of the language switch ---- */
+.g-gn__logo { display: block; flex: none; height: 34px; width: auto; }
+.g-gn__name { display: none; }
+@media (min-width: 80em) {
+  /* Full-width panel flush under the navbar, like the other mega menus. */
+  .g-nav__item--gn .g-nav__drop--gn {
+    display: flex; position: fixed; top: calc(var(--g-header-h, 85px) - 2px); left: 0; right: 0;
+    width: auto; min-width: 0; max-width: none;
+    border: 0; border-radius: 0 0 var(--g-r-card) var(--g-r-card);
+    padding: 18px max(24px, calc((100vw - var(--g-max)) / 2)) 32px;
+    align-items: flex-start; gap: 48px;
+    box-shadow: none;
+  }
+  .g .g-gn__links {
+    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2px 32px; align-self: center;
+  }
+  .g .g-gn__links a { display: inline-flex; padding: 8px 12px; }
+}
+.g .g-gn__links a[aria-current="page"] .g-nav__drop__label { color: #1D9FDA; }
+@media (max-width: 79.99em) {
+  /* In the phone menu: a plain labelled row with the links stacked under it;
+     the intro column stays desktop-only. */
+  .g-gn__logo { display: none; }
+  .g-gn__name { display: inline; }
+  .g-nav__item--gn .g-nav__drop__intro { display: none; }
+  .g-gn__links { flex-direction: column; gap: 0; }
+}
+
+/* --- HCP quotation form: landscape and compact --------------------------- */
+/* Full width instead of a centred 820px card; three columns on desktop with
+   the long fields (upload, notes, consent, submit) spanning the row, and
+   smaller labels and controls throughout. */
+.g-hcp-form { max-width: none; }
+@media (min-width: 64em) {
+  .g-hcp-form .g-form { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px 20px; }
+}
+.g-hcp-form > h3 { font-size: 20px; margin-bottom: 14px; }
+.g-hcp-form .g-field label, .g-hcp-form .g-field legend { font-size: 14px; }
+.g-hcp-form .g-field .g-help { font-size: 12.5px; margin-bottom: 4px; }
+.g-hcp-form .g-field input[type=text], .g-hcp-form .g-field input[type=email],
+.g-hcp-form .g-field input[type=tel], .g-hcp-form .g-field input[type=date],
+.g-hcp-form .g-field select, .g-hcp-form .g-field textarea {
+  min-height: 42px; padding: 9px 12px; font-size: 14px;
+}
+.g-hcp-form .g-field select { padding-right: 38px; background-position: right 12px center; background-size: 16px; }
+.g-hcp-form .g-field textarea { min-height: 88px; }
+.g-hcp-form .g-field__err { font-size: 13px; }
+.g-hcp-form .g-choice { font-size: 13.5px; }
+.g-hcp-form .g-choice input { width: 19px; height: 19px; }
+.g-hcp-form .g-upzone { padding: 14px 12px 12px; }
+.g-hcp-form .g-upzone__art svg { width: 76px; height: auto; }
+.g-hcp-form .g-upzone__txt { font-size: 13px; }
+.g-hcp-form .g-form button[type=submit] { min-height: 46px; font-size: 15px; padding-inline: 32px; }
+
+/* --- HCP "What you can expect": the About safety band with the three
+       points stacked on the right ------------------------------------------ */
+.g .g-expect__item h3 { color: #fff; font-size: 21px; margin: 0 0 6px; }
+.g .g-about-safe__text .g-expect__item p { font-size: 17px; line-height: 1.7; font-weight: 400; color: rgba(255, 255, 255, .95); }
+.g-expect__item + .g-expect__item { margin-top: 28px; }
+.g .g-expect__note {
+  margin-top: 32px; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, .35);
+  color: #fff; font-size: 16px; font-weight: 400;
+}
+
+/* --- HCP "Who we work with": text beside a large rounded photo ----------- */
+.g-who-split__media { margin: 0; }
+.g-who-split__media img {
+  display: block; width: 100%; height: 100%; min-height: 360px; max-height: 480px;
+  object-fit: cover; border-radius: 24px;
+}
+.g .g-who-split .g-label { display: block; margin-bottom: 4px; }
+@media (max-width: 63.99em) {
+  .g-who-split { grid-template-columns: 1fr; gap: 28px; }
+  .g-who-split__media img { min-height: 0; height: 240px; border-radius: 16px; }
+}
+.g .g-lang__opt:hover { background: var(--g-sky); color: var(--g-navy); }
+.g .g-lang__opt[aria-current="true"] { color: var(--g-navy); }
+.g .g-lang__opt[aria-current="true"]::after {
+  border-color: #1D9FDA; background: #1D9FDA; box-shadow: inset 0 0 0 3px #fff;
+}

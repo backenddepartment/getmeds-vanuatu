@@ -33,7 +33,7 @@ $countries = [
 $consent = static fn(): array => [
     'label' => 'Consent', 'type' => 'consent', 'required' => true,
     'html'  => 'I agree that Getmeds may use these details to respond to my enquiry. (<a href="'
-             . e(url('/privacy')) . '">Privacy Policy</a>)',
+             . e(url('/privacy')) . '" data-modal>Privacy Policy</a>)',
 ];
 
 /* The five enquiry types. Each is its own form with its own gform kind, so
@@ -44,13 +44,9 @@ $forms = [
     'medicine' => [
         'option' => 'Medicine Enquiry (Patients & Families)',
         'title'  => 'Medicine enquiry',
-        'quote'  => '“I need a medicine my doctor prescribed, or I want to know if you can supply it and what it costs.”',
         'kind'   => 'enquiry',
         'submit' => 'Send Medicine Enquiry',
         'schema' => [
-            'iam' => ['label' => 'I am', 'type' => 'select', 'required' => true, 'options' => [
-                'patient' => 'The patient', 'family' => 'A family member or friend', 'other' => 'Someone else',
-            ]],
             'name'    => ['label' => 'Full name', 'type' => 'text', 'required' => true,
                           'help' => 'The name of the person we should contact'],
             'patient' => ['label' => 'Patient name (if different)', 'type' => 'text',
@@ -73,7 +69,6 @@ $forms = [
     'cancer' => [
         'option' => 'Cancer Medicine Enquiry',
         'title'  => 'Cancer medicine enquiry',
-        'quote'  => '“A cancer medicine has been prescribed and I need it supplied in Vanuatu, cycle by cycle.”',
         'kind'   => 'cancer-enquiry',
         'submit' => 'Send Cancer Medicine Enquiry',
         'schema' => [
@@ -97,14 +92,9 @@ $forms = [
     'nps' => [
         'option' => 'Named Patient Supply',
         'title'  => 'Named Patient Supply enquiry',
-        'quote'  => '“The medicine is not normally available in Vanuatu and needs to be sourced for a named patient.”',
         'kind'   => 'nps-enquiry',
         'submit' => 'Send Named Patient Supply Enquiry',
         'schema' => [
-            'iam' => ['label' => 'I am', 'type' => 'select', 'required' => true, 'options' => [
-                'patient' => 'The patient', 'family' => 'A family member or friend',
-                'doctor' => 'A doctor', 'pharmacist' => 'A pharmacist', 'other' => 'Someone else',
-            ]],
             'name'    => ['label' => 'Full name', 'type' => 'text', 'required' => true],
             'phone'   => ['label' => 'Phone or WhatsApp number', 'type' => 'tel', 'required' => true,
                           'help' => 'Include your country code, for example +678'],
@@ -124,7 +114,6 @@ $forms = [
     'quotation' => [
         'option' => 'Quotation (Healthcare Professionals)',
         'title'  => 'Request a quotation',
-        'quote'  => '“We are a hospital, clinic or pharmacy and need a line-by-line quotation for medicines or supplies.”',
         'kind'   => 'quotation',
         'submit' => 'Request a Quotation',
         'schema' => [
@@ -145,7 +134,6 @@ $forms = [
     'other' => [
         'option' => 'Something Else',
         'title'  => 'General enquiry',
-        'quote'  => '“I have a question that does not fit the other forms.”',
         'kind'   => 'general-enquiry',
         'submit' => 'Send Enquiry',
         'schema' => [
@@ -317,7 +305,6 @@ include INC . '/header.php';
       <?php foreach ($forms as $key => $f): ?>
       <div class="g-iform__panel<?= $key === $active ? ' is-active' : '' ?>" data-panel="<?= e($key) ?>">
         <h3 class="g-iform__ptitle"><?= e($f['title']) ?></h3>
-        <p class="g-iform__quote"><?= e($f['quote']) ?></p>
         <?php gform_render($f['kind'], $f['schema'], $states[$key], [
             'id'      => 'form-' . $key,
             'submit'  => $f['submit'],
@@ -331,8 +318,8 @@ include INC . '/header.php';
 </section>
 
 <?php /* Before-you-send band: intro left, four gradient accordion cards right.
-         data-single (guide.js) keeps one card open at a time. */ ?>
-<section class="g-sec g-know" aria-labelledby="know-h">
+         data-smooth (guide.js) animates open/close and keeps one card open. */ ?>
+<section class="g-sec g-pt-0 g-know" aria-labelledby="know-h">
   <div class="g-wrap g-know__grid">
     <div class="g-know__intro">
       <span class="g-know__dots" aria-hidden="true"><i></i><i></i></span>
@@ -344,7 +331,7 @@ include INC . '/header.php';
         <?= g_call_btn('Talk to Our Team', 'secondary') ?>
       </div>
     </div>
-    <div class="g-know__cards" data-single>
+    <div class="g-know__cards" data-smooth>
       <details class="g-know__card g-know__card--1" open>
         <summary>
           <span class="g-know__kicker">Request a Medicine</span>
@@ -385,18 +372,6 @@ include INC . '/header.php';
           <p>We confirm we have received your enquiry, a pharmacist reviews any prescription, and we contact you with availability, price and next steps — within one working day. If a medicine is urgent, call us instead.</p>
         </div>
       </details>
-    </div>
-  </div>
-</section>
-
-<section class="g-sec g-bg-white g-sec--tight g-pt-0">
-  <div class="g-wrap g-narrow">
-    <div class="g-box g-box--emergency" role="note">
-      <?= gi('alert') ?>
-      <div>
-        <h2 class="g-box__head">In an emergency</h2>
-        <p>Do not contact a pharmacy in a medical emergency. A fever over 38 °C during or after chemotherapy, vomiting you cannot stop, trouble breathing, or bleeding that will not stop: contact your treating hospital or go to the emergency department now.</p>
-      </div>
     </div>
   </div>
 </section>

@@ -112,6 +112,47 @@
     });
   });
 
+  /* 4b. Accordions marked data-smooth also keep one open, but animate the
+         height on open and close (the before-you-send cards). Without
+         JavaScript they stay plain details and still toggle. */
+  var calm = window.matchMedia('(prefers-reduced-motion: reduce)');
+  $$('[data-smooth]').forEach(function (group) {
+    var items = $$('details', group);
+    items.forEach(function (d) {
+      var sum = d.querySelector('summary');
+      if (!sum || !d.animate) { return; }
+      var busy = false;
+      var run = function (from, to, openAfter) {
+        busy = true;
+        var a = d.animate({ height: [from + 'px', to + 'px'] },
+                          { duration: 340, easing: 'cubic-bezier(.4, 0, .2, 1)' });
+        a.onfinish = function () { d.open = openAfter; busy = false; };
+      };
+      d.gClose = function () {
+        if (!d.open) { return; }
+        if (busy || calm.matches) { d.open = false; return; }
+        run(d.offsetHeight, sum.offsetHeight, false);
+      };
+      sum.addEventListener('click', function (ev) {
+        ev.preventDefault();
+        if (busy) { return; }
+        if (calm.matches) {
+          d.open = !d.open;
+          if (d.open) { items.forEach(function (o) { if (o !== d) { o.open = false; } }); }
+          return;
+        }
+        if (d.open) {
+          run(d.offsetHeight, sum.offsetHeight, false);
+        } else {
+          items.forEach(function (o) { if (o !== d && o.gClose) { o.gClose(); } });
+          var from = d.offsetHeight;
+          d.open = true;
+          run(from, d.offsetHeight, true);
+        }
+      });
+    });
+  });
+
   /* 5. On a phone, footer columns and condition groups start closed, and
         elements marked data-mobile-closed (medicine cards) start closed. */
   if (phone.matches) {
@@ -433,4 +474,56 @@
       bar.classList.toggle('is-slider', !stuck);
     }, { rootMargin: '-65px 0px 0px 0px' }).observe(sentinel);
   });
+
+  /* Links marked data-modal (the consent Privacy Policy link) open the page
+     in a dialog, so a half-filled form is not lost. Without JS or dialog
+     support, or if the fetch fails, the link navigates as normal. */
+  (function () {
+    var links = $$('a[data-modal]');
+    if (!links.length || !window.fetch || !window.DOMParser ||
+        !('showModal' in doc.createElement('dialog'))) { return; }
+    var dlg = null, body = null, titles = null;
+    var build = function () {
+      dlg = doc.createElement('dialog');
+      dlg.className = 'g-pagedlg';
+      dlg.innerHTML = '<div class="g-pagedlg__head"><div class="g-pagedlg__titles"></div>' +
+                      '<button class="g-pagedlg__close" type="button" aria-label="Close">×</button></div>' +
+                      '<div class="g-pagedlg__body g-legal"></div>';
+      doc.body.appendChild(dlg);
+      body = dlg.querySelector('.g-pagedlg__body');
+      titles = dlg.querySelector('.g-pagedlg__titles');
+      dlg.querySelector('.g-pagedlg__close').addEventListener('click', function () { dlg.close(); });
+      dlg.addEventListener('click', function (ev) { if (ev.target === dlg) { dlg.close(); } });
+    };
+    links.forEach(function (a) {
+      a.addEventListener('click', function (ev) {
+        ev.preventDefault();
+        if (!dlg) { build(); }
+        titles.textContent = a.textContent;
+        body.innerHTML = '<p>Loading…</p>';
+        dlg.showModal();
+        fetch(a.href).then(function (r) {
+          if (!r.ok) { throw new Error(r.status); }
+          return r.text();
+        }).then(function (html) {
+          var d = new DOMParser().parseFromString(html, 'text/html');
+          var art = d.querySelector('.g-legal') || d.querySelector('main') || d.body;
+          var crumbs = art.querySelector('.g-crumbs');
+          if (crumbs) { crumbs.parentNode.removeChild(crumbs); }
+          /* The page title and its date line live in the fixed header; only
+             the sections below them scroll. */
+          titles.innerHTML = '';
+          var h1 = art.querySelector('h1');
+          var date = art.querySelector('.g-legal__date');
+          if (h1) { titles.appendChild(h1); }
+          if (date) { titles.appendChild(date); }
+          body.innerHTML = art.innerHTML;
+          body.scrollTop = 0;
+        }).catch(function () {
+          dlg.close();
+          window.location.href = a.href;
+        });
+      });
+    });
+  })();
 })();

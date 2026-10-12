@@ -86,6 +86,11 @@
     for (var j = 0; j < opts.length; j++) {
       opts[j].setAttribute('aria-current', opts[j].getAttribute('data-lang') === l ? 'true' : 'false');
     }
+    var flags = doc.querySelectorAll('[data-lang-flag]');
+    for (var k = 0; k < flags.length; k++) {
+      var src = flags[k].getAttribute(l === 'bi' ? 'data-flag-bi' : 'data-flag-en');
+      if (src) { flags[k].src = src; }
+    }
   };
   doc.addEventListener('click', function (ev) {
     var b = ev.target.closest ? ev.target.closest('[data-lang]') : null;

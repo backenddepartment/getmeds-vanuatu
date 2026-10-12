@@ -117,18 +117,21 @@ include INC . '/header.php';
 ?>
 
 <section class="g-hero g-bg-white g-hero--40 g-pg">
+  <?php /* assets/img/medicinebg inside the page gutters, with the hero text
+           overlaid on a navy tint so it stays readable. */ ?>
   <div class="g-wrap">
-    <div class="g-med-hero__text">
-      <h1>Medicines we supply</h1>
-      <p class="g-hero__lede">Getmeds Vanuatu supplies medicines across several medical areas. Cancer medicines are our main focus. We also supply essential medicines and medical supplies. We list medicine groups, not every product. Stock changes, and we do not want to promise a medicine we cannot supply. Send us the prescription and a pharmacist will check it for you. Prescription medicines need a valid prescription. Availability may vary.</p>
+    <div class="g-med-hero__banner">
+      <picture class="g-med-hero__img">
+        <source type="image/webp" srcset="<?= e(asset('/assets/img/medicinebg-1024.webp')) ?> 1024w, <?= e(asset('/assets/img/medicinebg-full.webp')) ?> 1774w" sizes="(max-width: 1248px) 100vw, 1200px">
+        <img src="<?= e(asset('/assets/img/medicinebg-full.jpg')) ?>" srcset="<?= e(asset('/assets/img/medicinebg-1024.jpg')) ?> 1024w, <?= e(asset('/assets/img/medicinebg-full.jpg')) ?> 1774w" sizes="(max-width: 1248px) 100vw, 1200px"
+             width="1774" height="387" alt="" decoding="async">
+      </picture>
+      <div class="g-med-hero__text">
+        <h1>Medicines we supply</h1>
+        <p class="g-hero__lede">Getmeds Vanuatu supplies medicines across several medical areas. Cancer medicines are our main focus. We also supply essential medicines and medical supplies. We list medicine groups, not every product. Stock changes, and we do not want to promise a medicine we cannot supply. Send us the prescription and a pharmacist will check it for you. Prescription medicines need a valid prescription. Availability may vary.</p>
+      </div>
     </div>
   </div>
-  <?php /* assets/img/medicinebg, edge to edge under the text. */ ?>
-  <picture class="g-med-hero__img">
-    <source type="image/webp" srcset="<?= e(asset('/assets/img/medicinebg-1024.webp')) ?> 1024w, <?= e(asset('/assets/img/medicinebg-full.webp')) ?> 1774w" sizes="100vw">
-    <img src="<?= e(asset('/assets/img/medicinebg-full.jpg')) ?>" srcset="<?= e(asset('/assets/img/medicinebg-1024.jpg')) ?> 1024w, <?= e(asset('/assets/img/medicinebg-full.jpg')) ?> 1774w" sizes="100vw"
-         width="1774" height="387" alt="" decoding="async">
-  </picture>
 </section>
 
 <div class="g-medpage">
