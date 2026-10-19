@@ -27,6 +27,12 @@ if (isset($generated[$path])) {
     return true;
 }
 
+// Mirrors the medicines-flow rewrite in .htaccess.
+if (preg_match('~^/medicines/shop/.+~', $path)) {
+    require $root . '/medicines/shop/index.php';
+    return true;
+}
+
 $file = realpath($root . $path);
 $rootReal = realpath($root);
 

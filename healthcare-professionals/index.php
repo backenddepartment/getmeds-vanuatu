@@ -45,33 +45,40 @@ include INC . '/head.php';
 include INC . '/header.php';
 ?>
 
-<?php /* Full-screen photo hero, same build as the home page (guide.css
-         "Home hero"): the navbar sits see-through over the photo
-         (includes/header.php), headline left, lede and buttons right, then a
-         rule and the kicker. .g-hcphero adds a navy gradient over the grey
-         photo so the white text stays readable. */ ?>
-<section class="g-homehero g-homehero--split g-hcphero" aria-labelledby="hcp-h1">
-  <div class="g-homehero__media">
-    <picture>
-      <source type="image/webp" srcset="<?= e(asset('/assets/img/photo/notes-800.webp')) ?> 800w, <?= e(asset('/assets/img/photo/notes-1280.webp')) ?> 1280w" sizes="100vw">
-      <img src="<?= e(asset('/assets/img/photo/notes-1280.jpg')) ?>"
-           srcset="<?= e(asset('/assets/img/photo/notes-800.jpg')) ?> 800w, <?= e(asset('/assets/img/photo/notes-1280.jpg')) ?> 1280w" sizes="100vw"
-           width="1280" height="854" alt="" loading="eager" fetchpriority="high" decoding="async">
-    </picture>
-  </div>
-  <div class="g-wrap g-homehero__inner">
-    <div class="g-homehero__row">
-      <h1 class="g-homehero__title" id="hcp-h1"><span>For healthcare</span> <span>professionals</span></h1>
-      <div class="g-homehero__side">
-        <p class="g-homehero__lede">A local source for cancer medicines, specialist medicines and medical supplies in Vanuatu and the Pacific. Let us quote for your requirement.</p>
-        <div class="g-homehero__btns">
-          <a class="g-homehero__btn g-homehero__btn--fill" href="#quote">Request a Quotation</a>
-          <a class="g-homehero__btn g-homehero__btn--line" href="<?= e(tel_url()) ?>">Talk to Our Pharmacist</a>
-        </div>
-      </div>
+<?php /* Page intro: eyebrow, title and lede, type as the Named Patient
+         Supply hero (guide.css .g-nps-hero). The header is solid here. */ ?>
+<section class="g-bg-white g-pg g-nps-hero g-hcp-hero" aria-labelledby="hcp-h1">
+  <div class="g-wrap">
+    <div class="g-hcp-hero__text">
+      <span class="g-label">Doctors, Hospitals, Clinics and Pharmacies</span>
+      <h1 id="hcp-h1">For Healthcare Professionals</h1>
+      <p class="g-hero__lede">A local source for cancer medicines, specialist medicines and medical supplies in Vanuatu and the Pacific.</p>
+      <p class="g-nps-simple">Getmeds Vanuatu works with doctors, hospitals, clinics and pharmacies to source the medicines your patients need, including oncology treatments, hard-to-find specialist medicines and essential supplies. Send us a prescription, treatment protocol or product list and our pharmacist will confirm availability, price and delivery time before you order. We supply single named-patient requests as well as regular and tender orders.</p>
     </div>
-    <div class="g-homehero__foot">
-      <p class="g-homehero__kicker">Licensed pharmacy · <?= e(cfg('address_city')) ?>, <?= e(cfg('address_country')) ?></p>
+  </div>
+</section>
+
+<?php /* Same layout as the oncology page's "How we supply cancer medicines"
+         (guide.css "g-onc-supply"): eyebrow, title and text on the left, the
+         six supply areas stacked as blue cards with outline icons on the right. */ ?>
+<section class="g-sec g-bg-white g-onc-supply g-hcp-supplysec" aria-labelledby="supply">
+  <div class="g-wrap g-onc-supply__split">
+    <div class="g-onc-supply__intro">
+      <span class="g-label">Products and Supplies</span>
+      <h2 id="supply">What we supply</h2>
+      <p>We source a wide range of products through flexible procurement. Some items may be limited by freight costs or the availability of export documents. We will tell you early if this applies.</p>
+    </div>
+    <div class="g-onc-supply__panel">
+      <?php foreach ([
+          ['ribbon',    'Cancer medicines — our main specialisation'],
+          ['drop',      'Haematology, hormonal and supportive-care medicines'],
+          ['pill',      'Essential medicines, including antibiotics and cardiometabolic medicines'],
+          ['kidney',    'Medicines for dialysis and heart disease'],
+          ['box',       'Single-use medical consumables'],
+          ['flask',     'Medical devices, equipment, laboratory supplies and contrast media'],
+      ] as [$ic, $t]): ?>
+      <?= g_card($ic, $t, '') ?>
+      <?php endforeach; ?>
     </div>
   </div>
 </section>
@@ -94,25 +101,6 @@ include INC . '/header.php';
   </div>
 </section>
 
-<section class="g-sec g-bg-white" aria-labelledby="supply">
-  <div class="g-wrap">
-    <div class="g-head"><h2 id="supply">What we supply</h2></div>
-    <ul class="g-hcp-supply" role="list">
-      <?php foreach ([
-          ['ribbon',    'Cancer medicines — our main specialisation'],
-          ['drop',      'Haematology, hormonal and supportive-care medicines'],
-          ['pill',      'Essential medicines, including antibiotics and cardiometabolic medicines'],
-          ['kidney',    'Medicines for dialysis and heart disease'],
-          ['box',       'Single-use medical consumables'],
-          ['flask',     'Medical devices, equipment, laboratory supplies and contrast media'],
-      ] as [$ic, $t]): ?>
-      <li><span class="g-hcp-supply__icon"><?= gi($ic) ?></span><span><?= e($t) ?></span></li>
-      <?php endforeach; ?>
-    </ul>
-    <p class="g-mt-lg">We source a wide range of products through flexible procurement. Some items may be limited by freight costs or the availability of export documents. We will tell you early if this applies.</p>
-  </div>
-</section>
-
 <section class="g-sec g-bg-white" aria-labelledby="onco">
   <div class="g-wrap">
     <div class="g-split">
@@ -128,16 +116,6 @@ include INC . '/header.php';
         <div class="g-diagram__arrow" aria-hidden="true"><?= gi('arrow') ?></div>
         <div class="g-diagram__step" aria-hidden="true"><?= gi('refresh') ?><strong>Supply per cycle</strong></div>
       </div>
-    </div>
-  </div>
-</section>
-
-<section class="g-sec g-sec--tight g-bg-white g-hcp-nps" aria-labelledby="nps">
-  <div class="g-wrap">
-    <div class="g-card g-card--sky g-stack">
-      <h2 id="nps" class="g-h3">Named Patient Supply</h2>
-      <p>If your patient needs a medicine that is not normally available in Vanuatu, we help arrange it for that named patient. We handle sourcing, the import approval and the paperwork.</p>
-      <p><a class="g-link-arrow" href="<?= e(url('/named-patient-supply')) ?>">How Named Patient Supply works <?= gi('arrow') ?></a></p>
     </div>
   </div>
 </section>

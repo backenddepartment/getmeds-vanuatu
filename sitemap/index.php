@@ -22,7 +22,7 @@ foreach (sitemap_pages() as $p) {
 
 $main = $more = $info = [];
 foreach ($byPath as $path => $p) {
-    if (strpos($path, '/conditions/') === 0) {
+    if (strpos($path, '/conditions/') === 0 || strpos($path, '/medicines/shop/') === 0) {
         continue;                      // listed under their groups below
     }
     if ($p['tier'] === 0)     { $main[] = $p; }
@@ -67,6 +67,14 @@ include INC . '/header.php';
       </div>
 
       <div>
+        <h2>Medicines</h2>
+        <ul>
+          <li><a href="<?= e(url('/medicines/catalog')) ?>">Medicines catalog</a></li>
+          <?php foreach (shop_categories() as $slug => [$name]): ?>
+          <li><a href="<?= e(url(shop_category_path($slug))) ?>"><?= e($name) ?></a></li>
+          <?php endforeach; ?>
+        </ul>
+
         <h2>Conditions</h2>
         <?php foreach (sitemap_condition_groups() as $group):
             $items = array_filter($group['conditions'] ?? [], fn($c) => isset($byPath['/conditions/' . $c['slug']]));

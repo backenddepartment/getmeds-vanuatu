@@ -2,9 +2,11 @@
 /**
  * Main navigation: the items from nav_tree(). About Us and Medicines open a
  * dropdown on hover or focus without JavaScript; guide.js adds click and
- * Escape handling. About Us also carries its own link (a "linkable" parent):
- * its label goes straight to /about, and a separate caret button opens the
- * dropdown. On a phone the list drops open under the header.
+ * Escape handling. Both also carry their own link (a "linkable" parent): the
+ * label goes straight to the page, and a separate caret button opens the
+ * dropdown. Dropdown links are page names only. Medicines lays its
+ * categories out in a grid ('grid') and puts a button under its intro
+ * ('button'). On a phone the list drops open under the header.
  */
 $here = current_path();
 $tree = nav_tree();
@@ -33,19 +35,29 @@ $network = [
     <?php foreach ($tree as $i => $item):
         $kids   = $item['children'] ?? [];
         $isHere = $item['url'] === '/' ? $here === '/' : in_section($item['url']);
-        if ($kids) {
-            foreach ($kids as $k) {
-                $isHere = $isHere || in_section($k['url']);
-            }
+        $btn    = $item['menu_intro']['button'] ?? null;
+        if ($btn) {
+            $isHere = $isHere || in_section($btn[1]);
+        }
+        foreach ($kids as $k) {
+            $kPath  = (string) parse_url($k['url'], PHP_URL_PATH);
+            $isHere = $isHere || (!empty($k['exact']) ? $here === $kPath : in_section($kPath));
         }
     ?>
     <?php if ($i === $last): /* Site search, GET to /search, so it works without JS. */ ?>
     <li class="g-nav__item g-nav__item--search">
-      <form class="g-navsearch" role="search" method="get" action="<?= e(url('/search/')) ?>">
-        <label class="g-sr" for="g-navsearch-q">Search this site</label>
+      <?php /* Suggestions as you type (assets/js/search-suggest.js): medicines,
+               their categories and pages, from /search/?format=json. Enter
+               opens the full results page. */ ?>
+      <form class="g-navsearch" role="search" method="get" action="<?= e(url('/search/')) ?>" data-suggest="<?= e(url('/search/')) ?>">
+        <label class="g-sr" for="g-navsearch-q">Search medicines and pages</label>
         <input class="g-navsearch__input" type="search" id="g-navsearch-q" name="q"
-               placeholder="How can we help you?" autocomplete="off" maxlength="100" value="<?= e($navQ) ?>">
+               placeholder="How can we help you?" autocomplete="off" maxlength="100" value="<?= e($navQ) ?>"
+               role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="g-suggest">
         <button class="g-navsearch__btn" type="submit" aria-label="Search"><?= gi('search') ?></button>
+        <div class="g-suggest" id="g-suggest" hidden></div>
+        <template id="g-suggest-empty"><?= g_noresult('g-noresult--sm') ?></template>
+        <template id="g-suggest-icons"><span data-i="med"><?= gi('pill') ?></span><span data-i="cat"><?= gi('box') ?></span><span data-i="page"><?= gi('clipboard') ?></span><span data-i="go"><?= gi('arrow') ?></span></template>
       </form>
     </li>
     <?php endif; ?>
@@ -60,14 +72,16 @@ $network = [
         <div class="g-nav__drop__intro">
           <h2><?= e($item['menu_intro']['heading']) ?></h2>
           <p><?= e($item['menu_intro']['text']) ?></p>
+          <?php if ($btn): ?>
+          <a class="g-nav__drop__btn" href="<?= e(url($btn[1])) ?>"><?= e($btn[0]) ?></a>
+          <?php endif; ?>
         </div>
         <?php endif; ?>
-        <ul class="g-nav__drop__links">
+        <ul class="g-nav__drop__links<?= !empty($item['grid']) ? ' g-nav__drop__links--grid' : '' ?>">
           <?php foreach ($kids as $k): ?>
           <li>
             <a href="<?= e(url($k['url'])) ?>"<?= $here === $k['url'] ? ' aria-current="page"' : '' ?>>
-              <span class="g-nav__drop__label"><?= e($k['label']) ?></span>
-              <?php if (!empty($k['desc'])): ?><span class="g-nav__drop__desc"><?= e($k['desc']) ?></span><?php endif; ?>
+              <span class="g-nav__drop__label"><?= e($k['label']) ?></span><?php if (empty($item['grid'])): ?><?= gi('arrow-ur', 'g-nav__drop__go') ?><?php endif; ?>
             </a>
           </li>
           <?php endforeach; ?>
@@ -129,6 +143,15 @@ $network = [
           </li>
           <?php endforeach; ?>
         </ul>
+        <?php /* The world map, as on Getmeds India: desktop only. The blue
+                 location dots are part of the picture. AVIF, then WebP; the
+                 902 KB PNG it was made from is not served. */ ?>
+        <div class="g-gn__map" aria-hidden="true">
+          <picture>
+            <source type="image/avif" srcset="<?= e(asset('/assets/img/countries.avif')) ?>">
+            <img src="<?= e(asset('/assets/img/countries.webp')) ?>" alt="" width="1672" height="941" decoding="async" loading="lazy">
+          </picture>
+        </div>
       </div>
     </li>
   </ul>

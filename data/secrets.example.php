@@ -12,4 +12,9 @@
 return [
     // From https://newsdata.io/ -> Dashboard -> API Key.
     'newsdata_api_key' => '',
+    // Brevo (https://app.brevo.com -> SMTP & API -> API Keys). Emails the
+    // Send Inquiry forms on the medicine pages. The sender must be an address
+    // verified in that Brevo account; leave it '' to use config.php's 'email'.
+    'brevo_api_key'      => '',
+    'brevo_sender_email' => '',
 ];

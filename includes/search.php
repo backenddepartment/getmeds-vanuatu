@@ -229,6 +229,214 @@ function site_search(string $q): array
     return $out;
 }
 
+/* -----------------------------------------------------------------------------
+ * Products and pages, ranked as Getmeds India ranks them, so the same search
+ * gives the same products in the same order (search/index.php, and the
+ * header's suggestions through ?format=json).
+ * -------------------------------------------------------------------------- */
+
+/** Lower case, punctuation folded to single spaces: used on both sides of every comparison. */
+function srch_normalize(string $value): string
+{
+    $text = html_entity_decode(strip_tags($value), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    $text = mb_strtolower($text, 'UTF-8');
+    $text = (string) preg_replace('/[^\p{L}\p{N}]+/u', ' ', $text);
+    return trim((string) preg_replace('/\s+/u', ' ', $text));
+}
+
+/** The words that must match. Single letters are dropped, unless that is all there is. */
+function srch_terms(string $query): array
+{
+    $normalized = srch_normalize($query);
+    if ($normalized === '') {
+        return [];
+    }
+    $terms = array_filter(explode(' ', $normalized), static function ($t) {
+        return mb_strlen($t, 'UTF-8') > 1;
+    });
+    if (!$terms) {
+        $terms = array_filter(explode(' ', $normalized));
+    }
+    return array_values(array_unique($terms));
+}
+
+/**
+ * A record's score, or 0 if any word is missing. Name hits weigh most (whole
+ * word 30, start of a word 20, inside 12), then the subtitle (8 or 5), then
+ * the body (2). Bonus when the whole query is the name (+200), starts it
+ * (+60) or is inside it (+25).
+ */
+function srch_score(array $fields, array $terms): int
+{
+    $title    = srch_normalize($fields['title'] ?? '');
+    $subtitle = srch_normalize($fields['subtitle'] ?? '');
+    $body     = srch_normalize($fields['body'] ?? '');
+    if ($title === '' && $subtitle === '' && $body === '') {
+        return 0;
+    }
+    $score = 0;
+    foreach ($terms as $term) {
+        $q = preg_quote($term, '/');
+        $termScore = 0;
+        if ($title !== '' && strpos($title, $term) !== false) {
+            if (preg_match('/(?:^| )' . $q . '(?:$| )/u', $title)) {
+                $termScore = 30;
+            } elseif (preg_match('/(?:^| )' . $q . '/u', $title)) {
+                $termScore = 20;
+            } else {
+                $termScore = 12;
+            }
+        } elseif ($subtitle !== '' && strpos($subtitle, $term) !== false) {
+            $termScore = preg_match('/(?:^| )' . $q . '(?:$| )/u', $subtitle) ? 8 : 5;
+        } elseif ($body !== '' && strpos($body, $term) !== false) {
+            $termScore = 2;
+        }
+        if ($termScore === 0) {
+            return 0;
+        }
+        $score += $termScore;
+    }
+    $phrase = implode(' ', $terms);
+    if ($title === $phrase) {
+        $score += 200;
+    } elseif ($title !== '' && strpos($title, $phrase) === 0) {
+        $score += 60;
+    } elseif ($title !== '' && strpos($title, $phrase) !== false) {
+        $score += 25;
+    }
+    return $score;
+}
+
+/** Highest score first; equal scores A to Z, so the order never shuffles. */
+function srch_rank(array $hits): array
+{
+    usort($hits, static function ($a, $b) {
+        return $a['score'] === $b['score'] ? strcasecmp($a['title'], $b['title']) : $b['score'] <=> $a['score'];
+    });
+    return $hits;
+}
+
+/** Every product that matches. Each: score, title, summary, meta, path. */
+function srch_products(array $terms): array
+{
+    $hits = [];
+    foreach (shop_products() as $p) {
+        $score = srch_score([
+            'title'    => $p['name'],
+            'subtitle' => $p['category'] . ' ' . $p['drug_class'],
+            'body'     => $p['oncology_type'],
+        ], $terms);
+        if ($score > 0) {
+            $hits[] = [
+                'score'   => $score,
+                'title'   => $p['name'],
+                'summary' => trim(implode(' · ', array_filter([$p['category'], $p['drug_class']]))),
+                'meta'    => $p['oncology_type'],
+                'path'    => shop_product_path($p),
+            ];
+        }
+    }
+    return srch_rank($hits);
+}
+
+/**
+ * Every site page that matches, from search_pages() (the pages themselves,
+ * not a list kept by hand): the title, then the description, then the text.
+ */
+function srch_pages(array $terms): array
+{
+    $hits = [];
+    foreach (search_pages() as $page) {
+        $score = srch_score(['title' => $page['title'], 'subtitle' => $page['desc'], 'body' => $page['text']], $terms);
+        if ($score > 0) {
+            $hits[] = [
+                'score'   => $score,
+                'title'   => $page['title'],
+                'summary' => $page['desc'] !== '' ? $page['desc'] : $page['text'],
+                'meta'    => '',
+                'path'    => $page['url'],
+            ];
+        }
+    }
+    return srch_rank($hits);
+}
+
+/** Both groups, the one with the best match listed first. */
+function srch_all(string $query, int $perGroup = 12): array
+{
+    $terms = srch_terms($query);
+    if (!$terms) {
+        return ['terms' => [], 'groups' => [], 'total' => 0, 'shown' => 0];
+    }
+    $sources = [
+        'products' => ['label' => 'Products', 'hits' => srch_products($terms)],
+        'pages'    => ['label' => 'Pages',    'hits' => srch_pages($terms)],
+    ];
+    $groups = [];
+    $total = $shown = 0;
+    foreach ($sources as $key => $source) {
+        if (!$source['hits']) {
+            continue;
+        }
+        $items = array_slice($source['hits'], 0, $perGroup);
+        $groups[$key] = ['label' => $source['label'], 'items' => $items, 'all' => $source['hits'],
+                         'total' => count($source['hits']), 'top' => $source['hits'][0]['score']];
+        $total += count($source['hits']);
+        $shown += count($items);
+    }
+    uasort($groups, static function ($a, $b) {
+        return $b['top'] <=> $a['top'];
+    });
+    return ['terms' => $terms, 'groups' => $groups, 'total' => $total, 'shown' => $shown];
+}
+
+/** Wraps matched words in <mark>. Takes text that is already escaped. */
+function srch_highlight(string $escaped, array $terms): string
+{
+    if ($escaped === '' || !$terms) {
+        return $escaped;
+    }
+    $patterns = array_map(static function ($t) {
+        return preg_quote($t, '/');
+    }, $terms);
+    usort($patterns, static function ($a, $b) {
+        return strlen($b) <=> strlen($a);
+    });
+    return (string) preg_replace('/(' . implode('|', $patterns) . ')/iu', '<mark>$1</mark>', $escaped);
+}
+
+/** Shortens a long summary on a word boundary. */
+function srch_trim(string $text, int $limit = 200): string
+{
+    $text = trim($text);
+    if (mb_strlen($text, 'UTF-8') <= $limit) {
+        return $text;
+    }
+    $cut   = mb_substr($text, 0, $limit, 'UTF-8');
+    $space = mb_strrpos($cut, ' ', 0, 'UTF-8');
+    return rtrim($space ? mb_substr($cut, 0, $space, 'UTF-8') : $cut, ' ,.;:') . '…';
+}
+
+/** Medicine categories whose name holds every search word. Each: name, url, count. */
+function search_medicine_cats(string $q): array
+{
+    $terms = search_terms($q);
+    if (!$terms) {
+        return [];
+    }
+    $out = [];
+    foreach (shop_categories() as $slug => [$name, , $n]) {
+        $lower = mb_strtolower($name, 'UTF-8');
+        foreach ($terms as $t) {
+            if (mb_strpos($lower, $t, 0, 'UTF-8') === false) {
+                continue 2;
+            }
+        }
+        $out[] = ['name' => $name, 'url' => shop_category_path($slug), 'count' => $n];
+    }
+    return $out;
+}
+
 /**
  * A short excerpt around the first matching word, HTML-escaped, with every
  * search word wrapped in <mark>. Safe to echo as-is.

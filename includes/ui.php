@@ -41,6 +41,7 @@ function gi(string $name, string $class = ''): string
         'image'     => '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/>',
         'user-tag'  => '<circle cx="9" cy="7" r="4"/><path d="M2 21v-2a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v2"/><path d="M17 11h5v4h-5z"/><path d="M19.5 9v2"/>',
         'user'      => '<circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/>',
+        'send'      => '<path d="M14.5 21.7a.5.5 0 0 0 .9 0L21.9 2.7a.5.5 0 0 0-.6-.6L2.3 8.6a.5.5 0 0 0 0 .9l7.9 3.2a2 2 0 0 1 1.1 1.1z"/><path d="m21.9 2.1-11 10.9"/>',
         'users'     => '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/>',
         'pharmacist'=> '<circle cx="12" cy="7" r="4"/><path d="M5 21v-2a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5v2"/><path d="M12 15v5M9.5 17.5h5"/>',
         'doctor'    => '<path d="M11 2v2M5 2v2"/><path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1"/><path d="M8 15a6 6 0 0 0 12 0v-3"/><circle cx="20" cy="10" r="2"/>',
@@ -64,7 +65,9 @@ function gi(string $name, string $class = ''): string
         'alert'     => '<path d="m21.7 18-8-14a2 2 0 0 0-3.5 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.7-3"/><path d="M12 9v4M12 17h.01"/>',
         'info'      => '<circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/>',
         'arrow'     => '<path d="M5 12h14M12 5l7 7-7 7"/>',
+        'arrow-ur'  => '<path d="M7 17 17 7M8 7h9v9"/>',
         'chev-down' => '<path d="m6 9 6 6 6-6"/>',
+        'chev-right'=> '<path d="m9 6 6 6-6 6"/>',
         'menu'      => '<path d="M4 6h16M4 12h16M4 18h16"/>',
         'close'     => '<path d="M18 6 6 18M6 6l12 12"/>',
         'island'    => '<path d="M13 8c0-2.8-2.2-5-5-5"/><path d="M13 8c0-2.8 2.2-5 5-5"/><path d="M13 8H7a4 4 0 0 0-4 4"/><path d="M13 8h6a4 4 0 0 1 4 4"/><path d="M13 8v12"/><path d="M2 21c3-1.5 6-2 11-2s8 .5 9 2"/>',
@@ -126,10 +129,22 @@ function g_call_btn(string $label = 'Call Us', string $variant = 'secondary'): s
     return g_btn($label, tel_url(), $variant, 'phone');
 }
 
-/** Breadcrumb trail. $trail: [['Home', '/'], ['About', null]] — null marks the current page. */
+/**
+ * Breadcrumb trail. $trail: [['Home', '/'], ['About', null]] — null marks the
+ * current page. The same trail goes out as Google's BreadcrumbList.
+ */
 function g_crumbs(array $trail): void
 {
+    $items = [];
+    foreach ($trail as $i => [$label, $href]) {
+        $items[] = ['@type' => 'ListItem', 'position' => $i + 1, 'name' => $label,
+                    'item' => abs_url($href ?? current_path())];
+    }
     ?>
+    <script type="application/ld+json"><?= json_encode(
+        ['@context' => 'https://schema.org', '@type' => 'BreadcrumbList', 'itemListElement' => $items],
+        JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG
+    ) ?></script>
     <nav class="g-crumbs" aria-label="Breadcrumb">
       <ol>
         <?php foreach ($trail as [$label, $href]): ?>
@@ -243,6 +258,25 @@ function g_cta_band(string $title, string $text = '', array $buttons = []): void
       </div>
     </section>
     <?php
+}
+
+/**
+ * The "no results" illustration: a magnifying glass sweeping over empty
+ * medicine boxes, with a question mark that bobs (guide.css, "No results").
+ * Still when the visitor has asked for less motion. Used by the Product
+ * Range, the search page and the header search's suggestions.
+ */
+function g_noresult(string $class = ''): string
+{
+    return '<svg class="g-noresult' . ($class !== '' ? ' ' . e($class) : '') . '" viewBox="0 0 220 150" aria-hidden="true" focusable="false">'
+         . '<ellipse class="g-nr-shadow" cx="110" cy="136" rx="78" ry="7"/>'
+         . '<g class="g-nr-boxes">'
+         . '<rect x="38" y="62" width="44" height="66" rx="8"/><rect x="88" y="44" width="44" height="84" rx="8"/><rect x="138" y="72" width="44" height="56" rx="8"/>'
+         . '<path d="M48 80h24M48 90h16M98 62h24M98 72h16M148 90h24M148 100h16"/>'
+         . '</g>'
+         . '<g class="g-nr-glass"><circle cx="112" cy="70" r="24"/><path d="M129 87l18 18"/><path class="g-nr-shine" d="M100 60a14 14 0 0 1 12-6"/></g>'
+         . '<text class="g-nr-q" x="174" y="40">?</text>'
+         . '</svg>';
 }
 
 /** Icon card. $body is trusted markup. */

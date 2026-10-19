@@ -235,6 +235,17 @@ function csrf_valid(?string $token): bool
  */
 function nav_tree(): array
 {
+    $shopCats = [];
+    foreach (shop_categories() as $slug => [$name]) {
+        $shopCats[] = ['label' => $name, 'url' => shop_category_path($slug)];
+    }
+    // Names long enough to wrap onto two lines in the four-column dropdown go
+    // to the bottom row, so the rows above stay one line each. Stable: the
+    // rest keep the Conditions page's order.
+    usort($shopCats, static function ($a, $b) {
+        return (strlen($a['label']) > 25) <=> (strlen($b['label']) > 25);
+    });
+
     return [
         ['label' => 'Home',      'url' => '/'],
         ['label' => 'About Us', 'url' => '/about', 'linkable' => true,
@@ -243,29 +254,144 @@ function nav_tree(): array
              'text'    => 'Our story, how Getmeds works, and the specialist care we focus on.',
          ],
          'children' => [
-             ['label' => 'How It Works',         'url' => '/how-it-works',
-              'desc'  => 'The steps from sending a prescription to picking up your medicine.'],
-             ['label' => 'Named Patient Supply', 'url' => '/named-patient-supply',
-              'desc'  => "Sourcing a prescribed medicine that isn't normally available in Vanuatu."],
-             ['label' => 'Oncology',             'url' => '/oncology',
-              'desc'  => 'Cancer and chemotherapy medicines, our main specialisation.'],
+             ['label' => 'How It Works',         'url' => '/how-it-works'],
+             ['label' => 'Named Patient Supply', 'url' => '/named-patient-supply'],
+             ['label' => 'Oncology',             'url' => '/oncology'],
+             // Exact: /medicines/shop sits under /medicines but belongs to the Medicines menu.
+             ['label' => 'Medicines we supply',  'url' => '/medicines', 'exact' => true],
+             ['label' => 'For Healthcare Professionals', 'url' => '/healthcare-professionals'],
          ]],
-        ['label' => 'Medicines', 'url' => '/medicines', 'linkable' => true,
+        // The shop's categories (the condition groups), and the Catalog page
+        // as the "View Full Catalog" button beside them.
+        ['label' => 'Medicines', 'url' => '/medicines/shop', 'linkable' => true, 'grid' => true,
          'menu_intro' => [
              'heading' => 'Medicines',
-             'text'    => 'What we supply, and the conditions we cover.',
+             'text'    => 'Browse our pharmacy by category, or open the full catalog to see every medicine we list.',
+             'button'  => ['View Full Catalog', '/medicines/catalog'],
          ],
-         'children' => [
-             ['label' => 'Medicines we supply', 'url' => '/medicines',
-              'desc'  => 'Browse every medicine group we stock, import or source.'],
-             ['label' => 'Conditions',          'url' => '/conditions',
-              'desc'  => 'Find medicines by the condition they treat.'],
-             ['label' => 'For Healthcare Professionals', 'url' => '/healthcare-professionals',
-              'desc'  => 'Quotations, bulk supply and support for hospitals, clinics and pharmacies.'],
-         ]],
+         'children' => $shopCats],
         ['label' => 'Articles', 'url' => '/articles'],
         ['label' => 'Contact',              'url' => '/contact'],
     ];
+}
+
+/**
+ * The medicines shop's categories: every therapeutic category in
+ * data/products.json, A to Z, each with its product count. Built from the
+ * data, never hand-written, so a category appears when its first product
+ * does. slug => [name, icon, count].
+ */
+function shop_categories(): array
+{
+    static $cats = null;
+    if ($cats !== null) {
+        return $cats;
+    }
+    $cats = [];
+    foreach (shop_products() as $p) {
+        if (!isset($cats[$p['cat']])) {
+            $cats[$p['cat']] = [$p['category'], 'ribbon', 0];
+        }
+        $cats[$p['cat']][2]++;
+    }
+    uasort($cats, static function ($a, $b) {
+        return strcasecmp($a[0], $b[0]);
+    });
+    return $cats;
+}
+
+/** A shop slug, from a name: "Heart and blood vessels" => heart-and-blood-vessels. */
+function shop_slug(string $name): string
+{
+    return trim((string) preg_replace('/[^a-z0-9]+/', '-', strtolower($name)), '-');
+}
+
+/*
+ * The medicines flow. Each level is a real page, linked by its breadcrumb:
+ *   /medicines/catalog                      Catalog: every category and its medicines
+ *   /medicines/shop                         All medicines
+ *   /medicines/shop/<category>/             One category
+ *   /medicines/shop/<category>/<medicine>/  One medicine
+ * The last two are routed by medicines/shop/index.php (.htaccess sends them
+ * there); shop_paths() lists them for the sitemap and the static build.
+ */
+
+/**
+ * Every product in data/products.json (the Getmeds molecule list, used as
+ * it comes), in its order, keyed by slug. The file's order is the default
+ * order of the Product Range table: most-requested first. Each: slug, name,
+ * cat (category slug), category (its name), drug_class, oncology_type, icon,
+ * rx (always true: every molecule here is a prescription medicine).
+ */
+function shop_products(): array
+{
+    static $rows = null;
+    if ($rows !== null) {
+        return $rows;
+    }
+    $rows = [];
+    $raw  = json_decode((string) @file_get_contents(APP_ROOT . '/data/products.json'), true);
+    foreach ((array) $raw as $r) {
+        $name = trim((string) ($r['name'] ?? ''));
+        $cat  = trim((string) ($r['category'] ?? ($r['therapeutic_category'] ?? '')));
+        $slug = shop_slug((string) ($r['slug'] ?? $name));
+        if ($slug === '' || $name === '' || $cat === '') {
+            continue;
+        }
+        $rows[$slug] = ['slug' => $slug, 'name' => $name, 'cat' => shop_slug($cat), 'category' => $cat,
+                        'drug_class' => trim((string) ($r['drug_class'] ?? '')),
+                        'oncology_type' => trim((string) ($r['oncology_type'] ?? '')),
+                        'icon' => 'ribbon', 'rx' => true];
+    }
+    return $rows;
+}
+
+/** Solid / Hematologic / Both, for the Product Range quick filters. */
+function shop_oncology_group(array $p): ?string
+{
+    $t = strtolower($p['oncology_type']);
+    $solid = strpos($t, 'solid') !== false;
+    $heme  = strpos($t, 'hematologic') !== false;
+    if ($solid && $heme) {
+        return 'both';
+    }
+    return $solid ? 'solid' : ($heme ? 'hematologic' : null);
+}
+
+/** The conditions in a category's condition group: [[slug, name], ...]. Everyday health has none. */
+function shop_category_conditions(string $catSlug): array
+{
+    foreach (require APP_ROOT . '/data/conditions.php' as $g) {
+        if (shop_slug($g['name']) === $catSlug) {
+            return array_map(static function ($c) {
+                return [$c['slug'], $c['name']];
+            }, $g['conditions']);
+        }
+    }
+    return [];
+}
+
+function shop_category_path(string $catSlug): string
+{
+    return '/medicines/shop/' . $catSlug . '/';
+}
+
+function shop_product_path(array $p): string
+{
+    return shop_category_path($p['cat']) . $p['slug'] . '/';
+}
+
+/** Every category and medicine page, for the sitemap and the static build. */
+function shop_paths(): array
+{
+    $paths = [];
+    foreach (array_keys(shop_categories()) as $slug) {
+        $paths[] = rtrim(shop_category_path($slug), '/');
+    }
+    foreach (shop_products() as $p) {
+        $paths[] = rtrim(shop_product_path($p), '/');
+    }
+    return $paths;
 }
 
 /** Children of a section, for a landing page to list. */
@@ -284,6 +410,8 @@ function footer_columns(): array
 {
     return [
         'Medicines' => [
+            ['Shop medicines',      '/medicines/shop'],
+            ['Medicines catalog',   '/medicines/catalog'],
             ['Medicines we supply', '/medicines'],
             ['Conditions',          '/conditions'],
             ['Cancer medicines',    '/medicines#oncology'],

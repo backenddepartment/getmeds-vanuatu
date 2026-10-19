@@ -22,7 +22,7 @@
 function sitemap_main_paths(): array
 {
     return [
-        '/', '/medicines', '/conditions', '/oncology',
+        '/', '/medicines/shop', '/medicines', '/conditions', '/oncology',
         '/healthcare-professionals', '/how-it-works', '/named-patient-supply',
     ];
 }
@@ -116,6 +116,24 @@ function sitemap_pages(): array
             'lastmod'    => date('Y-m-d', $mtime),
             'title'      => $title !== '' ? $title : ucwords(str_replace('-', ' ', basename($path))),
             'tier'       => $tier,
+        ];
+    }
+
+    // The medicines flow's category and medicine pages, routed by
+    // medicines/shop/index.php rather than a folder each.
+    $shopTime = date('Y-m-d', max((int) @filemtime($root . '/data/products.json'), (int) @filemtime($root . '/medicines/shop/index.php')));
+    $cats = shop_categories();
+    $products = shop_products();
+    foreach (shop_paths() as $path) {
+        $slug = basename($path);
+        $pages[] = [
+            'path'       => $path,
+            'file'       => $root . '/medicines/shop/index.php',
+            'priority'   => '0.8',
+            'changefreq' => 'monthly',
+            'lastmod'    => $shopTime,
+            'title'      => substr_count($path, '/') === 3 ? $cats[$slug][0] : $products[$slug]['name'],
+            'tier'       => 1,
         ];
     }
 

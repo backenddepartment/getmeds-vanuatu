@@ -219,6 +219,52 @@
     });
   });
 
+  /* 7a. Medicines listing (/medicines/shop and its category pages): the
+         search box narrows the cards on the page. The categories are pages
+         of their own, so the sidebar is plain links. ?q= fills the box, and
+         "Search all medicines" (shown when a category has no match) carries
+         the words across to the all-medicines page. */
+  $$('[data-shop]').forEach(function (shop) {
+    var input = shop.querySelector('[data-shop-search]');
+    var items = $$('[data-shop-item]', shop);
+    var count = shop.querySelector('[data-shop-count]');
+    var empty = shop.querySelector('[data-shop-empty]');
+    var wider = empty ? empty.querySelector('.g-cv__btn--ghost') : null;
+    var apply = function () {
+      var q = input ? input.value.trim().toLowerCase() : '';
+      var shown = 0;
+      items.forEach(function (it) {
+        var hit = q === '' || it.textContent.toLowerCase().indexOf(q) !== -1;
+        it.classList.toggle('g-hidden', !hit);
+        if (hit) { shown++; }
+      });
+      if (count) { count.textContent = shown + (shown === 1 ? ' product' : ' products'); }
+      if (empty) { empty.classList.toggle('g-hidden', shown !== 0); }
+      if (wider) { wider.href = wider.href.split('?')[0] + (q ? '?q=' + encodeURIComponent(input.value.trim()) : ''); }
+    };
+    if (!input) { return; }
+    var m = /[?&]q=([^&]*)/.exec(location.search);
+    if (m) {
+      try { input.value = decodeURIComponent(m[1].replace(/\+/g, ' ')); } catch (err) {}
+      apply();
+    }
+    input.addEventListener('input', apply);
+  });
+
+  /* 7c. Catalog (/medicines/catalog): a long category shows its first six
+         products and "More +" for the rest. */
+  $$('[data-catalog]').forEach(function (root) {
+    $$('.g-catalog__more', root).forEach(function (btn) {
+      var grp = btn.closest('.g-catalog__grp');
+      btn.addEventListener('click', function () {
+        var open = btn.getAttribute('aria-expanded') !== 'true';
+        grp.classList.toggle('is-more', open);
+        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        btn.textContent = open ? 'Less −' : 'More +';
+      });
+    });
+  });
+
   /* 7b. News photos and outlet icons come from other servers, and some refuse
          to be shown on another site. One that fails is removed, which leaves
          the stand-in picture (or the globe icon) that sits behind it. currentSrc is empty until a lazy image has
@@ -423,9 +469,9 @@
     update();
   });
 
-  /* 13. Medicines filter bar (data-slider): near the top of the page the
-        chips glide sideways in a slow loop, like a slider; once the bar
-        sticks under the header they settle into the plain row of buttons.
+  /* 13. Medicines filter bar (data-slider): the chips glide sideways in a
+        slow loop, like a slider, and the bar scrolls away with the page. It
+        no longer turns into the row of buttons when it reaches the header.
         The loop needs the row cloned once (hidden from screen readers and
         the tab order), and travels exactly one copy's width — measured
         here, because the flex gap would make a translateX(-50%) loop jump.
@@ -433,7 +479,7 @@
         Without JS, or with reduced motion, the plain buttons simply show. */
   $$('.g-filterbar[data-slider]').forEach(function (bar) {
     var list = bar.querySelector('.g-chips');
-    if (!list || !('IntersectionObserver' in window)) { return; }
+    if (!list) { return; }
     if (reduced && reduced.matches) { return; }
     var items = $$('li', list);
     if (!items.length) { return; }
@@ -446,11 +492,9 @@
       list.appendChild(copy);
     });
     var SPEED = 50; /* px per second */
-    /* The ticker is laid out very differently from the stuck button row
+    /* The ticker is laid out very differently from the plain button row
        (font size, dot separators), so the loop distance must be measured
-       while the is-slider styles apply — hence the class goes on first, and
-       size() skips the stuck state, where the clones are display:none and
-       measure as zero. */
+       while the is-slider styles apply — hence the class goes on first. */
     bar.classList.add('is-slider');
     var size = function () {
       /* offsetLeft, not getBoundingClientRect: the measurement must ignore
@@ -464,15 +508,6 @@
     size();
     window.addEventListener('resize', size);
     if (doc.fonts && doc.fonts.ready) { doc.fonts.ready.then(size); }
-    /* A zero-height sentinel just above the bar tells stuck from not: once it
-       passes under the sticky line (64px header), the bar is pinned. */
-    var sentinel = doc.createElement('span');
-    bar.parentNode.insertBefore(sentinel, bar);
-    new IntersectionObserver(function (entries) {
-      var en = entries[0];
-      var stuck = !en.isIntersecting && en.boundingClientRect.top < 65;
-      bar.classList.toggle('is-slider', !stuck);
-    }, { rootMargin: '-65px 0px 0px 0px' }).observe(sentinel);
   });
 
   /* Links marked data-modal (the consent Privacy Policy link) open the page

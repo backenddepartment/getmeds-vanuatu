@@ -100,53 +100,13 @@ $groups = [
         'Talk to Our Team', tel_url()],
 ];
 
-// Sticky filter chips: label => anchor.
-$chips = [
-    'Cancer'         => 'oncology',
-    'Blood'          => 'haematology',
-    'Supportive care'=> 'supportive-care',
-    'Diabetes'       => 'diabetes',
-    'Heart'          => 'cardiology',
-    'Kidney'         => 'renal',
-    'Antibiotics'    => 'antibiotics',
-    'More'           => 'medicine-groups',
-];
-
 include INC . '/head.php';
 include INC . '/header.php';
 ?>
 
-<section class="g-hero g-bg-white g-hero--40 g-pg">
-  <?php /* assets/img/medicinebg inside the page gutters, with the hero text
-           overlaid on a navy tint so it stays readable. */ ?>
-  <div class="g-wrap">
-    <div class="g-med-hero__banner">
-      <picture class="g-med-hero__img">
-        <source type="image/webp" srcset="<?= e(asset('/assets/img/medicinebg-1024.webp')) ?> 1024w, <?= e(asset('/assets/img/medicinebg-full.webp')) ?> 1774w" sizes="(max-width: 1248px) 100vw, 1200px">
-        <img src="<?= e(asset('/assets/img/medicinebg-full.jpg')) ?>" srcset="<?= e(asset('/assets/img/medicinebg-1024.jpg')) ?> 1024w, <?= e(asset('/assets/img/medicinebg-full.jpg')) ?> 1774w" sizes="(max-width: 1248px) 100vw, 1200px"
-             width="1774" height="387" alt="" decoding="async">
-      </picture>
-      <div class="g-med-hero__text">
-        <h1>Medicines we supply</h1>
-        <p class="g-hero__lede">Getmeds Vanuatu supplies medicines across several medical areas. Cancer medicines are our main focus. We also supply essential medicines and medical supplies. We list medicine groups, not every product. Stock changes, and we do not want to promise a medicine we cannot supply. Send us the prescription and a pharmacist will check it for you. Prescription medicines need a valid prescription. Availability may vary.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
 <div class="g-medpage">
-  <?php /* data-slider: guide.js glides the chips in a loop near the top of
-           the page; once the bar sticks they become the plain buttons. */ ?>
-  <nav class="g-filterbar" data-slider aria-label="Medicine groups">
-    <div class="g-wrap">
-      <ul class="g-chips" role="list">
-        <?php foreach ($chips as $label => $anchor): ?>
-        <li><a class="g-chip" href="#<?= e($anchor) ?>"><?= e($label) ?></a></li>
-        <?php endforeach; ?>
-      </ul>
-    </div>
-  </nav>
-
+  <?php /* The hero and the sliding chip bar are off for now (removed
+           2026-10-15); git history has both. */ ?>
   <section class="g-sec g-bg-white" id="medicine-groups" aria-labelledby="groups-h">
     <div class="g-wrap">
       <div class="g-head g-groups-head">

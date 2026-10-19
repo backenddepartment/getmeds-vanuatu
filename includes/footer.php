@@ -65,6 +65,7 @@
 <?php include INC . '/float-contact.php'; ?>
 
 <script src="<?= e(asset('/assets/js/guide.js')) ?>" defer></script>
+<script src="<?= e(asset('/assets/js/search-suggest.js')) ?>" defer></script>
 <script src="<?= e(asset('/assets/js/i18n.js')) ?>" defer></script>
 </body>
 </html>

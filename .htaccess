@@ -32,6 +32,10 @@ Options -Indexes
   RewriteRule ^sitemap-images\.xml$ sitemap-images.php [L]
   RewriteRule ^robots\.txt$ robots.php [L]
 
+  # The medicines flow: every category and medicine page under
+  # /medicines/shop/ is one PHP page, which works out which it is.
+  RewriteRule ^medicines/shop/.+ medicines/shop/index.php [L]
+
   # Strip a trailing index.php so the canonical URL is the directory.
   RewriteCond %{THE_REQUEST} \s/+(.*/)?index\.php[\s?] [NC]
   RewriteRule ^(.*/)?index\.php$ /%1 [R=301,L]
