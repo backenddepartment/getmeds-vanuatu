@@ -11,8 +11,9 @@
  *      and the prescription; Doctor, Pharmacy and Hospital need neither)
  *   4. the files: JPG, PNG or PDF by their content, not their name; each
  *      under 4 MB, 5 MB and 6 files in all
- *   5. the email, sent through Brevo to cfg('enquiry_recipient'), with Reply
- *      going to the person who asked
+ *   5. a row in the Google Sheet (sheets.php), and, when a Brevo key is set,
+ *      the email to cfg('enquiry_recipient') with Reply going to the person
+ *      who asked. It counts as sent if either one worked.
  * Always answers JSON: {ok, ref} or {ok: false, title, message}.
  *
  * The Brevo key is read from the BREVO_API_KEY environment variable, or from
@@ -20,6 +21,8 @@
  * committed. The sender address ('brevo_sender_email' in secrets.php, else
  * cfg('email')) must be a sender verified in the Brevo account.
  */
+
+require_once INC . '/sheets.php';
 
 const INQ_MAX_FILE  = 4 * 1024 * 1024;   // each file. Keep in step with shop-inquiry.js.
 const INQ_MAX_TOTAL = 5 * 1024 * 1024;
@@ -195,6 +198,8 @@ if ($patient) {
             'name'    => ($kind === 'id' ? 'patient-id-' : 'prescription-') . $have[$kind] . '.' . INQ_TYPES[$mime],
             'content' => base64_encode($bytes),
             'shown'   => $shown,
+            'mime'    => $mime,
+            'bytes'   => $bytes,
         ];
     }
     if ($total > INQ_MAX_TOTAL) {
@@ -234,17 +239,46 @@ if ($patient) {
     );
 }
 
-// 5. Send.
+// 5. Send: a row in the Google Sheet, and the email when Brevo is set up.
 $apiKey = inq_secret('BREVO_API_KEY', 'brevo_api_key');
-if ($apiKey === '') {
-    error_log('Getmeds inquiry: no Brevo key configured (BREVO_API_KEY or data/secrets.php brevo_api_key).');
+if ($apiKey === '' && !sheets_enabled()) {
+    error_log('Getmeds inquiry: neither the Google Sheet (sheets_webhook_url) nor Brevo (brevo_api_key) is configured.');
     inq_fail('Our inquiry form is not taking messages right now. Please call us on ' . cfg('phone') . ' or email ' . cfg('email') . '.', 'Inquiry Not Sent', 503);
 }
-$sender = inq_secret('BREVO_SENDER_EMAIL', 'brevo_sender_email') ?: (string) cfg('email');
 
 $ref = cfg('enquiry_ref_prefix', 'GV') . '-' . date('ymd') . '-' . strtoupper(bin2hex(random_bytes(2)));
-$rows[] = ['Reference', $ref];
 $rows[] = ['Sent from', abs_url(shop_product_path($product))];
+
+// In the sheet these share a tab with the Contact page's form for the same
+// person, so fields both forms ask for go under the Contact form's heading.
+$sameAs = [
+    'patient'  => ['Contact person' => 'Full name', 'Patient name' => 'Patient name (if different)',
+                   'Product' => 'Medicine name(s)', 'Phone' => 'Phone or WhatsApp number'],
+    'doctor'   => ['Name' => 'Full name', 'Product' => 'Medicine name and strength',
+                   'Phone' => 'Phone or WhatsApp number'],
+    'pharmacy' => ['Name' => 'Contact person', 'Message' => 'Notes'],
+    'hospital' => ['Name' => 'Contact person', 'Message' => 'Notes'],
+][$userType];
+$sheetRow = ['Source' => 'Medicine page (Send Inquiry)'];
+foreach ($rows as [$label, $value]) {
+    if ($label === 'Profile') {
+        continue;   // the tab already says who it is
+    }
+    $sheetRow[$label === 'Sent from' ? 'Page' : ($sameAs[$label] ?? $label)] = $value;
+}
+$sheetOk = sheets_append('shop-' . $userType, $ref, $sheetRow, array_map(static function ($f) {
+    return ['name' => $f['name'], 'mime' => $f['mime'], 'data' => $f['bytes']];
+}, $files));
+
+if ($apiKey === '') {
+    if (!$sheetOk) {
+        inq_fail('Your inquiry could not be sent just now. ' . $contactLine, 'Inquiry Not Sent', 502);
+    }
+    $_SESSION['inq_last'] = time();
+    inq_reply(200, ['ok' => true, 'ref' => $ref]);
+}
+$sender = inq_secret('BREVO_SENDER_EMAIL', 'brevo_sender_email') ?: (string) cfg('email');
+$rows[] = ['Reference', $ref];
 
 $html = '<h2 style="font-family:Arial,sans-serif">New inquiry: ' . e($product['name']) . '</h2>'
       . '<table cellpadding="8" style="border-collapse:collapse;font-family:Arial,sans-serif;font-size:14px">';
@@ -287,7 +321,10 @@ curl_close($ch);
 if ($resp === false || $status < 200 || $status >= 300) {
     // The reason goes to the server log only: never the key, never the person's details.
     error_log('Getmeds inquiry ' . $ref . ': Brevo answered ' . $status . ' ' . ($err !== '' ? $err : mb_substr((string) $resp, 0, 300)));
-    inq_fail('Your inquiry could not be sent just now. ' . $contactLine, 'Inquiry Not Sent', 502);
+    // Already in the sheet, so the inquiry is not lost: only fail if neither worked.
+    if (!$sheetOk) {
+        inq_fail('Your inquiry could not be sent just now. ' . $contactLine, 'Inquiry Not Sent', 502);
+    }
 }
 
 $_SESSION['inq_last'] = time();

@@ -17,4 +17,9 @@ return [
     // verified in that Brevo account; leave it '' to use config.php's 'email'.
     'brevo_api_key'      => '',
     'brevo_sender_email' => '',
+    // Google Sheet for every form (includes/sheets.php). The /exec address of
+    // the Apps Script web app in docs/google-sheets.gs, and the same SECRET
+    // that script holds.
+    'sheets_webhook_url'    => '',
+    'sheets_webhook_secret' => '',
 ];

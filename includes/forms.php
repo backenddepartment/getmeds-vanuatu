@@ -23,6 +23,7 @@
  */
 require_once INC . '/enquiry-handler.php';
 require_once INC . '/order-handler.php';
+require_once INC . '/sheets.php';
 
 const GFORM_MIN_SECONDS = 3;
 
@@ -124,10 +125,29 @@ function gform_run(string $kind, array $schema, array $prefill = []): array
         }
         $record[$name] = $v;
     }
-    foreach (order_store_uploads($files, $state['ref']) as $i => $f) {
+    $stored = order_store_uploads($files, $state['ref']);
+    foreach ($stored as $i => $f) {
         $record['file' . ($i + 1)] = $f['path'] . ' (' . $f['orig'] . ')';
     }
     enquiry_deliver($kind, $state['ref'], $record);
+
+    // The same row to the Google Sheet, headed by each field's label.
+    $columns = ['Source' => 'Website form'];
+    foreach ($schema as $name => $def) {
+        if (($def['type'] ?? '') !== 'file' && array_key_exists($name, $record)) {
+            $columns[rtrim((string) ($def['label'] ?? $name), ' *')] = $record[$name];
+        }
+    }
+    $columns['Page'] = (string) strtok((string) ($_SERVER['REQUEST_URI'] ?? '/'), '?');
+    $attach = [];
+    foreach ($stored as $f) {
+        $bytes = @file_get_contents(APP_ROOT . '/' . $f['path']);
+        if ($bytes !== false) {
+            $mime = function_exists('mime_content_type') ? (string) @mime_content_type(APP_ROOT . '/' . $f['path']) : '';
+            $attach[] = ['name' => $f['orig'] !== '' ? $f['orig'] : basename($f['path']), 'mime' => $mime ?: 'application/octet-stream', 'data' => $bytes];
+        }
+    }
+    sheets_append($kind, $state['ref'], $columns, $attach);
 
     return $state;
 }

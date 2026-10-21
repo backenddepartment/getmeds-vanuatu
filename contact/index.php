@@ -3,9 +3,9 @@
  * Contact (content guide, page 15) — enquiry-hub layout.
  *
  * Top to bottom: a light gradient hero (text left, diamond photo collage
- * right), the four ways to reach us, one big enquiry card where a type
- * selector swaps between five separate forms (each enquiry type asks only
- * for what it needs), the Golden Port location with the map, a "before you
+ * right), the four ways to reach us, one big enquiry card where an "I am a"
+ * selector (the medicines Send Inquiry people types) swaps between five
+ * separate forms (each asks only for what it needs), the Golden Port location with the map, a "before you
  * reach out" band with gradient accordion cards, the other-reasons cards and
  * the emergency note.
  *
@@ -36,14 +36,16 @@ $consent = static fn(): array => [
              . e(url('/privacy')) . '" data-modal>Privacy Policy</a>)',
 ];
 
-/* The five enquiry types. Each is its own form with its own gform kind, so
-   each asks only the questions that type needs. 'kind' must stay unique per
-   form; 'enquiry' and 'quotation' keep their historic names so the log and
-   email subjects read the same as before. */
+/* The enquiry types: the same four people as the Send Inquiry menu on the
+   medicines pages (shop-listing.php $AUDIENCES), plus Something Else. Each is
+   its own form with its own gform kind, so each asks only the questions that
+   person needs. 'kind' must stay unique per form; 'enquiry' and 'quotation'
+   keep their historic names so the log and email subjects read the same as
+   before. */
 $forms = [
-    'medicine' => [
-        'option' => 'Medicine Enquiry (Patients & Families)',
-        'title'  => 'Medicine enquiry',
+    'patient' => [
+        'option' => 'Patient / Caregiver',
+        'title'  => 'Medicine enquiry for a patient',
         'kind'   => 'enquiry',
         'submit' => 'Send Medicine Enquiry',
         'schema' => [
@@ -59,60 +61,59 @@ $forms = [
                           'help' => 'Helps us plan collection or delivery'],
             'medicine' => ['label' => 'Medicine name(s)', 'type' => 'text', 'required' => true,
                            'help' => 'Write it as it appears on the prescription'],
+            'hospital' => ['label' => 'Treating doctor or hospital', 'type' => 'text',
+                           'help' => 'Where the treatment is planned or happening'],
             'prescription' => ['label' => 'Upload prescription', 'type' => 'file',
                                'help' => 'A clear photo or PDF. We need this before we can supply a prescription medicine'],
-            'date_needed'  => ['label' => 'Date needed', 'type' => 'date'],
+            'date_needed'  => ['label' => 'Date needed', 'type' => 'date',
+                               'help' => 'For cancer treatment, the date of the next cycle'],
             'message'      => ['label' => 'Message', 'type' => 'textarea', 'help' => 'Anything else we should know'],
             'consent'      => [],
         ],
     ],
-    'cancer' => [
-        'option' => 'Cancer Medicine Enquiry',
-        'title'  => 'Cancer medicine enquiry',
-        'kind'   => 'cancer-enquiry',
-        'submit' => 'Send Cancer Medicine Enquiry',
+    'doctor' => [
+        'option' => 'Doctor / Healthcare Professional',
+        'title'  => 'Enquiry from a doctor or healthcare professional',
+        'kind'   => 'doctor-enquiry',
+        'submit' => 'Send Enquiry',
         'schema' => [
-            'name'    => ['label' => 'Full name', 'type' => 'text', 'required' => true],
-            'phone'   => ['label' => 'Phone or WhatsApp number', 'type' => 'tel', 'required' => true,
-                          'help' => 'Include your country code, for example +678'],
-            'email'   => ['label' => 'Email', 'type' => 'email'],
-            'country' => ['label' => 'Country', 'type' => 'select', 'required' => true, 'options' => []],
-            'hospital' => ['label' => 'Treating doctor or hospital', 'type' => 'text',
-                           'help' => 'Where the treatment is planned or happening'],
-            'medicine' => ['label' => 'Cancer medicine name(s)', 'type' => 'text', 'required' => true,
-                           'help' => 'As written on the prescription or protocol'],
-            'prescription' => ['label' => 'Upload prescription or treatment protocol', 'type' => 'file',
-                               'help' => 'A clear photo or PDF. A pharmacist reviews it before anything is supplied'],
-            'cycle'   => ['label' => 'Date of the next treatment cycle', 'type' => 'date',
-                          'help' => 'So we can plan the supply around your treatment'],
-            'message' => ['label' => 'Message', 'type' => 'textarea'],
-            'consent' => [],
-        ],
-    ],
-    'nps' => [
-        'option' => 'Named Patient Supply',
-        'title'  => 'Named Patient Supply enquiry',
-        'kind'   => 'nps-enquiry',
-        'submit' => 'Send Named Patient Supply Enquiry',
-        'schema' => [
-            'name'    => ['label' => 'Full name', 'type' => 'text', 'required' => true],
-            'phone'   => ['label' => 'Phone or WhatsApp number', 'type' => 'tel', 'required' => true,
-                          'help' => 'Include your country code, for example +678'],
-            'email'   => ['label' => 'Email', 'type' => 'email'],
-            'country' => ['label' => 'Country', 'type' => 'select', 'required' => true, 'options' => []],
+            'name'     => ['label' => 'Full name', 'type' => 'text', 'required' => true],
+            'role'     => ['label' => 'Role or specialty', 'type' => 'text',
+                           'help' => 'For example oncologist, GP or nurse'],
+            'facility' => ['label' => 'Hospital or clinic', 'type' => 'text'],
+            'phone'    => ['label' => 'Phone or WhatsApp number', 'type' => 'tel', 'required' => true,
+                           'help' => 'Include your country code, for example +678'],
+            'email'    => ['label' => 'Email', 'type' => 'email', 'required' => true],
+            'country'  => ['label' => 'Country', 'type' => 'select', 'required' => true, 'options' => []],
             'medicine' => ['label' => 'Medicine name and strength', 'type' => 'text', 'required' => true,
                            'help' => 'For example the brand or generic name, and the dose'],
-            'doctor'  => ['label' => 'Prescribing doctor', 'type' => 'text', 'required' => true,
-                          'help' => 'Named Patient Supply always starts from a prescription'],
-            'prescription' => ['label' => 'Upload prescription', 'type' => 'file',
-                               'help' => 'A clear photo or PDF'],
-            'why'     => ['label' => 'Why is it hard to get? (if you know)', 'type' => 'textarea',
-                          'help' => 'For example: not registered here, out of stock, or no local supplier'],
-            'consent' => [],
+            'prescription' => ['label' => 'Upload prescription or treatment protocol', 'type' => 'file',
+                               'help' => 'A clear photo or PDF. A pharmacist reviews it before anything is supplied'],
+            'message'  => ['label' => 'Message', 'type' => 'textarea',
+                           'help' => 'Quantities, timing, or anything else about the patient\'s supply'],
+            'consent'  => [],
         ],
     ],
-    'quotation' => [
-        'option' => 'Quotation (Healthcare Professionals)',
+    'pharmacy' => [
+        'option' => 'Pharmacy Owner / Retail Pharmacy',
+        'title'  => 'Enquiry from a pharmacy',
+        'kind'   => 'pharmacy-enquiry',
+        'submit' => 'Send Pharmacy Enquiry',
+        'schema' => [
+            'pharmacy' => ['label' => 'Pharmacy name', 'type' => 'text', 'required' => true],
+            'contact'  => ['label' => 'Contact person', 'type' => 'text', 'required' => true],
+            'email'    => ['label' => 'Email', 'type' => 'email', 'required' => true],
+            'phone'    => ['label' => 'Phone', 'type' => 'tel', 'required' => true],
+            'country'  => ['label' => 'Country', 'type' => 'select', 'required' => true, 'options' => []],
+            'products' => ['label' => 'Product list (upload)', 'type' => 'file',
+                           'help' => 'Photo, scan or PDF of the medicines you want to stock'],
+            'notes'    => ['label' => 'Notes', 'type' => 'textarea',
+                           'help' => 'Medicines, strengths, quantities and how often you reorder'],
+            'consent'  => [],
+        ],
+    ],
+    'hospital' => [
+        'option' => 'Hospital / Institution',
         'title'  => 'Request a quotation',
         'kind'   => 'quotation',
         'submit' => 'Request a Quotation',
@@ -154,19 +155,22 @@ unset($f);
 
 // request_url() types -> which form shows.
 $typeMap = [
-    'medicine'     => 'medicine',
-    'patient'      => 'medicine',
-    'pacific'      => 'medicine',
-    'cancer'       => 'cancer',
-    'nps'          => 'nps',
-    'quotation'    => 'quotation',
-    'professional' => 'quotation',
+    'medicine'     => 'patient',
+    'patient'      => 'patient',
+    'pacific'      => 'patient',
+    'cancer'       => 'patient',
+    'nps'          => 'patient',
+    'doctor'       => 'doctor',
+    'professional' => 'doctor',
+    'pharmacy'     => 'pharmacy',
+    'hospital'     => 'hospital',
+    'quotation'    => 'hospital',
     'other'        => 'other',
 ];
 
 // Pre-fill from the link that brought the visitor here (whitelisted values only).
 $reqType = isset($_GET['type']) && is_string($_GET['type']) ? strtolower(trim($_GET['type'])) : '';
-$active  = $typeMap[$reqType] ?? 'medicine';
+$active  = $typeMap[$reqType] ?? 'patient';
 $prefill = [];
 if ($reqType === 'patient') {
     $prefill['iam'] = 'patient';
@@ -295,7 +299,7 @@ include INC . '/header.php';
       <span class="g-label">Enquiry Form</span>
       <h2 id="iform-h">Send us your enquiry</h2>
       <div class="g-field g-iform__type">
-        <label for="enq-type">Enquiry type</label>
+        <label for="enq-type">I am a</label>
         <select id="enq-type">
           <?php foreach ($forms as $key => $f): ?>
           <option value="<?= e($key) ?>"<?= $key === $active ? ' selected' : '' ?>><?= e($f['option']) ?></option>
@@ -359,7 +363,7 @@ include INC . '/header.php';
           <span class="g-know__toggle" aria-hidden="true"></span>
         </summary>
         <div class="g-know__body">
-          <p>Each enquiry type has its own short form that asks only for what that request needs — a patient medicine enquiry, a cancer medicine, Named Patient Supply, a facility quotation, or anything else. Not sure? Pick any form, or just call us.</p>
+          <p>Choose who you are — a patient or caregiver, a doctor, a pharmacy, or a hospital — and the form changes to ask only for what that request needs. Not sure? Pick Something Else, or just call us.</p>
         </div>
       </details>
       <details class="g-know__card g-know__card--4">

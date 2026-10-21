@@ -81,7 +81,8 @@ $network = [
           <?php foreach ($kids as $k): ?>
           <li>
             <a href="<?= e(url($k['url'])) ?>"<?= $here === $k['url'] ? ' aria-current="page"' : '' ?>>
-              <span class="g-nav__drop__label"><?= e($k['label']) ?></span><?php if (empty($item['grid'])): ?><?= gi('arrow-ur', 'g-nav__drop__go') ?><?php endif; ?>
+              <?php /* <wbr> after a slash, so "A/B" names can wrap there instead of running into the next column. */ ?>
+              <span class="g-nav__drop__label"><?= str_replace('/', '/<wbr>', e($k['label'])) ?></span><?php if (empty($item['grid'])): ?><?= gi('arrow-ur', 'g-nav__drop__go') ?><?php endif; ?>
             </a>
           </li>
           <?php endforeach; ?>
