@@ -32,21 +32,23 @@ Options -Indexes
   RewriteRule ^sitemap-images\.xml$ sitemap-images.php [L]
   RewriteRule ^robots\.txt$ robots.php [L]
 
-  # The medicines flow: every category and medicine page under
-  # /medicines/shop/ is one PHP page, which works out which it is.
+  # The Product Range: /product-range/... is one PHP page, which works out
+  # which it is. The old /medicines/shop/... addresses redirect to it.
+  RewriteRule ^product-range/.+ product-range/index.php [L]
   RewriteRule ^medicines/shop/.+ medicines/shop/index.php [L]
 
   # Strip a trailing index.php so the canonical URL is the directory.
   RewriteCond %{THE_REQUEST} \s/+(.*/)?index\.php[\s?] [NC]
   RewriteRule ^(.*/)?index\.php$ /%1 [R=301,L]
 
-  # An address that matches no file or folder gets the site's own 404 page.
+  # An address that matches no file or folder goes to the Product Range
+  # router: it is a category (/<category>/) or product (/<category>/<product>/)
+  # page, or else the router shows the site's own 404 page with a 404 status.
   # A relative target, so it works wherever the site is mounted (ErrorDocument
   # below needs a path from the web root, which only works at the root).
-  # 404.php sends the 404 status itself.
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteRule ^ 404.php [L]
+  RewriteRule ^ product-range/index.php [L]
 </IfModule>
 
 # ---------------------------------------------------------------------------

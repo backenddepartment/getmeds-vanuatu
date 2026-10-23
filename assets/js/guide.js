@@ -219,7 +219,7 @@
     });
   });
 
-  /* 7a. Medicines listing (/medicines/shop and its category pages): the
+  /* 7a. Medicines listing (/product-range and its category pages): the
          search box narrows the cards on the page. The categories are pages
          of their own, so the sidebar is plain links. ?q= fills the box, and
          "Search all medicines" (shown when a category has no match) carries
@@ -389,6 +389,73 @@
     }, { rootMargin: '0px 0px -18% 0px' });
     if (panel) { io.observe(panel); }
   });
+
+  /* 7f. Healthcare Professionals (.hx sections): each [data-rv] part rises
+         in once it reaches the screen; the supply cards' light follows the
+         pointer; the cancer-care rail fills and the partner photo drifts as
+         the page scrolls. Without JS, or with reduced motion, all simply show. */
+  (function () {
+    var parts = $$('.hx [data-rv]');
+    if (!parts.length) { return; }
+    var still = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (still || !('IntersectionObserver' in window)) {
+      parts.forEach(function (el) { el.classList.add('is-in'); });
+    } else {
+      // A [data-count] number inside the part runs up from zero as it comes in.
+      var count = function (el) {
+        var target = parseInt(el.getAttribute('data-count'), 10) || 0, t0 = 0;
+        var step = function (t) {
+          if (!t0) { t0 = t; }
+          var k = Math.min(1, (t - t0) / 1600);
+          el.textContent = String(Math.round(target * (1 - Math.pow(1 - k, 4))));
+          if (k < 1) { window.requestAnimationFrame(step); }
+        };
+        el.textContent = '0';
+        window.requestAnimationFrame(step);
+      };
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          if (!en.isIntersecting) { return; }
+          en.target.classList.add('is-in');
+          $$('[data-count]', en.target).forEach(count);
+          io.unobserve(en.target);
+        });
+      }, { rootMargin: '0px 0px -10% 0px' });
+      parts.forEach(function (el) { io.observe(el); });
+      // The hero plays on load, even the parts just below the fold.
+      window.requestAnimationFrame(function () {
+        $$('.hx-hero [data-rv], .px-hero [data-rv]').forEach(function (el) { el.classList.add('is-in'); io.unobserve(el); });
+      });
+    }
+    $$('.hx-card').forEach(function (card) {
+      card.addEventListener('pointermove', function (ev) {
+        var r = card.getBoundingClientRect();
+        card.style.setProperty('--mx', (ev.clientX - r.left) + 'px');
+        card.style.setProperty('--my', (ev.clientY - r.top) + 'px');
+      });
+    });
+    if (still) { return; }
+    var flows = $$('.hx-flow'), drifts = $$('.hx [data-par]');
+    var frame = 0;
+    var update = function () {
+      frame = 0;
+      var vh = window.innerHeight || 1;
+      flows.forEach(function (f) {
+        var r = f.getBoundingClientRect();
+        // Empty while the rail's top is below 70% of the screen, full once its bottom passes that line.
+        f.style.setProperty('--p', Math.min(1, Math.max(0, (vh * 0.7 - r.top) / (r.height || 1))).toFixed(4));
+      });
+      drifts.forEach(function (el) {
+        var r = el.parentNode.getBoundingClientRect();
+        var off = Math.max(-1, Math.min(1, (r.top + r.height / 2 - vh / 2) / vh));
+        el.style.setProperty('--par', (off * parseFloat(el.getAttribute('data-par') || '0')).toFixed(1) + 'px');
+      });
+    };
+    var onScroll = function () { if (!frame) { frame = window.requestAnimationFrame(update); } };
+    update();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+  })();
 
   /* 8. Enquiry type cards: select the type in the form and scroll to it. */
   $$('[data-set-type]').forEach(function (card) {

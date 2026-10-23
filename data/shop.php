@@ -1,6 +1,6 @@
 <?php
 /**
- * The retail medicines shelf for /medicines/shop and /medicines/catalog.
+ * The retail medicines shelf for /product-range and /medicines/catalog.
  *
  * Unlike data/medicines.php (groups only), this lists products by generic
  * name, the way a pharmacy counter or shelf would. No prices and no stock

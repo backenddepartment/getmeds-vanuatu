@@ -27,7 +27,11 @@ if (isset($generated[$path])) {
     return true;
 }
 
-// Mirrors the medicines-flow rewrite in .htaccess.
+// Mirrors the Product Range rewrites in .htaccess.
+if (preg_match('~^/product-range/.+~', $path)) {
+    require $root . '/product-range/index.php';
+    return true;
+}
 if (preg_match('~^/medicines/shop/.+~', $path)) {
     require $root . '/medicines/shop/index.php';
     return true;
@@ -46,7 +50,7 @@ if ($file && is_dir($file) && is_file($file . '/index.php')) {
     return false;
 }
 
-// Anything else is a 404, and the static build wants that page's HTML.
-http_response_code(404);
-require $root . '/404.php';
+// Anything else is a category or product page, or a 404 (the Product Range
+// router includes 404.php), and the static build wants that page's HTML.
+require $root . '/product-range/index.php';
 return true;

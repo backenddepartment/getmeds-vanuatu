@@ -257,15 +257,16 @@ function nav_tree(): array
              ['label' => 'How It Works',         'url' => '/how-it-works'],
              ['label' => 'Named Patient Supply', 'url' => '/named-patient-supply'],
              ['label' => 'Oncology',             'url' => '/oncology'],
-             // Exact: /medicines/shop sits under /medicines but belongs to the Medicines menu.
+             // Exact: the pages under /medicines have menus of their own.
              ['label' => 'Medicines we supply',  'url' => '/medicines', 'exact' => true],
              ['label' => 'For Healthcare Professionals', 'url' => '/healthcare-professionals'],
+             ['label' => 'Pacific Access',       'url' => '/pacific-access'],
          ]],
         // The shop's categories (the condition groups), and the Catalog page
         // as the "View Full Catalog" button beside them.
-        ['label' => 'Medicines', 'url' => '/medicines/shop', 'linkable' => true, 'grid' => true,
+        ['label' => 'Product Range', 'url' => '/product-range/', 'linkable' => true, 'grid' => true,
          'menu_intro' => [
-             'heading' => 'Medicines',
+             'heading' => 'Product Range',
              'text'    => 'Browse our pharmacy by category, or open the full catalog to see every medicine we list.',
              'button'  => ['View Full Catalog', '/medicines/catalog'],
          ],
@@ -308,11 +309,11 @@ function shop_slug(string $name): string
 
 /*
  * The medicines flow. Each level is a real page, linked by its breadcrumb:
- *   /medicines/catalog                      Catalog: every category and its medicines
- *   /medicines/shop                         All medicines
- *   /medicines/shop/<category>/             One category
- *   /medicines/shop/<category>/<medicine>/  One medicine
- * The last two are routed by medicines/shop/index.php (.htaccess sends them
+ *   /medicines/catalog         Catalog: every category and its medicines
+ *   /product-range             All products
+ *   /<category>/               One category
+ *   /<category>/<product>/     One product
+ * The last two are routed by product-range/index.php (.htaccess sends them
  * there); shop_paths() lists them for the sitemap and the static build.
  */
 
@@ -373,7 +374,7 @@ function shop_category_conditions(string $catSlug): array
 
 function shop_category_path(string $catSlug): string
 {
-    return '/medicines/shop/' . $catSlug . '/';
+    return '/' . $catSlug . '/';
 }
 
 function shop_product_path(array $p): string
@@ -410,7 +411,7 @@ function footer_columns(): array
 {
     return [
         'Medicines' => [
-            ['Shop medicines',      '/medicines/shop'],
+            ['Product Range',       '/product-range/'],
             ['Medicines catalog',   '/medicines/catalog'],
             ['Medicines we supply', '/medicines'],
             ['Conditions',          '/conditions'],

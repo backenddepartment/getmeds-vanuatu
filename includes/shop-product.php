@@ -1,13 +1,14 @@
 <?php
 /**
- * One product: /medicines/shop/<category>/<medicine>/. Included by
- * medicines/shop/index.php, which sets $product and $cats.
+ * One product: /<category>/<product>/. Included by
+ * product-range/index.php, which sets $product and $cats.
  *
  * A copy of the Getmeds India product page (same layout, sizes, colours,
  * text, steps and popups), built with this site's CSS (guide.css, "Product
  * page") instead of India's Tailwind, which the CSP here would block:
- *   * Left: status | category, name, Oncology Type, Drug Class, "No Image",
- *     the Description card, Related Products chips.
+ *   * Left: status | category and name, with Oncology Type and Drug Class
+ *     beside them (no image placeholder), the Description card, Related
+ *     Products chips.
  *   * Right: Send Inquiry with the profile switcher pill.
  *       Patient / Caregiver: three steps
  *         1 Your details (name, email, phone with country, age)
@@ -21,7 +22,7 @@
  *   * Popups: Inquiry Sent!, Prescription Required, Valid ID Required, the
  *     ID preview, Please Check Your Form (also Submission Failed).
  * assets/js/shop-inquiry.js runs the forms and posts JSON, files as base64,
- * to /medicines/shop/inquiry (shop-inquiry.php), which checks it all again
+ * to /product-range/inquiry (shop-inquiry.php), which checks it all again
  * and emails it through Brevo.
  *
  * Two differences from India, on purpose: no "In stock" line (the
@@ -112,7 +113,7 @@ include INC . '/header.php';
 <div class="g-pd">
 
   <div class="g-pd__crumbbar">
-    <?php g_crumbs([['Home', '/'], ['Catalog', '/medicines/catalog'], ['Medicines', '/medicines/shop'], [$catName, $catPath], [$p['name'], null]]); ?>
+    <?php g_crumbs([['Home', '/'], ['Catalog', '/medicines/catalog'], ['Product Range', '/product-range/'], [$catName, $catPath], [$p['name'], null]]); ?>
     <a class="g-pd__help" href="<?= e(url('/contact')) ?>">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.5 9a2.5 2.5 0 0 1 5 0c0 1.5-2 2-2 3.5" stroke-linecap="round"/><circle cx="12" cy="17" r="0.6" fill="currentColor" stroke="none"/></svg>
       Do you need help?
@@ -135,15 +136,13 @@ include INC . '/header.php';
               <a class="g-pd__cat" href="<?= e(url($catPath)) ?>"><?= e($catName) ?></a>
             </p>
             <h1><?= e($p['name']) ?></h1>
+          </div>
+          <?php /* Right of the name: the key details, where a product photo
+                   would sit (there are no product photos). */ ?>
+          <div class="g-pd__metacol">
             <div class="g-pd__meta">
               <?php if ($p['oncology_type'] !== ''): ?><div><span>Oncology Type</span><strong><?= e($p['oncology_type']) ?></strong></div><?php endif; ?>
               <?php if ($p['drug_class'] !== ''): ?><div><span>Drug Class / Mechanism</span><strong><?= e($p['drug_class']) ?></strong></div><?php endif; ?>
-            </div>
-          </div>
-          <div class="g-pd__imgcol">
-            <div class="g-pd__noimg" aria-hidden="true">
-              <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-              <span>No Image</span>
             </div>
           </div>
         </div>
@@ -201,7 +200,7 @@ include INC . '/header.php';
         <p class="g-pd__static">Call us on <?= phone_link() ?> or email <a href="mailto:<?= e(cfg('email')) ?>?subject=<?= rawurlencode('Inquiry: ' . $p['name']) ?>"><?= e(cfg('email')) ?></a> with the product name, and attach your prescription.</p>
         <?php else: ?>
         <div id="pd-app"
-             data-endpoint="<?= e(url('/medicines/shop/inquiry')) ?>"
+             data-endpoint="<?= e(url('/product-range/inquiry')) ?>"
              data-product="<?= e($p['slug']) ?>"
              data-token="<?= e($token) ?>"
              data-profiles="<?= e(json_encode($PROFILES)) ?>">

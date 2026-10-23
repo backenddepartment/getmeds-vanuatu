@@ -24,6 +24,18 @@
 require_once INC . '/enquiry-handler.php';
 require_once INC . '/order-handler.php';
 require_once INC . '/sheets.php';
+require_once INC . '/mailer.php';
+
+/** What each form is called in its emails ("We have received your ..."). */
+const GFORM_MAIL_NAMES = [
+    'enquiry'          => 'Medicine enquiry',
+    'doctor-enquiry'   => 'Doctor enquiry',
+    'pharmacy-enquiry' => 'Pharmacy enquiry',
+    'quotation'        => 'Quotation request',
+    'general-enquiry'  => 'Enquiry',
+    'complaint'        => 'Complaint',
+    'side-effect'      => 'Side effect report',
+];
 
 const GFORM_MIN_SECONDS = 3;
 
@@ -148,6 +160,23 @@ function gform_run(string $kind, array $schema, array $prefill = []): array
         }
     }
     sheets_append($kind, $state['ref'], $columns, $attach);
+
+    // The emails (mailer.php, through Brevo): the team's copy with the files,
+    // and a confirmation to the person when they gave an email address.
+    $what = GFORM_MAIL_NAMES[$kind] ?? 'Enquiry';
+    $who  = (string) ($record['name'] ?? $record['contact'] ?? '');
+    $mail = (string) ($record['email'] ?? '');
+    $rows = [];
+    foreach ($columns as $label => $value) {
+        $rows[] = [$label, $value];
+    }
+    if ($attach) {
+        $rows[] = ['Files', implode(', ', array_column($attach, 'name'))];
+    }
+    mailer_notify_team($state['ref'], $what, $rows, $attach, $mail !== '' ? ['email' => $mail, 'name' => $who] : []);
+    if ($mail !== '') {
+        mailer_confirm_customer($mail, $who, $state['ref'], $what);
+    }
 
     return $state;
 }

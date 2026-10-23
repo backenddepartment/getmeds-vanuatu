@@ -1,8 +1,8 @@
 <?php
 /**
- * Product Range: /medicines/shop (all products) and
- * /medicines/shop/<category>/ (one category). Included by
- * medicines/shop/index.php, which sets $shopCat (a category slug, null for
+ * Product Range: /product-range (all products) and
+ * /<category>/ (one category). Included by
+ * product-range/index.php, which sets $shopCat (a category slug, null for
  * all, false for an address that matches nothing) and $cats.
  *
  * Laid out like Getmeds India's Product Range: a short hero, the breadcrumb
@@ -58,7 +58,7 @@ $AUDIENCES = [
 ];
 
 $all      = $shopCat === null;
-$basePath = $all ? '/medicines/shop' : shop_category_path($shopCat);
+$basePath = $all ? '/product-range/' : shop_category_path($shopCat);
 $catName  = $all ? 'All Products' : $cats[$shopCat][0];
 
 $q     = isset($_GET['q']) && is_string($_GET['q']) ? trim($_GET['q']) : '';
@@ -97,19 +97,19 @@ $href = static function (string $path, array $params): string {
     return url($path) . ($params ? '?' . http_build_query($params) : '');
 };
 
-// Home / Catalog / Medicines [/ Category]
-$trail = [['Home', '/'], ['Catalog', '/medicines/catalog'], ['Medicines', $all ? null : '/medicines/shop']];
+// Home / Catalog / Product Range [/ Category]
+$trail = [['Home', '/'], ['Catalog', '/medicines/catalog'], ['Product Range', $all ? null : '/product-range/']];
 if (!$all) {
     $trail[] = [$catName, null];
 }
 
 $page = $all ? [
-    'title'     => 'Medicines',
-    'seo_title' => 'Medicines — Product Range — Getmeds Vanuatu',
+    'title'     => 'Product Range',
+    'seo_title' => 'Product Range — Getmeds Vanuatu',
     'desc'      => 'Browse our oncology portfolio of ' . $count . ' molecules: targeted therapy, chemotherapy, immunotherapy, hormonal therapy and supportive care. Send an inquiry for any product.',
 ] : [
     'title'     => $catName,
-    'seo_title' => $catName . ' — Medicines — Getmeds Vanuatu',
+    'seo_title' => $catName . ' — Product Range — Getmeds Vanuatu',
     'desc'      => 'Browse ' . $count . ' ' . $catName . ' molecules at Getmeds Vanuatu. Send an inquiry for any product.',
 ];
 // A filtered or sorted view repeats the plain listing: keep it out of search results.
@@ -117,11 +117,20 @@ if ($filtered) {
     $page['noindex'] = true;
 }
 
+$headerOverlay = true;
 include INC . '/head.php';
 include INC . '/header.php';
 ?>
 
-<section class="g-hero g-bg-white g-conds-hero g-catalog__hero g-pr-hero">
+<?php /* The medicinebg photo runs from the top of the page, behind the
+         see-through header, down to the breadcrumb bar's line (guide.css
+         "Product Range hero"). */ ?>
+<section class="g-hero g-conds-hero g-catalog__hero g-pr-hero">
+  <picture class="g-pr-hero__img" aria-hidden="true">
+    <source type="image/webp" srcset="<?= e(asset('/assets/img/medicinebg-1024.webp')) ?> 1024w, <?= e(asset('/assets/img/medicinebg-full.webp')) ?> 2048w" sizes="100vw">
+    <img src="<?= e(asset('/assets/img/medicinebg-full.jpg')) ?>" alt="" loading="eager" fetchpriority="high" decoding="async">
+  </picture>
+  <div class="g-pr-hero__shade" aria-hidden="true"></div>
   <div class="g-wrap">
     <h1><?= e($all ? 'Products' : $catName) ?></h1>
     <p class="g-hero__lede"><?= $all
@@ -137,7 +146,7 @@ include INC . '/header.php';
   <aside class="g-pr__side" aria-labelledby="pr-side-h">
     <h2 id="pr-side-h">Therapeutic<br>Areas</h2>
     <nav aria-labelledby="pr-side-h" id="pr-side">
-      <a href="<?= e($href('/medicines/shop', $current)) ?>"<?= $all ? ' class="is-active" aria-current="page"' : '' ?>>All Products</a>
+      <a href="<?= e($href('/product-range/', $current)) ?>"<?= $all ? ' class="is-active" aria-current="page"' : '' ?>>All Products</a>
       <?php foreach ($cats as $slug => [$name]): ?>
       <a href="<?= e($href(shop_category_path($slug), $current)) ?>"<?= $slug === $shopCat ? ' class="is-active" aria-current="page"' : '' ?>><?= e($name) ?></a>
       <?php endforeach; ?>
@@ -165,7 +174,7 @@ include INC . '/header.php';
       <div class="g-pr__selects" id="pr-selects">
         <label class="g-pr__areas"><span>Therapeutic Areas</span>
           <select data-pr-nav>
-            <option data-url="<?= e($href('/medicines/shop', $current)) ?>"<?= $all ? ' selected' : '' ?>>All Products</option>
+            <option data-url="<?= e($href('/product-range/', $current)) ?>"<?= $all ? ' selected' : '' ?>>All Products</option>
             <?php foreach ($cats as $slug => [$name]): ?>
             <option data-url="<?= e($href(shop_category_path($slug), $current)) ?>"<?= $slug === $shopCat ? ' selected' : '' ?>><?= e($name) ?></option>
             <?php endforeach; ?>
@@ -200,7 +209,7 @@ include INC . '/header.php';
       <div class="g-pr__empty-btns">
         <a class="g-pr__btn" href="<?= e(url($basePath)) ?>">Clear all filters</a>
         <?php if (!$all && $q !== ''): ?>
-        <a class="g-pr__btn g-pr__btn--ghost" href="<?= e($href('/medicines/shop', ['q' => $q])) ?>">Search all products</a>
+        <a class="g-pr__btn g-pr__btn--ghost" href="<?= e($href('/product-range/', ['q' => $q])) ?>">Search all products</a>
         <?php endif; ?>
         <a class="g-pr__btn g-pr__btn--ghost" href="<?= e(request_url('medicine', $q !== '' ? '&medicine=' . rawurlencode($q) : '')) ?>">Ask us to source it</a>
       </div>

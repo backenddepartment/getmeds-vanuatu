@@ -23,7 +23,7 @@ $network = [
     ['Getmeds South East Asia',      'https://getmedshealthcare.com/coming-soon?site=Getmeds%20South%20East%20Asia'],
     ['Getmeds Latin',                'https://getmedshealthcare.com/coming-soon?site=Getmeds%20Latin'],
     ['Bishnoi Omniverse India',      'https://getmedshealthcare.com/coming-soon?site=Bishnoi%20Omniverse%20India'],
-    ['Bishnoi Omniverse Philippines','https://getmedshealthcare.com/coming-soon?site=Bishnoi%20Omniverse%20Philippines'],
+    ['Bishnoi Omniverse Philippines','https://bishnoiomniverse.com'],
     ['Naresh Bishnoi Foundation',    'https://getmedshealthcare.com/coming-soon?site=Naresh%20Bishnoi%20Foundation'],
     ['Naresh Bishnoi',               'https://getmedshealthcare.com/coming-soon?site=Naresh%20Bishnoi'],
     ['UNGC',                         'https://getmedshealthcare.com/coming-soon?site=UNGC'],

@@ -62,7 +62,7 @@ foreach ($it as $file) {
     $routes[] = '/' . dirname($rel);
 }
 /* The medicines flow's category and medicine pages have no folder of their
-   own (medicines/shop/index.php routes them), so shop_paths() lists them
+   own (product-range/index.php routes them), so shop_paths() lists them
    from data/products.json. */
 require_once $root . '/includes/bootstrap.php';
 $routes = array_merge($routes, shop_paths());

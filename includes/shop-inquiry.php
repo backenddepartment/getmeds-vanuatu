@@ -1,7 +1,7 @@
 <?php
 /**
  * Receives a Send Inquiry form from a medicine's page and emails it.
- * Included by medicines/shop/index.php for POST /medicines/shop/inquiry.
+ * Included by product-range/index.php for POST /product-range/inquiry.
  *
  * assets/js/shop-inquiry.js posts JSON, with files as base64. Everything it
  * already checked is checked again here, because anyone can post anything:
@@ -11,18 +11,15 @@
  *      and the prescription; Doctor, Pharmacy and Hospital need neither)
  *   4. the files: JPG, PNG or PDF by their content, not their name; each
  *      under 4 MB, 5 MB and 6 files in all
- *   5. a row in the Google Sheet (sheets.php), and, when a Brevo key is set,
- *      the email to cfg('enquiry_recipient') with Reply going to the person
- *      who asked. It counts as sent if either one worked.
+ *   5. a row in the Google Sheet (sheets.php), and, once Brevo SMTP is set
+ *      up (mailer.php), the team's email with the files and Reply going to
+ *      the person, then the person's confirmation. It counts as sent if the
+ *      sheet or the team email worked.
  * Always answers JSON: {ok, ref} or {ok: false, title, message}.
- *
- * The Brevo key is read from the BREVO_API_KEY environment variable, or from
- * data/secrets.php ('brevo_api_key'), never from config.php, which is
- * committed. The sender address ('brevo_sender_email' in secrets.php, else
- * cfg('email')) must be a sender verified in the Brevo account.
  */
 
 require_once INC . '/sheets.php';
+require_once INC . '/mailer.php';
 
 const INQ_MAX_FILE  = 4 * 1024 * 1024;   // each file. Keep in step with shop-inquiry.js.
 const INQ_MAX_TOTAL = 5 * 1024 * 1024;
@@ -64,21 +61,6 @@ function inq_str($v, int $max): string
     return mb_substr($v, 0, $max);
 }
 
-function inq_secret(string $env, string $key): string
-{
-    $v = getenv($env);
-    if (is_string($v) && trim($v) !== '') {
-        return trim($v);
-    }
-    $file = APP_ROOT . '/data/secrets.php';
-    if (is_file($file)) {
-        $secrets = require $file;
-        if (is_array($secrets) && !empty($secrets[$key])) {
-            return trim((string) $secrets[$key]);
-        }
-    }
-    return '';
-}
 
 if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
     header('Allow: POST');
@@ -239,10 +221,9 @@ if ($patient) {
     );
 }
 
-// 5. Send: a row in the Google Sheet, and the email when Brevo is set up.
-$apiKey = inq_secret('BREVO_API_KEY', 'brevo_api_key');
-if ($apiKey === '' && !sheets_enabled()) {
-    error_log('Getmeds inquiry: neither the Google Sheet (sheets_webhook_url) nor Brevo (brevo_api_key) is configured.');
+// 5. Send: a row in the Google Sheet, and the emails through Brevo (mailer.php).
+if (!mailer_enabled() && !sheets_enabled()) {
+    error_log('Getmeds inquiry: neither the Google Sheet (sheets_webhook_url) nor Brevo SMTP (brevo_smtp_login, brevo_smtp_key) is configured.');
     inq_fail('Our inquiry form is not taking messages right now. Please call us on ' . cfg('phone') . ' or email ' . cfg('email') . '.', 'Inquiry Not Sent', 503);
 }
 
@@ -264,68 +245,24 @@ foreach ($rows as [$label, $value]) {
     if ($label === 'Profile') {
         continue;   // the tab already says who it is
     }
-    $sheetRow[$label === 'Sent from' ? 'Page' : ($sameAs[$label] ?? $label)] = $value;
+    // The sheet links the files themselves under Patient ID and Prescription;
+    // their names go beside them, clear of the Attachments links column.
+    $label = ['Sent from' => 'Page', 'Attachments' => 'File names'][$label] ?? $label;
+    $sheetRow[$sameAs[$label] ?? $label] = $value;
 }
-$sheetOk = sheets_append('shop-' . $userType, $ref, $sheetRow, array_map(static function ($f) {
+$attach = array_map(static function ($f) {
     return ['name' => $f['name'], 'mime' => $f['mime'], 'data' => $f['bytes']];
-}, $files));
+}, $files);
+$sheetOk = sheets_append('shop-' . $userType, $ref, $sheetRow, $attach);
 
-if ($apiKey === '') {
-    if (!$sheetOk) {
-        inq_fail('Your inquiry could not be sent just now. ' . $contactLine, 'Inquiry Not Sent', 502);
-    }
-    $_SESSION['inq_last'] = time();
-    inq_reply(200, ['ok' => true, 'ref' => $ref]);
+// The team's copy, with the files and Reply going to the person, then the
+// person's confirmation. Counts as sent if the sheet or the team email worked.
+$mailOk = mailer_notify_team($ref, 'Medicine inquiry', $rows, $attach,
+    ['email' => $email, 'name' => $name], $product['name'] . ' (' . INQ_PROFILES[$userType] . ')');
+if (!$sheetOk && !$mailOk) {
+    inq_fail('Your inquiry could not be sent just now. ' . $contactLine, 'Inquiry Not Sent', 502);
 }
-$sender = inq_secret('BREVO_SENDER_EMAIL', 'brevo_sender_email') ?: (string) cfg('email');
-$rows[] = ['Reference', $ref];
-
-$html = '<h2 style="font-family:Arial,sans-serif">New inquiry: ' . e($product['name']) . '</h2>'
-      . '<table cellpadding="8" style="border-collapse:collapse;font-family:Arial,sans-serif;font-size:14px">';
-$text = 'New inquiry: ' . $product['name'] . "\n\n";
-foreach ($rows as [$label, $value]) {
-    $html .= '<tr><th align="left" valign="top" style="border-bottom:1px solid #ddd;background:#f6f8fa">' . e($label) . '</th>'
-           . '<td style="border-bottom:1px solid #ddd">' . nl2br(e($value)) . '</td></tr>';
-    $text .= $label . ': ' . $value . "\n";
-}
-$html .= '</table>';
-
-$mail = [
-    'sender'      => ['name' => (string) cfg('site_name'), 'email' => $sender],
-    'to'          => [['email' => (string) cfg('enquiry_recipient', cfg('email'))]],
-    'replyTo'     => ['email' => $email, 'name' => $name],
-    'subject'     => 'Inquiry ' . $ref . ': ' . $product['name'] . ' (' . INQ_PROFILES[$userType] . ')',
-    'htmlContent' => $html,
-    'textContent' => $text,
-];
-if ($files) {
-    $mail['attachment'] = array_map(static function ($f) {
-        return ['name' => $f['name'], 'content' => $f['content']];
-    }, $files);
-}
-
-$ch = curl_init('https://api.brevo.com/v3/smtp/email');
-curl_setopt_array($ch, [
-    CURLOPT_POST           => true,
-    CURLOPT_RETURNTRANSFER => true,
-    CURLOPT_CONNECTTIMEOUT => 10,
-    CURLOPT_TIMEOUT        => 45,
-    CURLOPT_HTTPHEADER     => ['accept: application/json', 'content-type: application/json', 'api-key: ' . $apiKey],
-    CURLOPT_POSTFIELDS     => json_encode($mail, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
-]);
-$resp   = curl_exec($ch);
-$status = (int) curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
-$err    = curl_error($ch);
-curl_close($ch);
-
-if ($resp === false || $status < 200 || $status >= 300) {
-    // The reason goes to the server log only: never the key, never the person's details.
-    error_log('Getmeds inquiry ' . $ref . ': Brevo answered ' . $status . ' ' . ($err !== '' ? $err : mb_substr((string) $resp, 0, 300)));
-    // Already in the sheet, so the inquiry is not lost: only fail if neither worked.
-    if (!$sheetOk) {
-        inq_fail('Your inquiry could not be sent just now. ' . $contactLine, 'Inquiry Not Sent', 502);
-    }
-}
+mailer_confirm_customer($email, $name, $ref, 'Medicine inquiry', $product['name']);
 
 $_SESSION['inq_last'] = time();
 inq_reply(200, ['ok' => true, 'ref' => $ref]);

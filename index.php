@@ -94,7 +94,7 @@ include INC . '/header.php';
       <div class="g-supply__caption">
         <span class="g-supply__eyebrow">Getmeds<br>Product Range</span>
         <p class="g-supply__title">Essential to Advanced Therapies</p>
-        <p class="g-supply__meta">8 medicine groups &nbsp;&middot;&nbsp; Stocked, imported and sourced</p>
+        <p class="g-supply__meta"><?= count(shop_categories()) ?> therapeutic areas &nbsp;&middot;&nbsp; Stocked, imported and sourced</p>
       </div>
       <a class="g-supply__plus" href="<?= e(url('/medicines')) ?>" aria-label="See all medicine groups">+</a>
     </div>
@@ -104,20 +104,21 @@ include INC . '/header.php';
         <strong>Pacific disease patterns.</strong>
       </h2>
       <?php
-      $chips = [
-          ['oncology', 'Cancer Medicines'],
-          ['haematology', 'Blood Disorders'],
-          ['supportive-care', 'Supportive Care'],
-          ['diabetes', 'Diabetes'],
-          ['cardiology', 'Heart &amp; Blood Pressure'],
-          ['renal', 'Kidney &amp; Dialysis'],
-          ['antibiotics', 'Antibiotics'],
-          ['medical-supplies', 'Medical Supplies'],
-      ];
+      /* The Product Range categories, folded into their families:
+         "Immunotherapy (Cytokine)" => Immunotherapy. Each chip opens the
+         family's own category, or its largest one when it has none. */
+      $chips = [];
+      foreach (shop_categories() as $slug => [$name, , $n]) {
+          $family = trim((string) preg_replace('~\s*(\(.*\)|/\s*Miscellaneous)$~', '', $name));
+          $own = shop_slug($family) === $slug;
+          if (!isset($chips[$family]) || $own || (!$chips[$family][2] && $n > $chips[$family][1])) {
+              $chips[$family] = [$slug, $n, $own];
+          }
+      }
       ?>
       <div class="g-supply__chips">
-        <?php foreach ($chips as [$anchor, $name]): ?>
-        <a class="g-supply__chip" href="<?= e(url('/medicines') . '#' . $anchor) ?>"><?= $name ?></a>
+        <?php foreach ($chips as $family => [$slug]): ?>
+        <a class="g-supply__chip" href="<?= e(url(shop_category_path($slug))) ?>"><?= e($family) ?></a>
         <?php endforeach; ?>
       </div>
       <nav class="g-supply__tabs" aria-label="Medicine shortcuts">

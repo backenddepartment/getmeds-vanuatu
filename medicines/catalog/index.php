@@ -45,7 +45,7 @@ include INC . '/header.php';
   <div class="g-wrap" data-catalog>
     <div class="g-catalog__head">
       <h2 id="catalog-h">All Categories</h2>
-      <?= g_btn('View all ' . $total . ' products', url('/medicines/shop'), 'primary', 'arrow') ?>
+      <?= g_btn('View all ' . $total . ' products', url('/product-range/'), 'primary', 'arrow') ?>
     </div>
 
     <div class="g-catalog__grid">

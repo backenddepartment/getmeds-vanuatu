@@ -26,7 +26,7 @@ $terms   = $results['terms'];
 $popular = [
     ['Home', '/'],
     ['About Us', '/about'],
-    ['Medicines', '/medicines/shop'],
+    ['Product Range', '/product-range/'],
     ['Catalog', '/medicines/catalog'],
     ['How It Works', '/how-it-works'],
     ['Contact Us', '/contact'],
@@ -124,7 +124,7 @@ include INC . '/header.php';
         <li>Try a broader word, such as a drug class (&ldquo;checkpoint inhibitor&rdquo;) or a therapy area.</li>
       </ul>
       <div class="g-srp__chips g-srp__nonebtns">
-        <a class="g-srp__chip g-srp__chip--blue" href="<?= e(url('/medicines/shop')) ?>">Browse all products</a>
+        <a class="g-srp__chip g-srp__chip--blue" href="<?= e(url('/product-range/')) ?>">Browse all products</a>
         <a class="g-srp__chip" href="<?= e(request_url('medicine', '&medicine=' . rawurlencode($query))) ?>">Ask us directly</a>
       </div>
     </div>
@@ -150,7 +150,7 @@ include INC . '/header.php';
         <?php endforeach; ?>
       </ul>
       <?php if ($key === 'products' && $group['total'] > count($group['items'])): ?>
-      <a class="g-srp__all" href="<?= e(url('/medicines/shop') . '?q=' . rawurlencode($query)) ?>">
+      <a class="g-srp__all" href="<?= e(url('/product-range/') . '?q=' . rawurlencode($query)) ?>">
         See all <?= (int) $group['total'] ?> matching products
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
       </a>

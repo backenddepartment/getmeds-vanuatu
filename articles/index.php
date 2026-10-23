@@ -27,22 +27,30 @@ include INC . '/header.php';
 
 ?>
 
-<?php /* Full-screen photo hero, same size, photo and style as the home page's hero
-         (the navbar sits over it, see-through: includes/header.php, guide.css
-         "Home hero"). */ ?>
-<section class="g-homehero" aria-labelledby="articles-h">
+<?php /* Full-screen photo hero, same size and style as the home page's hero, with
+         the About page's photo (the navbar sits over it, see-through:
+         includes/header.php, guide.css "Home hero"). */ ?>
+<section class="g-homehero g-homehero--split" aria-labelledby="articles-h">
   <div class="g-homehero__media">
-    <img src="<?= e(asset('/assets/img/homeherosection-1200.jpg')) ?>"
-         srcset="<?= e(asset('/assets/img/homeherosection-800.jpg')) ?> 800w, <?= e(asset('/assets/img/homeherosection-1200.jpg')) ?> 1200w, <?= e(asset('/assets/img/homeherosection.png')) ?> 1600w"
-         sizes="100vw" width="1200" height="628" alt="" loading="eager" fetchpriority="high" decoding="async">
+    <img src="<?= e(asset('/assets/img/aboutusbg.jpg')) ?>"
+         width="1920" height="881" alt="" loading="eager" fetchpriority="high" decoding="async">
+    <div class="g-homehero__scrim" aria-hidden="true"></div>
   </div>
+  <?php /* Same bottom layout as the About hero: headline left, description and
+           buttons right, then a rule and the kicker under it. */ ?>
   <div class="g-wrap g-homehero__inner">
-    <p class="g-homehero__kicker">From the Getmeds Vanuatu team</p>
-    <h1 class="g-homehero__title" id="articles-h">Guides and Articles</h1>
-    <p class="g-homehero__lede">Healthcare news from around the world, on pharmaceuticals, medicines, clinical research and global health.</p>
-    <div class="g-homehero__btns">
-      <a class="g-homehero__btn g-homehero__btn--fill" href="<?= e(url('/order')) ?>">Order a Medicine</a>
-      <a class="g-homehero__btn g-homehero__btn--line" href="<?= e(tel_url()) ?>">Call <?= e(cfg('phone')) ?></a>
+    <div class="g-homehero__row">
+      <h1 class="g-homehero__title" id="articles-h">Guides and Articles</h1>
+      <div class="g-homehero__side">
+        <p class="g-homehero__lede">Healthcare news from around the world, on pharmaceuticals, medicines, clinical research and global health.</p>
+        <div class="g-homehero__btns">
+          <a class="g-homehero__btn g-homehero__btn--fill" href="<?= e(url('/order')) ?>">Order a Medicine</a>
+          <a class="g-homehero__btn g-homehero__btn--line" href="<?= e(tel_url()) ?>">Call <?= e(cfg('phone')) ?></a>
+        </div>
+      </div>
+    </div>
+    <div class="g-homehero__foot">
+      <p class="g-homehero__kicker">From the Getmeds Vanuatu team</p>
     </div>
   </div>
 </section>

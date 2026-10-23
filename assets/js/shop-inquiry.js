@@ -4,7 +4,7 @@
  * Profile switcher, the three-step Patient / Caregiver form, the one-step
  * Doctor / Pharmacy / Hospital form, the age dropdowns, the ID and
  * prescription uploads, the popups, and the send: everything goes as JSON,
- * files as base64, to /medicines/shop/inquiry (includes/shop-inquiry.php),
+ * files as base64, to /product-range/inquiry (includes/shop-inquiry.php),
  * which checks it all again. The phone fields use intl-tel-input
  * (assets/vendor), Vanuatu first; if it fails to load they fall back to a
  * plain number check. */

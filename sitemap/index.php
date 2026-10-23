@@ -20,9 +20,10 @@ foreach (sitemap_pages() as $p) {
     $byPath[$p['path']] = $p;
 }
 
+$shopPaths = shop_paths();
 $main = $more = $info = [];
 foreach ($byPath as $path => $p) {
-    if (strpos($path, '/conditions/') === 0 || strpos($path, '/medicines/shop/') === 0) {
+    if (strpos($path, '/conditions/') === 0 || in_array($path, $shopPaths, true)) {
         continue;                      // listed under their groups below
     }
     if ($p['tier'] === 0)     { $main[] = $p; }

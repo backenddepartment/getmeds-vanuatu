@@ -65,7 +65,10 @@ body { margin: 0; -webkit-font-smoothing: antialiased; text-rendering: optimizeL
 img, svg, video { max-width: 100%; height: auto; }
 img { display: block; }
 button, input, select, textarea { font: inherit; }
-h1, h2, h3, h4 { text-wrap: balance; }
+/* Line breaks: titles, eyebrows and captions split into even lines; body text
+   never leaves one word alone on its last line. */
+h1, h2, h3, h4, h5, h6, .g-h1, .g-h2, .g-h3, .g-label, figcaption, legend { text-wrap: balance; }
+p, li, dd, dt, blockquote, td, th, label, summary { text-wrap: pretty; }
 :target { scroll-margin-top: 110px; }
 .u-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; }
 .skip { position: absolute; left: 16px; top: 16px; transform: translateY(-300%); z-index: 100; display: inline-flex; align-items: center; min-height: 48px; padding: 0 16px; background: #0B2A5B; color: #fff; font-weight: 600; text-decoration: none; border-radius: 12px; }

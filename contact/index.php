@@ -213,24 +213,28 @@ include INC . '/header.php';
 
 ?>
 
-<?php /* Light gradient hero: label, two-tone headline and the two actions on
-         the left, a diamond photo collage on the right (guide.css
-         "Contact enquiry hub"). */ ?>
-<section class="g-chero" aria-labelledby="contact-hero-title">
-  <div class="g-wrap g-chero__grid">
-    <div class="g-chero__text">
-      <span class="g-label">Contact Us</span>
-      <h1 id="contact-hero-title"><em>One team</em> for medicines, quotations and partnerships</h1>
-      <p class="g-chero__lede">Send us a prescription, a medicine question or a product list. The more detail you share, the faster we can come back with availability, price and next steps. A pharmacist checks every medicine request.</p>
-      <div class="g-btns g-chero__btns">
-        <a class="g-btn g-btn--grad" href="#enquiry">Send Us Your Enquiry</a>
-        <?= g_call_btn('Talk to Our Team', 'secondary') ?>
+<?php /* Full-screen photo hero, same photo, size and layout as the About page's
+         hero (the navbar sits over it, see-through: includes/header.php,
+         guide.css "Home hero"). */ ?>
+<section class="g-homehero g-homehero--split" aria-labelledby="contact-hero-title">
+  <div class="g-homehero__media">
+    <img src="<?= e(asset('/assets/img/aboutusbg.jpg')) ?>"
+         width="1920" height="881" alt="" loading="eager" fetchpriority="high" decoding="async">
+    <div class="g-homehero__scrim" aria-hidden="true"></div>
+  </div>
+  <div class="g-wrap g-homehero__inner">
+    <div class="g-homehero__row">
+      <h1 class="g-homehero__title" id="contact-hero-title">One team for medicines, quotations and partnerships</h1>
+      <div class="g-homehero__side">
+        <p class="g-homehero__lede">Send us a prescription, a medicine question or a product list. The more detail you share, the faster we can come back with availability, price and next steps. A pharmacist checks every medicine request.</p>
+        <div class="g-homehero__btns">
+          <a class="g-homehero__btn g-homehero__btn--fill" href="#enquiry">Send Us Your Enquiry</a>
+          <a class="g-homehero__btn g-homehero__btn--line" href="<?= e(tel_url()) ?>">Talk to Our Team</a>
+        </div>
       </div>
     </div>
-    <div class="g-chero__collage" aria-hidden="true">
-      <span class="g-chero__dia g-chero__dia--1"><img src="<?= e(asset('/assets/img/team-vanuatu-800.jpg')) ?>" alt="" loading="eager" decoding="async"></span>
-      <span class="g-chero__dia g-chero__dia--2"><img src="<?= e(asset('/assets/img/photo/dispensary-480.jpg')) ?>" alt="" loading="lazy" decoding="async"></span>
-      <span class="g-chero__dia g-chero__dia--3"><img src="<?= e(asset('/assets/img/photo/island-480.jpg')) ?>" alt="" loading="lazy" decoding="async"></span>
+    <div class="g-homehero__foot">
+      <p class="g-homehero__kicker">Contact Us</p>
     </div>
   </div>
 </section>
