@@ -9,15 +9,16 @@ require __DIR__ . '/../includes/bootstrap.php';
 require_once INC . '/forms.php';
 
 $schema = [
-    'name'     => ['label' => 'Your name', 'type' => 'text', 'required' => true],
-    'phone'    => ['label' => 'Phone', 'type' => 'tel', 'required' => true],
-    'patient'  => ['label' => 'Patient name', 'type' => 'text'],
-    'medicine' => ['label' => 'Medicine name', 'type' => 'text', 'required' => true],
+    'name'     => ['label' => 'Your name', 'type' => 'text', 'required' => true, 'placeholder' => 'e.g. Marie Kalo'],
+    'phone'    => ['label' => 'Phone', 'type' => 'tel', 'required' => true, 'placeholder' => 'e.g. +678 555 1234'],
+    'patient'  => ['label' => 'Patient name', 'type' => 'text', 'placeholder' => 'e.g. John Kalo'],
+    'medicine' => ['label' => 'Medicine name', 'type' => 'text', 'required' => true, 'placeholder' => 'e.g. Capecitabine 500 mg tablets'],
     'date_started' => ['label' => 'Date started', 'type' => 'date'],
-    'what'     => ['label' => 'What happened?', 'type' => 'textarea', 'required' => true],
+    'what'     => ['label' => 'What happened?', 'type' => 'textarea', 'required' => true,
+                   'placeholder' => 'e.g. A red, itchy rash on both hands three days after starting the tablets.'],
     'still'    => ['label' => 'Is the patient still taking the medicine?', 'type' => 'radio',
                    'options' => ['yes' => 'Yes', 'no' => 'No']],
-    'doctor'   => ['label' => 'Doctor\'s name', 'type' => 'text'],
+    'doctor'   => ['label' => 'Doctor\'s name', 'type' => 'text', 'placeholder' => 'e.g. Dr Tari'],
     'consent'  => ['label' => 'Consent', 'type' => 'consent', 'required' => true,
                    'html' => 'I agree that Getmeds may use these details to respond to my report. (<a href="'
                            . e(url('/privacy')) . '">Privacy Policy</a>)'],

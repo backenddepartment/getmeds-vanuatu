@@ -433,7 +433,6 @@ function footer_columns(): array
         'Company' => [
             ['About us',          '/about'],
             ['Pacific access',    '/pacific-access'],
-            ['Affordable access', '/affordable-access'],
             ['Services',          '/services'],
         ],
     ];

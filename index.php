@@ -27,8 +27,8 @@ include INC . '/header.php';
          (includes/header.php, guide.css "Home hero"). */ ?>
 <section class="g-homehero g-homehero--split" aria-labelledby="hero-title">
   <div class="g-homehero__media">
-    <img src="<?= e(asset('/assets/img/homepagebg.jpg')) ?>"
-         width="1920" height="884" alt="" loading="eager" fetchpriority="high" decoding="async">
+    <img src="<?= e(asset('/assets/img/homepage.jpg')) ?>"
+         width="1920" height="878" alt="" loading="eager" fetchpriority="high" decoding="async">
   </div>
   <?php /* Content sits at the bottom of the photo: headline left, description
            and buttons right, then a rule and the kicker under it. */ ?>
@@ -194,7 +194,7 @@ include INC . '/header.php';
     </div>
     <div>
       <p class="g-lead">Getmeds works to lower these barriers. We give you a clear price before you commit to anything.</p>
-      <div class="g-btns g-mt"><?= g_btn('How we keep access affordable', url('/affordable-access'), 'secondary') ?></div>
+      <div class="g-btns g-mt"><?= g_btn('How we keep access affordable', url('/about'), 'secondary') ?></div>
     </div>
   </div>
 </section>

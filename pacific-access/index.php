@@ -126,25 +126,4 @@ include INC . '/header.php';
   </div>
 </section>
 
-<?php /* Coming home after treatment overseas (white, above the blue footer):
-         text left, a collage of colour photos right (medicines on their way
-         to the islands, the team at the airport, a patient back home). */ ?>
-<section class="hx px-sec" aria-labelledby="home">
-  <div class="g-wrap">
-    <div class="px-home">
-      <div>
-        <span class="hx-kicker" data-rv>Returning Patients</span>
-        <h2 id="home" class="hx-mask" data-rv style="--d:1"><span>Coming home after treatment overseas</span></h2>
-        <p data-rv style="--d:2">Many Pacific patients go overseas for cancer treatment. When they return, they often need to continue medicines at home. We help plan local supply so treatment is not interrupted.</p>
-        <p class="px-home__tip" data-rv style="--d:3"><?= gi('clipboard') ?>Please bring your prescription or treatment protocol from the overseas hospital.</p>
-      </div>
-      <div class="px-collage px-collage--home">
-        <span class="px-c px-c--a" data-rv="clip"><img src="<?= e(asset('/assets/img/connection.jpg')) ?>" width="1736" height="343" loading="lazy" alt="Medicine boxes and bottles with a flight path out to a Pacific island." data-par="16"></span>
-        <span class="px-c px-c--b" data-rv="clip" style="--d:2"><img src="<?= e(asset('/assets/img/vanuatuone.jpg')) ?>" width="1600" height="1200" loading="lazy" alt="The Getmeds team at the airport." data-par="-14"></span>
-        <span class="px-c px-c--c" data-rv="clip" style="--d:4"><img src="<?= e(asset('/assets/img/patients-card.jpg')) ?>" width="330" height="630" loading="lazy" alt="A smiling patient." data-par="20"></span>
-      </div>
-    </div>
-  </div>
-</section>
-
 <?php include INC . '/footer.php'; ?>

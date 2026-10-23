@@ -5,4 +5,4 @@
  */
 require __DIR__ . '/../../includes/bootstrap.php';
 
-redirect_to('/affordable-access');
+redirect_to('/about');

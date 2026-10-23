@@ -23,8 +23,8 @@ include INC . '/header.php';
          "Home hero"). */ ?>
 <section class="g-homehero g-homehero--split" aria-labelledby="about-hero-title">
   <div class="g-homehero__media">
-    <img src="<?= e(asset('/assets/img/aboutusbg.jpg')) ?>"
-         width="1920" height="881" alt="" loading="eager" fetchpriority="high" decoding="async">
+    <img src="<?= e(asset('/assets/img/homepagebg.jpg')) ?>"
+         width="1920" height="884" alt="" loading="eager" fetchpriority="high" decoding="async">
     <div class="g-homehero__scrim" aria-hidden="true"></div>
   </div>
   <?php /* Same bottom layout as the home hero: headline left, description and

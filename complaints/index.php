@@ -10,12 +10,14 @@ require __DIR__ . '/../includes/bootstrap.php';
 require_once INC . '/forms.php';
 
 $schema = [
-    'name'      => ['label' => 'Name', 'type' => 'text', 'required' => true],
-    'phone'     => ['label' => 'Phone', 'type' => 'tel', 'required' => true],
-    'email'     => ['label' => 'Email', 'type' => 'email'],
-    'reference' => ['label' => 'Order or reference', 'type' => 'text'],
-    'what'      => ['label' => 'What happened', 'type' => 'textarea', 'required' => true],
-    'wish'      => ['label' => 'What would you like us to do', 'type' => 'textarea'],
+    'name'      => ['label' => 'Name', 'type' => 'text', 'required' => true, 'placeholder' => 'e.g. Marie Kalo'],
+    'phone'     => ['label' => 'Phone', 'type' => 'tel', 'required' => true, 'placeholder' => 'e.g. +678 555 1234'],
+    'email'     => ['label' => 'Email', 'type' => 'email', 'placeholder' => 'e.g. marie@example.com'],
+    'reference' => ['label' => 'Order or reference', 'type' => 'text', 'placeholder' => 'e.g. GV-2026-0412'],
+    'what'      => ['label' => 'What happened', 'type' => 'textarea', 'required' => true,
+                    'placeholder' => 'e.g. My order arrived two days later than I was told.'],
+    'wish'      => ['label' => 'What would you like us to do', 'type' => 'textarea',
+                    'placeholder' => 'e.g. Call me to confirm the date of my next delivery.'],
     'consent'   => ['label' => 'Consent', 'type' => 'consent', 'required' => true,
                     'html' => 'I agree that Getmeds may use these details to respond to my complaint. (<a href="'
                             . e(url('/privacy')) . '">Privacy Policy</a>)'],
