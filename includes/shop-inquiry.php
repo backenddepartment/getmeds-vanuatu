@@ -13,9 +13,8 @@
  *      under 4 MB, 5 MB and 6 files in all
  *   5. a row in the Google Sheet (sheets.php), and, once Brevo SMTP is set
  *      up (mailer.php), the team's email with the files and Reply going to
- *      the person, then the person's confirmation. It counts as sent if the
- *      sheet or the team email worked.
- * Always answers JSON: {ok, ref} or {ok: false, title, message}.
+ *      the person. It counts as sent if the sheet or the email worked.
+ * Always answers JSON: {ok} or {ok: false, title, message}.
  */
 
 require_once INC . '/sheets.php';
@@ -80,7 +79,7 @@ if (!is_array($in)) {
 
 // 1. Bot trap: answer as if it worked, and send nothing.
 if (inq_str($in['website'] ?? '', 200) !== '') {
-    inq_reply(200, ['ok' => true, 'ref' => '']);
+    inq_reply(200, ['ok' => true]);
 }
 
 // 2. Same session as the page, and not too fast.
@@ -255,14 +254,13 @@ $attach = array_map(static function ($f) {
 }, $files);
 $sheetOk = sheets_append('shop-' . $userType, $ref, $sheetRow, $attach);
 
-// The team's copy, with the files and Reply going to the person, then the
-// person's confirmation. Counts as sent if the sheet or the team email worked.
-$mailOk = mailer_notify_team($ref, 'Medicine inquiry', $rows, $attach,
+// The team's email, with the files and Reply going to the person (nothing
+// is emailed to the person). Counts as sent if the sheet or the email worked.
+$mailOk = mailer_notify_team('Medicine inquiry', $rows, $attach,
     ['email' => $email, 'name' => $name], $product['name'] . ' (' . INQ_PROFILES[$userType] . ')');
 if (!$sheetOk && !$mailOk) {
     inq_fail('Your inquiry could not be sent just now. ' . $contactLine, 'Inquiry Not Sent', 502);
 }
-mailer_confirm_customer($email, $name, $ref, 'Medicine inquiry', $product['name']);
 
 $_SESSION['inq_last'] = time();
-inq_reply(200, ['ok' => true, 'ref' => $ref]);
+inq_reply(200, ['ok' => true]);

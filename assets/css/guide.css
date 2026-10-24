@@ -3624,7 +3624,6 @@ html:not(.js) .g-catalog__more { display: none; }
 }
 .g .g-pd__dialog--success h2 { margin: 0 0 8px; font-size: 1.5rem; font-weight: 700; color: var(--pd-900); }
 .g .g-pd__dialog--success > p { margin: 0 0 24px; max-width: none; font-size: 1rem; color: var(--pd-500); }
-.g .g-pd__dialog--success .g-pd__ref { margin-top: -12px; font-size: .9rem; font-weight: 600; color: var(--pd-800); }
 .g-pd__dialog--success .g-pd__dfoot { padding: 16px 0 0; }
 .g-pd__dbody { padding: 32px 32px 20px; }
 .g-pd__warnicon { display: flex; align-items: center; justify-content: center; width: 56px; height: 56px; margin: 0 auto 16px; border-radius: 50%; background: linear-gradient(135deg, #EF4444, #F59E0B); }
@@ -4165,3 +4164,10 @@ main, .g-footer { --g-max: 1160px; --g-gutter: clamp(20px, 4vw, 48px); }
    per-field placeholder rule above. */
 .g input::placeholder,
 .g textarea::placeholder { font-weight: 500; font-size: .9em; color: #9AA4B0; opacity: 1; }
+
+/* Navbar search: a dark gray border; regular-weight text and
+   placeholder (smaller again in the compact tier, where room is tight). */
+.g .g-navsearch__input { border-color: #3A4450; font-weight: 400; }
+.g .g-navsearch__input::placeholder { font-size: 1em; font-weight: 400; color: #5B6B7A; }
+@media (min-width: 70em) { .g .g-navsearch__input { font-size: 13.5px; } }
+@media (min-width: 70em) and (max-width: 79.99em) { .g .g-navsearch__input { font-size: 12.5px; } }

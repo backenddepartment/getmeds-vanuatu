@@ -326,7 +326,6 @@ include INC . '/header.php';
     <div class="g-pd__okicon" aria-hidden="true"><svg viewBox="0 0 52 52"><circle class="g-pd__okring" cx="26" cy="26" r="24"/><path class="g-pd__okcheck" d="M15 27l7 7 15-16"/></svg></div>
     <h2 id="pd-success-h">Inquiry Sent!</h2>
     <p>Thank you for your inquiry. <?= e(PD_SLA) ?></p>
-    <p class="g-pd__ref" id="pd-success-ref" hidden></p>
     <div class="g-pd__dfoot"><button type="button" class="g-pd__close g-pd__link" data-modal="pd-modal-success">Close</button></div>
   </div>
 </div>

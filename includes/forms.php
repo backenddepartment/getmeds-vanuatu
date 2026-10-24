@@ -26,7 +26,7 @@ require_once INC . '/order-handler.php';
 require_once INC . '/sheets.php';
 require_once INC . '/mailer.php';
 
-/** What each form is called in its emails ("We have received your ..."). */
+/** What each form is called in the team's email. */
 const GFORM_MAIL_NAMES = [
     'enquiry'          => 'Medicine enquiry',
     'doctor-enquiry'   => 'Doctor enquiry',
@@ -161,9 +161,8 @@ function gform_run(string $kind, array $schema, array $prefill = []): array
     }
     sheets_append($kind, $state['ref'], $columns, $attach);
 
-    // The emails (mailer.php, through Brevo): the team's copy with the files,
-    // and a confirmation to the person when they gave an email address.
-    $what = GFORM_MAIL_NAMES[$kind] ?? 'Enquiry';
+    // The team's email (mailer.php, through Brevo) with the files, Reply
+    // going to the person. Nothing is emailed to the person themselves.
     $who  = (string) ($record['name'] ?? $record['contact'] ?? '');
     $mail = (string) ($record['email'] ?? '');
     $rows = [];
@@ -173,10 +172,7 @@ function gform_run(string $kind, array $schema, array $prefill = []): array
     if ($attach) {
         $rows[] = ['Files', implode(', ', array_column($attach, 'name'))];
     }
-    mailer_notify_team($state['ref'], $what, $rows, $attach, $mail !== '' ? ['email' => $mail, 'name' => $who] : []);
-    if ($mail !== '') {
-        mailer_confirm_customer($mail, $who, $state['ref'], $what);
-    }
+    mailer_notify_team(GFORM_MAIL_NAMES[$kind] ?? 'Enquiry', $rows, $attach, $mail !== '' ? ['email' => $mail, 'name' => $who] : []);
 
     return $state;
 }
@@ -193,7 +189,7 @@ function gform_render(string $kind, array $schema, array $state, array $o = []):
         ?>
         <div class="g-success" id="<?= e($id) ?>" role="status" tabindex="-1">
           <p><strong><?= e($o['success'] ?? 'Thank you. We have received your message.') ?></strong></p>
-          <p class="g-mt-sm">Your reference is <strong><?= e($state['ref']) ?></strong>. Quote it if you call us on <a href="<?= e(tel_url()) ?>"><?= e(cfg('phone')) ?></a>.</p>
+          <p class="g-mt-sm">If it is urgent, call us on <a href="<?= e(tel_url()) ?>"><?= e(cfg('phone')) ?></a>.</p>
         </div>
         <?php
         return;

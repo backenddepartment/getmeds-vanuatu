@@ -415,9 +415,6 @@
         showAlert((data && data.message) || 'Your inquiry could not be sent. Please try again, or call us.', (data && data.title) || 'Submission Failed');
         return;
       }
-      var ref = $('pd-success-ref');
-      ref.hidden = !data.ref;
-      ref.textContent = data.ref ? 'Your reference: ' + data.ref : '';
       resetAll();
       openModal('pd-modal-success');
     }).catch(function () {
