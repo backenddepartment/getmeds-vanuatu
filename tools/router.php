@@ -22,6 +22,11 @@ if (preg_match('~^/(data|includes|tools|\.github)(/|$)~', $path)) {
 
 // Mirrors the sitemap and robots.txt rewrites in .htaccess.
 $generated = ['/sitemap.xml' => 'sitemap.php', '/sitemap-images.xml' => 'sitemap-images.php', '/robots.txt' => 'robots.php'];
+if (preg_match('~^/sitemap-(pages|categories|products)\.xml$~', $path, $m)) {
+    $_GET['set'] = $m[1];
+    require $root . '/sitemap.php';
+    return true;
+}
 if (isset($generated[$path])) {
     require $root . '/' . $generated[$path];
     return true;

@@ -1,8 +1,12 @@
 /* Header search suggestions (includes/nav.php).
  *
- * As the visitor types, a short pause, then /search/?format=json&q=… is
- * asked for a few matching medicines, medicine categories and pages, shown
- * under the box with the typed words highlighted. Arrow keys move through
+ * As the visitor types, matching medicines show at once: the medicine list
+ * (/search/?format=index) is fetched the first time the box is used, and
+ * matched and ranked here exactly as the server does (srch_score() in
+ * includes/search.php). A moment later /search/?format=json&q=… answers with
+ * the full suggestions (medicines, categories and pages), which replace
+ * them; its answers are remembered, so going back over a word is instant.
+ * The typed words are highlighted. Arrow keys move through
  * them, Enter opens the one chosen (or the full results page when none is),
  * Escape closes the panel. When nothing matches, the panel shows the "no
  * results" illustration and a way to ask a pharmacist. Without JavaScript,
@@ -18,6 +22,60 @@
   var emptyArt = document.getElementById('g-suggest-empty');
   var iconTpl = document.getElementById('g-suggest-icons');
   var timer = null, ctrl = null, lastQ = null, active = -1, items = [];
+  var cache = {}, index = null, indexWanted = false;
+
+  // The medicine list, once, the first time the box is used.
+  function loadIndex() {
+    if (indexWanted) { return; }
+    indexWanted = true;
+    fetch(endpoint + '?format=index', { credentials: 'same-origin' })
+      .then(function (res) { if (!res.ok) { throw new Error(res.status); } return res.json(); })
+      .then(function (list) {
+        index = list.map(function (m) { return { n: m.n, s: m.s, u: m.u, tn: norm(m.n), ts: norm(m.s), tb: norm(m.b) }; });
+        if (input.value.trim() && !cache[input.value.trim()]) { instant(input.value.trim()); }
+      })
+      .catch(function () { /* the server's suggestions still come */ });
+  }
+  // Lowercase, anything not a letter or digit to a space (srch_normalize()).
+  function norm(s) {
+    return String(s || '').toLowerCase().replace(/[^\p{L}\p{N}]+/gu, ' ').replace(/\s+/g, ' ').trim();
+  }
+  function has(text, term, whole) {
+    var re = new RegExp('(?:^| )' + term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + (whole ? '(?:$| )' : ''));
+    return re.test(text);
+  }
+  // A medicine's score, or 0 if any word is missing (srch_score()).
+  function score(m, words) {
+    var total = 0;
+    for (var i = 0; i < words.length; i++) {
+      var t = words[i], s = 0;
+      if (m.tn.indexOf(t) !== -1) { s = has(m.tn, t, true) ? 30 : (has(m.tn, t, false) ? 20 : 12); }
+      else if (m.ts.indexOf(t) !== -1) { s = has(m.ts, t, true) ? 8 : 5; }
+      else if (m.tb.indexOf(t) !== -1) { s = 2; }
+      if (!s) { return 0; }
+      total += s;
+    }
+    var phrase = words.join(' ');
+    if (m.tn === phrase) { total += 200; } else if (m.tn.indexOf(phrase) === 0) { total += 60; } else if (m.tn.indexOf(phrase) !== -1) { total += 25; }
+    return total;
+  }
+  // Matching medicines straight away, while the full suggestions load.
+  function instant(q) {
+    if (!index) { return; }
+    var n = norm(q), words = n.split(' ').filter(function (w) { return w.length > 1; });
+    if (!words.length) { words = n.split(' ').filter(Boolean); }
+    words = words.filter(function (w, i) { return words.indexOf(w) === i; });
+    var hits = [];
+    index.forEach(function (m) { var s = score(m, words); if (s) { hits.push({ s: s, m: m }); } });
+    if (!hits.length) { return; }   // nothing yet: wait for the server, which also searches pages
+    hits.sort(function (a, b) { return b.s - a.s || a.m.n.localeCompare(b.m.n, undefined, { sensitivity: 'base' }); });
+    render({
+      medicines: hits.slice(0, 6).map(function (h) { return { name: h.m.n, url: h.m.u, meta: h.m.s }; }),
+      categories: [], pages: [],
+      totals: { medicines: hits.length, categories: 0, pages: 0 },
+      all: endpoint + '?q=' + encodeURIComponent(q)
+    }, q);
+  }
 
   function icon(name) {
     var el = iconTpl && iconTpl.content.querySelector('[data-i="' + name + '"]');
@@ -108,6 +166,7 @@
     if (terms(q).length === 0) { lastQ = null; close(); panel.innerHTML = ''; return; }
     if (q === lastQ) { if (panel.innerHTML) { open(); } return; }
     lastQ = q;
+    if (cache[q]) { render(cache[q], q); return; }
     if (ctrl) { ctrl.abort(); }
     ctrl = window.AbortController ? new AbortController() : null;
     form.classList.add('is-loading');
@@ -115,6 +174,7 @@
       .then(function (res) { if (!res.ok) { throw new Error(res.status); } return res.json(); })
       .then(function (data) {
         form.classList.remove('is-loading');
+        cache[q] = data;
         if (input.value.trim() === q) { render(data, q); }
       })
       .catch(function (err) {
@@ -124,10 +184,15 @@
   }
 
   input.addEventListener('input', function () {
+    var q = input.value.trim();
     clearTimeout(timer);
-    timer = setTimeout(suggest, 200);
+    loadIndex();
+    if (terms(q).length && cache[q]) { suggest(); return; }    // seen before: at once
+    if (terms(q).length) { instant(q); }                      // medicines at once
+    timer = setTimeout(suggest, 60);                           // then the full suggestions
   });
   input.addEventListener('focus', function () {
+    loadIndex();
     if (panel.innerHTML && input.value.trim() === lastQ) { open(); }
   });
   input.addEventListener('keydown', function (e) {

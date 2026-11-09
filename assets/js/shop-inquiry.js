@@ -110,52 +110,49 @@
     return (iti && iti.getNumber()) || fallbackNumber(input.value);
   }
 
-  /* ---- Age dropdowns ---- */
-  var openAge = null;
-  function closeAge() {
-    if (!openAge) { return; }
-    openAge.querySelector('.g-pd__agemenu').hidden = true;
-    openAge.querySelector('.g-pd__agebtn').setAttribute('aria-expanded', 'false');
-    openAge = null;
-  }
-  function setAge(drop, value) {
-    drop.querySelector('input').value = value;
-    var label = drop.querySelector('.g-pd__agelabel');
-    label.textContent = value || 'Age';
-    label.classList.toggle('is-empty', !value);
-    drop.querySelectorAll('[role="option"]').forEach(function (o) {
-      o.setAttribute('aria-selected', o.getAttribute('data-value') === value ? 'true' : 'false');
-    });
-  }
-  document.querySelectorAll('[data-age]').forEach(function (drop) {
-    var btn = drop.querySelector('.g-pd__agebtn'), menu = drop.querySelector('.g-pd__agemenu');
-    setAge(drop, '');
-    btn.addEventListener('click', function (e) {
-      e.stopPropagation();
-      if (openAge === drop) { closeAge(); return; }
-      closeAge();
-      menu.hidden = false;
-      btn.setAttribute('aria-expanded', 'true');
-      openAge = drop;
-      var cur = menu.querySelector('[aria-selected="true"]') || menu.querySelector('[role="option"]');
-      if (cur) { cur.scrollIntoView({ block: 'nearest' }); cur.focus(); }
-    });
-    menu.addEventListener('click', function (e) {
-      var o = e.target.closest('[role="option"]');
-      if (!o) { return; }
-      setAge(drop, o.getAttribute('data-value'));
-      closeAge();
-      btn.focus();
-    });
-    menu.addEventListener('keydown', function (e) {
-      var o = document.activeElement;
-      if (e.key === 'ArrowDown' && o.nextElementSibling) { e.preventDefault(); o.nextElementSibling.focus(); }
-      if (e.key === 'ArrowUp' && o.previousElementSibling) { e.preventDefault(); o.previousElementSibling.focus(); }
-      if (e.key === 'Escape') { e.stopPropagation(); closeAge(); btn.focus(); }
+  /* ---- Age: a number field, digits only, optional ---- */
+  document.querySelectorAll('input[name="age"]').forEach(function (input) {
+    input.addEventListener('input', function () {
+      var d = input.value.replace(/\D/g, '').slice(0, 3);
+      if (d !== input.value) { input.value = d; }
     });
   });
-  document.addEventListener('click', function (e) {
-    if (openAge && !openAge.contains(e.target)) { closeAge(); }
+  function ageOk(input) {
+    var v = input.value.trim();
+    return v === '' || (/^\d{1,3}$/.test(v) && Number(v) <= 120);
+  }
+
+  /* ---- Inline field errors: the message sits under the field, is tied to
+          it by aria-describedby and aria-invalid, and the field takes focus,
+          so a screen reader reads the field and the problem together. ---- */
+  var errSeq = 0;
+  function clearError(input) {
+    var id = input.getAttribute('data-err-id');
+    if (!id) { return; }
+    var el = document.getElementById(id);
+    if (el) { el.remove(); }
+    input.removeAttribute('aria-invalid');
+    var rest = (input.getAttribute('aria-describedby') || '').split(' ').filter(function (t) { return t && t !== id; });
+    if (rest.length) { input.setAttribute('aria-describedby', rest.join(' ')); } else { input.removeAttribute('aria-describedby'); }
+    input.removeAttribute('data-err-id');
+  }
+  function fieldError(input, message) {
+    clearError(input);
+    var id = 'pd-err-' + (++errSeq);
+    var msg = document.createElement('span');
+    msg.className = 'g-pd__err';
+    msg.id = id;
+    msg.textContent = message;
+    var host = input.closest('.g-pd__field') || input.parentNode;
+    host.appendChild(msg);
+    input.setAttribute('aria-invalid', 'true');
+    input.setAttribute('aria-describedby', ((input.getAttribute('aria-describedby') || '') + ' ' + id).trim());
+    input.setAttribute('data-err-id', id);
+    input.focus();
+    return false;
+  }
+  document.addEventListener('input', function (e) {
+    if (e.target && e.target.getAttribute && e.target.getAttribute('data-err-id')) { clearError(e.target); }
   });
 
   /* ---- Files ---- */
@@ -219,7 +216,10 @@
       dot.className = (i <= state.step ? 'on' : '') + (i === state.step ? ' now' : '');
       dots.appendChild(dot);
     }
-    $('pd-step-label').textContent = 'Step ' + state.step + ' of ' + total;
+    // A polite live region: a screen reader hears the step change.
+    var cur = activeForm().querySelector('.g-pd__step[data-step="' + state.step + '"]');
+    var title = cur ? cur.getAttribute('data-title') : '';
+    $('pd-step-label').textContent = 'Step ' + state.step + ' of ' + total + (title ? ': ' + title : '');
   }
 
   function goToStep(n, focus) {
@@ -239,21 +239,22 @@
   }
 
   function field(form, name) { return form.querySelector('[name="' + name + '"]'); }
-  function emailOk(input) { return input.value.trim() !== '' && input.checkValidity(); }
+  // Email is optional: empty is fine, anything typed must be an address.
+  function emailOk(input) { return input.value.trim() === '' || input.checkValidity(); }
 
   // Checks before leaving a step of the patient form.
   function stepGuard(n) {
     if (state.userType !== 'patient') { return true; }
     if (n === 1) {
-      if (!field(formPatient, 'patientName').value.trim()) { showAlert("Please enter the patient's full name."); return false; }
-      if (!emailOk(field(formPatient, 'patientEmail'))) { showAlert('Please enter a valid email address.'); return false; }
-      if (!phoneValid(field(formPatient, 'patientPhone'))) { showAlert('Please enter a valid phone number.'); return false; }
-      if (!$('pd-age-patient').value) { showAlert("Please select the patient's age."); return false; }
+      var nm = field(formPatient, 'patientName'), ph = field(formPatient, 'patientPhone');
+      if (!nm.value.trim()) { return fieldError(nm, "Please enter the patient's full name."); }
+      if (!phoneValid(ph)) { return fieldError(ph, 'Please enter a valid phone or WhatsApp number.'); }
+      if (!state.rxFiles.length) { openModal('pd-modal-rx'); return false; }
     }
     if (n === 2) {
-      if (!normalizeAddress(field(formPatient, 'patientAddress').value)) { showAlert('Please enter the delivery address.'); return false; }
-      if (!state.contactSame && !$('pd-contact-name').value.trim()) { showAlert("Please provide the contact person's full name."); return false; }
-      if (!state.rxFiles.length) { openModal('pd-modal-rx'); return false; }
+      var em = field(formPatient, 'patientEmail'), ag = $('pd-age-patient');
+      if (!emailOk(em)) { return fieldError(em, 'Please check the email address, or leave it empty.'); }
+      if (!ageOk(ag)) { return fieldError(ag, 'Please enter the age as a number, or leave it empty.'); }
       if (!state.idFiles.length) { openModal('pd-modal-id'); return false; }
     }
     if (n === 3) {
@@ -379,14 +380,14 @@
     state.sending = on;
     var b = form.querySelector('.g-pd__submit');
     b.disabled = on;
-    b.textContent = on ? 'Sending…' : 'Submit Inquiry Request';
+    b.textContent = on ? 'Sending…' : 'Send Request';
   }
 
   function resetAll() {
     formPatient.reset();
     formCorp.reset();
     phones.forEach(function (iti, input) { if (iti) { iti.setNumber(''); } else { input.value = ''; } });
-    document.querySelectorAll('[data-age]').forEach(function (d) { setAge(d, ''); });
+    document.querySelectorAll('[data-err-id]').forEach(clearError);
     state.idFiles = [];
     state.rxFiles = [];
     state.contactSame = false;
@@ -441,8 +442,9 @@
     }
     var problem = budgetError(state.idFiles.concat(state.rxFiles));
     if (problem) { showAlert(problem, 'Too Many Attachments'); return; }
-    var same = state.contactSame;
     var name = field(formPatient, 'patientName').value.trim();
+    // No separate contact person given: the contact is the patient.
+    var same = state.contactSame || !$('pd-contact-name').value.trim();
     var phone = phoneNumber(field(formPatient, 'patientPhone'));
     filesPayload().then(function (files) {
       send({
@@ -466,16 +468,17 @@
   formCorp.addEventListener('submit', function (e) {
     e.preventDefault();
     if (state.sending) { return; }
-    if (!field(formCorp, 'corpName').value.trim()) { showAlert('Please enter your full name.'); return; }
-    if (!phoneValid(field(formCorp, 'corpPhone'))) { showAlert('Please enter a valid phone number.'); return; }
-    if (!emailOk(field(formCorp, 'corpEmail'))) { showAlert('Please enter a valid email address.'); return; }
-    if (!field(formCorp, 'corpMessage').value.trim()) { showAlert('Please tell us more about your requirements.'); return; }
+    var cn = field(formCorp, 'corpName'), cp = field(formCorp, 'corpPhone'),
+        ce = field(formCorp, 'corpEmail'), cm = field(formCorp, 'corpMessage');
+    if (!cn.value.trim()) { fieldError(cn, 'Please enter your full name.'); return; }
+    if (!phoneValid(cp)) { fieldError(cp, 'Please enter a valid phone or WhatsApp number.'); return; }
+    if (!emailOk(ce)) { fieldError(ce, 'Please check the email address, or leave it empty.'); return; }
+    if (!cm.value.trim()) { fieldError(cm, 'Please tell us more about your requirements.'); return; }
     send({
-      name:    field(formCorp, 'corpName').value.trim(),
-      email:   field(formCorp, 'corpEmail').value.trim(),
-      phone:   phoneNumber(field(formCorp, 'corpPhone')),
-      age:     $('pd-age-corp').value,
-      message: field(formCorp, 'corpMessage').value.trim()
+      name:    cn.value.trim(),
+      email:   ce.value.trim(),
+      phone:   phoneNumber(cp),
+      message: cm.value.trim()
     }, formCorp);
   });
 

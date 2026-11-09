@@ -16,15 +16,36 @@ declare(strict_types=1);
 /** Directories under the root that hold no pages. */
 const SEARCH_SKIP = ['includes', 'data', 'tools', 'assets', 'search', '.github', '.impeccable', 'node_modules'];
 
-/** Every page, as ['url', 'title', 'desc', 'text']. Built once per request. */
+/**
+ * Every page, as ['url', 'title', 'desc', 'text']. Finding and reading every
+ * page's source is the slow part of a search, so the result is kept in
+ * data/cache/search-pages.json. Within the hour it is used as long as none
+ * of its page files (nor data/medicines.php) has changed, which only needs a
+ * look at those files; after the hour the folders are searched again, so a
+ * new page joins the results within an hour (or at once if the cache file
+ * is deleted).
+ */
 function search_pages(): array
 {
     static $pages = null;
     if ($pages !== null) {
         return $pages;
     }
-    $pages = [];
-    $root  = rtrim(str_replace('\\', '/', APP_ROOT), '/');
+    $cache = APP_ROOT . '/data/cache/search-pages.json';
+    $saved = is_file($cache) ? json_decode((string) file_get_contents($cache), true) : null;
+    if (is_array($saved) && is_array($saved['pages'] ?? null) && is_array($saved['files'] ?? null)
+        && time() - (int) ($saved['at'] ?? 0) < 3600) {
+        $fresh = true;
+        foreach ($saved['files'] as $path => $mtime) {
+            if (@filemtime($path) !== $mtime) {
+                $fresh = false;
+                break;
+            }
+        }
+        if ($fresh) {
+            return $pages = $saved['pages'];
+        }
+    }
 
     $it = new RecursiveIteratorIterator(new RecursiveCallbackFilterIterator(
         new RecursiveDirectoryIterator(APP_ROOT, FilesystemIterator::SKIP_DOTS),
@@ -32,10 +53,16 @@ function search_pages(): array
             return !($f->isDir() && in_array($f->getFilename(), SEARCH_SKIP, true));
         }
     ));
+    $files = [];
     foreach ($it as $file) {
-        if ($file->getFilename() !== 'index.php') {
-            continue;
+        if ($file->getFilename() === 'index.php') {
+            $files[$file->getPathname()] = $file->getMTime();
         }
+    }
+    $pages = [];
+    $root  = rtrim(str_replace('\\', '/', APP_ROOT), '/');
+    foreach (array_keys($files) as $path) {
+        $file = new SplFileInfo($path);
         $dir   = str_replace('\\', '/', dirname($file->getPathname()));
         $rel   = trim(substr($dir, strlen($root)), '/');
         $src   = (string) file_get_contents($file->getPathname());
@@ -64,6 +91,13 @@ function search_pages(): array
             }
         }
         $pages[] = $entry;
+    }
+    $medicines = APP_ROOT . '/data/medicines.php';
+    if (is_file($medicines)) {
+        $files[$medicines] = filemtime($medicines);
+    }
+    if (is_dir(dirname($cache)) && is_writable(dirname($cache))) {
+        @file_put_contents($cache, json_encode(['at' => time(), 'files' => $files, 'pages' => $pages], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE), LOCK_EX);
     }
     return $pages;
 }

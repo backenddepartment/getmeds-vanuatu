@@ -22,7 +22,7 @@
 function sitemap_main_paths(): array
 {
     return [
-        '/', '/product-range', '/medicines', '/conditions', '/oncology',
+        '/', '/product-range', '/medicines', '/oncology',
         '/healthcare-professionals', '/how-it-works', '/named-patient-supply',
     ];
 }
@@ -32,14 +32,16 @@ function sitemap_static_paths(): array
 {
     return [
         '/about', '/contact', '/faq', '/privacy', '/terms',
-        '/complaints', '/policies-and-safety', '/sitemap',
+        '/complaints', '/policies-and-safety',
     ];
 }
 
 /** Folders that are never pages. Mirrors .htaccess and tools/build-static.php. */
 function sitemap_skip_dirs(): array
 {
-    return ['includes/', 'data/', 'tools/', 'docs/', 'vendor/', 'node_modules/', '.github/', '.claude/', '.impeccable/', 'assets/'];
+    return ['includes/', 'data/', 'tools/', 'docs/', 'vendor/', 'node_modules/', '.github/', '.claude/', '.impeccable/', 'assets/',
+            // Article drafts awaiting pharmacist review: never listed.
+            'articles/drafts/'];
 }
 
 /**
@@ -116,6 +118,7 @@ function sitemap_pages(): array
             'lastmod'    => date('Y-m-d', $mtime),
             'title'      => $title !== '' ? $title : ucwords(str_replace('-', ' ', basename($path))),
             'tier'       => $tier,
+            'set'        => 'pages',
         ];
     }
 
@@ -126,6 +129,14 @@ function sitemap_pages(): array
     $products = shop_products();
     foreach (shop_paths() as $path) {
         $slug = basename($path);
+        // Long-tail medicine pages are noindex until they have unique content.
+        if (substr_count($path, '/') > 1 && !shop_product_indexed($slug)) {
+            continue;
+        }
+        // Specialist-only categories are noindex too.
+        if (substr_count($path, '/') === 1 && shop_is_restricted($slug)) {
+            continue;
+        }
         $pages[] = [
             'path'       => $path,
             'file'       => $root . '/product-range/index.php',
@@ -134,6 +145,7 @@ function sitemap_pages(): array
             'lastmod'    => $shopTime,
             'title'      => substr_count($path, '/') === 1 ? $cats[$slug][0] : $products[$slug]['name'],
             'tier'       => 1,
+            'set'        => substr_count($path, '/') === 1 ? 'categories' : 'products',
         ];
     }
 
@@ -150,6 +162,29 @@ function sitemap_pages(): array
     });
 
     return $pages;
+}
+
+/**
+ * The child sitemaps sitemap.xml indexes, in order: set => file name. Split by
+ * page type so Search Console reports indexing for each one separately. The
+ * articles are one page (/articles, the news feed), so it sits in "pages"
+ * rather than a sitemap of its own.
+ */
+function sitemap_sets(): array
+{
+    return [
+        'pages'      => 'sitemap-pages.xml',
+        'categories' => 'sitemap-categories.xml',
+        'products'   => 'sitemap-products.xml',
+    ];
+}
+
+/** The pages in one set, and the newest lastmod among them. */
+function sitemap_set_pages(string $set): array
+{
+    return array_values(array_filter(sitemap_pages(), static function (array $p) use ($set): bool {
+        return $p['set'] === $set;
+    }));
 }
 
 /** slug => condition name, from data/conditions.php. */

@@ -349,7 +349,7 @@ function section_notes(): void
         <p>
           We do not replace the advice of your doctor, oncologist or pharmacist. Please do not
           change a medicine, dose or treatment schedule without talking to them first.
-          <a class="body-link" href="<?= e(url('/policies') . '#safety') ?>">Read about patient safety</a>.
+          <a class="body-link" href="<?= e(url('/policies-and-safety') . '#pharmacist-checks') ?>">Read about patient safety</a>.
         </p>
         <?php if ($showNpa): ?>
         <p>
@@ -379,7 +379,8 @@ function medicine_lookup(string $context = ''): void
         return;
     }
     ?>
-    <form class="lookup" method="get" action="<?= e(url('/order')) ?>">
+    <form class="lookup" method="get" action="<?= e(url('/contact') . '#enquiry') ?>">
+      <input type="hidden" name="type" value="medicine">
       <div class="lookup__row">
         <div>
           <label for="lookup-medicine">Medicine name</label>

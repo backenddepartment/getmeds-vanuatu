@@ -28,11 +28,19 @@ $page = [
     'desc'      => 'Browse the full Getmeds Vanuatu catalog by category: ' . $total . ' products across ' . count($cats) . ' categories: targeted therapy, chemotherapy, immunotherapy, hormonal therapy and supportive care.',
 ];
 
+$headerOverlay = true;
 include INC . '/head.php';
 include INC . '/header.php';
 ?>
 
-<section class="g-hero g-bg-white g-conds-hero g-catalog__hero">
+<?php /* The same hero as the Product Range (includes/shop-listing.php): the
+         medicinebg photo behind the see-through header, white title. */ ?>
+<section class="g-hero g-conds-hero g-catalog__hero g-pr-hero">
+  <picture class="g-pr-hero__img" aria-hidden="true">
+    <source type="image/webp" srcset="<?= e(asset('/assets/img/medicinebg-1024.webp')) ?> 1024w, <?= e(asset('/assets/img/medicinebg-full.webp')) ?> 2048w" sizes="100vw">
+    <img src="<?= e(asset('/assets/img/medicinebg-full.jpg')) ?>" alt="" loading="eager" fetchpriority="high" decoding="async">
+  </picture>
+  <div class="g-pr-hero__shade" aria-hidden="true"></div>
   <div class="g-wrap">
     <h1>Catalog</h1>
     <p class="g-hero__lede"><?= $total ?> products across <?= count($cats) ?> categories. Choose a category to see every product in it.</p>

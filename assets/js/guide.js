@@ -68,8 +68,15 @@
     var btn = item.querySelector('.g-nav__caret') || item.querySelector('button.g-nav__link');
     var drop = item.querySelector('.g-nav__drop');
     var closeTimer = null;
+    /* Menu pictures (the Global Network map) load on first open only. */
+    var loadDeferred = function () {
+      $$('[data-srcset]', item).forEach(function (s) { s.srcset = s.getAttribute('data-srcset'); s.removeAttribute('data-srcset'); });
+      $$('[data-src]', item).forEach(function (i) { i.src = i.getAttribute('data-src'); i.removeAttribute('data-src'); });
+    };
+    item.addEventListener('focusin', loadDeferred);
     var open = function () {
       if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
+      loadDeferred();
       item.classList.add('is-open');
       if (btn) { btn.setAttribute('aria-expanded', 'true'); }
       syncMenuOpen();
@@ -102,6 +109,28 @@
     });
   });
 
+  /* 3b. Phone bottom bar: the body's bottom padding follows the bar's real
+         height (--g-mbar-h), so it never covers the last line of a page; and
+         the bar slides away while a form field has focus, so it cannot sit
+         over the field or the on-screen keyboard. */
+  var mbar = doc.getElementById('g-mbar');
+  if (mbar) {
+    var syncMbar = function () {
+      if (mbar.offsetHeight) { doc.documentElement.style.setProperty('--g-mbar-h', mbar.offsetHeight + 'px'); }
+    };
+    syncMbar();
+    window.addEventListener('resize', syncMbar);
+    if (doc.fonts && doc.fonts.ready) { doc.fonts.ready.then(syncMbar); }
+    var isField = function (el) {
+      return !!el && !mbar.contains(el) && el.matches &&
+        el.matches('input:not([type=checkbox]):not([type=radio]):not([type=submit]):not([type=button]):not([type=hidden]), textarea, select');
+    };
+    doc.addEventListener('focusin', function (ev) { if (isField(ev.target)) { mbar.classList.add('is-hidden'); } });
+    doc.addEventListener('focusout', function () {
+      setTimeout(function () { if (!isField(doc.activeElement)) { mbar.classList.remove('is-hidden'); } }, 50);
+    });
+  }
+
   /* 4. Accordions marked data-single keep one answer open at a time (FAQ). */
   $$('[data-single]').forEach(function (group) {
     var items = $$('details', group);
@@ -124,9 +153,11 @@
       var busy = false;
       var run = function (from, to, openAfter) {
         busy = true;
+        // While closing it is still [open]: is-closing lets an arrow turn back at once.
+        d.classList.toggle('is-closing', !openAfter);
         var a = d.animate({ height: [from + 'px', to + 'px'] },
                           { duration: 340, easing: 'cubic-bezier(.4, 0, .2, 1)' });
-        a.onfinish = function () { d.open = openAfter; busy = false; };
+        a.onfinish = function () { d.open = openAfter; d.classList.remove('is-closing'); busy = false; };
       };
       d.gClose = function () {
         if (!d.open) { return; }
@@ -170,21 +201,7 @@
   window.addEventListener('hashchange', openHash);
   openHash();
 
-  /* 6. Cookie notice: remembered per browser; essential-only is the default. */
-  var cookie = doc.getElementById('g-cookie');
-  if (cookie) {
-    var choice = null;
-    try { choice = window.localStorage.getItem('gv-cookies'); } catch (e) { choice = null; }
-    if (!choice) { cookie.classList.add('is-shown'); }
-    $$('[data-cookie]', cookie).forEach(function (b) {
-      b.addEventListener('click', function () {
-        try { window.localStorage.setItem('gv-cookies', b.getAttribute('data-cookie')); } catch (e) { /* private mode */ }
-        cookie.classList.remove('is-shown');
-      });
-    });
-  }
-
-  /* 7. Live filter: an input with data-filter="#list" hides non-matching
+  /* 6. Live filter: an input with data-filter="#list" hides non-matching
         [data-filter-item] entries, and groups left empty. */
   $$('[data-filter]').forEach(function (input) {
     var root = doc.querySelector(input.getAttribute('data-filter'));
@@ -391,9 +408,8 @@
   });
 
   /* 7f. Healthcare Professionals (.hx sections): each [data-rv] part rises
-         in once it reaches the screen; the supply cards' light follows the
-         pointer; the cancer-care rail fills and the partner photo drifts as
-         the page scrolls. Without JS, or with reduced motion, all simply show. */
+         in once it reaches the screen; a [data-par] photo drifts as the page
+         scrolls. Without JS, or with reduced motion, all simply show. */
   (function () {
     var parts = $$('.hx [data-rv]');
     if (!parts.length) { return; }
@@ -427,24 +443,12 @@
         $$('.hx-hero [data-rv], .px-hero [data-rv]').forEach(function (el) { el.classList.add('is-in'); io.unobserve(el); });
       });
     }
-    $$('.hx-card').forEach(function (card) {
-      card.addEventListener('pointermove', function (ev) {
-        var r = card.getBoundingClientRect();
-        card.style.setProperty('--mx', (ev.clientX - r.left) + 'px');
-        card.style.setProperty('--my', (ev.clientY - r.top) + 'px');
-      });
-    });
     if (still) { return; }
-    var flows = $$('.hx-flow'), drifts = $$('.hx [data-par]');
+    var drifts = $$('.hx [data-par]');
     var frame = 0;
     var update = function () {
       frame = 0;
       var vh = window.innerHeight || 1;
-      flows.forEach(function (f) {
-        var r = f.getBoundingClientRect();
-        // Empty while the rail's top is below 70% of the screen, full once its bottom passes that line.
-        f.style.setProperty('--p', Math.min(1, Math.max(0, (vh * 0.7 - r.top) / (r.height || 1))).toFixed(4));
-      });
       drifts.forEach(function (el) {
         var r = el.parentNode.getBoundingClientRect();
         var off = Math.max(-1, Math.min(1, (r.top + r.height / 2 - vh / 2) / vh));
@@ -456,6 +460,16 @@
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onScroll);
   })();
+
+  /* 7g. The Pacific Access map's route lights and pin run only while the map
+         is on screen, so they cost nothing while the visitor scrolls past. */
+  $$('.px-map--wide').forEach(function (map) {
+    if (!('IntersectionObserver' in window)) { return; }
+    map.classList.add('is-paused');
+    new IntersectionObserver(function (entries) {
+      map.classList.toggle('is-paused', !entries[0].isIntersecting);
+    }, { rootMargin: '80px 0px' }).observe(map);
+  });
 
   /* 8. Enquiry type cards: select the type in the form and scroll to it. */
   $$('[data-set-type]').forEach(function (card) {
@@ -577,8 +591,11 @@
     if (doc.fonts && doc.fonts.ready) { doc.fonts.ready.then(size); }
   });
 
-  /* Links marked data-modal (the consent Privacy Policy link) open the page
-     in a dialog, so a half-filled form is not lost. Without JS or dialog
+  /* Links marked data-modal (the footer's policy links and the consent
+     Privacy Policy links) open the page in a dialog, so a half-filled form is
+     not lost. A page can hand the dialog a text-only version of itself in a
+     <template data-modal-body>; otherwise its .g-legal article is shown. A
+     data-modal link inside the dialog opens in it too. Without JS or dialog
      support, or if the fetch fails, the link navigates as normal. */
   (function () {
     var links = $$('a[data-modal]');
@@ -595,37 +612,85 @@
       body = dlg.querySelector('.g-pagedlg__body');
       titles = dlg.querySelector('.g-pagedlg__titles');
       dlg.querySelector('.g-pagedlg__close').addEventListener('click', function () { dlg.close(); });
-      dlg.addEventListener('click', function (ev) { if (ev.target === dlg) { dlg.close(); } });
+      dlg.addEventListener('click', function (ev) {
+        if (ev.target === dlg) { dlg.close(); return; }
+        var inner = ev.target.closest && ev.target.closest('a[data-modal]');
+        if (inner) { ev.preventDefault(); show(inner); }
+      });
+      // A form in the pop-up (Complaints, Report a side effect) posts from it.
+      dlg.addEventListener('submit', function (ev) {
+        var form = ev.target;
+        if (!form || form.method.toLowerCase() !== 'post') { return; }
+        ev.preventDefault();
+        if (!form.reportValidity()) { return; }
+        var btn = form.querySelector('[type="submit"]');
+        if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
+        load(current, { body: new FormData(form) });
+      });
+    };
+    /* Ask for the page as a pop-up (the X-Gv-Modal header: without it a
+       pop-up-only page sends the visitor elsewhere), then show its content.
+       opts.body posts a form from the pop-up; the answer (the thank-you, or
+       the form again with its errors) is shown in the pop-up too. */
+    var current = '';
+    var load = function (url, opts) {
+      current = url;
+      fetch(url, {
+        method: opts.body ? 'POST' : 'GET',
+        body: opts.body || undefined,
+        credentials: 'same-origin',
+        headers: { 'X-Gv-Modal': '1' }
+      }).then(function (r) {
+        if (!r.ok) { throw new Error(r.status); }
+        return r.text();
+      }).then(function (html) {
+        var d = new DOMParser().parseFromString(html, 'text/html');
+        var tpl = d.querySelector('template[data-modal-body]');
+        var art;
+        if (tpl) {
+          art = doc.createElement('div');
+          art.innerHTML = tpl.innerHTML;
+        } else {
+          art = d.querySelector('.g-legal') || d.querySelector('main') || d.body;
+        }
+        var crumbs = art.querySelector('.g-crumbs');
+        if (crumbs) { crumbs.parentNode.removeChild(crumbs); }
+        /* The page title and its date line live in the fixed header; only
+           the sections below them scroll. */
+        titles.innerHTML = '';
+        var h1 = art.querySelector('h1');
+        var date = art.querySelector('.g-legal__date');
+        /* An h2 here: the page behind the dialog already has its one h1. */
+        if (h1) {
+          var h2 = document.createElement('h2');
+          h2.textContent = h1.textContent;
+          titles.appendChild(h2);
+          h1.parentNode.removeChild(h1);
+        }
+        if (date) { titles.appendChild(date); }
+        body.innerHTML = art.innerHTML;
+        // After a post, show the thank-you or the first error; else the top.
+        var focus = opts.body && body.querySelector('.g-success, .g-errors, [aria-invalid="true"]');
+        if (focus) { focus.scrollIntoView({ block: 'center' }); } else { body.scrollTop = 0; }
+      }).catch(function () {
+        if (opts.body) {
+          body.insertAdjacentHTML('afterbegin', '<p class="g-pagedlg__alert">Your message could not be sent just now. Please try again, or call us.</p>');
+          body.scrollTop = 0;
+          return;
+        }
+        dlg.close();
+        window.location.href = url;
+      });
+    };
+    var show = function (a) {
+      if (!dlg) { build(); }
+      titles.textContent = a.textContent;
+      body.innerHTML = '<p>Loading…</p>';
+      if (!dlg.open) { dlg.showModal(); }
+      load(a.href, {});
     };
     links.forEach(function (a) {
-      a.addEventListener('click', function (ev) {
-        ev.preventDefault();
-        if (!dlg) { build(); }
-        titles.textContent = a.textContent;
-        body.innerHTML = '<p>Loading…</p>';
-        dlg.showModal();
-        fetch(a.href).then(function (r) {
-          if (!r.ok) { throw new Error(r.status); }
-          return r.text();
-        }).then(function (html) {
-          var d = new DOMParser().parseFromString(html, 'text/html');
-          var art = d.querySelector('.g-legal') || d.querySelector('main') || d.body;
-          var crumbs = art.querySelector('.g-crumbs');
-          if (crumbs) { crumbs.parentNode.removeChild(crumbs); }
-          /* The page title and its date line live in the fixed header; only
-             the sections below them scroll. */
-          titles.innerHTML = '';
-          var h1 = art.querySelector('h1');
-          var date = art.querySelector('.g-legal__date');
-          if (h1) { titles.appendChild(h1); }
-          if (date) { titles.appendChild(date); }
-          body.innerHTML = art.innerHTML;
-          body.scrollTop = 0;
-        }).catch(function () {
-          dlg.close();
-          window.location.href = a.href;
-        });
-      });
+      a.addEventListener('click', function (ev) { ev.preventDefault(); show(a); });
     });
   })();
 })();

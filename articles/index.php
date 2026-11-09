@@ -44,7 +44,7 @@ include INC . '/header.php';
       <div class="g-homehero__side">
         <p class="g-homehero__lede">Healthcare news from around the world, on pharmaceuticals, medicines, clinical research and global health.</p>
         <div class="g-homehero__btns">
-          <a class="g-homehero__btn g-homehero__btn--fill" href="<?= e(url('/order')) ?>">Order a Medicine</a>
+          <a class="g-homehero__btn g-homehero__btn--fill" href="<?= e(request_url('medicine')) ?>">Request a Medicine</a>
           <a class="g-homehero__btn g-homehero__btn--line" href="<?= e(tel_url()) ?>">Call <?= e(cfg('phone')) ?></a>
         </div>
       </div>

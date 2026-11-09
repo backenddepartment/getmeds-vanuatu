@@ -5,10 +5,13 @@
  *
  * The sitemaps tell a crawler what to crawl; this tells it what not to. The
  * default is allow everything, then disallow:
- *   - any back panel or dashboard address, so a login or admin screen added
- *     later is never crawled. None exists on the site today.
  *   - the private folders .htaccess already refuses (data, includes, docs, tools)
  *   - the search results page, which is only a view of other pages
+ *
+ * No admin, back panel or dashboard paths are listed (audit, 4 November 2026):
+ * robots.txt is public, so listing them only tells an attacker where to look,
+ * and Disallow is not security. An admin screen added later must be protected
+ * by a login and send its own "X-Robots-Tag: noindex" header.
  *
  * Paths carry the base path, so the rules are right when the site is mounted in
  * a subfolder. A crawler only reads robots.txt at the domain root, so the file
@@ -20,9 +23,6 @@ header('Content-Type: text/plain; charset=utf-8');
 
 $b = base_path();
 $disallow = [
-    // Back panel and dashboard.
-    '/admin/', '/administrator/', '/backpanel/', '/back-panel/', '/backend/',
-    '/dashboard/', '/cpanel/', '/panel/', '/login/', '/wp-admin/', '/wp-login.php',
     // Private folders.
     '/data/', '/includes/', '/docs/', '/tools/',
     // Search results.
@@ -35,5 +35,5 @@ foreach ($disallow as $path) {
     echo "Disallow: {$b}{$path}\n";
 }
 echo "\n";
+// The sitemap index; it lists the page, category, product and image sitemaps.
 echo 'Sitemap: ', abs_url('/sitemap.xml'), "\n";
-echo 'Sitemap: ', abs_url('/sitemap-images.xml'), "\n";

@@ -10,8 +10,8 @@ require __DIR__ . '/../includes/bootstrap.php';
 
 $page = [
     'title'     => 'About Getmeds Vanuatu',
-    'seo_title' => 'About Getmeds Vanuatu — Medicine Access for Vanuatu and the Pacific',
-    'desc'      => 'Getmeds Vanuatu is a Port Vila pharmacy focused on cancer medicines. Learn why we started and how we help patients across the Pacific get the medicines they need.',
+    'seo_title' => 'About Getmeds Vanuatu — Medicine Access for the Pacific',
+    'desc'      => 'Getmeds Vanuatu is a Port Vila pharmacy focused on cancer medicines. Learn why we started and how we help patients across the Pacific get their medicines.',
 ];
 
 include INC . '/head.php';
@@ -35,7 +35,7 @@ include INC . '/header.php';
       <div class="g-homehero__side">
         <p class="g-homehero__lede">Getmeds Vanuatu is a pharmacy in Port Vila. Our main work is making cancer medicines available in Vanuatu and the Pacific. We also supply other important medicines and medical supplies.</p>
         <div class="g-homehero__btns">
-          <a class="g-homehero__btn g-homehero__btn--fill" href="<?= e(url('/order')) ?>">Order a Medicine</a>
+          <a class="g-homehero__btn g-homehero__btn--fill" href="<?= e(request_url('medicine')) ?>">Request a Medicine</a>
           <a class="g-homehero__btn g-homehero__btn--line" href="<?= e(tel_url()) ?>">Call <?= e(cfg('phone')) ?></a>
         </div>
       </div>
@@ -260,6 +260,7 @@ include INC . '/header.php';
     <div class="g-home-cta__text">
       <h2>Talk to us</h2>
       <p>Have a question about a medicine? Our team is here to help.</p>
+      <p class="g-home-cta__hours"><?= gi('clock') ?><?= e(cfg('reply_time')) ?> Open <?= e(cfg('hours_long')) ?></p>
     </div>
     <div class="g-home-cta__btns">
       <a class="g-home-cta__btn g-home-cta__btn--white" href="<?= e(request_url('medicine')) ?>">Request a Medicine</a>

@@ -31,6 +31,16 @@ if ($path === '/product-range/inquiry') {
 $cats = shop_categories();
 $products = shop_products();
 
+/** A renamed product's new slug, from data/product-redirects.json (old => new). */
+function shop_renamed_slug(string $old): ?string
+{
+    static $map = null;
+    if ($map === null) {
+        $map = (array) json_decode((string) @file_get_contents(APP_ROOT . '/data/product-redirects.json'), true);
+    }
+    return isset($map[$old]) && is_string($map[$old]) ? $map[$old] : null;
+}
+
 $shopCat = null;      // category slug, null for all products
 $product = null;
 $to      = null;      // where an old or stray address belongs
@@ -60,6 +70,11 @@ if ($path === '/product-range') {
         if ('/' . $rest . '/' !== shop_product_path($product)) {
             $to = shop_product_path($product);
         }
+    } elseif (in_array(count($seg), [1, 2], true)
+        && ($new = shop_renamed_slug($s)) !== null && isset($products[$new])) {
+        // A product renamed on 2026-11-04 (internal tags such as "Onc
+        // Adjacent" taken out of its name): its old address still works.
+        $to = shop_product_path($products[$new]);
     } else {
         include APP_ROOT . '/404.php';
         return;

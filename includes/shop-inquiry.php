@@ -111,14 +111,17 @@ $age   = inq_str($in['age'] ?? '', 3);
 if ($name === '') {
     inq_fail($patient ? "Please enter the patient's full name." : 'Please enter your full name.');
 }
-if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    inq_fail('Please enter a valid email address.');
+// Email and age are optional (2026-11-04: the form asks first for only the
+// name, the phone or WhatsApp number and the prescription); if given, they
+// must be real.
+if ($email !== '' && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    inq_fail('Please check the email address, or leave it empty.');
 }
 if (!preg_match('/^\+?[0-9 ()-]{6,20}$/', $phone) || strlen((string) preg_replace('/\D/', '', $phone)) < 6) {
-    inq_fail('Please enter a valid phone number.');
+    inq_fail('Please enter a valid phone or WhatsApp number.');
 }
-if ($age !== '' && (!ctype_digit($age) || (int) $age < 1 || (int) $age > 100)) {
-    inq_fail('Please choose an age from the list.');
+if ($age !== '' && (!ctype_digit($age) || (int) $age > 120)) {
+    inq_fail('Please enter the age as a number, or leave it empty.');
 }
 
 $rows = [
@@ -131,14 +134,10 @@ if ($patient) {
     $address = inq_str($in['address'] ?? '', 300);
     $contact = inq_str($in['contactName'] ?? '', 120);
     $rel     = inq_str($in['relationship'] ?? '', 40);
-    if ($age === '') {
-        inq_fail("Please select the patient's age.");
-    }
-    if ($address === '') {
-        inq_fail('Please enter the delivery address.');
-    }
+    // No separate contact person: the contact is the patient.
     if ($contact === '') {
-        inq_fail("Please provide the contact person's full name.");
+        $contact = $name;
+        $rel = $rel !== '' ? $rel : 'Self (patient)';
     }
     if (!in_array($rel, INQ_RELATIONSHIPS, true)) {
         $rel = 'Other';
@@ -195,10 +194,10 @@ if ($patient) {
 
     array_push($rows,
         ['Patient name', $name],
-        ['Patient age', $age],
-        ['Email', $email],
+        ['Patient age', $age !== '' ? $age : 'Not given'],
+        ['Email', $email !== '' ? $email : 'Not given'],
         ['Phone', $phone],
-        ['Delivery address', $address],
+        ['Delivery address', $address !== '' ? $address : 'Not given (will collect)'],
         ['Contact person', $contact],
         ['Relationship to patient', $rel !== '' ? $rel : 'Not given'],
         ['Consent', 'Confirmed accurate and valid; accepted the Privacy Policy'],
@@ -213,8 +212,7 @@ if ($patient) {
     }
     array_push($rows,
         ['Name', $name],
-        ['Age', $age !== '' ? $age : 'Not given'],
-        ['Email', $email],
+        ['Email', $email !== '' ? $email : 'Not given'],
         ['Phone', $phone],
         ['Message', $message !== '' ? $message : 'None']
     );
@@ -257,7 +255,7 @@ $sheetOk = sheets_append('shop-' . $userType, $ref, $sheetRow, $attach);
 // The team's email, with the files and Reply going to the person (nothing
 // is emailed to the person). Counts as sent if the sheet or the email worked.
 $mailOk = mailer_notify_team('Medicine inquiry', $rows, $attach,
-    ['email' => $email, 'name' => $name], $product['name'] . ' (' . INQ_PROFILES[$userType] . ')');
+    $email !== '' ? ['email' => $email, 'name' => $name] : [], $product['name'] . ' (' . INQ_PROFILES[$userType] . ')');
 if (!$sheetOk && !$mailOk) {
     inq_fail('Your inquiry could not be sent just now. ' . $contactLine, 'Inquiry Not Sent', 502);
 }

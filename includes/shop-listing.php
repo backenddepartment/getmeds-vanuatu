@@ -60,16 +60,29 @@ $AUDIENCES = [
 $all      = $shopCat === null;
 $basePath = $all ? '/product-range/' : shop_category_path($shopCat);
 $catName  = $all ? 'All Products' : $cats[$shopCat][0];
+$tabName  = ($all && isset($_GET['group']) && is_string($_GET['group']) && isset(shop_category_groups()[$_GET['group']]))
+          ? shop_category_groups()[$_GET['group']]['label'] : $catName;
+
+// Groups (data/category-groups.php): the first level of the Therapeutic
+// Areas list. ?group= narrows All Products to one group's categories.
+$groups   = shop_category_groups();
+$group    = $all && isset($_GET['group']) && is_string($_GET['group']) && isset($groups[$_GET['group']]) ? $_GET['group'] : '';
+$groupCats = $group !== '' ? $groups[$group]['cats'] : null;
+$inGroup  = $all ? '' : (string) shop_category_group($shopCat);
 
 $q     = isset($_GET['q']) && is_string($_GET['q']) ? trim($_GET['q']) : '';
 $quick = isset($_GET['quick']) && is_string($_GET['quick']) && isset($QUICK[$_GET['quick']]) ? $_GET['quick'] : '';
 $sort  = isset($_GET['sort']) && is_string($_GET['sort']) && isset($SORT[$_GET['sort']]) ? $_GET['sort'] : '';
 $pg    = isset($_GET['page']) && is_string($_GET['page']) ? max(1, (int) $_GET['page']) : 1;
-$current  = ['q' => $q, 'quick' => $quick, 'sort' => $sort];   // kept when moving around
-$filtered = $q !== '' || $quick !== '' || $sort !== '';
+$current  = ['group' => $group, 'q' => $q, 'quick' => $quick, 'sort' => $sort];   // kept when moving around
+$toCat    = array_merge($current, ['group' => '']);   // a category page has no group filter
+$filtered = $q !== '' || $quick !== '' || $sort !== '' || $group !== '';
 
-$rows = array_values(array_filter(shop_products(), static function ($p) use ($shopCat, $q, $quick) {
+$rows = array_values(array_filter(shop_products(), static function ($p) use ($shopCat, $q, $quick, $groupCats) {
     if ($shopCat !== null && $p['cat'] !== $shopCat) {
+        return false;
+    }
+    if ($groupCats !== null && !isset($groupCats[$p['cat']])) {
         return false;
     }
     if ($q !== '' && stripos($p['name'] . ' ' . $p['drug_class'], $q) === false) {
@@ -106,7 +119,7 @@ if (!$all) {
 $page = $all ? [
     'title'     => 'Product Range',
     'seo_title' => 'Product Range — Getmeds Vanuatu',
-    'desc'      => 'Browse our oncology portfolio of ' . $count . ' molecules: targeted therapy, chemotherapy, immunotherapy, hormonal therapy and supportive care. Send an inquiry for any product.',
+    'desc'      => 'Browse ' . $count . ' prescription medicines we can supply in Vanuatu: chemotherapy, targeted therapy, immunotherapy, hormonal therapy and supportive care. Send an inquiry for any medicine.',
 ] : [
     'title'     => $catName,
     'seo_title' => $catName . ' — Product Range — Getmeds Vanuatu',
@@ -115,6 +128,12 @@ $page = $all ? [
 // A filtered or sorted view repeats the plain listing: keep it out of search results.
 if ($filtered) {
     $page['noindex'] = true;
+}
+// Specialist-only categories (investigational, CAR-T, cell and gene therapy):
+// listed for hospitals and specialists, kept out of search engines.
+$restricted = !$all && shop_is_restricted($shopCat);
+if ($restricted && empty($page['noindex'])) {
+    $page['noindex'] = 'follow';
 }
 
 $headerOverlay = true;
@@ -135,7 +154,10 @@ include INC . '/header.php';
     <h1><?= e($all ? 'Products' : $catName) ?></h1>
     <p class="g-hero__lede"><?= $all
         ? 'Comprehensive catalog of pharmaceutical solutions. Browse categories and send inquiries directly.'
-        : $count . ' molecule' . ($count === 1 ? '' : 's') . ' in this therapeutic area. Open any product for its details, or send an inquiry directly.' ?></p>
+        : $count . ' molecule' . ($count === 1 ? '' : 's') . ' in this therapeutic area. Open any product for its details, or send a request directly.' ?></p>
+    <?php if ($restricted): ?>
+    <p class="g-pro-note" role="note"><?= gi('alert') ?><span><?= g_restricted_note() ?></span></p>
+    <?php endif; ?>
   </div>
 </section>
 
@@ -145,19 +167,27 @@ include INC . '/header.php';
 
   <aside class="g-pr__side" aria-labelledby="pr-side-h">
     <h2 id="pr-side-h">Therapeutic<br>Areas</h2>
+    <?php /* First level: the groups (each link shows that whole group);
+             second level: the categories inside, by their short names. */ ?>
     <nav aria-labelledby="pr-side-h" id="pr-side">
-      <a href="<?= e($href('/product-range/', $current)) ?>"<?= $all ? ' class="is-active" aria-current="page"' : '' ?>>All Products</a>
-      <?php foreach ($cats as $slug => [$name]): ?>
-      <a href="<?= e($href(shop_category_path($slug), $current)) ?>"<?= $slug === $shopCat ? ' class="is-active" aria-current="page"' : '' ?>><?= e($name) ?></a>
+      <a href="<?= e($href('/product-range/', array_merge($current, ['group' => '']))) ?>"<?= $all && $group === '' ? ' class="is-active" aria-current="page"' : '' ?>>All Products</a>
+      <?php foreach ($groups as $gKey => $g): $gOn = $gKey === $group || $gKey === $inGroup; ?>
+      <div class="g-pr__grp<?= $gOn ? ' is-open' : '' ?>">
+        <a class="g-pr__grp-title<?= $all && $gKey === $group ? ' is-active' : '' ?>" href="<?= e($href('/product-range/', array_merge($current, ['group' => $gKey]))) ?>"<?= $all && $gKey === $group ? ' aria-current="page"' : '' ?>><?= e($g['label']) ?></a>
+        <?php foreach ($g['cats'] as $slug => [$short, $full]): ?>
+        <a class="g-pr__grp-cat<?= $slug === $shopCat ? ' is-active' : '' ?>" href="<?= e($href(shop_category_path($slug), $toCat)) ?>" title="<?= e($full) ?>"<?= $slug === $shopCat ? ' aria-current="page"' : '' ?>><?= e($short) ?></a>
+        <?php endforeach; ?>
+      </div>
       <?php endforeach; ?>
     </nav>
   </aside>
 
   <div class="g-pr__main">
-    <h2 class="g-pr__tab" id="pr-tab"><?= e($catName) ?> <span>(<?= $total ?>)</span></h2>
+    <h2 class="g-pr__tab" id="pr-tab"><?= e($tabName) ?> <span>(<?= $total ?>)</span></h2>
 
     <div class="g-pr__filters">
       <form class="g-pr__search" method="get" action="<?= e(url($basePath)) ?>" role="search">
+        <?php if ($group !== ''): ?><input type="hidden" name="group" value="<?= e($group) ?>"><?php endif; ?>
         <?php if ($quick !== ''): ?><input type="hidden" name="quick" value="<?= e($quick) ?>"><?php endif; ?>
         <?php if ($sort !== ''): ?><input type="hidden" name="sort" value="<?= e($sort) ?>"><?php endif; ?>
         <?php /* Filters as you type (script below); Enter searches without it.
@@ -165,7 +195,7 @@ include INC . '/header.php';
         <div class="g-pr__field">
           <?= gi('search') ?>
           <input type="search" name="q" value="<?= e($q) ?>" placeholder="Search product or ingredient..." aria-label="Search product or ingredient" autocomplete="off" id="pr-q">
-          <a class="g-pr__x" id="pr-x" href="<?= e($href($basePath, ['quick' => $quick, 'sort' => $sort])) ?>" aria-label="Clear search"<?= $q === '' ? ' hidden' : '' ?>><?= gi('close') ?></a>
+          <a class="g-pr__x" id="pr-x" href="<?= e($href($basePath, ['group' => $group, 'quick' => $quick, 'sort' => $sort])) ?>" aria-label="Clear search"<?= $q === '' ? ' hidden' : '' ?>><?= gi('close') ?></a>
         </div>
       </form>
 
@@ -174,9 +204,14 @@ include INC . '/header.php';
       <div class="g-pr__selects" id="pr-selects">
         <label class="g-pr__areas"><span>Therapeutic Areas</span>
           <select data-pr-nav>
-            <option data-url="<?= e($href('/product-range/', $current)) ?>"<?= $all ? ' selected' : '' ?>>All Products</option>
-            <?php foreach ($cats as $slug => [$name]): ?>
-            <option data-url="<?= e($href(shop_category_path($slug), $current)) ?>"<?= $slug === $shopCat ? ' selected' : '' ?>><?= e($name) ?></option>
+            <option data-url="<?= e($href('/product-range/', array_merge($current, ['group' => '']))) ?>"<?= $all && $group === '' ? ' selected' : '' ?>>All Products</option>
+            <?php foreach ($groups as $gKey => $g): ?>
+            <optgroup label="<?= e($g['label']) ?>">
+              <option data-url="<?= e($href('/product-range/', array_merge($current, ['group' => $gKey]))) ?>"<?= $all && $gKey === $group ? ' selected' : '' ?>>All <?= e($g['label']) ?></option>
+              <?php foreach ($g['cats'] as $slug => [$short]): ?>
+              <option data-url="<?= e($href(shop_category_path($slug), $toCat)) ?>"<?= $slug === $shopCat ? ' selected' : '' ?>><?= e($short) ?></option>
+              <?php endforeach; ?>
+            </optgroup>
             <?php endforeach; ?>
           </select>
         </label>
@@ -230,7 +265,7 @@ include INC . '/header.php';
           <td class="g-pr__md g-pr__blue"><?= e($p['oncology_type'] ?: '—') ?></td>
           <td>
             <button type="button" class="g-pr__inq" data-url="<?= e($purl) ?>" aria-haspopup="true" aria-expanded="false">
-              <?= gi('send', 'g-pr__inq-send') ?>Send Inquiry<?= gi('chev-down', 'g-pr__inq-chev') ?>
+              <?= gi('send', 'g-pr__inq-send') ?>Request a Medicine<?= gi('chev-down', 'g-pr__inq-chev') ?>
             </button>
           </td>
           <td class="g-pr__chev-cell">

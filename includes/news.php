@@ -88,6 +88,14 @@ function news_items(): array
         return array_slice($items, 0, $limit);
     }
 
+    // Out of date but we have headlines: show them now, and refresh in the
+    // background (news-refresh.php), so no visitor waits on newsdata.io. Only
+    // with nothing to show at all, or while rendering a static build, does the
+    // page wait for the fetch.
+    if ($items && !is_static_build() && !defined('NEWS_REFRESHING') && news_refresh_in_background()) {
+        return array_slice($items, 0, $limit);
+    }
+
     // One refresh at a time. Anyone who arrives while it runs gets the
     // headlines already in hand instead of queueing a second request.
     $dir = dirname(news_cache_file());
@@ -127,6 +135,72 @@ function news_items(): array
 }
 
 /**
+ * Ask this same site for news-refresh.php and hang up without waiting for the
+ * answer: the refresh runs in its own request while this page carries on.
+ * Works under mod_php and PHP-FPM alike. False if the request could not be
+ * sent, and then the caller refreshes in this request as before.
+ */
+function news_refresh_in_background(): bool
+{
+    $host = (string) ($_SERVER['HTTP_HOST'] ?? '');
+    if ($host === '' || !preg_match('/^[a-z0-9.\-]+(:\d+)?$/i', $host)) {
+        return false;
+    }
+    $https = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off');
+    $port  = (int) ($_SERVER['SERVER_PORT'] ?? ($https ? 443 : 80));
+    $ip    = (string) ($_SERVER['SERVER_ADDR'] ?? '127.0.0.1');
+    if ($ip === '' || $ip === '::1') {
+        $ip = '127.0.0.1';
+    }
+    $name = (string) preg_replace('/:\d+$/', '', $host);
+    $ctx  = stream_context_create(['ssl' => [
+        // Our own server, reached by its own address: the name on the
+        // certificate is the site's, which is checked, but not the address.
+        'peer_name' => $name, 'verify_peer' => false, 'verify_peer_name' => false,
+    ]]);
+    $sock = @stream_socket_client(($https ? 'ssl://' : 'tcp://') . $ip . ':' . $port, $errno, $errstr, 1.5, STREAM_CLIENT_CONNECT, $ctx);
+    if (!$sock) {
+        news_log('background refresh: could not connect (' . $errstr . ')');
+        return false;
+    }
+    fwrite($sock, 'GET ' . url('/news-refresh.php') . " HTTP/1.1\r\nHost: " . $host
+        . "\r\nUser-Agent: getmeds-news-refresh\r\nConnection: close\r\n\r\n");
+    fclose($sock);
+    return true;
+}
+
+/**
+ * A headline's topic for its stand-in tile: [label, icon]. Oncology when the
+ * headline is about cancer, Vaccines for vaccines, else the outlet's category.
+ */
+function news_topic(array $n): array
+{
+    $t = strtolower($n['title'] . ' ' . $n['excerpt']);
+    if (preg_match('/cancer|oncolog|tumou?r|chemo|leuk(a)?emia|lymphoma|myeloma|carcinoma|nsclc|metasta/', $t)) {
+        return ['Oncology', 'vial'];
+    }
+    if (preg_match('/vaccin|immunis|immuniz/', $t)) {
+        return ['Vaccines', 'shield'];
+    }
+    if (preg_match('/drug|medicine|pharma|fda|approval|clinical trial/', $t)) {
+        return ['Medicines', 'pill'];
+    }
+    return strcasecmp($n['category'], 'Science') === 0 ? ['Science', 'script'] : ['Health', 'hosp'];
+}
+
+/**
+ * True when a headline is about health or medicine. The home page shows only
+ * these, so an off-topic science story from the feed never leads the page.
+ */
+function news_is_health(array $n): bool
+{
+    if (strcasecmp($n['category'], 'Science') !== 0) {
+        return true;
+    }
+    return news_topic($n)[0] !== 'Science';
+}
+
+/**
  * One headline card, as shown on /articles and in the home page's Latest
  * articles section. Links to the outlet's own page in a new tab.
  */
@@ -135,14 +209,16 @@ function news_card(array $n): void
     ?>
       <a class="g-article-card" data-filter-item href="<?= e($n['link']) ?>" target="_blank" rel="noopener noreferrer nofollow">
         <div class="g-article-card__media<?= $n['image'] === '' ? ' g-article-card__media--none' : '' ?>">
-          <?php /* The stand-in picture, behind the outlet's photo: it shows when
-                   an article has no photo, or its photo fails to load (guide.js
-                   removes a broken one). Resized copies of
-                   assets/img/articlenoimagefallback.png. */ ?>
-          <picture class="g-article-card__ph" aria-hidden="true">
-            <source type="image/webp" srcset="<?= e(asset('/assets/img/articlenoimagefallback-800.webp')) ?> 800w, <?= e(asset('/assets/img/articlenoimagefallback-1200.webp')) ?> 1200w" sizes="(max-width: 47.99em) 100vw, 400px">
-            <img src="<?= e(asset('/assets/img/articlenoimagefallback-800.jpg')) ?>" srcset="<?= e(asset('/assets/img/articlenoimagefallback-800.jpg')) ?> 800w, <?= e(asset('/assets/img/articlenoimagefallback-1200.jpg')) ?> 1200w" sizes="(max-width: 47.99em) 100vw, 400px" alt="" width="800" height="450" loading="lazy" decoding="async">
-          </picture>
+          <?php /* The stand-in, behind the outlet's photo: it shows when an
+                   article has no photo, or its photo fails to load (guide.js
+                   removes a broken one). A branded tile in the Getmeds colours
+                   with the article's topic, drawn in CSS: no image to load,
+                   and no "missing picture" icon that reads as broken. */
+                [$topic, $topicIcon] = news_topic($n); ?>
+          <span class="g-article-card__ph g-article-card__ph--brand g-article-card__ph--<?= e(strtolower($topic)) ?>" aria-hidden="true">
+            <?= gi($topicIcon) ?>
+            <span class="g-article-card__ph-topic"><?= e($topic) ?></span>
+          </span>
           <?php if ($n['image'] !== ''): ?>
           <img src="<?= e($n['image']) ?>" alt="" width="800" height="500" loading="lazy" decoding="async" referrerpolicy="no-referrer" data-fallback>
           <?php endif; ?>
@@ -150,7 +226,9 @@ function news_card(array $n): void
           <?php if ($n['time']): ?><span class="g-article-card__tag"><?= e(gmdate('j M Y', $n['time'])) ?></span><?php endif; ?>
         </div>
         <h3 class="g-article-card__title"><?= e($n['title']) ?></h3>
-        <?php if ($n['excerpt'] !== ''): ?><p class="g-article-card__excerpt"><?= e($n['excerpt']) ?></p><?php endif; ?>
+        <?php /* Some outlets send the headline again as the summary: shown
+                 only when it says something the title does not. */
+              if ($n['excerpt'] !== '' && stripos($n['excerpt'], mb_substr($n['title'], 0, 40)) !== 0): ?><p class="g-article-card__excerpt"><?= e($n['excerpt']) ?></p><?php endif; ?>
         <div class="g-article-card__foot">
           <?php /* The outlet's own icon. The globe behind it shows when the
                    outlet has none, or its icon fails to load (guide.js). */ ?>

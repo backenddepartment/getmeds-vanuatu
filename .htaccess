@@ -19,16 +19,53 @@ Options -Indexes
   Require all denied
 </FilesMatch>
 
+# Build files that say which tools and versions the site is built with.
+<FilesMatch "^(package(-lock)?\.json|composer\.(json|lock))$">
+  Require all denied
+</FilesMatch>
+
+# config.php returns an array and prints nothing, but it is the site's whole
+# settings file: no reason for it to answer over HTTP at all.
+<FilesMatch "^config\.php$">
+  Require all denied
+</FilesMatch>
+
+# Backups, editor leftovers, dumps and archives. An "index.php.bak" or a
+# "site.zip" left behind after an edit would be served as plain text or a
+# download, source code and all.
+<FilesMatch "(\.(bak|old|orig|save|swp|swo|tmp|sql|sqlite|db|ini|env|log|zip|tar|gz|tgz|7z|rar)|~)$">
+  Require all denied
+</FilesMatch>
+
+# Do not print the Apache version on error pages.
+ServerSignature Off
+
 # The enquiry log lives under data/ and contains people's contact details.
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteRule ^data/ - [F,L]
   RewriteRule ^includes/ - [F,L]
   RewriteRule ^docs/ - [F,L]
+  # Build scripts, and every hidden file or folder (.git holds the whole
+  # source history; .github, .claude and the rest are tooling). Only
+  # .well-known stays open, for the SSL certificate check.
+  RewriteRule ^tools/ - [F,L]
+  RewriteRule (^|/)\.(?!well-known/) - [F,L]
+
+  # Live site: always HTTPS. Prescriptions and patient IDs are uploaded through
+  # these forms, so they must never travel in the clear. Skipped on this
+  # computer (localhost) so XAMPP keeps working over plain http. A proxy or CDN
+  # that ends HTTPS in front of the site says so in X-Forwarded-Proto, which is
+  # checked so the redirect cannot loop.
+  RewriteCond %{HTTPS} !=on
+  RewriteCond %{HTTP:X-Forwarded-Proto} !=https [NC]
+  RewriteCond %{HTTP_HOST} !^(localhost|127\.0\.0\.1|\[::1\])(:\d+)?$ [NC]
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
 
   # Sitemaps and robots.txt are generated from the pages that exist, so they
   # never go stale. tools/build-static.php writes the same three as real files.
   RewriteRule ^sitemap\.xml$ sitemap.php [L]
+  RewriteRule ^sitemap-(pages|categories|products)\.xml$ sitemap.php?set=$1 [L]
   RewriteRule ^sitemap-images\.xml$ sitemap-images.php [L]
   RewriteRule ^robots\.txt$ robots.php [L]
 
@@ -74,6 +111,16 @@ Options -Indexes
 
   # Do not leak the PHP version.
   Header unset X-Powered-By
+
+  # HSTS: once a browser has seen the site over HTTPS, it refuses plain http
+  # for a year. Sent only on HTTPS responses, so localhost is unaffected.
+  # A year, without includeSubDomains or preload: those are hard to undo, and
+  # whether every subdomain is on HTTPS is a decision for whoever runs the domain.
+  Header always set Strict-Transport-Security "max-age=31536000" "expr=%{HTTPS} == 'on' || %{HTTP:X-Forwarded-Proto} == 'https'"
+
+  # Answers that carry what someone typed or uploaded must not sit in a
+  # shared or browser cache.
+  Header always set Cache-Control "no-store" "expr=%{REQUEST_METHOD} == 'POST'"
 </IfModule>
 
 # ---------------------------------------------------------------------------

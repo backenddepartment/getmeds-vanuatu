@@ -403,6 +403,28 @@ return [
         'conditions' => [
             [
                 'slug'    => 'type-1-diabetes',
+                // Restored as a full page (audit, 2026-11-04): the keys below
+                // add to the guide copy; pages without them stay redirects.
+                'seo_title' => 'Insulin and Type 1 Diabetes Supplies in Vanuatu — Getmeds Vanuatu',
+                'desc'      => 'Insulin and type 1 diabetes supplies in Port Vila, on prescription. Send your prescription to Getmeds Vanuatu and our pharmacist confirms availability and price.',
+                'supply'    => [
+                    'Insulin, as your doctor prescribes it',
+                    'Supplies for daily insulin use, such as pen needles, syringes, blood glucose meters and test strips',
+                    'Advice from our pharmacist on storing and using insulin safely',
+                    'Simple blood sugar checks at our pharmacy in Port Vila',
+                    'Planned refills, so you do not run out between doctor visits',
+                ],
+                'send'      => [
+                    'Your prescription, or a clear photo of it',
+                    'The names of the insulin and supplies you use now, if you have them',
+                    'How much you need and by when, for example one month\'s supply',
+                    'For a child: the parent or carer\'s name and phone number',
+                ],
+                'faq'       => [
+                    ['Do I need a prescription for insulin?', 'Yes. Insulin is a prescription medicine. Your doctor decides which insulin and dose are right for you, and we supply what is on the prescription.'],
+                    ['How should I store insulin?', 'Follow the instructions on the pack and your pharmacist\'s advice. In general, insulin you have not started is kept in a fridge, never the freezer, and all insulin is kept away from heat and direct sun.'],
+                    ['What if my insulin is not available in Vanuatu?', 'We can often import or source it. Our pharmacist tells you the earliest possible date and the price before you commit.'],
+                ],
                 'name'    => 'Type 1 diabetes',
                 'what'    => 'The body cannot make insulin, a hormone that controls blood sugar. It often starts in children or young adults.',
                 'treated' => 'People with type 1 diabetes need insulin every day, and regular blood sugar checks.',
@@ -413,6 +435,24 @@ return [
             ],
             [
                 'slug'    => 'type-2-diabetes',
+                'seo_title' => 'Diabetes Medicines in Vanuatu (Type 2) — Getmeds Vanuatu',
+                'desc'      => 'Type 2 diabetes medicines, insulin and diabetes supplies in Port Vila. Send your prescription to Getmeds Vanuatu and our pharmacist confirms availability and price.',
+                'supply'    => [
+                    'Diabetes tablets and injections your doctor prescribes, including insulin',
+                    'Diabetes devices and supplies, such as blood glucose meters, test strips and pen needles',
+                    'Simple blood sugar checks at our pharmacy in Port Vila',
+                    'Planned refills, so you do not run out between doctor visits',
+                ],
+                'send'      => [
+                    'Your prescription, or a clear photo of it',
+                    'The names of the medicines you take now, if you have them',
+                    'How much you need and by when, for example one month\'s supply',
+                ],
+                'faq'       => [
+                    ['Do I need a prescription for diabetes medicine?', 'Yes. Diabetes tablets and insulin are prescription medicines. Your doctor decides which medicine and dose are right for you, and we supply what is on the prescription.'],
+                    ['Can you help me plan regular supply?', 'Yes. Tell us how much you use and when your supply runs out, and our pharmacist will help you plan refills so you do not miss doses.'],
+                    ['What if my medicine is not available in Vanuatu?', 'We can often import or source it. Our pharmacist tells you the earliest possible date and the price before you commit.'],
+                ],
                 'name'    => 'Type 2 diabetes',
                 'what'    => 'The body does not use insulin well, so blood sugar stays too high. It is common in the Pacific.',
                 'treated' => 'Healthy eating, activity, and often tablets or injections. Regular checks help prevent problems.',
@@ -430,6 +470,24 @@ return [
         'conditions' => [
             [
                 'slug'    => 'high-blood-pressure',
+                'seo_title' => 'Blood Pressure Medicines in Vanuatu — Getmeds Vanuatu',
+                'desc'      => 'Blood pressure medicines and home blood pressure monitors in Port Vila, plus simple blood pressure checks at our pharmacy. Send your prescription to Getmeds Vanuatu.',
+                'supply'    => [
+                    'Blood pressure medicines your doctor prescribes',
+                    'Home blood pressure monitors and supplies',
+                    'Simple blood pressure checks at our pharmacy in Port Vila',
+                    'Planned refills, so you can take your medicine every day without gaps',
+                ],
+                'send'      => [
+                    'Your prescription, or a clear photo of it',
+                    'The names of the medicines you take now, if you have them',
+                    'How much you need and by when, for example one month\'s supply',
+                ],
+                'faq'       => [
+                    ['I feel well. Do I still need my blood pressure medicine?', 'High blood pressure often has no signs, so feeling well does not mean it is under control. Do not stop or change your medicine without talking to your doctor.'],
+                    ['Can I check my blood pressure at Getmeds?', 'Yes. We offer simple blood pressure checks at our pharmacy in Port Vila during opening hours. If a reading is high, we will advise you to see your doctor.'],
+                    ['What if my medicine is not available in Vanuatu?', 'We can often import or source it. Our pharmacist tells you the earliest possible date and the price before you commit.'],
+                ],
                 'name'    => 'High blood pressure (hypertension)',
                 'what'    => 'Blood pushes too hard against the walls of the blood vessels. It often has no signs, so checking is important.',
                 'treated' => 'Lifestyle changes and, often, daily medicine.',
@@ -440,6 +498,23 @@ return [
             ],
             [
                 'slug'    => 'high-cholesterol',
+                'seo_title' => 'Cholesterol Medicines in Vanuatu — Getmeds Vanuatu',
+                'desc'      => 'Cholesterol medicines in Port Vila, on prescription, with planned refills so you do not run out. Send your prescription to Getmeds Vanuatu to check availability.',
+                'supply'    => [
+                    'Cholesterol medicines your doctor prescribes',
+                    'Planned refills for long-term medicine, so you do not run out',
+                    'Import or sourcing of a prescribed medicine that is hard to find in Vanuatu',
+                ],
+                'send'      => [
+                    'Your prescription, or a clear photo of it',
+                    'The names of the medicines you take now, if you have them',
+                    'How much you need and by when, for example three months\' supply',
+                ],
+                'faq'       => [
+                    ['How long will I need cholesterol medicine?', 'Many people take it for a long time. Your doctor decides how long you need it and checks your cholesterol with blood tests.'],
+                    ['Do I need a prescription?', 'Yes. Cholesterol medicines are prescription medicines. We supply what your doctor has prescribed.'],
+                    ['What if my medicine is not available in Vanuatu?', 'We can often import or source it. Our pharmacist tells you the earliest possible date and the price before you commit.'],
+                ],
                 'name'    => 'High cholesterol',
                 'what'    => 'Cholesterol is a fat in the blood. Too much can raise the risk of heart disease and stroke.',
                 'treated' => 'Healthy eating, activity and, for some people, daily medicine.',
@@ -477,6 +552,24 @@ return [
         'conditions' => [
             [
                 'slug'    => 'chronic-kidney-disease',
+                'seo_title' => 'Kidney Disease Medicines in Vanuatu — Getmeds Vanuatu',
+                'desc'      => 'Medicines for chronic kidney disease in Port Vila, including anaemia and blood pressure medicines, on prescription. Send your prescription to Getmeds Vanuatu.',
+                'supply'    => [
+                    'Medicines your doctor prescribes to protect the kidneys and control blood pressure',
+                    'Anaemia medicines used in kidney disease',
+                    'Planned refills when you take several regular medicines',
+                    'Named Patient Supply for a prescribed medicine that is not normally available in Vanuatu',
+                ],
+                'send'      => [
+                    'Your prescription or treatment plan, or a clear photo of it',
+                    'A list of all the medicines you take now',
+                    'How much you need and by when',
+                ],
+                'faq'       => [
+                    ['Can I take medicines from the shop with kidney disease?', 'Some common medicines, including some painkillers, can be hard on the kidneys. Always ask your doctor or pharmacist before you take any new medicine, including ones bought without a prescription.'],
+                    ['I take many medicines. Can you help me keep track?', 'Yes. Send us the full list from your doctor and our pharmacist can help you plan refills, so you can collect them together.'],
+                    ['What if my medicine is not available in Vanuatu?', 'We can often import or source it. Our pharmacist tells you the earliest possible date and the price before you commit.'],
+                ],
                 'name'    => 'Chronic kidney disease',
                 'what'    => 'The kidneys slowly lose their ability to clean the blood. Diabetes and high blood pressure are common causes.',
                 'treated' => 'Treatment includes medicines to protect the kidneys, control blood pressure and manage complications.',
@@ -487,6 +580,24 @@ return [
             ],
             [
                 'slug'    => 'dialysis',
+                'seo_title' => 'Dialysis Medicines in Vanuatu — Getmeds Vanuatu',
+                'desc'      => 'Medicines for people on dialysis in Port Vila: anaemia, bone health and blood pressure medicines on prescription, with planned regular supply. Getmeds Vanuatu.',
+                'supply'    => [
+                    'Medicines your kidney team prescribes, such as treatments for anaemia, bone health and blood pressure',
+                    'Regular, planned supply that fits around your dialysis sessions',
+                    'Named Patient Supply for a prescribed medicine that is not normally available in Vanuatu',
+                    'Quotations for hospitals and dialysis units',
+                ],
+                'send'      => [
+                    'Your prescription or treatment plan from your kidney team, or a clear photo of it',
+                    'A list of all the medicines you take now',
+                    'The hospital or dialysis unit where you have treatment',
+                ],
+                'faq'       => [
+                    ['Can you supply the hospital or dialysis unit directly?', 'Yes. Hospitals and clinics can request a quotation on our For Healthcare Professionals page.'],
+                    ['Can you help me plan regular supply?', 'Yes. Tell us how much you use and when your supply runs out, and our pharmacist will help you plan refills around your dialysis schedule.'],
+                    ['What if my medicine is not available in Vanuatu?', 'We can often import or source it through Named Patient Supply. Our pharmacist tells you the earliest possible date and the price before you commit.'],
+                ],
                 'name'    => 'Dialysis care',
                 'what'    => 'Dialysis cleans the blood when the kidneys stop working. People on dialysis often need several regular medicines.',
                 'treated' => 'Medicines may include treatments for anaemia, bone health and blood pressure, alongside dialysis.',

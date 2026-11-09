@@ -76,7 +76,7 @@ $forms = [
         'option' => 'Doctor / Healthcare Professional',
         'title'  => 'Enquiry from a doctor or healthcare professional',
         'kind'   => 'doctor-enquiry',
-        'submit' => 'Send Enquiry',
+        'submit' => 'Send Request',
         'schema' => [
             'name'     => ['label' => 'Full name', 'type' => 'text', 'required' => true, 'placeholder' => 'e.g. Dr Marie Kalo'],
             'role'     => ['label' => 'Role or specialty', 'type' => 'text',
@@ -140,7 +140,7 @@ $forms = [
         'option' => 'Something Else',
         'title'  => 'General enquiry',
         'kind'   => 'general-enquiry',
-        'submit' => 'Send Enquiry',
+        'submit' => 'Send Request',
         'schema' => [
             'name'    => ['label' => 'Full name', 'type' => 'text', 'required' => true, 'placeholder' => 'e.g. Marie Kalo'],
             'phone'   => ['label' => 'Phone or WhatsApp number', 'type' => 'tel', 'required' => true,
@@ -290,15 +290,15 @@ include INC . '/header.php';
       <span class="g-label">More Help</span>
       <h2 id="oreasons-h">Other reasons to get in touch</h2>
       <div class="g-oreasons__list">
-        <a href="<?= e(url('/report-a-side-effect')) ?>">
+        <a href="<?= e(url('/report-a-side-effect')) ?>" data-modal>
           <h3>Report a side effect</h3>
           <p>Something happened after taking a medicine we supplied.</p>
         </a>
-        <a href="<?= e(url('/complaints')) ?>">
+        <a href="<?= e(url('/complaints')) ?>" data-modal>
           <h3>Make a complaint</h3>
           <p>If something went wrong, we want to hear it.</p>
         </a>
-        <a href="<?= e(url('/policies-and-safety')) ?>#returns">
+        <a href="<?= e(url('/policies-and-safety')) ?>#returns" data-modal>
           <h3>Return or dispose of medicine</h3>
           <p>Unused cancer medicine must not go in household rubbish.</p>
         </a>

@@ -309,6 +309,7 @@ function order_store_uploads(array $files, string $ref): array
     if (!is_dir($dir) && !@mkdir($dir, 0700, true) && !is_dir($dir)) {
         return [];
     }
+    order_lock_uploads();
 
     $safeRef = preg_replace('/[^A-Za-z0-9-]/', '', $ref);
     $stored  = [];
@@ -330,6 +331,23 @@ function order_store_uploads(array $files, string $ref): array
     }
 
     return $stored;
+}
+
+/**
+ * data/uploads is gitignored, so on a fresh server it is created by the first
+ * upload, without its own .htaccess. Write it then: a second lock beside the
+ * site-wide /data/ rule, which also stops anything in there being run as PHP.
+ */
+function order_lock_uploads(): void
+{
+    $file = APP_ROOT . '/data/uploads/.htaccess';
+    if (is_file($file)) {
+        return;
+    }
+    @file_put_contents($file, "# Uploaded prescriptions and patient IDs. Never served, never run.\n"
+        . "Require all denied\n"
+        . "<IfModule mod_php.c>\n  php_flag engine off\n</IfModule>\n"
+        . "RemoveHandler .php .phtml .phar\nRemoveType .php .phtml .phar\n", LOCK_EX);
 }
 
 /** A short reference the customer can quote on the phone. */

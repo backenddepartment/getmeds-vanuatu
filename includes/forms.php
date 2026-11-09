@@ -38,6 +38,7 @@ const GFORM_MAIL_NAMES = [
 ];
 
 const GFORM_MIN_SECONDS = 3;
+const GFORM_GAP_SECS    = 20;
 
 /**
  * Handle a POST for this form. Returns the state gform_render() needs:
@@ -117,11 +118,20 @@ function gform_run(string $kind, array $schema, array $prefill = []): array
         return $state;
     }
 
+    // One send per GFORM_GAP_SECS for this session, the same rule as the
+    // medicine pages' Send Inquiry form. Stops a script that keeps its session
+    // cookie from flooding the team's inbox, the sheet and the uploads folder.
+    if (!$isBot && isset($_SESSION['gform_last']) && time() - (int) $_SESSION['gform_last'] < GFORM_GAP_SECS) {
+        $state['errors']['_form'] = 'You have just sent a form. Please wait a few seconds, then send this one again.';
+        return $state;
+    }
+
     $state['ref']  = enquiry_reference();
     $state['sent'] = true;
     if ($isBot) {
         return $state;
     }
+    $_SESSION['gform_last'] = time();
 
     $record = [];
     foreach ($schema as $name => $def) {

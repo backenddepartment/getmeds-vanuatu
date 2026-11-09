@@ -43,7 +43,7 @@ if ($cond === null) {
       <div class="g-wrap">
         <h1>That page is not here</h1>
         <p class="g-hero__lede">The address you used does not match a condition page.</p>
-        <div class="g-btns"><?= g_btn('Medicine access by condition', url('/conditions'), 'primary', 'arrow') ?></div>
+        <div class="g-btns"><?= g_btn('Browse the Product Range', url('/product-range/'), 'primary', 'arrow') ?></div>
       </div>
     </section>
     <?php
@@ -82,20 +82,37 @@ $summary = preg_match('/^.+?[.!?](?=\s|$)/u', $cond['what'], $m) ? $m[0] : $cond
 
 $page = [
     'title'     => $name,
-    'seo_title' => $name . ' Medicines in Vanuatu — Getmeds Vanuatu',
-    'desc'      => 'Information about access to medicines for ' . $lower
-                 . ' in Vanuatu and the Pacific. Send your prescription to Getmeds Vanuatu to check availability.',
+    'seo_title' => $cond['seo_title'] ?? ($name . ' Medicines in Vanuatu — Getmeds Vanuatu'),
+    'desc'      => $cond['desc'] ?? ('Information about access to medicines for ' . $lower
+                 . ' in Vanuatu and the Pacific. Send your prescription to Getmeds Vanuatu to check availability.'),
 ];
+
+// Restored pages (audit, 2026-11-04) carry extra blocks: what we can supply,
+// what to send, and a few common questions.
+$supply = $cond['supply'] ?? [];
+$send   = $cond['send'] ?? [];
+$faq    = $cond['faq'] ?? [];
+$waUrl  = whatsapp_url('Hello Getmeds, I would like to request a medicine for ' . $lower . '. I will send a photo of my prescription.');
 
 include INC . '/head.php';
 include INC . '/header.php';
 ?>
+<?php if ($faq): ?>
+<script type="application/ld+json"><?= json_encode([
+    '@context'   => 'https://schema.org',
+    '@type'      => 'FAQPage',
+    'mainEntity' => array_map(static function ($qa) {
+        return ['@type' => 'Question', 'name' => $qa[0],
+                'acceptedAnswer' => ['@type' => 'Answer', 'text' => $qa[1]]];
+    }, $faq),
+], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?></script>
+<?php endif; ?>
 
 <div class="g-cond <?= $pink ? 'g-accent-pink' : 'g-accent-blue' ?>">
 
 <section class="g-hero g-hero--short g-hero--sky g-cond-hero">
   <div class="g-wrap">
-    <?php g_crumbs([['Home', '/'], ['Conditions', '/conditions'], [$name, null]]); ?>
+    <?php g_crumbs([['Home', '/'], ['Medicines', '/medicines'], [$name, null]]); ?>
     <div class="g-cond-hero__row">
       <span class="g-cond-icon"><?= gi($group['icon']) ?></span>
       <div>
@@ -123,7 +140,26 @@ include INC . '/header.php';
       <div class="g-cond-block">
         <h2>How Getmeds can help</h2>
         <p><?= e($cond['help']) ?></p>
+        <?php if ($supply): ?>
+        <ul class="g-cond-list" role="list">
+          <?php foreach ($supply as $s): ?>
+          <li><?= gi('check-circle') ?><span><?= e($s) ?></span></li>
+          <?php endforeach; ?>
+        </ul>
+        <?php endif; ?>
       </div>
+
+      <?php if ($send): ?>
+      <div class="g-cond-block">
+        <h2>What to send us</h2>
+        <ul class="g-cond-list" role="list">
+          <?php foreach ($send as $s): ?>
+          <li><?= gi('file') ?><span><?= e($s) ?></span></li>
+          <?php endforeach; ?>
+        </ul>
+        <p>Use the request form, <a href="<?= e($waUrl) ?>" target="_blank" rel="noopener">WhatsApp us a photo</a>, or call <?= phone_link() ?>. Our pharmacist checks the prescription, availability and price, and replies with the next steps. <?= e(cfg('reply_time')) ?></p>
+      </div>
+      <?php endif; ?>
 
       <div class="g-cond-block">
         <h2>Related medicines</h2>
@@ -140,6 +176,16 @@ include INC . '/header.php';
         <p><a class="g-link-arrow" href="<?= e(url('/named-patient-supply')) ?>">Named Patient Supply<?= gi('arrow') ?></a></p>
       </div>
 
+      <?php if ($faq): ?>
+      <div class="g-cond-block g-cond-faq">
+        <h2>Common questions</h2>
+        <?php foreach ($faq as [$q, $a]): ?>
+        <h3><?= e($q) ?></h3>
+        <p><?= e($a) ?></p>
+        <?php endforeach; ?>
+      </div>
+      <?php endif; ?>
+
       <div class="g-cond-block">
         <?php g_box('safety', 'This page gives general information only. It is not medical advice. Please speak to a doctor, nurse or pharmacist about your own health. Do not start, stop or change a medicine without their advice.', 'Important note'); ?>
       </div>
@@ -149,6 +195,7 @@ include INC . '/header.php';
         <p>Getmeds may be able to assist with access to appropriate medicines for this condition. Contact the Getmeds team to check availability and supply requirements.</p>
         <div class="g-btns g-btns--center">
           <?= g_btn('Request a Medicine', request_url('medicine'), 'primary') ?>
+          <?= g_btn('WhatsApp Us', $waUrl, 'white') ?>
           <?= g_call_btn('Talk to Our Team', 'white') ?>
         </div>
       </div>
@@ -159,8 +206,10 @@ include INC . '/header.php';
         <h2 class="g-h3">Need this medicine?</h2>
         <div class="g-btns g-mt-sm">
           <?= g_btn('Request a Medicine', request_url('medicine'), 'primary') ?>
+          <?= g_btn('WhatsApp Us', $waUrl, 'secondary') ?>
           <?= g_call_btn('Talk to Our Team', 'secondary') ?>
         </div>
+        <p class="g-cond-side__phone"><?= gi('clock') ?><?= e(cfg('reply_time_short')) ?> · <?= e(cfg('hours_short')) ?></p>
         <p class="g-cond-side__phone"><?= gi('phone') ?><?= phone_link() ?></p>
       </div>
     </aside>

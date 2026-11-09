@@ -17,6 +17,13 @@ return [
     // Confirmed values. These are real and may be relied on.
     // ---------------------------------------------------------------------
 
+    // The live site's address, e.g. 'https://<production domain>' (no trailing
+    // slash). MUST be set at launch: canonical, og:url, og:image, the sitemaps
+    // and the schema are built from it. Empty means "use the host the request
+    // came in on", which is right on localhost and wrong anywhere a proxy or a
+    // second hostname sits in front of the site.
+    'site_origin'      => '',
+
     'site_name'        => 'Getmeds Vanuatu',
     'site_descriptor'  => 'Pacific Chemotherapy Pharmacy',
 
@@ -33,6 +40,17 @@ return [
     // Displayed beside the phone number in the masthead. Keep it short.
     'hours_short'      => 'Mon to Fri, 8am to 5pm',
     'hours_long'       => 'Monday to Friday, 8am to 5pm. Closed public holidays.',
+
+    // The reply promise shown beside the request buttons (owner decision,
+    // 2026-11-04). Only change it to something the pharmacy can keep.
+    'reply_time'       => 'A pharmacist replies the same business day.',
+    'reply_time_short' => 'Same-day reply',
+
+    // Product pages kept in Google: the first N in data/products.json (its
+    // order is most-requested first). The rest stay open to visitors and the
+    // site search but carry noindex and leave the sitemap until they have
+    // unique, pharmacist-reviewed content (owner decision, 2026-11-04).
+    'products_indexed' => 50,
 
     // Shown in the home page stats bar under the hero. Confirm with the pharmacist.
     'medicines_count'  => '100+',
@@ -113,7 +131,9 @@ return [
     'news_query'          => 'pharmaceutical OR "clinical trial" OR biotech OR "global health" OR oncology OR vaccine',
 
     // newsdata.io categories, comma separated, and the language of the articles.
-    'news_categories'     => 'health,science',
+    // Health only: the science category brought in chemistry and market-report
+    // stories with nothing to do with medicines.
+    'news_categories'     => 'health',
     'news_language'       => 'en',
 
     // Which outlets to draw from: 'top' is the best-known tenth, 'medium' the

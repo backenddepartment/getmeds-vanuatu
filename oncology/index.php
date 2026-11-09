@@ -10,7 +10,7 @@ require __DIR__ . '/../includes/bootstrap.php';
 
 $page = [
     'title'     => 'Oncology and Chemotherapy',
-    'seo_title' => 'Chemotherapy and Cancer Medicines in Vanuatu — Getmeds Vanuatu',
+    'seo_title' => 'Chemotherapy & Cancer Medicines in Vanuatu — Getmeds Vanuatu',
     'desc'      => "Getmeds Vanuatu supplies chemotherapy and cancer medicines in Port Vila against a doctor's prescription. In stock, imported or sourced for each patient.",
 ];
 
@@ -230,6 +230,7 @@ $ribbons = [
     <div class="g-home-cta__text">
       <h2>Ask about a cancer medicine</h2>
       <p>Send the prescription and we will check what we can supply.</p>
+      <p class="g-home-cta__hours"><?= gi('clock') ?><?= e(cfg('reply_time')) ?> Open <?= e(cfg('hours_long')) ?></p>
     </div>
     <div class="g-home-cta__btns">
       <a class="g-home-cta__btn g-home-cta__btn--white" href="<?= e(request_url('cancer')) ?>">Request a Cancer Medicine</a>

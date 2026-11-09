@@ -11,12 +11,15 @@
  *     Products chips.
  *   * Right: Send Inquiry with the profile switcher pill.
  *       Patient / Caregiver: three steps
- *         1 Your details (name, email, phone with country, age)
- *         2 Delivery & documents (address, contact person, the patient's ID
- *           with thumbnails, the prescription; both required)
+ *         1 Your details (name, phone or WhatsApp, the prescription: all
+ *           required, and nothing else, so the first step is quick)
+ *         2 A few more details (email, age, address, contact person: all
+ *           optional; the patient's ID with thumbnails: required)
  *         3 Consent & send (two checkboxes, medical disclaimer)
- *       Doctor / Pharmacy / Hospital: one step (name, phone, age, email,
- *       message)
+ *       Doctor / Pharmacy / Hospital: one step (name, phone, email
+ *       (optional), message)
+ *     Field problems show under the field (aria-describedby, aria-invalid);
+ *     the step label is a live region.
  *     The Product Range table's Send Inquiry menu opens this page with
  *     ?userType= set, so the right form shows straight away.
  *   * Popups: Inquiry Sent!, Prescription Required, Valid ID Required, the
@@ -27,7 +30,8 @@
  *
  * Two differences from India, on purpose: no "In stock" line (the
  * pharmacist confirms availability, so the status says "Prescription
- * medicine"), and ages run 1 to 100 so a child's inquiry is not blocked.
+ * medicine"), and the age is an optional number field (0 to 120), not a
+ * 100-row dropdown.
  */
 
 $p       = $product;
@@ -57,22 +61,13 @@ foreach (shop_products() as $r) {
     }
 }
 
-/** The "Age" dropdown, used by both forms. */
-$ageDropdown = static function (string $id): string {
-    $opts = '';
-    for ($age = 1; $age <= 100; $age++) {
-        $opts .= '<button type="button" role="option" data-value="' . $age . '">' . $age . '</button>';
-    }
-    return '<div class="g-pd__age">'
-         . '<span class="g-pd__label" id="' . $id . '-l">Age</span>'
-         . '<div class="g-pd__agedrop" data-age>'
-         . '<input type="hidden" id="' . $id . '" value="">'
-         . '<button type="button" class="g-pd__agebtn" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="' . $id . '-l">'
-         . '<span class="g-pd__agelabel">Age</span>'
-         . '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>'
-         . '</button>'
-         . '<div class="g-pd__agemenu" role="listbox" hidden>' . $opts . '</div>'
-         . '</div></div>';
+/** The patient's age: a short number field (a phone shows the number pad),
+    not a 100-row dropdown. Optional. */
+$ageInput = static function (string $id): string {
+    return '<label class="g-pd__field g-pd__age" for="' . $id . '">'
+         . '<span class="g-pd__label">Age (optional)</span>'
+         . '<input type="text" id="' . $id . '" name="age" inputmode="numeric" pattern="[0-9]*" maxlength="3" autocomplete="off" placeholder="e.g. 54">'
+         . '</label>';
 };
 
 /** A field only bots fill in. A submission that fills it is dropped. */
@@ -90,10 +85,27 @@ $slaNote = static function (string $id): string {
 
 $accept = '.jpg,.jpeg,.png,.pdf,image/jpeg,image/png,application/pdf';
 
+/* The fullest description that fits a search result (160 characters): long
+   medicine names get a shorter wording rather than losing the useful part. */
+$pdDesc = '';
+foreach ([
+    $p['name'] . ' — ' . $catName . '. Sourced by Getmeds Vanuatu from internationally certified manufacturers, available by prescription. Request a quote.',
+    $p['name'] . ' — ' . $catName . '. Sourced by Getmeds Vanuatu from certified manufacturers, available by prescription. Request a quote.',
+    $p['name'] . ' — ' . $catName . '. Available by prescription from Getmeds Vanuatu. Request a quote.',
+    $p['name'] . ', available by prescription from Getmeds Vanuatu in Port Vila. Request a quote.',
+] as $pdDesc) {
+    if (mb_strlen($pdDesc) <= 160) {
+        break;
+    }
+}
+
 $page = [
     'title'     => $p['name'],
     'seo_title' => $p['name'] . ' — ' . $catName . ' — Getmeds Vanuatu',
-    'desc'      => $p['name'] . ' — ' . $catName . '. Sourced by Getmeds Vanuatu from internationally certified manufacturers, available by prescription. Send an inquiry for a quote.',
+    'desc'      => $pdDesc,
+    // Only the most-requested medicines are offered to search engines; the
+    // rest still pass link value on ('follow').
+    'noindex'   => shop_product_indexed($p['slug']) ? false : 'follow',
 ];
 
 include INC . '/head.php';
@@ -149,12 +161,31 @@ include INC . '/header.php';
 
         <div class="g-pd__desc">
           <div class="g-pd__tabs"><span>Description</span></div>
+          <?php /* Written for the patient and the doctor, from the data we
+                   hold (name, category, drug class) and nothing more: no
+                   strengths, prices or stock are claimed here. */ ?>
           <p>
-            <?= e($p['name']) ?>
-            <?php if ($p['drug_class'] !== ''): ?>is classified as <?= preg_match('/^[aeiou]/i', $p['drug_class']) ? 'an' : 'a' ?> <?= e($p['drug_class']) ?>,<?php endif; ?>
-            sourced for use within our <?= e($catName) ?> portfolio.
-            Reach out to our team for full regulatory documentation, pricing, and current availability.
+            <?= e($p['name']) ?> is a prescription medicine in the <?= e($catName) ?> group<?php if ($p['drug_class'] !== ''): ?> (<?= e($p['drug_class']) ?>)<?php endif; ?>.
+            It is supplied only against a valid prescription and is used under the care of a doctor or specialist,
+            who decides whether it is right for the patient and at what dose.
           </p>
+          <?php if (shop_is_restricted($p['cat'])): ?>
+          <p class="g-pro-note" role="note"><?= gi('alert') ?><span><?= g_restricted_note() ?></span></p>
+          <?php endif; ?>
+          <p class="g-pd__avail">
+            <strong>Available on request.</strong>
+            Our pharmacist confirms whether it is in stock or needs to be imported, how long supply will take,
+            and the price, before you order.
+          </p>
+          <div class="g-pd__how">
+            <h2 class="g-pd__howh">How to request <?= e($p['name']) ?> in Vanuatu</h2>
+            <ol>
+              <li><strong>Send the prescription.</strong> Use the form on this page, <a href="<?= e(whatsapp_url('Hello Getmeds, I would like to request ' . $p['name'] . '.')) ?>" rel="noopener">WhatsApp us a photo</a>, or call <?= phone_link() ?>.</li>
+              <li><strong>Our pharmacist checks it.</strong> We check the prescription, stock and import time.</li>
+              <li><strong>You get the price and date.</strong> We confirm both in writing before you pay, then you collect it on the agreed date.</li>
+            </ol>
+            <p class="g-pd__pro">Healthcare professionals can ask for product and regulatory documentation with their quotation.</p>
+          </div>
           <div class="g-pd__grid">
             <div><span>Therapeutic Category</span><strong><?= e($catName) ?></strong></div>
             <div><span>Oncology Type</span><strong><?= e($p['oncology_type'] ?: '—') ?></strong></div>
@@ -176,7 +207,7 @@ include INC . '/header.php';
       <!-- ============ RIGHT: SEND INQUIRY ============ -->
       <div class="g-pd__inquiry">
         <div class="g-pd__inqhead">
-          <h2>Send Inquiry</h2>
+          <h2>Request a Medicine</h2>
           <p>Submit your details to get a formal quote for this product.</p>
 
           <?php if (!$static): ?>
@@ -212,23 +243,33 @@ include INC . '/header.php';
 
           <!-- Patient / Caregiver: three steps -->
           <form id="pd-form-patient" class="g-pd__form" hidden novalidate>
-            <div class="g-pd__step" data-step="1">
+            <?php /* Step 1 asks only for what the pharmacist needs to start:
+                     who, how to reach them, and the prescription. Everything
+                     else is step 2, and optional apart from the patient's ID. */ ?>
+            <div class="g-pd__step" data-step="1" data-title="Your details">
               <h3>Your details</h3>
               <label class="g-pd__field"><span class="g-pd__label">Target Product</span><input type="text" readonly value="<?= e($p['name']) ?>" class="g-pd__readonly"></label>
-              <label class="g-pd__field"><span class="g-pd__label">Patient Full Name</span><input type="text" name="patientName" autocomplete="name" maxlength="120" placeholder="Full name as shown on the prescription"></label>
-              <label class="g-pd__field"><span class="g-pd__label">Email Address</span><input type="email" name="patientEmail" autocomplete="email" maxlength="160" placeholder="john@example.com"></label>
-              <div class="g-pd__row">
-                <label class="g-pd__field g-pd__grow"><span class="g-pd__label">Phone Number</span><span class="g-pd__phonewrap"><input type="tel" name="patientPhone" class="g-pd__phone" inputmode="numeric" autocomplete="tel" placeholder="591 2345"></span></label>
-                <?= $ageDropdown('pd-age-patient') ?>
+              <label class="g-pd__field"><span class="g-pd__label">Patient full name</span><input type="text" name="patientName" autocomplete="name" maxlength="120" required aria-required="true" placeholder="Full name as shown on the prescription"></label>
+              <label class="g-pd__field"><span class="g-pd__label">Phone or WhatsApp number</span><span class="g-pd__phonewrap"><input type="tel" name="patientPhone" class="g-pd__phone" inputmode="numeric" autocomplete="tel" required aria-required="true" placeholder="591 2345"></span></label>
+
+              <div class="g-pd__upload">
+                <label class="g-pd__label" for="pd-rx-input">Upload prescription (required)</label>
+                <input id="pd-rx-input" type="file" multiple accept="<?= e($accept) ?>" class="g-pd__file" aria-describedby="pd-rx-hint">
+                <p class="g-pd__hint" id="pd-rx-hint">A clear phone photo or a PDF of the doctor's prescription. JPG, PNG or PDF.</p>
+                <ul id="pd-rx-list" class="g-pd__rxlist" role="list"></ul>
               </div>
             </div>
 
-            <div class="g-pd__step" data-step="2" hidden>
-              <h3>Delivery &amp; documents</h3>
-              <label class="g-pd__field"><span class="g-pd__label">Delivery Address</span><input type="text" name="patientAddress" autocomplete="street-address" maxlength="300" placeholder="Complete address for courier delivery"></label>
+            <div class="g-pd__step" data-step="2" data-title="A few more details" hidden>
+              <h3>A few more details</h3>
+              <div class="g-pd__row">
+                <label class="g-pd__field g-pd__grow"><span class="g-pd__label">Email address (optional)</span><input type="email" name="patientEmail" autocomplete="email" maxlength="160" placeholder="john@example.com"></label>
+                <?= $ageInput('pd-age-patient') ?>
+              </div>
+              <label class="g-pd__field"><span class="g-pd__label">Delivery address (optional)</span><input type="text" name="patientAddress" autocomplete="street-address" maxlength="300" placeholder="Only if you would like it delivered"></label>
 
               <div class="g-pd__box">
-                <h4>Contact Person</h4>
+                <h4>Contact person (optional)</h4>
                 <label class="g-pd__check"><input type="checkbox" id="pd-contact-same">
                   <span><strong>Same as patient details</strong><small>Check this if the patient is the one placing the inquiry.</small></span>
                 </label>
@@ -256,24 +297,18 @@ include INC . '/header.php';
                 </div>
               </div>
 
-              <div class="g-pd__upload">
-                <label class="g-pd__label" for="pd-rx-input">Upload Prescription (Required)</label>
-                <input id="pd-rx-input" type="file" multiple accept="<?= e($accept) ?>" class="g-pd__file">
-                <ul id="pd-rx-list" class="g-pd__rxlist" role="list"></ul>
-              </div>
-
               <p class="g-pd__note">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
                 <span>Our pharmacists will contact you on the mobile number provided.</span>
               </p>
             </div>
 
-            <div class="g-pd__step" data-step="3" hidden>
+            <div class="g-pd__step" data-step="3" data-title="Consent and send" hidden>
               <h3>Consent &amp; send</h3>
               <div class="g-pd__consent">
                 <h4>Declarations and Consent</h4>
                 <div class="g-pd__check g-pd__check--sm"><input type="checkbox" id="pd-terms"><label for="pd-terms">I confirm that the information provided is accurate and that the prescription submitted is valid.</label></div>
-                <div class="g-pd__check g-pd__check--sm"><input type="checkbox" id="pd-privacy"><label for="pd-privacy">I have read and understood the <a href="<?= e(url('/privacy')) ?>" target="_blank" rel="noopener">Privacy Policy</a> and consent to the collection, use, and processing of my personal and sensitive personal information for the purpose of verifying and processing this inquiry.</label></div>
+                <div class="g-pd__check g-pd__check--sm"><input type="checkbox" id="pd-privacy"><label for="pd-privacy">I have read and understood the <a href="<?= e(url('/privacy')) ?>" data-modal>Privacy Policy</a> and consent to the collection, use, and processing of my personal and sensitive personal information for the purpose of verifying and processing this inquiry.</label></div>
               </div>
               <?= $honeypot ?>
               <div class="g-pd__disclaimer">
@@ -285,7 +320,7 @@ include INC . '/header.php';
             <div class="g-pd__actions">
               <button type="button" class="g-pd__back">Back</button>
               <button type="button" class="g-pd__next g-pd__primary">Continue</button>
-              <button type="submit" class="g-pd__submit g-pd__primary" hidden>Submit Inquiry Request</button>
+              <button type="submit" class="g-pd__submit g-pd__primary" hidden>Send Request</button>
               <?= $slaNote('pd-sla-1') ?>
             </div>
           </form>
@@ -295,19 +330,16 @@ include INC . '/header.php';
             <div class="g-pd__step" data-step="1">
               <h3>Your details</h3>
               <label class="g-pd__field"><span class="g-pd__label">Target Product</span><input type="text" readonly value="<?= e($p['name']) ?>" class="g-pd__readonly"></label>
-              <label class="g-pd__field"><span class="g-pd__label">Full Name</span><input type="text" name="corpName" autocomplete="name" maxlength="120" placeholder="John Doe"></label>
-              <div class="g-pd__row">
-                <label class="g-pd__field g-pd__grow"><span class="g-pd__label">Phone Number</span><span class="g-pd__phonewrap"><input type="tel" name="corpPhone" class="g-pd__phone" inputmode="numeric" autocomplete="tel" placeholder="591 2345"></span></label>
-                <?= $ageDropdown('pd-age-corp') ?>
-              </div>
-              <label class="g-pd__field"><span class="g-pd__label">Email Address</span><input type="email" name="corpEmail" autocomplete="email" maxlength="160" placeholder="john@example.com"></label>
-              <label class="g-pd__field"><span class="g-pd__label">Message</span><textarea name="corpMessage" rows="3" maxlength="3000" placeholder="Tell us more about your requirements..."></textarea></label>
+              <label class="g-pd__field"><span class="g-pd__label">Full name</span><input type="text" name="corpName" autocomplete="name" maxlength="120" required aria-required="true" placeholder="John Doe"></label>
+              <label class="g-pd__field"><span class="g-pd__label">Phone or WhatsApp number</span><span class="g-pd__phonewrap"><input type="tel" name="corpPhone" class="g-pd__phone" inputmode="numeric" autocomplete="tel" required aria-required="true" placeholder="591 2345"></span></label>
+              <label class="g-pd__field"><span class="g-pd__label">Email address (optional)</span><input type="email" name="corpEmail" autocomplete="email" maxlength="160" placeholder="pharmacy@hospital.vu"></label>
+              <label class="g-pd__field"><span class="g-pd__label">Message</span><textarea name="corpMessage" rows="3" maxlength="3000" required aria-required="true" placeholder="Quantity, strength, preferred brand, date needed..."></textarea></label>
               <?= $honeypot ?>
             </div>
             <div class="g-pd__actions">
               <button type="button" class="g-pd__back" hidden>Back</button>
               <button type="button" class="g-pd__next g-pd__primary" hidden>Continue</button>
-              <button type="submit" class="g-pd__submit g-pd__primary">Submit Inquiry Request</button>
+              <button type="submit" class="g-pd__submit g-pd__primary">Send Request</button>
               <?= $slaNote('pd-sla-2') ?>
             </div>
           </form>
@@ -324,7 +356,7 @@ include INC . '/header.php';
   <div class="g-pd__dialog g-pd__dialog--success">
     <?php /* The circle fills in, then the check draws itself, each time the popup opens. */ ?>
     <div class="g-pd__okicon" aria-hidden="true"><svg viewBox="0 0 52 52"><circle class="g-pd__okring" cx="26" cy="26" r="24"/><path class="g-pd__okcheck" d="M15 27l7 7 15-16"/></svg></div>
-    <h2 id="pd-success-h">Inquiry Sent!</h2>
+    <h2 id="pd-success-h">Request Sent!</h2>
     <p>Thank you for your inquiry. <?= e(PD_SLA) ?></p>
     <div class="g-pd__dfoot"><button type="button" class="g-pd__close g-pd__link" data-modal="pd-modal-success">Close</button></div>
   </div>

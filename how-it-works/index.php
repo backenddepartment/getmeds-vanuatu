@@ -133,6 +133,7 @@ include INC . '/header.php';
     <div class="g-home-cta__text">
       <h2 id="hosp-h">For hospitals, clinics and pharmacies</h2>
       <p>Send your requirement or product list. We reply with a quotation. After you confirm, we source, receive and supply the order, and keep a full record.</p>
+      <p class="g-home-cta__hours"><?= gi('clock') ?><?= e(cfg('reply_time')) ?> Open <?= e(cfg('hours_long')) ?></p>
     </div>
     <div class="g-home-cta__btns">
       <a class="g-home-cta__btn g-home-cta__btn--white" href="<?= e(request_url('quotation')) ?>">Request a Quotation</a>
@@ -146,6 +147,7 @@ include INC . '/header.php';
     <div class="g-home-cta__text">
       <h2>Start your request</h2>
       <p>Send us the medicine name and prescription, or call us and our team will help.</p>
+      <p class="g-home-cta__hours"><?= gi('clock') ?><?= e(cfg('reply_time')) ?> Open <?= e(cfg('hours_long')) ?></p>
     </div>
     <div class="g-home-cta__btns">
       <a class="g-home-cta__btn g-home-cta__btn--white" href="<?= e(request_url('medicine')) ?>">Request a Medicine</a>

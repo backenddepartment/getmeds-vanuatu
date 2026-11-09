@@ -7,6 +7,8 @@
  */
 require __DIR__ . '/../includes/bootstrap.php';
 
+// Opens as a pop-up from data-modal links (MODAL_PAGES), and as a full page when opened directly.
+
 $page = [
     'title'     => 'Privacy Policy',
     'seo_title' => 'Privacy Policy — Getmeds Vanuatu',

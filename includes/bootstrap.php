@@ -8,6 +8,14 @@
 
 declare(strict_types=1);
 
+/* PHP errors show only on this computer (localhost). On the live site a visitor
+   would see the server's folder paths in them, so there they go to the error
+   log instead. */
+if (!in_array(strtolower((string) preg_replace('/:\d+$/', '', $_SERVER['HTTP_HOST'] ?? 'localhost')), ['localhost', '127.0.0.1', '::1', '[::1]'], true)) {
+    ini_set('display_errors', '0');
+    ini_set('log_errors', '1');
+}
+
 define('APP_ROOT', dirname(__DIR__));
 define('INC', APP_ROOT . '/includes');
 
@@ -50,13 +58,26 @@ function base_path(): string
     return $base;
 }
 
-/** Build a site URL from a root-relative path. Always use this, never a bare href. */
+/**
+ * Build a site URL from a root-relative path. Always use this, never a bare href.
+ *
+ * Page addresses get the trailing slash they are served at (/about becomes
+ * /about/), so every internal link matches its canonical and sitemap URL and
+ * no click costs a 301. A path whose last part has a file extension (.css,
+ * .jpg, .xml, .php) is a file and is left alone. Any ?query or #hash is kept.
+ */
 function url(string $path = '/'): string
 {
     if ($path === '' || $path[0] !== '/') {
         $path = '/' . $path;
     }
-    return base_path() . $path;
+    $cut    = strcspn($path, '?#');
+    $suffix = (string) substr($path, $cut);
+    $path   = substr($path, 0, $cut);
+    if ($path !== '/' && substr($path, -1) !== '/' && strpos(basename($path), '.') === false) {
+        $path .= '/';
+    }
+    return base_path() . $path . $suffix;
 }
 
 /**
@@ -71,6 +92,37 @@ function asset(string $path): string
 }
 
 /**
+ * A stylesheet, served as a minified copy (<name>.min.css beside it) that is
+ * rebuilt whenever the source is newer. Edit the normal .css file only; the
+ * .min.css is generated. Conservative: strips comments and whitespace, never
+ * touches the space before a colon (".a :hover" differs from ".a:hover") or
+ * anything inside calc(). Falls back to the source file if it cannot write.
+ */
+function asset_css(string $path): string
+{
+    $src = APP_ROOT . $path;
+    $minPath = (string) preg_replace('/\.css$/', '.min.css', $path);
+    $min = APP_ROOT . $minPath;
+    if (!is_file($src)) {
+        return asset($path);
+    }
+    if (!is_file($min) || filemtime($min) < filemtime($src)) {
+        $css = (string) file_get_contents($src);
+        $css = (string) preg_replace('#/\*.*?\*/#s', '', $css);
+        $css = (string) preg_replace('/\s+/', ' ', $css);
+        $css = (string) preg_replace('/\s*([{};,>])\s*/', '$1', $css);
+        $css = (string) preg_replace('/:\s+/', ':', $css);
+        $css = str_replace(';}', '}', $css);
+        $tmp = $min . '.' . getmypid() . '.tmp';
+        if ($css === '' || @file_put_contents($tmp, trim($css)) === false || !@rename($tmp, $min)) {
+            @unlink($tmp);
+            return asset($path);
+        }
+    }
+    return asset($minPath);
+}
+
+/**
  * Absolute URL, for the places a relative one is not allowed: og:image and
  * canonical are both read by machines that have no page context to resolve
  * against. Derived from the request rather than hard-coded, so this works the
@@ -82,6 +134,14 @@ function abs_url(string $path = '/'): string
     // 127.0.0.1, and an og:image pointing there is worse than none at all.
     $origin = getenv('GV_SITE_ORIGIN');
     if ($origin !== false && $origin !== '') {
+        return rtrim($origin, '/') . url($path);
+    }
+
+    // The production address from config.php ('site_origin'). Set at launch,
+    // so canonical, og:url, og:image, the sitemaps and the schema all name the
+    // live HTTPS domain whatever host the request arrived on.
+    $origin = (string) cfg('site_origin', '');
+    if ($origin !== '') {
         return rtrim($origin, '/') . url($path);
     }
 
@@ -194,11 +254,18 @@ function ensure_session(): void
     if (session_status() === PHP_SESSION_ACTIVE) {
         return;
     }
+    // Refuse a session id the server did not issue (session fixation), and keep
+    // the id out of URLs.
+    ini_set('session.use_strict_mode', '1');
+    ini_set('session.use_only_cookies', '1');
     session_set_cookie_params([
         'path'     => base_path() === '' ? '/' : base_path(),
         'httponly' => true,
         'samesite' => 'Lax',
-        'secure'   => !empty($_SERVER['HTTPS']),
+        // Behind a proxy or CDN that ends HTTPS, PHP sees plain http; the
+        // proxy's header says the visitor's connection was secure.
+        'secure'   => (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+                   || strtolower((string) ($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '')) === 'https',
     ]);
     session_start();
 }
@@ -235,16 +302,17 @@ function csrf_valid(?string $token): bool
  */
 function nav_tree(): array
 {
-    $shopCats = [];
-    foreach (shop_categories() as $slug => [$name]) {
-        $shopCats[] = ['label' => $name, 'url' => shop_category_path($slug)];
+    // The Product Range menu: its categories in patient-friendly groups
+    // (data/category-groups.php), each under a group title, with short labels.
+    // 'children' keeps the flat list, for the current-page check.
+    $shopCats = $shopGroups = [];
+    foreach (shop_category_groups() as $g) {
+        $links = [];
+        foreach ($g['cats'] as $slug => [$short]) {
+            $links[] = $shopCats[] = ['label' => $short, 'url' => shop_category_path($slug)];
+        }
+        $shopGroups[] = ['label' => $g['label'], 'children' => $links];
     }
-    // Names long enough to wrap onto two lines in the four-column dropdown go
-    // to the bottom row, so the rows above stay one line each. Stable: the
-    // rest keep the Conditions page's order.
-    usort($shopCats, static function ($a, $b) {
-        return (strlen($a['label']) > 25) <=> (strlen($b['label']) > 25);
-    });
 
     return [
         ['label' => 'Home',      'url' => '/'],
@@ -259,6 +327,7 @@ function nav_tree(): array
              ['label' => 'Oncology',             'url' => '/oncology'],
              // Exact: the pages under /medicines have menus of their own.
              ['label' => 'Medicines we supply',  'url' => '/medicines', 'exact' => true],
+             ['label' => 'For Patients',         'url' => '/patients'],
              ['label' => 'For Healthcare Professionals', 'url' => '/healthcare-professionals'],
              ['label' => 'Pacific Access',       'url' => '/pacific-access'],
          ]],
@@ -267,10 +336,10 @@ function nav_tree(): array
         ['label' => 'Product Range', 'url' => '/product-range/', 'linkable' => true, 'grid' => true,
          'menu_intro' => [
              'heading' => 'Product Range',
-             'text'    => 'Browse our pharmacy by category, or open the full catalog to see every medicine we list.',
+             'text'    => 'Browse our pharmacy by type of treatment, or open the full catalog to see every medicine we list.',
              'button'  => ['View Full Catalog', '/medicines/catalog'],
          ],
-         'children' => $shopCats],
+         'children' => $shopCats, 'groups' => $shopGroups],
         ['label' => 'Articles', 'url' => '/articles'],
         ['label' => 'Contact',              'url' => '/contact'],
     ];
@@ -299,6 +368,51 @@ function shop_categories(): array
         return strcasecmp($a[0], $b[0]);
     });
     return $cats;
+}
+
+/**
+ * The categories in their patient-friendly groups (data/category-groups.php),
+ * in that file's order, only categories that have products. A category not in
+ * the file falls into 'other' under its full name, so nothing ever vanishes.
+ * key => ['label', 'desc', 'cats' => [slug => [short label, full name, count]]]
+ */
+function shop_category_groups(): array
+{
+    static $groups = null;
+    if ($groups !== null) {
+        return $groups;
+    }
+    $cats   = shop_categories();
+    $groups = [];
+    $placed = [];
+    foreach (require APP_ROOT . '/data/category-groups.php' as $key => [$label, $desc, $members]) {
+        $groups[$key] = ['label' => $label, 'desc' => $desc, 'cats' => []];
+        foreach ($members as $slug => $short) {
+            if (isset($cats[$slug]) && !isset($placed[$slug])) {
+                $groups[$key]['cats'][$slug] = [$short, $cats[$slug][0], $cats[$slug][2]];
+                $placed[$slug] = true;
+            }
+        }
+    }
+    foreach ($cats as $slug => [$name, , $count]) {
+        if (!isset($placed[$slug])) {
+            $groups['other']['cats'][$slug] = [$name, $name, $count];
+        }
+    }
+    return $groups = array_filter($groups, static function ($g) {
+        return $g['cats'] !== [];
+    });
+}
+
+/** The group key a category sits in. */
+function shop_category_group(string $catSlug): ?string
+{
+    foreach (shop_category_groups() as $key => $g) {
+        if (isset($g['cats'][$catSlug])) {
+            return $key;
+        }
+    }
+    return null;
 }
 
 /** A shop slug, from a name: "Heart and blood vessels" => heart-and-blood-vessels. */
@@ -382,6 +496,50 @@ function shop_product_path(array $p): string
     return shop_category_path($p['cat']) . $p['slug'] . '/';
 }
 
+/**
+ * Is this product page one of the most-requested, kept in search engines?
+ * The first cfg('products_indexed') rows of data/products.json are; the rest
+ * carry "noindex, follow" and stay out of sitemap-products.xml.
+ */
+function shop_product_indexed(string $slug): bool
+{
+    static $keep = null;
+    if ($keep === null) {
+        $keep = [];
+        $max  = (int) cfg('products_indexed', 50);
+        foreach (shop_products() as $s => $p) {
+            if (count($keep) >= $max) {
+                break;
+            }
+            // Specialist-only therapies are never offered to search engines.
+            if (!shop_is_restricted($p['cat'])) {
+                $keep[$s] = true;
+            }
+        }
+    }
+    return isset($keep[$slug]);
+}
+
+/**
+ * Specialist-only categories: investigational medicines, CAR-T and other cell
+ * and gene therapies. Until the Vanuatu Pharmacy Board confirms how these may
+ * be presented, they stay listed for hospitals and specialists but carry a
+ * specialist-use notice and are kept out of search engines (audit, 2026-11-04).
+ */
+function shop_is_restricted(string $catSlug): bool
+{
+    return (bool) preg_match('/investigational|cellular-therapy|gene-therapy/', $catSlug);
+}
+
+/** The notice shown on specialist-only category and product pages (trusted HTML). */
+function g_restricted_note(): string
+{
+    return '<strong>Specialist use only.</strong> This therapy may be investigational or not yet approved for '
+         . 'general use in Vanuatu. It is supplied only to hospitals and treating specialists, for a named patient '
+         . 'and subject to regulatory approval. Patients: please ask your specialist, who can '
+         . '<a href="' . e(url('/healthcare-professionals') . '#quote') . '">contact us</a>.';
+}
+
 /** Every category and medicine page, for the sitemap and the static build. */
 function shop_paths(): array
 {
@@ -406,6 +564,27 @@ function nav_children(string $sectionUrl): array
     return [];
 }
 
+/**
+ * Pages whose links open as pop-ups (guide.js, data-modal), so a half-filled
+ * form is not lost. Each is also a real page: opened directly (typed,
+ * bookmarked, a search result, a link without JS) it renders in full with the
+ * header and footer. They used to redirect when opened directly, which left
+ * the forms' consent boxes pointing at a Privacy Policy no one could open
+ * (audit, 4 November 2026).
+ */
+const MODAL_PAGES = ['/privacy', '/terms', '/complaints', '/policies-and-safety', '/report-a-side-effect'];
+
+/** Kept so older page templates that still call it keep working. Does nothing. */
+function modal_only(string $fallback = '/'): void
+{
+}
+
+/** True for a link that should open as a pop-up. */
+function is_modal_path(string $path): bool
+{
+    return in_array(rtrim((string) strtok($path, '#?'), '/'), MODAL_PAGES, true);
+}
+
 /** Footer navigation columns (content guide, page 22). */
 function footer_columns(): array
 {
@@ -414,7 +593,6 @@ function footer_columns(): array
             ['Product Range',       '/product-range/'],
             ['Medicines catalog',   '/medicines/catalog'],
             ['Medicines we supply', '/medicines'],
-            ['Conditions',          '/conditions'],
             ['Cancer medicines',    '/medicines#oncology'],
             ['Medical supplies',    '/medicines#medical-supplies'],
         ],
@@ -446,7 +624,6 @@ function footer_links(): array
         ['label' => 'Terms of Use',        'url' => '/terms'],
         ['label' => 'Complaints',          'url' => '/complaints'],
         ['label' => 'Policies and Safety', 'url' => '/policies-and-safety'],
-        ['label' => 'Sitemap',             'url' => '/sitemap'],
     ];
 }
 

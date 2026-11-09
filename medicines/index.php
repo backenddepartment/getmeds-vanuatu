@@ -112,10 +112,12 @@ include INC . '/header.php';
       <div class="g-head g-groups-head">
         <div>
           <span class="g-label">What We Supply</span>
-          <h2 id="groups-h">Medicine groups</h2>
+          <h1 id="groups-h">Medicines we supply</h1>
         </div>
         <p class="g-groups-head__sub">We supply <?= count($groups) ?> groups of medicines, from cancer and blood disorders to diabetes, heart and kidney care, antibiotics and everyday medicines. Open a group to see what it covers, what we provide, who may need it and how to get it.</p>
       </div>
+      <?php /* For screen readers: the h3 group names sit under this, not straight under the h1. */ ?>
+      <h2 class="g-sr">Medicine groups</h2>
       <div class="g-acc g-acc--cards g-medcards">
         <?php foreach ($groups as $i => [$id, $icon, $name, $what, $provides, $who, $ctaLabel, $ctaHref]): ?>
         <details class="g-acc__item" id="<?= e($id) ?>" data-mobile-closed>
@@ -140,6 +142,29 @@ include INC . '/header.php';
         </details>
         <?php endforeach; ?>
       </div>
+
+      <?php /* Long-term conditions with their own page (the condition pages
+               restored on 2026-11-04: any entry in data/conditions.php that
+               carries 'supply' copy). */
+      $longTerm = [];
+      foreach (require APP_ROOT . '/data/conditions.php' as $cg) {
+          foreach ($cg['conditions'] as $c) {
+              if (!empty($c['supply'])) {
+                  $longTerm[] = $c;
+              }
+          }
+      }
+      if ($longTerm): ?>
+      <div class="g-longterm" aria-labelledby="longterm-h">
+        <h2 id="longterm-h" class="g-h3">Long-term conditions</h2>
+        <p>Medicines and supplies for conditions many people in Vanuatu live with. Each page explains what we can supply and what to send us.</p>
+        <ul class="g-chips g-longterm__list" role="list">
+          <?php foreach ($longTerm as $c): ?>
+          <li><a class="g-chip" href="<?= e(url('/conditions/' . $c['slug'])) ?>"><?= gi('pill') ?><?= e($c['name']) ?></a></li>
+          <?php endforeach; ?>
+        </ul>
+      </div>
+      <?php endif; ?>
     </div>
   </section>
 </div>
@@ -201,6 +226,7 @@ include INC . '/header.php';
     <div class="g-home-cta__text">
       <h2>Can't see your medicine?</h2>
       <p>We can source many products that are not listed here. Some items may take longer or cost more because of freight or import paperwork. We will tell you before you commit.</p>
+      <p class="g-home-cta__hours"><?= gi('clock') ?><?= e(cfg('reply_time')) ?> Open <?= e(cfg('hours_long')) ?></p>
     </div>
     <div class="g-home-cta__btns">
       <a class="g-home-cta__btn g-home-cta__btn--white" href="<?= e(request_url('medicine')) ?>">Request a Medicine</a>

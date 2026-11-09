@@ -213,7 +213,7 @@ if ($body && stripos($body, '</html>') !== false) {
 
 /* Sitemaps and robots.txt. Rendered here rather than copied, so their absolute
    URLs carry --origin, the address the site is actually published at. */
-foreach (['sitemap.xml', 'sitemap-images.xml', 'robots.txt'] as $gen) {
+foreach (['sitemap.xml', 'sitemap-pages.xml', 'sitemap-categories.xml', 'sitemap-products.xml', 'sitemap-images.xml', 'robots.txt'] as $gen) {
     $body = @file_get_contents("http://127.0.0.1:$port/$gen", false, $ctx);
     $code = 0;
     foreach ($http_response_header ?? [] as $h) {

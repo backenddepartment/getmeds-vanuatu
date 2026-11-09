@@ -5,6 +5,8 @@
  */
 require __DIR__ . '/../includes/bootstrap.php';
 
+// Opens as a pop-up from data-modal links (MODAL_PAGES), and as a full page when opened directly.
+
 $page = [
     'title'     => 'Terms of Use',
     'seo_title' => 'Terms of Use — Getmeds Vanuatu',

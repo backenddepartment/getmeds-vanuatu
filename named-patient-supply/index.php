@@ -164,6 +164,7 @@ include INC . '/header.php';
     <div class="g-home-cta__text">
       <h2>Ask about Named Patient Supply</h2>
       <p>Send us the prescription and we will check what is possible.</p>
+      <p class="g-home-cta__hours"><?= gi('clock') ?><?= e(cfg('reply_time')) ?> Open <?= e(cfg('hours_long')) ?></p>
     </div>
     <div class="g-home-cta__btns">
       <a class="g-home-cta__btn g-home-cta__btn--white" href="<?= e(request_url('nps')) ?>">Make a Named Patient Supply Enquiry</a>

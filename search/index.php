@@ -32,6 +32,24 @@ $popular = [
     ['Contact Us', '/contact'],
 ];
 
+// Every medicine, small, for the header search to match in the browser as
+// each letter is typed (assets/js/search-suggest.js): n name, s subtitle,
+// b body text (as srch_products() scores them), u address.
+if (($_GET['format'] ?? '') === 'index') {
+    header('Content-Type: application/json; charset=utf-8');
+    header('Cache-Control: public, max-age=3600');
+    header('X-Robots-Tag: noindex');
+    echo json_encode(array_values(array_map(static function ($p) {
+        return [
+            'n' => $p['name'],
+            's' => trim(implode(' · ', array_filter([$p['category'], $p['drug_class']]))),
+            'b' => $p['oncology_type'],
+            'u' => url(shop_product_path($p)),
+        ];
+    }, shop_products())), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+    exit;
+}
+
 if (($_GET['format'] ?? '') === 'json') {
     header('Content-Type: application/json; charset=utf-8');
     header('Cache-Control: no-store');
@@ -68,8 +86,13 @@ include INC . '/head.php';
 include INC . '/header.php';
 ?>
 
-<div class="g-srp">
+<?php /* With results: the heading, the count and an illustration on the left
+         (sticky), the results on the right. Before a search, and when
+         nothing matches, everything stays centred in one column. */
+$split = $query !== '' && $results['total'] > 0; ?>
+<div class="g-srp<?= $split ? ' g-srp--split' : '' ?>">
   <div class="g-srp__wrap">
+    <?php if ($split): ?><div class="g-srp__split"><aside class="g-srp__side"><?php endif; ?>
 
     <h1><?php if ($query !== ''): ?>Results for &ldquo;<?= e($query) ?>&rdquo;<?php else: ?>Search<?php endif; ?></h1>
 
@@ -84,6 +107,27 @@ include INC . '/header.php';
     </p>
     <?php else: ?>
     <p class="g-srp__sum">Search the catalogue and the rest of the site.</p>
+    <?php endif; ?>
+
+    <?php if ($split): ?>
+    <?php /* Results being found: a magnifying glass sweeps down three result
+             cards as they slide in, each ticked off in turn. Still when
+             motion is reduced. */ ?>
+    <svg class="g-sx" viewBox="0 0 280 230" aria-hidden="true" focusable="false">
+      <ellipse class="g-sx-shadow" cx="140" cy="214" rx="104" ry="7"/>
+      <?php foreach ([0, 1, 2] as $i): $y = 34 + $i * 58; ?>
+      <g class="g-sx-card g-sx-card--<?= $i + 1 ?>">
+        <rect class="g-sx-box" x="34" y="<?= $y ?>" width="212" height="46" rx="12"/>
+        <rect class="g-sx-ic" x="46" y="<?= $y + 11 ?>" width="24" height="24" rx="7"/>
+        <rect class="g-sx-mark" x="80" y="<?= $y + 11 ?>" width="34" height="11" rx="4"/>
+        <rect class="g-sx-title" x="80" y="<?= $y + 13 ?>" width="<?= [92, 76, 84][$i] ?>" height="7" rx="3.5"/>
+        <rect class="g-sx-sub" x="80" y="<?= $y + 27 ?>" width="<?= [118, 104, 96][$i] ?>" height="6" rx="3"/>
+        <g class="g-sx-tick"><circle cx="226" cy="<?= $y + 23 ?>" r="9"/><path d="M221.5 <?= $y + 23 ?>l3 3 6-6"/></g>
+      </g>
+      <?php endforeach; ?>
+      <g class="g-sx-glass"><circle cx="0" cy="0" r="20"/><path d="M14 14l15 15"/><path class="g-sx-shine" d="M-9 -6a11 11 0 0 1 9-7"/></g>
+    </svg>
+    </aside><div class="g-srp__results">
     <?php endif; ?>
 
     <?php if ($query === ''): ?>
@@ -160,6 +204,7 @@ include INC . '/header.php';
 
     <?php endif; ?>
 
+    <?php if ($split): ?></div></div><?php endif; ?>
   </div>
 </div>
 

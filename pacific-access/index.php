@@ -23,28 +23,59 @@ include INC . '/head.php';
 include INC . '/header.php';
 ?>
 
-<?php /* Hero (white): text left, the Pacific map right, a pulse rising from
-         Vanuatu's pin. */ ?>
+<?php /* Hero (white): the eyebrow and title top left, the line and the button
+         top right, then the Pacific map across the full width under them. */ ?>
 <section class="hx px-hero" aria-labelledby="pac-h1">
-  <div class="g-wrap px-hero__grid">
-    <div class="px-hero__text">
-      <span class="hx-kicker" data-rv>Pacific Islands Access</span>
-      <h1 id="pac-h1" class="px-hero__title">
-        <span class="hx-mask" data-rv style="--d:1"><span>Medicine access</span></span>
-        <span class="hx-mask" data-rv style="--d:2"><span>across the <em>Pacific</em></span></span>
-      </h1>
-      <p class="px-hero__lede" data-rv style="--d:3">Access to important medicines should not depend solely on where a patient lives.</p>
-      <div class="px-btns" data-rv style="--d:4">
-        <?= g_btn('Pacific Enquiry', request_url('pacific')) ?>
+  <div class="g-wrap">
+    <div class="px-hero__top">
+      <div class="px-hero__text">
+        <span class="hx-kicker" data-rv>Pacific Islands Access</span>
+        <h1 id="pac-h1" class="px-hero__title">
+          <span class="hx-mask" data-rv style="--d:1"><span>Medicine access</span></span>
+          <span class="hx-mask" data-rv style="--d:2"><span>across the <em>Pacific</em></span></span>
+        </h1>
+      </div>
+      <div class="px-hero__side">
+        <p class="px-hero__lede" data-rv style="--d:3">Access to important medicines should not depend solely on where a patient lives.</p>
+        <div class="px-btns" data-rv style="--d:4">
+          <?= g_btn('Pacific Enquiry', request_url('pacific')) ?>
+        </div>
       </div>
     </div>
-    <figure class="px-map" data-rv style="--d:3">
+    <figure class="px-map px-map--wide" data-rv style="--d:3">
       <picture>
-        <source type="image/webp" srcset="<?= e(asset('/assets/img/vanuatumap-800.webp')) ?> 800w, <?= e(asset('/assets/img/vanuatumap-1200.webp')) ?> 1200w" sizes="(max-width: 63.99em) 90vw, 760px">
-        <img src="<?= e(asset('/assets/img/vanuatumap.png')) ?>" width="1480" height="1063" loading="eager" fetchpriority="high" decoding="async"
-             alt="Map of the Pacific with Vanuatu at the centre, linked to Solomon Islands, Nauru, Tuvalu, Samoa, Fiji and Tonga.">
+        <source type="image/webp" srcset="<?= e(asset('/assets/img/pacificaccess-900.webp')) ?> 900w, <?= e(asset('/assets/img/pacificaccess-1400.webp')) ?> 1400w" sizes="(max-width: 79.99em) 100vw, 1160px">
+        <img src="<?= e(asset('/assets/img/pacificaccess-1400.png')) ?>" srcset="<?= e(asset('/assets/img/pacificaccess-900.png')) ?> 900w, <?= e(asset('/assets/img/pacificaccess-1400.png')) ?> 1400w" sizes="(max-width: 79.99em) 100vw, 1160px"
+             width="1400" height="700" loading="eager" fetchpriority="high" decoding="async"
+             alt="Map of the Pacific Islands with Vanuatu at the centre, linked to Papua New Guinea, Solomon Islands, New Caledonia, Fiji, Samoa, Tonga, French Polynesia and the other island nations.">
       </picture>
-      <span class="px-map__pulse" aria-hidden="true"><span></span><span></span></span>
+      <?php /* Over the map, in the image's own pixels (1774 x 887): a light
+               travelling out from Vanuatu to each island in turn, and a pin on
+               Vanuatu with pulsing rings. Still when motion is reduced. */
+      $vu = [558, 650];
+      $islands = [
+          [168, 422], [407, 463], [440, 735], [606, 413], [452, 293], [125, 240], [292, 162], [550, 182],
+          [718, 270], [752, 620], [856, 486], [888, 742], [955, 285], [1016, 607], [1062, 483], [1072, 740],
+          [1185, 298], [1217, 427], [1238, 555], [1390, 580], [1580, 592], [1620, 462], [1676, 695], [1690, 800],
+      ]; ?>
+      <svg class="px-routes" viewBox="0 0 1774 887" preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false">
+        <?php foreach ($islands as $i => [$x, $y]):
+            // A gentle curve: the midpoint pushed sideways by a share of the distance.
+            $mx = ($vu[0] + $x) / 2; $my = ($vu[1] + $y) / 2;
+            $dx = $x - $vu[0]; $dy = $y - $vu[1];
+            $bend = ($i % 2 ? .14 : -.14);
+            $cx = round($mx - $dy * $bend); $cy = round($my + $dx * $bend); ?>
+        <path class="px-route" pathLength="100" style="--i:<?= $i ?>" d="M<?= $vu[0] ?> <?= $vu[1] ?>Q<?= $cx ?> <?= $cy ?> <?= $x ?> <?= $y ?>"/>
+        <circle class="px-route__end" style="--i:<?= $i ?>" cx="<?= $x ?>" cy="<?= $y ?>" r="9"/>
+        <?php endforeach; ?>
+        <g class="px-pin" transform="translate(<?= $vu[0] ?> <?= $vu[1] ?>) scale(.95)">
+          <circle class="px-pin__ring" r="22"/>
+          <circle class="px-pin__ring px-pin__ring--2" r="22"/>
+          <circle class="px-pin__ring px-pin__ring--3" r="22"/>
+          <path class="px-pin__drop" d="M0 0C-6-14-26-30-26-50a26 26 0 0 1 52 0C26-30 6-14 0 0z"/>
+          <circle class="px-pin__dot" cx="0" cy="-50" r="9"/>
+        </g>
+      </svg>
     </figure>
   </div>
 </section>

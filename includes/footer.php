@@ -3,7 +3,7 @@
  * Closes <main>, then the Global Footer (content guide, page 22):
  * the brand block, four link columns plus a Contact column (accordions on a
  * phone), and a legal strip with the copyright and policy links. Then the
- * cookie notice and the scripts.
+ * global contact controls and scripts.
  */
 ?>
 </main>
@@ -24,7 +24,7 @@
       <summary><h2><?= e($head) ?></h2></summary>
       <ul>
         <?php foreach ($links as [$label, $href]): ?>
-        <li><a href="<?= e(url($href)) ?>"><?= e($label) ?></a></li>
+        <li><a href="<?= e(url($href)) ?>"<?= is_modal_path($href) ? ' data-modal' : '' ?>><?= e($label) ?></a></li>
         <?php endforeach; ?>
       </ul>
     </details>
@@ -45,22 +45,12 @@
       <p>&copy; <?= date('Y') ?> Getmeds Vanuatu-Pacific. Port Vila, Vanuatu.</p>
       <ul>
         <?php foreach (footer_links() as $l): ?>
-        <li><a href="<?= e(url($l['url'])) ?>"><?= e($l['label']) ?></a></li>
+        <li><a href="<?= e(url($l['url'])) ?>" data-modal><?= e($l['label']) ?></a></li>
         <?php endforeach; ?>
       </ul>
     </div>
   </div>
 </footer>
-
-<?php /* Cookie notice (guide, page 22). Defaults to essential cookies only;
-         no analytics script ships until one is chosen and configured. */ ?>
-<div class="g-cookie" id="g-cookie" role="region" aria-label="Cookie notice">
-  <p>We use essential cookies to make this website work. With your permission we also use analytics cookies to improve it.</p>
-  <div class="g-cookie__btns">
-    <button type="button" class="g-btn g-btn--primary" data-cookie="analytics">Accept analytics</button>
-    <button type="button" class="g-btn g-btn--secondary" data-cookie="essential">Essential only</button>
-  </div>
-</div>
 
 <?php include INC . '/float-contact.php'; ?>
 

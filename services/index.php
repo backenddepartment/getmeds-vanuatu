@@ -2,12 +2,8 @@
 /**
  * Services (content guide, page 13).
  *
- * An overview: H1 and intro, then eight service cards (two columns on
- * desktop, one on mobile). Each card is a <details>: the closed card shows the
- * icon, the service name (H2), a one-line explanation, the "Who it is for"
- * tag and an arrow; opened, it shows the details, the how-it-works mini steps
- * and the CTA button. Service 1 has the Care Pink top border (flagship);
- * Service 7 is the navy card for professionals.
+ * An overview: H1 and intro, then eight expandable service cards (two columns
+ * on desktop, one on mobile), followed by one clear site-wide call to action.
  */
 require __DIR__ . '/../includes/bootstrap.php';
 
@@ -61,7 +57,7 @@ $services = [
      'Quotations and ongoing supply for facilities, and for overseas treatment agencies whose patients return home.',
      'Hospitals, clinics, pharmacies, agencies',
      ['Product list', 'quotation', 'supply', 'follow-up'],
-     'Healthcare Professional Enquiry', request_url('professional'), 'g-card--navy'],
+     'Healthcare Professional Enquiry', request_url('professional'), ''],
     ['basic-health-checks', 'pulse', 'Basic health checks',
      'Blood pressure and blood sugar checks.',
      'Simple checks at our pharmacy. If a result needs attention, we advise you to see a doctor.',
@@ -74,18 +70,28 @@ include INC . '/head.php';
 include INC . '/header.php';
 ?>
 
-<section class="g-sec g-bg-white g-svc-intro" aria-labelledby="svc-h1">
-  <div class="g-wrap g-narrow g-center">
-    <h1 id="svc-h1">Our services</h1>
-    <p class="g-hero__lede" style="margin-inline:auto">Everything we do is about one thing: helping people get the medicines they need.</p>
+<section class="g-sec g-bg-white g-svc-hero" aria-labelledby="svc-h1">
+  <div class="g-wrap g-svc-hero__grid">
+    <div>
+      <span class="g-label">How We Help</span>
+      <h1 id="svc-h1">Our services</h1>
+    </div>
+    <div class="g-svc-hero__intro">
+      <p class="g-hero__lede">Everything we do is about one thing: helping people get the medicines and medical supplies they need.</p>
+      <p>Choose a service below to see who it is for, how it works and the best way to contact our team.</p>
+    </div>
   </div>
 </section>
 
-<section class="g-sec g-bg-sky" aria-label="Our eight services">
+<section class="g-sec g-svc-list" aria-labelledby="svc-list-h">
   <div class="g-wrap">
+    <div class="g-svc-list__head">
+      <span class="g-label">Choose a Service</span>
+      <h2 id="svc-list-h">What can we help you with?</h2>
+    </div>
     <div class="g-svc-grid">
       <?php foreach ($services as [$id, $ic, $name, $line, $details, $who, $how, $cta, $href, $cls]): ?>
-      <details class="g-card g-svc <?= e($cls) ?>" id="<?= e($id) ?>">
+      <details class="g-card g-svc <?= e($cls) ?>" id="<?= e($id) ?>" data-smooth>
         <summary>
           <span class="g-card__icon"><?= gi($ic) ?></span>
           <span class="g-svc__head">
@@ -113,6 +119,20 @@ include INC . '/header.php';
         </div>
       </details>
       <?php endforeach; ?>
+    </div>
+  </div>
+</section>
+
+<section class="g-sec g-home-cta" aria-label="Start your enquiry">
+  <div class="g-wrap g-home-cta__inner">
+    <div class="g-home-cta__text">
+      <h2>Not sure which service you need?</h2>
+      <p>Tell us the medicine, medical supply or support you are looking for. Our team will guide you to the right next step.</p>
+      <p class="g-home-cta__hours"><?= gi('clock') ?><?= e(cfg('reply_time')) ?> Open <?= e(cfg('hours_long')) ?></p>
+    </div>
+    <div class="g-home-cta__btns">
+      <a class="g-home-cta__btn g-home-cta__btn--white" href="<?= e(request_url('medicine')) ?>">Send an Enquiry</a>
+      <a class="g-home-cta__btn g-home-cta__btn--dark" href="<?= e(tel_url()) ?>"><?= gi('phone') ?><span>Call <?= e(cfg('phone')) ?></span></a>
     </div>
   </div>
 </section>

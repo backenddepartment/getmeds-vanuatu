@@ -13,7 +13,7 @@
  */
 $fbUrl = (string) cfg('facebook_url');
 $msUrl = (string) cfg('messenger_url');
-$waUrl = whatsapp_url('Hello, I would like to order a medicine.');
+$waUrl = whatsapp_url('Hello Getmeds, I would like to request a medicine. I will send a photo of my prescription.');
 ?>
 <ul class="floatcta" aria-label="Contact us">
   <li>

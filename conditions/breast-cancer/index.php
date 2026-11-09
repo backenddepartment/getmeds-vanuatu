@@ -1,5 +1,9 @@
 <?php
-/** Breast cancer (content guide, page 08). Copy: data/conditions.php. */
+/**
+ * Removed page (owner decision, 2026-10-26): the condition pages are replaced
+ * by the full Product Range, so this address 301s there and old links and
+ * search results still land somewhere useful.
+ */
 require __DIR__ . '/../../includes/bootstrap.php';
-$slug = 'breast-cancer';
-include INC . '/condition-page.php';
+
+redirect_to('/product-range/');

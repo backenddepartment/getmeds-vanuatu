@@ -4,7 +4,7 @@
  *
  * Built from the same list as sitemap.xml (includes/sitemap.php), so the two
  * never disagree. Conditions are grouped the way the /conditions hub groups
- * them. Linked from the footer's legal strip.
+ * them. Not linked from anywhere a visitor sees (see $page below).
  */
 require __DIR__ . '/../includes/bootstrap.php';
 require_once INC . '/sitemap.php';
@@ -13,6 +13,9 @@ $page = [
     'title'     => 'Sitemap',
     'seo_title' => 'Sitemap — Getmeds Vanuatu',
     'desc'      => 'Every page on the Getmeds Vanuatu website, in one list.',
+    // Not shown to visitors: no footer link, not in the site search, not in
+    // search engines or sitemap.xml. Kept for whoever opens /sitemap directly.
+    'noindex'   => true,
 ];
 
 $byPath = [];

@@ -121,7 +121,7 @@ function provider_gate_render(string $mode, string $heading = 'h1'): void
             </p>
           </div>
 
-          <form method="post" action="<?= e(current_path() === '/' ? url('/providers') : url(current_path())) ?>">
+          <form method="post" action="<?= e(current_path() === '/' ? url('/healthcare-professionals') : url(current_path())) ?>">
             <?= csrf_field() ?>
             <div class="actions actions--tight">
               <button class="btn btn--primary" type="submit" name="hcp_continue" value="1">

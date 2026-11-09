@@ -13,11 +13,16 @@ require INC . '/news.php';
 
 $page = [
     'title'     => 'Getmeds Vanuatu',
-    'seo_title' => 'Getmeds Vanuatu — Cancer Medicines and Chemotherapy Pharmacy, Port Vila',
+    'seo_title' => 'Getmeds Vanuatu — Cancer Medicines & Chemotherapy, Port Vila',
     'desc'      => 'Getmeds Vanuatu helps patients and doctors get cancer medicines and other important medicines in Vanuatu and across the Pacific. Send a prescription to start.',
+    // The featured FAQs' schema (includes/faq.php): the home page's own six
+    // questions only, in <head>; the other two featured ones are in /faq's.
+    'head'      => (static function (): string { require_once INC . '/faq.php'; return faq_schema('home'); })(),
 ];
 
-$news = array_slice(news_items(), 0, 3);
+// Health and medicine headlines only: an off-topic science story from the
+// feed never leads the home page (/articles still lists the full feed).
+$news = array_slice(array_values(array_filter(news_items(), 'news_is_health')), 0, 3);
 
 include INC . '/head.php';
 include INC . '/header.php';
@@ -27,8 +32,12 @@ include INC . '/header.php';
          (includes/header.php, guide.css "Home hero"). */ ?>
 <section class="g-homehero g-homehero--split" aria-labelledby="hero-title">
   <div class="g-homehero__media">
-    <img src="<?= e(asset('/assets/img/homepage.jpg')) ?>"
-         width="1920" height="878" alt="" loading="eager" fetchpriority="high" decoding="async">
+    <?php /* WebP copies of homepage.jpg (217 KB): 22, 42 and 106 KB. */ ?>
+    <picture>
+      <source type="image/webp" srcset="<?= e(asset('/assets/img/homepage-640.webp')) ?> 640w, <?= e(asset('/assets/img/homepage-1024.webp')) ?> 1024w, <?= e(asset('/assets/img/homepage-1920.webp')) ?> 1920w" sizes="100vw">
+      <img src="<?= e(asset('/assets/img/homepage.jpg')) ?>"
+           width="1920" height="878" alt="" loading="eager" fetchpriority="high" decoding="async">
+    </picture>
   </div>
   <?php /* Content sits at the bottom of the photo: headline left, description
            and buttons right, then a rule and the kicker under it. */ ?>
@@ -38,7 +47,11 @@ include INC . '/header.php';
       <div class="g-homehero__side">
         <p class="g-homehero__lede">Getmeds Vanuatu-Pacific helps patients and healthcare providers access essential and cancer medicines through reliable sourcing, more affordable pricing, and a growing supply network across the Pacific.</p>
         <div class="g-homehero__btns">
-          <a class="g-homehero__btn g-homehero__btn--fill" href="<?= e(url('/order')) ?>">Order a Medicine</a>
+          <a class="g-homehero__btn g-homehero__btn--fill" href="<?= e(request_url('medicine')) ?>">Request a Medicine</a>
+          <?php /* WhatsApp: a photo of the prescription is the quickest way most
+                   people here can ask (audit, 2026-11-04). Same pre-filled
+                   message as the phone's bottom bar. */ ?>
+          <a class="g-homehero__btn g-homehero__btn--wa" href="<?= e(whatsapp_url('Hello Getmeds, I would like to request a medicine. I will send a photo of my prescription.')) ?>" target="_blank" rel="noopener"><svg class="g-i" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="currentColor" stroke="none"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.87 9.87 0 0 0 4.74 1.21h.01c5.46 0 9.9-4.45 9.9-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm0 18.15h-.01a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.18 8.18 0 0 1-1.26-4.38c0-4.54 3.7-8.23 8.25-8.23 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.82c0 4.54-3.7 8.23-8.23 8.23zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.24-.64.8-.79.97-.14.16-.29.18-.54.06-.25-.13-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.01-.38.11-.5.11-.11.25-.29.37-.43.13-.15.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.47-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.15-1.18-.06-.1-.23-.16-.48-.29z"/></svg><span>WhatsApp Your Prescription</span></a>
           <a class="g-homehero__btn g-homehero__btn--line" href="<?= e(tel_url()) ?>">Call <?= e(cfg('phone')) ?></a>
         </div>
       </div>
@@ -77,10 +90,14 @@ include INC . '/header.php';
   </div>
   <div class="g-wrap">
     <figure class="g-home-intro__photo">
+      <?php /* WebP copies of home-about (174 KB): 32 and 74 KB. */ ?>
+      <picture>
+      <source type="image/webp" srcset="<?= e(asset('/assets/img/home-about-800.webp')) ?> 800w, <?= e(asset('/assets/img/home-about-1600.webp')) ?> 1600w" sizes="(max-width: 1248px) 100vw, 1200px">
       <img src="<?= e(asset('/assets/img/home-about-1600.jpg')) ?>"
            srcset="<?= e(asset('/assets/img/home-about-800.jpg')) ?> 800w, <?= e(asset('/assets/img/home-about-1600.jpg')) ?> 1600w"
            sizes="(max-width: 1248px) 100vw, 1200px" width="1600" height="905" loading="lazy" decoding="async"
            alt="Getmeds Vanuatu staff around a meeting table during a training session, with a presentation on the screen.">
+      </picture>
     </figure>
   </div>
 </section>
@@ -88,7 +105,10 @@ include INC . '/header.php';
 <section class="g-sec g-bg-white g-cat-sec" aria-labelledby="cat-h">
   <div class="g-supply">
     <div class="g-supply__media">
-      <img src="<?= e(asset('/assets/img/medicinecta.png')) ?>" width="1024" height="1536"
+      <?php /* WebP copies of medicinecta.png (2.2 MB): 34 KB and 90 KB. */ ?>
+      <img src="<?= e(asset('/assets/img/medicinecta-1024.webp')) ?>"
+           srcset="<?= e(asset('/assets/img/medicinecta-600.webp')) ?> 600w, <?= e(asset('/assets/img/medicinecta-1024.webp')) ?> 1024w"
+           sizes="(max-width: 47.99em) 100vw, 50vw" width="1024" height="1536"
            loading="lazy" decoding="async"
            alt="Getmeds Vanuatu-Pacific medicine bottle with blister packs of capsules and tablets on blue and green blocks.">
       <div class="g-supply__caption">
@@ -96,7 +116,7 @@ include INC . '/header.php';
         <p class="g-supply__title">Essential to Advanced Therapies</p>
         <p class="g-supply__meta"><?= count(shop_categories()) ?> therapeutic areas &nbsp;&middot;&nbsp; Stocked, imported and sourced</p>
       </div>
-      <a class="g-supply__plus" href="<?= e(url('/medicines')) ?>" aria-label="See all medicine groups">+</a>
+      <a class="g-supply__plus" href="<?= e(url('/medicines')) ?>" >See all groups <span aria-hidden="true">&rarr;</span></a>
     </div>
     <div class="g-supply__body">
       <h2 id="cat-h" class="g-supply__h">
@@ -123,8 +143,8 @@ include INC . '/header.php';
       </div>
       <nav class="g-supply__tabs" aria-label="Medicine shortcuts">
         <a class="is-active" href="<?= e(url('/medicines')) ?>">All Medicines</a>
-        <a href="<?= e(url('/patients/how-to-order')) ?>">How to Order</a>
-        <a href="<?= e(url('/order')) ?>">Order Medicines</a>
+        <a href="<?= e(url('/how-it-works')) ?>">How It Works</a>
+        <a href="<?= e(request_url('medicine')) ?>">Request a Medicine</a>
       </nav>
     </div>
   </div>
@@ -199,12 +219,44 @@ include INC . '/header.php';
   </div>
 </section>
 
+<?php /* Who is asking: two real HTML cards (they were pictures with the words
+         drawn in, which a phone shrank past reading and a screen reader could
+         not follow). Each sends its reader to the right form. */ ?>
 <section class="g-sec g-bg-white g-split-sec" aria-labelledby="split-h">
   <div class="g-wrap">
-    <h2 id="split-h" class="g-sr">Enquiries for healthcare professionals and for patients</h2>
-    <div class="g-grid g-grid--2 g-home-split">
-      <img class="g-home-split__img" src="<?= e(asset('/assets/img/families.png')) ?>" width="1200" height="630" loading="lazy" decoding="async" alt="For doctors, hospitals and pharmacies: send us a prescription, a treatment protocol or a product list. We will reply with availability and a quotation.">
-      <img class="g-home-split__img" src="<?= e(asset('/assets/img/patients.png')) ?>" width="1200" height="630" loading="lazy" decoding="async" alt="For patients and families: you do not need to know medical words to ask us for help. Send us your prescription and tell us how to reach you.">
+    <div class="g-home-split__head">
+      <div class="g-home-split__title">
+        <span class="g-label">Send an Enquiry</span>
+        <h2 id="split-h">Enquiries for healthcare professionals and for patients</h2>
+      </div>
+      <p class="g-home-split__sub">Choose the option that fits you. Send your prescription, protocol or product list, and our pharmacist will confirm availability and price before you order. <?= e(cfg('reply_time')) ?></p>
+    </div>
+    <div class="g-home-split">
+      <article class="g-home-split__card g-home-split__card--pro" aria-labelledby="split-pro">
+        <?php /* Photos cropped from the original enquiry images (families.png,
+                 patients.png) without their baked-in text, which is written
+                 out as real text beside them instead. Decorative: alt="". */ ?>
+        <div class="g-home-split__photo">
+          <img src="<?= e(asset('/assets/img/enquiry-pro-photo.webp')) ?>" width="400" height="630" alt="" loading="lazy" decoding="async">
+        </div>
+        <div class="g-home-split__text">
+          <span class="g-home-split__eyebrow">Doctors, hospitals and pharmacies</span>
+          <h3 id="split-pro">For doctors &amp; hospitals</h3>
+          <p>Send us a prescription, a treatment protocol or a product list. Our pharmacist replies with availability, price and delivery time.</p>
+          <div class="g-btns"><?= g_btn('Request a Quotation', url('/healthcare-professionals') . '#quote', 'primary') ?></div>
+        </div>
+      </article>
+      <article class="g-home-split__card g-home-split__card--pat" aria-labelledby="split-pat">
+        <div class="g-home-split__photo">
+          <img src="<?= e(asset('/assets/img/enquiry-patient-photo.webp')) ?>" width="520" height="646" alt="" loading="lazy" decoding="async">
+        </div>
+        <div class="g-home-split__text">
+          <span class="g-home-split__eyebrow">Patients and families</span>
+          <h3 id="split-pat">For patients &amp; families</h3>
+          <p>You do not need to know medical words to ask us for help. Send us your prescription and tell us how to reach you.</p>
+          <div class="g-btns"><?= g_btn('Request a Medicine', request_url('patient'), 'primary') ?></div>
+        </div>
+      </article>
     </div>
   </div>
 </section>
@@ -242,28 +294,16 @@ include INC . '/header.php';
         <?= g_btn('Contact us', url('/contact'), 'secondary') ?>
       </div>
     </div>
-    <div class="g-home-faq__list">
-      <?php
-      $homeFaq = [
-          ['What is Named Patient Supply?',
-           'It is a way to get a prescribed medicine that is not normally available in Vanuatu, ordered for one named patient. Not every medicine can be supplied this way.'],
-          ['Do I need a prescription?',
-           "Yes, for all prescription medicines. Cancer medicines must follow a doctor's prescription or treatment protocol. We only supply what your doctor prescribed."],
-          ['How does pricing work?',
-           'Prices depend on the medicine, amount and source. We give you a clear quotation before you commit. You pay nothing until you agree.'],
-          ['How long does supply take?',
-           'It depends on whether the medicine is in stock, needs to be imported, or must be specially sourced. We give you the earliest possible date when we quote.'],
-          ['Can patients from other Pacific Islands access Getmeds?',
-           'We are working to expand access across the Pacific and welcome enquiries from other Pacific countries. Contact us with your country and the medicine you need, and we will tell you what is possible.'],
-      ];
-      ?>
-      <?php foreach ($homeFaq as $i => [$q, $a]): ?>
+    <div class="g-home-faq__list" data-smooth>
+      <?php /* The featured questions from includes/faq.php, word for word as in
+               the schema; every answer is in the page as it loads. */ ?>
+      <?php foreach (faq_home() as $i => $item): ?>
       <details class="g-home-faq__item"<?= $i === 0 ? ' open' : '' ?>>
         <summary>
-          <span><?= e($q) ?></span>
+          <span><?= e($item['q']) ?></span>
           <span class="g-home-faq__toggle" aria-hidden="true"><?= gi('chev-down') ?></span>
         </summary>
-        <p><?= e($a) ?></p>
+        <?= faq_answer($item) ?>
       </details>
       <?php endforeach; ?>
     </div>
@@ -275,6 +315,14 @@ include INC . '/header.php';
     <div class="g-home-cta__text">
       <h2>Need a medicine? Start with your prescription.</h2>
       <p>Send it to us and a pharmacist will reply with what we can supply and the price.</p>
+      <?php /* The two answers people look for before they ask (FAQ "Price and
+               timing"), said here beside the buttons rather than only inside
+               the closed accordion above. */ ?>
+      <ul class="g-home-cta__facts">
+        <li><?= gi('check-circle') ?><span><strong>Price:</strong> a clear quotation before you commit. You pay nothing until you agree.</span></li>
+        <li><?= gi('check-circle') ?><span><strong>Timing:</strong> we give you the earliest possible supply date when we quote.</span></li>
+      </ul>
+      <p class="g-home-cta__hours"><?= gi('clock') ?><?= e(cfg('reply_time')) ?> Open <?= e(cfg('hours_long')) ?></p>
     </div>
     <div class="g-home-cta__btns">
       <a class="g-home-cta__btn g-home-cta__btn--white" href="<?= e(request_url('medicine')) ?>">Request a Medicine</a>

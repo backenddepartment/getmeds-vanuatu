@@ -6,6 +6,8 @@
  * then the short text, the short form, and what we do next.
  */
 require __DIR__ . '/../includes/bootstrap.php';
+
+// Opens as a pop-up from data-modal links (MODAL_PAGES), and as a full page when opened directly.
 require_once INC . '/forms.php';
 
 $schema = [
@@ -21,7 +23,7 @@ $schema = [
     'doctor'   => ['label' => 'Doctor\'s name', 'type' => 'text', 'placeholder' => 'e.g. Dr Tari'],
     'consent'  => ['label' => 'Consent', 'type' => 'consent', 'required' => true,
                    'html' => 'I agree that Getmeds may use these details to respond to my report. (<a href="'
-                           . e(url('/privacy')) . '">Privacy Policy</a>)'],
+                           . e(url('/privacy')) . '" data-modal>Privacy Policy</a>)'],
 ];
 
 $state = gform_run('side-effect', $schema);
@@ -60,6 +62,24 @@ include INC . '/header.php';
     <h2 class="g-mt-lg">What we do next</h2>
     <p class="g-mt-sm">A pharmacist reviews every report, contacts you if we need more details, and passes safety information to the proper health authorities where required.</p>
   </div>
+  <?php /* What the pop-up shows (guide.js, data-modal): the emergency note,
+           the text and the form, which posts from the pop-up. */ ?>
+  <template data-modal-body>
+    <h1>Report a side effect</h1>
+    <p class="g-pagedlg__alert"><strong>If the reaction is serious</strong> (trouble breathing, swelling of the face or throat, a fever during chemotherapy, or bleeding that will not stop), go to hospital now.</p>
+    <h2>When to report</h2>
+    <p>If you or someone you care for had an unexpected reaction after taking a medicine from Getmeds, please tell us. Also tell your doctor. Your report helps keep other patients safe.</p>
+    <h2>How to report</h2>
+    <div class="g-pagedlg__form">
+      <?php gform_render('side-effect', $schema, $state, [
+          'id'      => 'report-modal',
+          'submit'  => 'Send Report',
+          'success' => 'Thank you. A pharmacist will review your report and contact you.',
+      ]); ?>
+    </div>
+    <h2>What we do next</h2>
+    <p>A pharmacist reviews every report, contacts you if we need more details, and passes safety information to the proper health authorities where required.</p>
+  </template>
 </section>
 
 <?php include INC . '/footer.php'; ?>

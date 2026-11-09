@@ -70,13 +70,29 @@ $network = [
       <div class="g-nav__drop g-nav__drop--mega" id="g-drop-<?= $i ?>">
         <?php if (!empty($item['menu_intro'])): ?>
         <div class="g-nav__drop__intro">
-          <h2><?= e($item['menu_intro']['heading']) ?></h2>
+          <p class="g-nav__drop__title"><?= e($item['menu_intro']['heading']) ?></p>
           <p><?= e($item['menu_intro']['text']) ?></p>
           <?php if ($btn): ?>
           <a class="g-nav__drop__btn" href="<?= e(url($btn[1])) ?>"><?= e($btn[0]) ?></a>
           <?php endif; ?>
         </div>
         <?php endif; ?>
+        <?php if (!empty($item['groups'])): /* Product Range: categories under
+                 their group titles (data/category-groups.php). The titles are
+                 paragraphs, not headings, so the page's H1 stays first. */ ?>
+        <div class="g-nav__groups">
+          <?php foreach ($item['groups'] as $grp): ?>
+          <div class="g-nav__group">
+            <p class="g-nav__group__title"><?= e($grp['label']) ?></p>
+            <ul class="g-nav__group__links">
+              <?php foreach ($grp['children'] as $k): ?>
+              <li><a href="<?= e(url($k['url'])) ?>"<?= $here === rtrim($k['url'], '/') ? ' aria-current="page"' : '' ?>><span class="g-nav__drop__label"><?= e($k['label']) ?></span></a></li>
+              <?php endforeach; ?>
+            </ul>
+          </div>
+          <?php endforeach; ?>
+        </div>
+        <?php else: ?>
         <ul class="g-nav__drop__links<?= !empty($item['grid']) ? ' g-nav__drop__links--grid' : '' ?>">
           <?php foreach ($kids as $k): ?>
           <li>
@@ -87,6 +103,7 @@ $network = [
           </li>
           <?php endforeach; ?>
         </ul>
+        <?php endif; ?>
       </div>
       <?php elseif ($kids): ?>
       <button class="g-nav__link" type="button" aria-expanded="false" aria-controls="g-drop-<?= $i ?>">
@@ -125,12 +142,13 @@ $network = [
              click, Escape and header-solid behaviour as the mega menus. */ ?>
     <li class="g-nav__item g-nav__item--drop g-nav__item--gn" data-no-i18n>
       <button class="g-nav__link" type="button" aria-expanded="false" aria-controls="g-drop-gn" aria-label="Global Network">
-        <img class="g-gn__logo" src="<?= e(asset('/assets/img/globalnetworklogo.png')) ?>" alt="" height="34">
+        <?php /* A 68px-tall copy (6 KB) of the 1.3 MB globalnetworklogo.png. */ ?>
+        <img class="g-gn__logo" src="<?= e(asset('/assets/img/globalnetworklogo-68.png')) ?>" alt="" width="51" height="34">
         <span class="g-gn__name">Global Network</span><?= gi('chev-down') ?>
       </button>
       <div class="g-nav__drop g-nav__drop--mega g-nav__drop--gn" id="g-drop-gn">
         <div class="g-nav__drop__intro">
-          <h2>Global Network</h2>
+          <p class="g-nav__drop__title">Global Network</p>
           <p>Getmeds Healthcare&rsquo;s growing footprint across the world &mdash; connect with any of our regional sites and trusted partners.</p>
         </div>
         <ul class="g-nav__drop__links g-gn__links">
@@ -146,12 +164,14 @@ $network = [
         </ul>
         <?php /* The world map, as on Getmeds India: desktop only. The blue
                  location dots are part of the picture. AVIF, then WebP; the
-                 902 KB PNG it was made from is not served. */ ?>
+                 902 KB PNG it was made from is not served. Its address waits
+                 in data-src / data-srcset until the menu first opens
+                 (guide.js, 3), so a visitor who never opens it never
+                 downloads it. Decorative: without JS it simply is not shown. */ ?>
         <div class="g-gn__map" aria-hidden="true">
           <picture>
-            <source type="image/avif" srcset="<?= e(asset('/assets/img/countries.avif')) ?>">
-            <img src="<?= e(asset('/assets/img/countries.webp')) ?>" alt="" width="1672" height="941" decoding="async" loading="lazy">
-          </picture>
+            <source type="image/avif" data-srcset="<?= e(asset('/assets/img/countries.avif')) ?>">
+            <img data-src="<?= e(asset('/assets/img/countries.webp')) ?>" alt="" width="1672" height="941" decoding="async">
         </div>
       </div>
     </li>

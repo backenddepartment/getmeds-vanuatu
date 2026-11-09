@@ -7,20 +7,22 @@
  * next".
  */
 require __DIR__ . '/../includes/bootstrap.php';
+
+// Opens as a pop-up from data-modal links (MODAL_PAGES), and as a full page when opened directly.
 require_once INC . '/forms.php';
 
 $schema = [
     'name'      => ['label' => 'Name', 'type' => 'text', 'required' => true, 'placeholder' => 'e.g. Marie Kalo'],
     'phone'     => ['label' => 'Phone', 'type' => 'tel', 'required' => true, 'placeholder' => 'e.g. +678 555 1234'],
     'email'     => ['label' => 'Email', 'type' => 'email', 'placeholder' => 'e.g. marie@example.com'],
-    'reference' => ['label' => 'Order or reference', 'type' => 'text', 'placeholder' => 'e.g. GV-2026-0412'],
+    'reference' => ['label' => 'Which order', 'type' => 'text', 'placeholder' => 'e.g. Paclitaxel, collected 12 October'],
     'what'      => ['label' => 'What happened', 'type' => 'textarea', 'required' => true,
                     'placeholder' => 'e.g. My order arrived two days later than I was told.'],
     'wish'      => ['label' => 'What would you like us to do', 'type' => 'textarea',
                     'placeholder' => 'e.g. Call me to confirm the date of my next delivery.'],
     'consent'   => ['label' => 'Consent', 'type' => 'consent', 'required' => true,
                     'html' => 'I agree that Getmeds may use these details to respond to my complaint. (<a href="'
-                            . e(url('/privacy')) . '">Privacy Policy</a>)'],
+                            . e(url('/privacy')) . '" data-modal>Privacy Policy</a>)'],
 ];
 
 $state = gform_run('complaint', $schema);
@@ -31,6 +33,14 @@ $page = [
     'desc'      => 'Tell us if something went wrong with your order, medicine or service. We listen and respond.',
 ];
 
+// Said once, shown on the page and in its pop-up version (the footer link).
+$intro = 'If something went wrong, we would rather hear it from you. Your feedback helps us improve.';
+$steps = [
+    'We confirm we have received your complaint within two working days.',
+    'A senior team member looks into it.',
+    'We contact you with what we found and what we will do.',
+];
+
 include INC . '/head.php';
 include INC . '/header.php';
 ?>
@@ -39,7 +49,7 @@ include INC . '/header.php';
   <div class="g-wrap g-narrow">
     <?php g_crumbs([['Home', '/'], ['Complaints and feedback', null]]); ?>
     <h1>Complaints and feedback</h1>
-    <p class="g-lead g-mt-sm">If something went wrong, we would rather hear it from you. Your feedback helps us improve.</p>
+    <p class="g-lead g-mt-sm"><?= e($intro) ?></p>
 
     <h2 class="g-mt-lg">How to tell us</h2>
     <div class="g-grid g-grid--3 g-mt g-tellus">
@@ -71,13 +81,28 @@ include INC . '/header.php';
   <div class="g-wrap g-narrow">
     <h2>What happens next</h2>
     <div class="g-mt-lg">
-      <?php g_steps([
-          ['', 'We confirm we have received your complaint within two working days.'],
-          ['', 'A senior team member looks into it.'],
-          ['', 'We contact you with what we found and what we will do.'],
-      ], 'h'); ?>
+      <?php g_steps(array_map(static function (string $s): array { return ['', $s]; }, $steps), 'h'); ?>
     </div>
   </div>
+  <?php /* What the pop-up shows (guide.js, data-modal): the text and the form
+           itself, which posts from the pop-up and shows its answer there. */ ?>
+  <template data-modal-body>
+    <h1>Complaints and feedback</h1>
+    <p><?= e($intro) ?></p>
+    <h2>How to tell us</h2>
+    <p>Call <a href="<?= e(tel_url()) ?>"><?= e(cfg('phone')) ?></a>, email <a href="mailto:<?= e(cfg('email')) ?>"><?= e(cfg('email')) ?></a>, or use the form below.</p>
+    <div class="g-pagedlg__form">
+      <?php gform_render('complaint', $schema, $state, [
+          'id'      => 'complaint-modal',
+          'submit'  => 'Send Feedback',
+          'success' => 'Thank you. We have received your complaint. We will confirm this within two working days.',
+      ]); ?>
+    </div>
+    <h2>What happens next</h2>
+    <ol>
+      <?php foreach ($steps as $s): ?><li><?= e($s) ?></li><?php endforeach; ?>
+    </ol>
+  </template>
 </section>
 
 <?php include INC . '/footer.php'; ?>
