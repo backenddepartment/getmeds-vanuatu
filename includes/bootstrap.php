@@ -16,6 +16,14 @@ if (!in_array(strtolower((string) preg_replace('/:\d+$/', '', $_SERVER['HTTP_HOS
     ini_set('log_errors', '1');
 }
 
+/* Behind a Cloudflare Tunnel the request can reach Apache marked http even
+   though the visitor used https. Cloudflare always says which in CF-Visitor;
+   carry it into X-Forwarded-Proto, the one header the rest of the site reads. */
+if (strtolower((string) ($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '')) !== 'https'
+    && stripos((string) ($_SERVER['HTTP_CF_VISITOR'] ?? ''), '"scheme":"https"') !== false) {
+    $_SERVER['HTTP_X_FORWARDED_PROTO'] = 'https';
+}
+
 define('APP_ROOT', dirname(__DIR__));
 define('INC', APP_ROOT . '/includes');
 
@@ -146,7 +154,7 @@ function abs_url(string $path = '/'): string
     }
 
     $https  = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
-           || (($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https');
+           || strtolower((string) ($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '')) === 'https';
     $host   = $_SERVER['HTTP_HOST'] ?? 'getmeds.vu';
     return ($https ? 'https' : 'http') . '://' . $host . url($path);
 }
