@@ -163,7 +163,12 @@ function news_refresh_in_background(): bool
         news_log('background refresh: could not connect (' . $errstr . ')');
         return false;
     }
-    fwrite($sock, 'GET ' . url('/news-refresh.php') . " HTTP/1.1\r\nHost: " . $host
+    // Behind a proxy that ends HTTPS (Coolify/Traefik), this request reaches
+    // Apache as plain http; without the header .htaccess would answer it with
+    // a redirect to https and the refresh would never run.
+    $fwd = strtolower((string) ($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '')) === 'https'
+        ? "\r\nX-Forwarded-Proto: https" : '';
+    fwrite($sock, 'GET ' . url('/news-refresh.php') . " HTTP/1.1\r\nHost: " . $host . $fwd
         . "\r\nUser-Agent: getmeds-news-refresh\r\nConnection: close\r\n\r\n");
     fclose($sock);
     return true;
