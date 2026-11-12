@@ -4676,3 +4676,58 @@ main:has(> .pt-next:last-child) + .g-footer::before { display: none; }
   .g-pr__inq .g-pr__inq-send { display: none; }
   .g-pr__chev-cell { width: 28px; padding-inline: 0 6px !important; }
 }
+
+/* Mobile zoom fixes.
+   1. Nothing may make the page wider than the screen: Safari zooms the whole
+      page out to fit it. The news slider is the containing block for the
+      cards' absolutely placed bits (e.g. the screen-reader "(opens in a new
+      tab)"), so they are clipped inside it instead of widening the page.
+      overflow-x: clip (not hidden) keeps the sticky header working.
+   2. iOS Safari zooms in on any field under 16px when it is tapped; fields
+      are 16px on iPhone/iPad only, the desktop design is unchanged. */
+.g-home-news__track, .g-article-card { position: relative; }
+html, body { overflow-x: clip; }
+@supports (-webkit-touch-callout: none) {
+  .g input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+  .g select, .g textarea { font-size: 16px !important; }
+}
+
+/* Phone fixes from the mobile audit.
+   Long (Bislama) button labels wrap instead of running off the screen, and
+   everything tappable is at least about 44px, the comfortable thumb size.
+   Where a bigger box would push the layout around, the tap area grows with
+   padding and a matching negative margin, so the design looks the same. */
+@media (max-width: 47.99em) {
+  /* Named Patient Supply (and any banner) button: wrap the label. */
+  .g-home-cta__btn { white-space: normal; text-align: center; line-height: 1.3; padding-block: 10px; max-width: 100%; }
+
+  /* Product Range / category tables: details arrow and category label. */
+  .g .g-pr__chev { width: 44px; height: 44px; margin: -8px; }
+  .g .g-pr__cat { font-size: 12.5px; }
+
+  /* Product page: category link, "I am a" switch, "When will we reply?". */
+  .g .g-pd__cat { display: inline-block; padding-block: 11px; margin-block: -11px; }
+  .g .g-pd__switcher > button { min-height: 44px; }
+  .g .g-pd__slabtn { padding: 14px; margin: -10px; }
+
+  /* Catalog: category and medicine links, "More +". */
+  .g .g-catalog__grp li a { min-height: 44px; padding-block: 8px; }
+  .g .g-catalog__grp h3 a { display: inline-flex; align-items: center; min-height: 44px; }
+  .g .g-catalog__more { min-height: 44px; padding-inline: 4px; margin-inline: -4px; }
+
+  /* Single text links: home supply tabs, condition pages, contact ways,
+     healthcare professionals list. */
+  .g .g-supply__tabs a,
+  .g .g-link-arrow,
+  .g .g-cond-side__phone a,
+  .g .g-ways__item a,
+  .g .hx-supply-list__link { display: inline-flex; align-items: center; min-height: 44px; }
+  .g .g-supply__tabs { row-gap: 0; }
+  .g .g-cond-side__phone a { flex: 1 1 auto; }
+
+  /* Forms: bigger checkboxes/radios; the privacy link inside the consent
+     text gets a taller tap area without moving the lines. */
+  .g .g-choice input, .g .g-iform .g-choice input, .g .g-hcp-form .g-choice input { width: 24px; height: 24px; margin-top: 1px; }
+  .g .g-choice { min-height: 44px; align-items: flex-start; padding-block: 2px; }
+  .g .g-choice a { padding-block: 10px; }
+}
