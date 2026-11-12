@@ -64,10 +64,10 @@ include INC . '/header.php';
 
 <section class="g-statbar" aria-label="Getmeds Vanuatu at a glance">
   <ul class="g-wrap g-statbar__list">
-    <li><span class="g-statbar__num">1st</span><span class="g-statbar__cap">Chemotherapy pharmacy<br>in the Pacific</span></li>
-    <li><span class="g-statbar__num">Named</span><span class="g-statbar__cap">Patient access for<br>hard-to-find medicines</span></li>
-    <li><span class="g-statbar__num"><?= e(cfg('medicines_count')) ?></span><span class="g-statbar__cap">Affordable medicines<br>available to order</span></li>
-    <li><span class="g-statbar__num">83</span><span class="g-statbar__cap">Islands of Vanuatu<br>we work to reach</span></li>
+    <li><span class="g-statbar__num">1st</span><span class="g-statbar__cap">Chemotherapy pharmacy <br>in the Pacific</span></li>
+    <li><span class="g-statbar__num">Named</span><span class="g-statbar__cap">Patient access for <br>hard-to-find medicines</span></li>
+    <li><span class="g-statbar__num"><?= e(cfg('medicines_count')) ?></span><span class="g-statbar__cap">Affordable medicines <br>available to order</span></li>
+    <li><span class="g-statbar__num">83</span><span class="g-statbar__cap">Islands of Vanuatu <br>we work to reach</span></li>
   </ul>
 </section>
 
@@ -120,7 +120,7 @@ include INC . '/header.php';
     </div>
     <div class="g-supply__body">
       <h2 id="cat-h" class="g-supply__h">
-        <span>A portfolio built around</span>
+        <span>A portfolio <br class="g-supply__br">built around</span>
         <strong>Pacific disease patterns.</strong>
       </h2>
       <?php
@@ -277,7 +277,7 @@ include INC . '/header.php';
       </div>
     </div>
     <?php /* Headlines are the outlets' own words: left out of the Bislama swap. */ ?>
-    <div class="g-articles-grid g-mt" data-no-i18n>
+    <div class="g-articles-grid g-home-news__track g-mt" data-no-i18n>
       <?php foreach ($news as $n) { news_card($n); } ?>
     </div>
   </div>

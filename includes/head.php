@@ -139,7 +139,7 @@ $canonical = abs_url(current_path() === '/' ? '/' : current_path() . '/');
 ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG) ?></script>
 <?php endif; ?>
 <?= $page['head'] ?? '' ?>
-<script>(function(d){var c='js';try{var q=/[?&]lang=(bi|en)/.exec(location.search);if(q){localStorage.setItem('gv-lang',q[1]);}if(localStorage.getItem('gv-lang')==='bi'){c+=' lang-bi lang-pending';d.lang='bi';setTimeout(function(){d.classList.remove('lang-pending');},2500);}}catch(e){}d.className=c;})(document.documentElement);</script>
+<script>(function(d){var c='js',l='bi';try{var q=/[?&]lang=(bi|en)/.exec(location.search);if(q){localStorage.setItem('gv-lang-v2',q[1]);}if(localStorage.getItem('gv-lang-v2')==='en'){l='en';}}catch(e){}if(l==='bi'){c+=' lang-bi lang-pending';d.lang='bi';setTimeout(function(){d.classList.remove('lang-pending');},2500);}d.className=c;})(document.documentElement);</script>
 </head>
 <body class="g">
 <a class="skip" href="#main">Skip to content</a>

@@ -1,16 +1,18 @@
 /* Getmeds Vanuatu — English / Bislama switch.
    The site is served as static HTML on GitHub Pages as well as PHP, so the
-   switch runs here in the browser. English is the page as sent. Bislama swaps
+   switch runs here in the browser. English is the page as sent, but Bislama is
+   the default language shown; English only once a visitor picks it. Bislama swaps
    every text, placeholder, alt and aria-label for its entry in
    assets/i18n/bi.json (English text as the key). A text with no entry stays in
-   English. The choice is remembered per browser in localStorage ("gv-lang").
+   English. The choice is remembered per browser in localStorage ("gv-lang-v2").
    head.php hides the page while a Bislama swap is pending, so English never
    flashes first; it shows the page again after 2.5s whatever happens. */
 (function () {
   'use strict';
   var doc = document;
   var root = doc.documentElement;
-  var KEY = 'gv-lang';
+  /* v2: renamed when Bislama became the default, so earlier English picks reset. */
+  var KEY = 'gv-lang-v2';
   var ATTRS = ['placeholder', 'alt', 'aria-label', 'title'];
   var SKIP = { SCRIPT: 1, STYLE: 1, NOSCRIPT: 1, TEXTAREA: 1, CODE: 1 };
 
@@ -18,7 +20,8 @@
   var urlLang = (/[?&]lang=(bi|en)/.exec(window.location.search) || [])[1];
   var getLang = function () {
     if (urlLang) { return urlLang; }
-    try { return window.localStorage.getItem(KEY) === 'bi' ? 'bi' : 'en'; } catch (e) { return 'en'; }
+    /* Bislama is the default; English only once a visitor has chosen it. */
+    try { return window.localStorage.getItem(KEY) === 'en' ? 'en' : 'bi'; } catch (e) { return 'bi'; }
   };
   var setLang = function (l) {
     try { window.localStorage.setItem(KEY, l); } catch (e) { /* private mode: this page only */ }

@@ -61,7 +61,7 @@ $network = [
       </form>
     </li>
     <?php endif; ?>
-    <li class="g-nav__item<?= $kids ? ' g-nav__item--drop' : '' ?><?= !empty($item['linkable']) ? ' g-nav__item--linkable' : '' ?><?= $isHere ? ' is-current' : '' ?>">
+    <li class="g-nav__item<?= $kids ? ' g-nav__item--drop' : '' ?><?= !empty($item['linkable']) ? ' g-nav__item--linkable' : '' ?><?= $item['url'] === '/about' ? ' g-nav__item--expanded' : '' ?><?= $isHere ? ' is-current' : '' ?>">
       <?php if ($kids && !empty($item['linkable'])): ?>
       <a class="g-nav__link" href="<?= e(url($item['url'])) ?>"<?= $here === $item['url'] ? ' aria-current="page"' : '' ?>><?= e($item['label']) ?></a>
       <button class="g-nav__caret" type="button" aria-expanded="false" aria-controls="g-drop-<?= $i ?>" aria-label="<?= e($item['label']) ?> menu">

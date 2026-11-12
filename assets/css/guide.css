@@ -460,7 +460,7 @@ body {
 .g-iconbtn {
   display: inline-flex; align-items: center; justify-content: center;
   width: 48px; height: 48px; border-radius: 12px;
-  border: 1px solid var(--g-line); background: #fff; color: var(--g-navy);
+  border: none; background: #fff; color: var(--g-navy);
   cursor: pointer;
 }
 .g-iconbtn .g-i { width: 24px; height: 24px; }
@@ -491,42 +491,11 @@ body {
   .g-nav__item--linkable .g-nav__caret { width: 44px; height: 44px; flex: none; }
 }
 
-/* Mobile sticky bottom bar: opening hours, then Request a Medicine, WhatsApp and Call. */
-.g-mbar { display: none; }
+/* Phones and tablets: no bottom action bar (removed 2026-11-09 at the
+   owner's request). The four-button desktop stack stays hidden too, so
+   nothing is fixed to the bottom of the screen. */
 @media (max-width: 63.99em) {
-  .g-mbar {
-    display: block;
-    position: fixed; left: 0; right: 0; bottom: 0; z-index: 60;
-    padding: 6px 12px calc(8px + env(safe-area-inset-bottom));
-    background: #fff; border-top: 1px solid var(--g-line);
-    box-shadow: 0 -4px 16px rgba(11,42,91,.08);
-    transition: transform .2s ease;
-  }
-  /* Request a Medicine, WhatsApp, Call. */
-  .g-mbar__btns { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr) minmax(0, .8fr); gap: 8px; }
-  .g-mbar .g-btn { min-height: 48px; padding: 0 10px; font-size: 15px; gap: 6px; white-space: nowrap; }
-  .g-mbar .g-btn .g-i { width: 18px; height: 18px; flex: none; }
-  .g .g-mbar__hours {
-    display: flex; align-items: center; justify-content: center; gap: 6px;
-    margin: 0 0 6px; max-width: none; font-size: 12.5px; line-height: 1.3; color: var(--g-muted);
-  }
-  .g-mbar__hours .g-i { width: 14px; height: 14px; color: var(--g-blue); }
-  /* Room for the bar under the last line of every page. guide.js sets the
-     bar's measured height; the fallback covers the first paint. */
-  body.g { padding-bottom: calc(var(--g-mbar-h, 92px) + 8px); }
-  /* Out of the way while someone is typing into a form (guide.js). */
-  .g-mbar.is-hidden { transform: translateY(110%); }
-  /* The bar already keeps the important actions in reach. Hide the
-     four-button desktop stack so it cannot cover narrow-screen content. */
   .floatcta { display: none !important; }
-}
-/* Narrow phones: Call becomes an icon (its aria-label keeps the name), so
-   "Request a Medicine" and "WhatsApp" still fit on one line each. */
-@media (max-width: 29.99em) {
-  .g-mbar__btns { grid-template-columns: minmax(0, 1.7fr) minmax(0, 1.2fr) 48px; gap: 6px; }
-  .g-mbar .g-btn { padding: 0 8px; font-size: 14px; }
-  .g-mbar__call span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-  .g-mbar .g-mbar__call { padding: 0; }
 }
 
 /* ---------- 8. Heroes and breadcrumbs ----------------------------------- */
@@ -2169,7 +2138,16 @@ ul.g-chips { padding-left: 0; }
 .g-statbar__num { display: block; font-family: var(--g-head); font-weight: 600; color: #1D9FDA; font-size: 34px; line-height: 1.1; }
 .g-statbar__cap { display: block; margin-top: 8px; color: var(--g-ink); font-family: var(--g-head); font-weight: 500; font-size: 15px; line-height: 1.45; }
 @media (max-width: 63.99em) { .g-statbar__list { grid-template-columns: repeat(2, 1fr); row-gap: 32px; } }
-@media (max-width: 29.99em) { .g-statbar { padding: 32px 0; } .g-statbar__list { grid-template-columns: 1fr; gap: 24px; } .g-statbar__num { font-size: 30px; } .g-statbar__list li { padding-left: 18px; } }
+/* Narrow phones: still a 2 x 2 grid. Smaller type, and the captions' line
+   breaks are dropped so they wrap to the narrower columns on their own. */
+@media (max-width: 29.99em) {
+  .g-statbar { padding: 32px 0; }
+  .g-statbar__list { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 16px; row-gap: 28px; }
+  .g-statbar__list li { padding-left: 12px; }
+  .g-statbar__num { font-size: 26px; }
+  .g-statbar__cap { margin-top: 6px; font-size: 13px; line-height: 1.4; }
+  .g-statbar__cap br { display: none; }
+}
 /* Floating contact buttons: `.g a` painted the logos link blue. Keep them white. */
 .g .floatcta__btn, .g .floatcta__btn:hover, .g .floatcta__btn:focus-visible { color: #fff; }
 /* Navbar: black text, a size smaller. `.g a` outranks .g-nav__link, so scope it. */
@@ -2312,7 +2290,7 @@ ul.g-chips { padding-left: 0; }
 .js .g .g-header[data-overlay]:not(.is-compact):not(.is-open):not(.g-header--menu-open) .g-header__phone a { color: #fff; }
 .js .g .g-header[data-overlay]:not(.is-compact):not(.is-open):not(.g-header--menu-open) .g-nav__list > li > .g-nav__link:hover,
 .js .g .g-header[data-overlay]:not(.is-compact):not(.is-open):not(.g-header--menu-open) .g-nav__list > li > .g-nav__caret:hover { background: rgba(255,255,255,.14); color: #fff; }
-.js .g-header[data-overlay]:not(.is-compact):not(.is-open):not(.g-header--menu-open) .g-iconbtn { background: transparent; border-color: rgba(255,255,255,.6); color: #fff; }
+.js .g-header[data-overlay]:not(.is-compact):not(.is-open):not(.g-header--menu-open) .g-iconbtn { background: transparent; color: #fff; }
 .js .g-header[data-overlay]:not(.is-compact):not(.is-open):not(.g-header--menu-open) :focus-visible { outline-color: #fff; }
 @media print { .g-logo__light { display: none !important; } .g-header[data-overlay] .g-logo img { display: block !important; } }
 .js .g .g-header[data-overlay]:not(.is-compact):not(.is-open):not(.g-header--menu-open) .g-nav__item.is-current > .g-nav__link,
@@ -2626,6 +2604,13 @@ ul.g-chips { padding-left: 0; }
 
 .g-cat-sec { padding-top: 56px; }
 @media (max-width: 47.99em) { .g-cat-sec { padding-top: 40px; } }
+/* Phones: the home intro photo runs edge to edge, square corners, with no
+   gap under it (the next section opens on its own full-width photo). */
+@media (max-width: 47.99em) {
+  .g-intro-sec > .g-wrap:has(.g-home-intro__photo) { padding-inline: 0; }
+  .g-home-intro__photo img { border-radius: 0; }
+  .g-intro-sec + .g-cat-sec { padding-top: 0; }
+}
 
 /* Less space between What we supply and Why Getmeds Vanuatu. */
 .g-cat-sec { padding-bottom: 0; }
@@ -2690,8 +2675,25 @@ ul.g-chips { padding-left: 0; }
   .g-supply__body { padding: 40px var(--g-gutter) 48px; }
   .g .g-supply__h { margin-bottom: 28px; }
   .g-supply__chips { gap: 12px; }
-  .g-supply__chip { padding: 8px 18px; font-size: 14px; }
+  .g .g-supply__chip { padding: 8px 18px; font-size: 14px; }
   .g-supply__tabs { margin-top: 36px; gap: 24px; }
+}
+/* Stacked (phone and tablet): heading, chips and tabs first, the photo
+   under them. Heading in exactly three lines: "A portfolio" / "built
+   around" / "Pacific disease patterns." The blue line measures 12.44em, so
+   the size follows the screen to keep it on one line inside 20px margins.
+   Smaller chips, and the photo square so the caption clears the pill. */
+.g-supply__br { display: none; }
+@media (max-width: 63.99em) {
+  .g-supply__br { display: inline; }
+  .g .g-supply__h { font-size: min(32px, calc((100vw - 40px) / 12.8)); }
+  .g-supply__h span, .g-supply__h strong { white-space: nowrap; }
+  .g-supply__media { order: 2; aspect-ratio: 1 / 1; }
+  .g-supply__chips { gap: 8px; }
+  .g .g-supply__chip { padding: 6px 14px; font-size: 13px; }
+}
+@media (min-width: 48em) and (max-width: 63.99em) {
+  .g-supply__media { aspect-ratio: 16 / 9; }
 }
 
 /* More affordable access: photo background, section height untouched (the
@@ -2826,6 +2828,21 @@ ul.g-chips { padding-left: 0; }
 .g-article-card:hover .g-article-card__go .g-i { transform: translateX(3px); }
 @media (max-width: 63.99em) { .g-articles-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 47.99em) { .g-articles-grid { grid-template-columns: 1fr; } }
+/* Home page news on phones: a sideways swipe slider. Each card takes 85% of
+   the width so the next one peeks in; cards snap into place. The track runs
+   to the screen edges, with the page margin kept as scroll padding. */
+@media (max-width: 47.99em) {
+  .g-articles-grid.g-home-news__track {
+    display: grid; grid-auto-flow: column; grid-template-columns: none;
+    grid-auto-columns: 85%; gap: 14px;
+    margin-inline: calc(-1 * var(--g-gutter)); padding: 0 var(--g-gutter) 6px;
+    overflow-x: auto; overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory; scroll-padding-inline: var(--g-gutter);
+    -webkit-overflow-scrolling: touch; scrollbar-width: none;
+  }
+  .g-home-news__track::-webkit-scrollbar { display: none; }
+  .g-home-news__track > * { scroll-snap-align: start; min-width: 0; }
+}
 
 /* ==========================================================================
    Contact enquiry hub (contact/index.php): light gradient hero with the
@@ -4593,9 +4610,69 @@ main:has(> .pt-next:last-child) + .g-footer::before { display: none; }
 .g :is(.g-homehero, .g-hero, .hx-hero, .px-hero, .g-hiw-hero, .g-svc-hero, .g-faqp__side, .g-groups-head, .g-med-hero__text, .g-chero__text, .hero) :is(h1, .g-homehero__title, .px-hero__title, .hero__title) {
   font-size: clamp(36px, 3.3vw, 60px); font-weight: 600; line-height: 1.1; letter-spacing: -.02em;
 }
+/* Home hero headline: always three lines, one phrase each. On phones the
+   size follows the screen width so "Stronger Cancer Care." never wraps. */
+.g .g-homehero--split .g-homehero__title > span { white-space: nowrap; }
+@media (max-width: 47.99em) {
+  /* The widest line measures 10.9em; 11.2 leaves a little slack inside the 20px side margins. */
+  .g .g-homehero.g-homehero--split .g-homehero__title { font-size: min(36px, calc((100vw - 40px) / 11.2)); }
+}
 .g :is(.g-homehero, .g-hero, .hx-hero, .px-hero, .g-hiw-hero, .g-svc-hero, .g-faqp__side, .g-groups-head, .g-med-hero__text, .g-chero__text, .hero) :is(.g-homehero__lede, .g-hero__lede, .px-hero__lede, .g-faqp__lede, .g-chero__lede, .hero__lede) {
   font-size: 15px; font-weight: 400; line-height: 1.6;
 }
 .g :is(.g-homehero, .g-hero, .hx-hero, .px-hero, .g-hiw-hero, .g-svc-hero, .g-faqp__side, .g-groups-head, .g-med-hero__text, .g-chero__text, .hero) :is(.g-homehero__btn, .g-btn, .btn) {
   font-size: 13.5px; font-weight: 500;
+}
+
+/* --- Phone and tablet menu (2026-11-10) -----------------------------------
+   The white panel fills the screen from under the header to the bottom.
+   Each section with a submenu (About Us, Product Range, Language, Global
+   Network) is an accordion: the link and its arrow on one row, the submenu
+   closed under it until the arrow is tapped (guide.js adds .is-open). The
+   submenu is one stacked list: the desktop intro text is left out, and only
+   a button such as "View Full Catalog" is kept. */
+@media (max-width: 69.99em) {
+  .g-nav {
+    height: calc(100vh - var(--g-header-h, 69px));
+    height: calc(100dvh - var(--g-header-h, 69px));
+    max-height: none; overflow-y: auto; overscroll-behavior: contain;
+    box-shadow: none; border-bottom: 0;
+  }
+  .g-nav__list > .g-nav__item { border-bottom: 1px solid var(--g-line); }
+  .g-nav__list > .g-nav__item--search { border-bottom: 0; }
+  .g-nav__item--linkable { flex-wrap: wrap; }
+  .g-nav__item--drop > .g-nav__drop { display: none; flex: 0 0 100%; width: 100%; padding: 0 0 12px 12px; }
+  .g-nav__item--drop.is-open > .g-nav__drop { display: block; }
+  .g-nav__caret .g-i, button.g-nav__link .g-i { transition: transform .2s ease; }
+  .g-nav__item--drop.is-open > .g-nav__caret .g-i,
+  .g-nav__item--drop.is-open > button.g-nav__link > .g-i { transform: rotate(180deg); }
+  .g-nav__drop__intro .g-nav__drop__title,
+  .g-nav__drop__intro > p { display: none; }
+  .g-nav__drop__intro:not(:has(.g-nav__drop__btn)) { display: none; }
+  .g-nav__drop__links, .g-nav__drop__links--grid, .g-gn__links { display: flex; flex-direction: column; gap: 0; }
+  .g-nav__drop__links li { flex: none; }
+  .g .g-nav__drop a:not(.g-nav__drop__btn) { display: flex; align-items: center; min-height: 44px; padding: 8px 14px; font-size: 15px; font-weight: 500; }
+  .g .g-nav__drop .g-nav__drop__label { font-size: 15px; font-weight: 500; }
+  .g .g-nav__drop__desc { display: none; }
+}
+/* Phone and tablet menu: About Us shows its pages straight away, always
+   open, with no arrow to toggle (includes/nav.php adds the class). */
+@media (max-width: 69.99em) {
+  .g-nav__item--expanded > .g-nav__drop { display: block; }
+  .g-nav__item--expanded > .g-nav__caret { display: none; }
+}
+/* Product Range on phones and tablets: the column keeps to the screen width
+   (a plain 1fr let the table stretch it past the right edge), with the same
+   margin on both sides. Narrow phones: tighter table cells and no paper-plane
+   icon on the Request button, so all three columns fit. */
+@media (max-width: 63.99em) {
+  .g-pr { grid-template-columns: minmax(0, 1fr); }
+  .g-pr.g-wrap { padding-inline: var(--g-gutter); }
+}
+@media (max-width: 39.99em) {
+  .g-pr__table td, .g-pr__table th { padding-inline: 8px; }
+  .g-pr__table th:first-child, .g-pr__table td:first-child { padding-left: 12px; }
+  .g-pr__table td:first-child { overflow-wrap: anywhere; }
+  .g-pr__inq .g-pr__inq-send { display: none; }
+  .g-pr__chev-cell { width: 28px; padding-inline: 0 6px !important; }
 }

@@ -95,11 +95,17 @@
         if (item.classList.contains('is-open')) { close(); } else { open(); }
       });
     }
-    item.addEventListener('mouseenter', open);
-    item.addEventListener('mouseleave', scheduleClose);
+    /* Hover opens menus on the desktop bar only. In the phone and tablet
+       menu a tap fires mouseenter just before click, which would open the
+       accordion and close it again at once; there, only the tap counts. */
+    var deskBar = window.matchMedia('(min-width: 70em)');
+    var hoverOpen = function () { if (deskBar.matches) { open(); } };
+    var hoverClose = function () { if (deskBar.matches) { scheduleClose(); } };
+    item.addEventListener('mouseenter', hoverOpen);
+    item.addEventListener('mouseleave', hoverClose);
     if (drop) {
-      drop.addEventListener('mouseenter', open);
-      drop.addEventListener('mouseleave', scheduleClose);
+      drop.addEventListener('mouseenter', hoverOpen);
+      drop.addEventListener('mouseleave', hoverClose);
     }
     doc.addEventListener('click', function (ev) {
       if (!item.contains(ev.target)) { close(); }
