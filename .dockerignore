@@ -1,0 +1,21 @@
+# Never ship into the image
+.git
+.github
+.claude
+.impeccable
+dist
+dist-root
+docs
+tools
+node_modules
+*.md
+package-lock.json
+Dockerfile
+.dockerignore
+
+# Patient data and secrets: these live in the volume / env vars, never the image
+data/secrets.php
+data/uploads
+data/cache
+data/orders.log
+data/enquiries.log
